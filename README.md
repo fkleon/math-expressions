@@ -22,10 +22,11 @@ Suggestions and pull requests are always welcome!
 
 ## Documentation ##
 
-To follow.
+See [DartDoc][dartdoc].
 
 ## Examples ##
 
 For now, see [examples.dart](example/examples.dart)
 
 [mathExpr]: http://www-sfb288.math.tu-berlin.de/~jtem/mathExpr/
+[dartdoc]: http://fkleon.github.io/math_expressions/
