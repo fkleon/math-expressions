@@ -1,0 +1,12 @@
+.DS_Store
+.project
+pubspec.lock
+.buildlog
+
+# Symlinks #
+packages
+*.lnk
+
+# Folders #
+packages/
+web/out/
