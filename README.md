@@ -1,4 +1,4 @@
-# vector_math #
+# math_expressions #
 ==============
 
 ## Introduction ##
