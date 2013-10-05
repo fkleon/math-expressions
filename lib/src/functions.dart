@@ -270,7 +270,7 @@ class Exponential extends DefaultFunction {
    * You also can use variables or arbitrary expressions:
    *     x = new Variable('x');
    *     exp = new Exponential(x);
-   *     exp = new Exponential(x + 4);
+   *     exp = new Exponential(x + four);
    */
   Exponential(exp): super._unary("exp", exp);
 
@@ -550,7 +550,6 @@ class Sqrt extends Root {
 
     if (type == EvaluationType.VECTOR) {
       //TODO apply function to all vector elements
-      throw new UnimplementedError('Can not evaluate functions on vectors yet.');
     }
 
     if (type == EvaluationType.INTERVAL) {
@@ -603,7 +602,6 @@ class Sin extends DefaultFunction {
 
     if (type == EvaluationType.VECTOR) {
       //TODO apply function to all vector elements
-      throw new UnimplementedError('Can not evaluate functions on vectors yet.');
     }
 
     if (type == EvaluationType.INTERVAL) {
@@ -654,7 +652,6 @@ class Cos extends DefaultFunction {
 
     if (type == EvaluationType.VECTOR) {
       //TODO apply function to all vector elements
-      throw new UnimplementedError('Can not evaluate functions on vectors yet.');
     }
 
     if (type == EvaluationType.INTERVAL) {
@@ -705,7 +702,6 @@ class Tan extends DefaultFunction {
 
     if (type == EvaluationType.VECTOR) {
       //TODO apply function to all vector elements
-      throw new UnimplementedError('Can not evaluate functions on vectors yet.');
     }
 
     throw new UnimplementedError('Can not evaluate tan on ${type} yet.');
