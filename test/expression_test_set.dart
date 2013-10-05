@@ -11,6 +11,8 @@ class ExpressionTests extends TestSet {
     'Expression REAL Creation': simpleRealCreation,
     'Expression INTERVAL Creation': simpleIntervalCreation,
     'Expression VECTOR Creation': simpleVectorCreation,
+    'Binary Op Convenience Creation': convenienceBinaryCreation,
+    'Unary Op Convenience Creation': convenienceUnaryCreation,
     'Simple REAL evaluation': simpleRealEval,
     'Simple INTERVAL evaluation': simpleIntervalEval,
     'Simple VECTOR evaluation': simpleVectorEval,
@@ -108,6 +110,28 @@ class ExpressionTests extends TestSet {
     expect(_hasMember(e6, n1), isTrue);
   }
 
+  void convenienceBinaryCreation() {
+    // Test Expression creation with convenience constructors.
+    List<BinaryOperator> binOps = [new Times('x', 2), 
+                                   new Divide('x', 2),
+                                   new Plus('x', 2),
+                                   new Minus('x', 2),
+                                   new Power('x', 2)];
+
+    for (BinaryOperator binOp in binOps) {
+      expect(binOp.first, new isInstanceOf<Variable>());
+      expect(binOp.second, new isInstanceOf<Number>());
+    }
+  }
+  
+  void convenienceUnaryCreation() {
+    List<UnaryOperator> unOps = [new UnaryMinus('x')]; 
+    
+    for (UnaryOperator unOp in unOps) {
+      expect(unOp.exp, new isInstanceOf<Variable>());
+    }
+  }
+  
   void simpleIntervalCreation() {
     _createBasicExpressions(interval);
 
@@ -180,6 +204,7 @@ class ExpressionTests extends TestSet {
     eval = e2.evaluate(interval, cm);
     expect(eval, equals(ri1 / ri2));
 
+    //TODO
 //    eval = e3.evaluate(interval, cm);
 //    expect(eval, equals(ri1 ^ ri2));
 
@@ -204,6 +229,7 @@ class ExpressionTests extends TestSet {
     eval = e2.evaluate(interval, cm);
     expect(eval, equals(int1 / int2));
 
+    //TODO
 //    eval = e3.evaluate(interval, cm);
 //    expect(eval, equals(i1 ^ i2));
 
@@ -225,8 +251,36 @@ class ExpressionTests extends TestSet {
   void defFuncCreation() {
     // Create all the default functions:
     // Log, Ln, Cos, Sin, Tan, Pow, etc.
-    print(e1);
-    throw new UnimplementedError();
+   
+    // Test with number literal
+    Expression exp = n2;
+    List<MathFunction> functions = _createDefaultFunctions(n2);
+    
+    for (MathFunction fun in functions) {
+      // Numbers get boxed into BoundVariable, check for those instead of contains
+      expect(fun.args, anyElement(new isInstanceOf<BoundVariable>()));
+    }
+    
+    // Test with variable
+    exp = new Variable('x');
+    functions = _createDefaultFunctions(exp);
+    
+    for (MathFunction fun in functions) {
+      // Variables should not get boxed, test for contains
+      expect(fun.args, contains(exp));
+    }
+  }
+  
+  List<MathFunction> _createDefaultFunctions(Expression exp) {
+    return [new Cos(exp),
+            new Exponential(exp),
+            new Log(exp, exp),
+            new Ln(exp),
+            new Root(5, exp),
+            new Root.sqrt(exp),
+            new Sqrt(exp),
+            new Sin(exp),
+            new Tan(exp)];
   }
 
   void defFuncRealEval() {
