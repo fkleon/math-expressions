@@ -105,7 +105,7 @@ class ContextModel {
   }
 
   /**
-   * returns the function for the given function name.
+   * Returns the function for the given function name.
    *
    * Throws a StateError, if function is not bound.
    */

@@ -1,16 +1,28 @@
 part of math_expressions;
 
-//TODO documentation
+/**
+ * The Parser creates a mathematical [Expression] from an input string.
+ * 
+ * It uses a [Lexer] to create a RPN token stream and then builds the
+ * expression.
+ */
 class Parser {
   Lexer lex;
 
+  /**
+   * Creates a new parser.
+   */
   Parser(): lex = new Lexer();
 
+  /**
+   * Parses the given input string into an [Expression]. Throws a [StateError]
+   * if the token stream is invalid. Returns a valid [Expression].
+   */
   Expression parse(String inputString) {
     List<Expression> expressionStack = new List<Expression>();
     List<Token> inputStream;
 
-    lex.createUPNStream(inputString);
+    lex.createRPNStream(inputString);
     inputStream = lex.tokenStream;
 
     for (var i = 0; i < inputStream.length; i++){
@@ -137,12 +149,23 @@ class Parser {
   }
 }
 
+/**
+ * The lexer creates tokens (see [TokenType] and [Token]) from an input string.
+ * The input string is expected to be in
+ * [infix notation form](https://en.wikipedia.org/wiki/Infix_notation).
+ * The lexer can convert an infix stream into a
+ * [postfix stream](https://en.wikipedia.org/wiki/Reverse_Polish_notation)
+ * (Reverse Polish Notation) for further processing by a [Parser].
+ */
 class Lexer {
-  var keywords = new Map<String, TokenType>();
+  Map keywords = new Map<String, TokenType>();
   List<Token> _tokenStream;
   String intBuffer = "";
   String varBuffer = "";
 
+  /**
+   * Creates a new lexer.
+   */
   Lexer() {
     keywords["+"] = TokenType.PLUS;
     keywords["-"] = TokenType.MINUS;
@@ -163,7 +186,8 @@ class Lexer {
   List<Token> get tokenStream =>  _tokenStream;
 
   /**
-   * creates a list of tokens from the given string.
+   * Tokenizes a given input string.
+   * Returns a list of [Token] in infix notation.
    */
   List<Token> createTokenStream(String inputString) {
     List<Token> tempTokenStream = new List<Token>();
@@ -176,52 +200,52 @@ class Lexer {
     while (iter.moveNext()) {
       String si = iter.currentAsString;
 
-      /* check if the current Character is a keyword. If it is a keyword, check if the intBuffer is not empty and add
+      /* 
+       * Check if the current Character is a keyword. If it is a keyword, check if the intBuffer is not empty and add
        * a Value Token for the intBuffer and the corresponding Token for the keyword.
        */
       if(keywords.containsKey(si)) {
         // check and or do intBuffer and varBuffer
         if(intBuffer.length > 0) {
-          doIntBuffer(tempTokenStream);
+          _doIntBuffer(tempTokenStream);
         }
         if(varBuffer.length > 0) {
-          doVarBuffer(tempTokenStream);
+          _doVarBuffer(tempTokenStream);
         }
         tempTokenStream.add(new Token(si, keywords[si]));
       } else {
-        // check if the current string is a Number. If it's the case add the string to the intBuffer.
+        // Check if the current string is a Number. If it's the case add the string to the intBuffer.
         StringBuffer sb = new StringBuffer(intBuffer);
         try {
           siInt = int.parse(si);
-          // the current string is a number and it is added to the intBuffer.
+          // The current string is a number and it is added to the intBuffer.
           sb.write(si);
           intBuffer = sb.toString();
           if(varBuffer.length > 0) {
-            doVarBuffer(tempTokenStream);
+            _doVarBuffer(tempTokenStream);
           }
         } on FormatException {
-          // check if the current string is part of a floating point input
+          // Check if the current string is part of a floating point input
           if(si=="."){
             sb.write(si);
             intBuffer = sb.toString();
             continue;
           }
 
-          // the current string is not a number and not a simple keyword, so it has to be a variable or log or ln.
+          // The current string is not a number and not a simple keyword, so it has to be a variable or log or ln.
           sb = new StringBuffer(varBuffer);
           if(intBuffer.length > 0) {
-            /* the intBuffer contains a string and the current string is a variable or part of a complex keyword, so the value is added to the tokenstream
-             * and the current string is added to the var buffer.
+            /* 
+             * The intBuffer contains a string and the current string is a
+             * variable or part of a complex keyword, so the value is added
+             * to the token stream and the current string is added to the
+             * var buffer.
              */
-            doIntBuffer(tempTokenStream);
+            _doIntBuffer(tempTokenStream);
             sb.write(si);
             varBuffer = sb.toString();
-            //reset the intBuffer.
-            intBuffer ="";
-            //  print("was in text and do int case");
           } else {
-            // the intBuffer contains no string and the current string is a variable, so both Tokens are added to the tokenStream.
-            // print("was in text case");
+            // intBuffer contains no string and the current string is a variable, so both Tokens are added to the tokenStream.
             sb.write(si);
             varBuffer = sb.toString();
           }
@@ -231,29 +255,29 @@ class Lexer {
 
     if(intBuffer.length > 0) {
       // There are no more symbols in the input string but there is still an int in the intBuffer
-      doIntBuffer(tempTokenStream);
-      intBuffer ="";
+      _doIntBuffer(tempTokenStream);
     }
     if(varBuffer.length > 0) {
       // There are no more symbols in the input string but there is still a variable or keyword in the varBuffer
-      doVarBuffer(tempTokenStream);
-      varBuffer ="";
+      _doVarBuffer(tempTokenStream);
     }
     return tempTokenStream;
   }
 
   /**
    * Checks if the intBuffer contains a number and adds it to the tokenStream.
+   * Then clears the intBuffer.
    */
-  void doIntBuffer(List<Token> stream){
+  void _doIntBuffer(List<Token> stream){
     stream.add(new Token(intBuffer,TokenType.VAL));
     intBuffer = "";
   }
 
   /**
    * Checks if the varBuffer contains a keyword or a variable and adds them to the tokenStream.
+   * Then clears the varBuffer.
    */
-  void doVarBuffer(List<Token> stream) {
+  void _doVarBuffer(List<Token> stream) {
     if(keywords.containsKey(varBuffer)) {
       stream.add(new Token(varBuffer, keywords[varBuffer]));
     } else {
@@ -263,7 +287,8 @@ class Lexer {
   }
 
   /**
-   * Transforms the lexers token stream into UPN.
+   * Transforms the lexer's token stream into RPN using the Shunting-yard
+   * algorithm. Returns a list of [Token] in RPN form.
    */
   List<Token> shuntingYard(List<Token> stream) {
     if(stream.isEmpty) {
@@ -276,19 +301,19 @@ class Lexer {
     for(int i = 0; i < stream.length; i++) {
       Token tempToken = stream[i];
 
-      //if the current Token is a value or a variable, put them into the outputstream.
+      // If the current Token is a value or a variable, put them into the output stream.
       if(tempToken.type == TokenType.VAL || tempToken.type == TokenType.VAR) {
         outputStream.add(tempToken);
         continue;
       }
 
-      //if the current Token is a left brace, put it on the operator buffer.
+      // If the current Token is a left brace, put it on the operator buffer.
       if(tempToken.type == TokenType.LBRACE) {
         operatorBuffer.add(tempToken);
         continue;
       }
 
-      //if the current Token is a right brace, empty the operator buffer until you find a left brace.
+      // If the current Token is a right brace, empty the operator buffer until you find a left brace.
       if(tempToken.type == TokenType.RBRACE) {
         while(operatorBuffer.last.type != TokenType.LBRACE) {
           outputStream.add(operatorBuffer.last);
@@ -298,23 +323,27 @@ class Lexer {
         continue;
       }
       /*
-       * if there is no other operator in the operatorBuffer, than the current operator token ist added to the
-       * operatorBuffer.
+       * If there is no other operator in the operator buffer, the current
+       * operator token is added to the operator buffer.
        */
       if(operatorBuffer.isEmpty){
         operatorBuffer.add(tempToken);
         continue;
       }
 
-      /* if the current Tokens type is MINUS and the last Token in the operator buffer is of type LBRACE
-       * the current Token is an unary minus, so the tokentype has to be changed.
+      /* 
+       * If the current Tokens type is MINUS and the last Token in the operator
+       * buffer is of type LBRACE, the current Token is an unary minus, so the
+       * token type has to be changed.
        */
       if(tempToken.type == TokenType.MINUS && operatorBuffer.last.type == TokenType.LBRACE) {
         Token newToken = new Token(tempToken.text, TokenType.UNMINUS);
         operatorBuffer.add(newToken);
         continue;
       }
-      /* if the current token is an operator and it's priority is lower than the priority of the last
+      
+      /* 
+       * If the current token is an operator and it's priority is lower than the priority of the last
        * operator in the operator buffer, than put the operators from the operator buffer into the output
        * stream until you find an operator with a priority lower or equal as the current tokens.
        * Then add the current Token to the operator buffer.
@@ -331,9 +360,10 @@ class Lexer {
         continue;
       }
     }
+    
     /*
-     * when the algorithm reached the end of the input stream, then we add the tokens in the
-     * operatorBuffer to the outputStream.
+     * When the algorithm reaches the end of the input stream, we add the
+     * tokens in the operatorBuffer to the outputStream.
      */
     while(!operatorBuffer.isEmpty) {
       outputStream.add(operatorBuffer.last);
@@ -344,23 +374,26 @@ class Lexer {
   }
 
   /**
-   * This method invokes the createTokenStream methode to create an infix token stream and then invokes the shunting
-   * yards method to transform this stream into an UPN token stream.
-   *
-   * Returns  List<Token>.
+   * This method invokes the createTokenStream methode to create an infix token
+   * stream and then invokes the shunting yard method to transform this stream
+   * into a RPN (reverse polish notation) token stream.
    */
-  createUPNStream(String inputString) {
+  void createRPNStream(String inputString) {
     List<Token> infixStream = createTokenStream(inputString);
     _tokenStream = shuntingYard(infixStream);
   }
 }
 
+/**
+ * A Token consists of text and has a [TokenType].
+ */
 class Token {
   //TODO
-  var text;
+  String text;
   final TokenType type;
 
-  bool operator==(Token token) => (token.text == this.text) && (token.type == this.type);
+  bool operator==(Token token) => (token.text == this.text)
+      && (token.type == this.type);
 
   Token(var this.text, TokenType this.type);
 
@@ -369,22 +402,25 @@ class Token {
   }
 }
 
+/**
+ * A token type.
+ */
 class TokenType {
   static final TokenType VAR = const TokenType("VAR",10);
   static final TokenType VAL = const TokenType("VAL",10);
 
-  //Braces
+  // Braces
   static final TokenType LBRACE = const TokenType("LBRACE",-1);
   static final TokenType RBRACE = const TokenType("RBRACE",-1);
 
-  //Simple Operators
+  // Simple Operators
   static final TokenType PLUS = const TokenType("PLUS",1);
   static final TokenType MINUS = const TokenType("MINUS",1);
   static final TokenType UNMINUS = const TokenType("UNMINUS",1);
   static final TokenType TIMES = const TokenType("TIMES",2);
   static final TokenType DIV = const TokenType("DIV",2);
 
-  //Complex Operators
+  // Complex Operators
   static final TokenType POW = const TokenType("POW",3);
   static final TokenType SQRT = const TokenType("SQRT",3);
   static final TokenType LOG = const TokenType("LOG",3);
