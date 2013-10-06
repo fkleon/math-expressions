@@ -46,9 +46,9 @@ You can either create an mathematical expression programmatically or parse a str
 ```
   Variable x = new Variable('x'), y = new Variable('y');
   Power xSquare = new Power(x, 2);
-  Cos ySin = new Cos(y);
+  Cos yCos = new Cos(y);
   Number three = new Number(3.0);
-  Expression exp = (xSquare + ySin) / three;
+  Expression exp = (xSquare + yCos) / three;
 ```
 
 * Create the expression via the parser:
@@ -78,6 +78,7 @@ This example shows how to simplify and derive
 
 ![Example 2][exampleEq2]
 
+* Expressions can be simplified and differentiated with respect to a given variable:
 ```
   Expression exp = p.parse("x*1 - (-5)");
 
