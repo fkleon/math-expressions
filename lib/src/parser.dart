@@ -111,6 +111,22 @@ class Parser {
         expressionStack.add(currentExpression);
         continue;
       }
+      
+      if(currentToken.type == TokenType.COS) {
+        Expression operand = expressionStack.last;
+        expressionStack.removeLast();
+        Expression currentExpression = new Cos(operand);
+        expressionStack.add(currentExpression);
+        continue;
+      }
+      
+      if(currentToken.type == TokenType.SIN) {
+        Expression operand = expressionStack.last;
+        expressionStack.removeLast();
+        Expression currentExpression = new Sin(operand);
+        expressionStack.add(currentExpression);
+        continue;
+      }
     }
 
     if(expressionStack.length > 1){
@@ -135,6 +151,8 @@ class Lexer {
     keywords["^"] = TokenType.POW;
     keywords["sqrt"] = TokenType.SQRT;
     keywords["log"] = TokenType.LOG;
+    keywords["cos"] = TokenType.COS;
+    keywords["sin"] = TokenType.SIN;
     keywords["ln"] = TokenType.LN;
     keywords["e"] = TokenType.EFUNC;
     keywords["("] = TokenType.LBRACE;
@@ -371,6 +389,8 @@ class TokenType {
   static final TokenType SQRT = const TokenType("SQRT",3);
   static final TokenType LOG = const TokenType("LOG",3);
   static final TokenType LN = const TokenType("LN",3);
+  static final TokenType COS = const TokenType("COS",3);
+  static final TokenType SIN = const TokenType("SIN",3);
   static final TokenType EFUNC = const TokenType("EFUNC",3);
 
   final String value;
