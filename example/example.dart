@@ -8,6 +8,7 @@ void main() {
   //_evaluateTest();
   _example1();
   _example2();
+  _example3();
 }
 
 /**
@@ -50,6 +51,20 @@ void _example2() {
   
   print(expDerived);            // = (((x * 0.0) + (1.0 * 1.0)) - -(0.0))
   print(expDerived.simplify()); // = 1.0
+}
+
+void _example3() {
+  //TODO move to functional tests.
+  Parser p = new Parser();
+  Expression exp = p.parse("x * 2^2.5 * log(10)(100)");
+  
+  print(exp);
+  
+  ContextModel cm = new ContextModel();
+  cm.bindGlobalVariableName('x', new Number(1.0));
+  
+  double eval = exp.evaluate(EvaluationType.REAL, cm);
+  print(eval);
 }
 
 void _expressionTest() {

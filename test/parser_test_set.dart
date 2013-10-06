@@ -8,56 +8,64 @@ class ParserTests extends TestSet {
   get name => 'Parser Tests';
 
   get testFunctions => {
-    'Parser Token test': parserTokenTest,
+    'Lexer Token Creation (Infix + Postfix)': lexerTokenTest,
+    'Parser Expression Creation': parserExpressionTest
   };
 
   void initTests() {
     pars = new Parser();
     lex = new Lexer();
 
-    inputString1 = "x + 2";
-    inputString2 = "x * 2^2.5 * log(10)(100)";
-    inputString3 = "log(10)(100)";
+    inputStrings = ["x + 2",
+                    "x * 2^2.5 * log(10)(100)",
+                    "log(10)(100)"];
+    
+    tokenStreams = new List(inputStrings.length);
+    rpnTokenStreams = new List(inputStrings.length);
 
-    tokenStream1 = [new Token("x", TokenType.VAR),
-                    new Token("+", TokenType.PLUS),
-                    new Token("2", TokenType.VAL)];
+    tokenStreams[0] = [new Token("x", TokenType.VAR),
+                       new Token("+", TokenType.PLUS),
+                       new Token("2", TokenType.VAL)];
+    
+    rpnTokenStreams[0] = [new Token("x", TokenType.VAR),
+                          new Token("2", TokenType.VAL),
+                          new Token("+", TokenType.PLUS)];
 
-    tokenStream2 = [new Token("x", TokenType.VAR),
-                    new Token("*", TokenType.TIMES),
-                    new Token("2", TokenType.VAL),
-                    new Token("^", TokenType.POW),
-                    new Token("2.5", TokenType.VAL),
-                    new Token("*", TokenType.TIMES),
-                    new Token("log", TokenType.LOG),
+    tokenStreams[1] = [new Token("x", TokenType.VAR),
+                      new Token("*", TokenType.TIMES),
+                      new Token("2", TokenType.VAL),
+                      new Token("^", TokenType.POW),
+                      new Token("2.5", TokenType.VAL),
+                      new Token("*", TokenType.TIMES),
+                      new Token("log", TokenType.LOG),
+                      new Token("(", TokenType.LBRACE),
+                      new Token("10", TokenType.VAL),
+                      new Token(")", TokenType.RBRACE),
+                      new Token("(", TokenType.LBRACE),
+                      new Token("100", TokenType.VAL),
+                      new Token(")", TokenType.RBRACE)];
+
+    rpnTokenStreams[1] = [new Token("x", TokenType.VAR),
+                          new Token("2", TokenType.VAL),
+                          new Token("2.5", TokenType.VAL),
+                          new Token("^", TokenType.POW),
+                          new Token("10", TokenType.VAL),
+                          new Token("100", TokenType.VAL),
+                          new Token("log", TokenType.LOG),
+                          new Token("*", TokenType.TIMES),
+                          new Token("*", TokenType.TIMES)];
+
+    tokenStreams[2] = [new Token("log", TokenType.LOG),
                     new Token("(", TokenType.LBRACE),
                     new Token("10", TokenType.VAL),
                     new Token(")", TokenType.RBRACE),
                     new Token("(", TokenType.LBRACE),
                     new Token("100", TokenType.VAL),
                     new Token(")", TokenType.RBRACE)];
-
-    upnTokenStream2 = [new Token("x", TokenType.VAR),
-                    new Token("*", TokenType.TIMES),
-                    new Token("2", TokenType.VAL),
-                    new Token("^", TokenType.POW),
-                    new Token("2.5", TokenType.VAL),
-                    new Token("*", TokenType.TIMES),
-                    new Token("log", TokenType.LOG),
-                    new Token("(", TokenType.LBRACE),
-                    new Token("10", TokenType.VAL),
-                    new Token(")", TokenType.RBRACE),
-                    new Token("(", TokenType.LBRACE),
-                    new Token("100", TokenType.VAL),
-                    new Token(")", TokenType.RBRACE)];
-
-    tokenStream3 = [new Token("log", TokenType.LOG),
-                    new Token("(", TokenType.LBRACE),
-                    new Token("10", TokenType.VAL),
-                    new Token(")", TokenType.RBRACE),
-                    new Token("(", TokenType.LBRACE),
-                    new Token("100", TokenType.VAL),
-                    new Token(")", TokenType.RBRACE)];
+    
+    rpnTokenStreams[2] = [new Token("10", TokenType.VAL),
+                          new Token("100", TokenType.VAL),
+                          new Token("log", TokenType.LOG)];
   }
 
   /*
@@ -65,36 +73,30 @@ class ParserTests extends TestSet {
    */
   Parser pars;
   Lexer lex;
-  String inputString1;
-  String inputString2;
-  String inputString3;
+  List<String> inputStrings;
 
-  List<Token> tokenStream1;
-  List<Token> tokenStream2;
-  List<Token> tokenStream3;
+  List<List<Token>> tokenStreams;
+  List<List<Token>> rpnTokenStreams;
 
-  List<Token> upnTokenStream1;
-  List<Token> upnTokenStream2;
-
-
-  void parserTokenTest() {
-    List<Token> stream1 = lex.createTokenStream(inputString1);
-    List<Token> stream2 = lex.createTokenStream(inputString2);
-    List<Token> stream3 = lex.createTokenStream(inputString3);
-
-    List<Token> upnStream1 = lex.shuntingYard(stream1);
-    List<Token> upnStream2 = lex.shuntingYard(stream2);
-
-    expect(stream1, orderedEquals(tokenStream1));
-    expect(stream1, isNot(orderedEquals(tokenStream2)));
-    expect(stream2, orderedEquals(tokenStream2));
-    expect(stream2, isNot(orderedEquals(tokenStream1)));
-    expect(stream3, orderedEquals(tokenStream3));
+  void lexerTokenTest() {
+    for (int i = 0; i < inputStrings.length; i++) {
+      String input = inputStrings[i];
+      
+      // Test infix streams
+      List<Token> infixStream = lex.createTokenStream(input);
+      expect(infixStream, orderedEquals(tokenStreams[i]));
+      
+      // Test RPN streams
+      List<Token> rpnStream = lex.shuntingYard(infixStream);
+      expect(rpnStream, orderedEquals(rpnTokenStreams[i]));
+    }
   }
 
   void parserExpressionTest() {
-    throw new UnimplementedError();
+    for (String inputString in inputStrings) {
+      Expression exp = pars.parse(inputString);
+      // TODO Don't just test for no exceptions,
+      // also test for expression content.
+    }
   }
-
-
 }
