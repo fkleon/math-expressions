@@ -1,10 +1,55 @@
 import 'package:math_expressions/math_expressions.dart';
+import 'dart:math' as Math;
 
 //TODO Documentation
 //TODO Extend and offer CLI/Web Interface
 void main() {
   //_expressionTest();
-  _evaluateTest();
+  //_evaluateTest();
+  _example1();
+  _example2();
+}
+
+/**
+ * Example 1: Expression creation and evaluation
+ */
+void _example1() {
+  // (1a) Parse expression:
+  Parser p = new Parser();
+  Expression exp = p.parse("(x^2 + cos(y)) / 3");
+  
+  // (1b) Build expression: (x^2 + cos(y)) / 3
+  Variable x = new Variable('x'), y = new Variable('y');
+  Power xSquare = new Power(x, 2);
+  Cos yCos = new Cos(y);
+  Number three = new Number(3.0);
+  exp = (xSquare + yCos) / three;
+
+  // (2) Bind variables:
+  ContextModel cm = new ContextModel();
+  cm.bindGlobalVariable(x, new Number(2.0));
+  cm.bindGlobalVariable(y, new Number(Math.PI));
+  
+  // (3) Evaluate expression:
+  double eval = exp.evaluate(EvaluationType.REAL, cm);
+
+  print(eval); // = 1
+}
+
+/**
+ * Example 2: Expression simplification and derivation
+ */
+void _example2() {
+  Parser p = new Parser();
+  Expression exp = p.parse("x*1 - (-5)");
+
+  print(exp);            // = ((x * 1.0) - -(5.0))
+  print(exp.simplify()); // = (x + 5.0)
+
+  Expression expDerived = exp.derive('x');
+  
+  print(expDerived);            // = (((x * 0.0) + (1.0 * 1.0)) - -(0.0))
+  print(expDerived.simplify()); // = 1.0
 }
 
 void _expressionTest() {
