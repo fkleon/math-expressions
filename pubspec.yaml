@@ -1,7 +1,7 @@
 name: math_expressions
-version: 0.0.1
+version: 0.0.1+1
 author: Frederik Leonhardt <frederik.leonhardt@gmail.com>
-description: A math library supporting REAL, INTERVAL and VECTOR evaluations of arbitrary expressions.
+description: A math library for parsing and evaluating expressions in real, interval and vector contexts. Also supports simplification and differentiation.
 homepage: https://github.com/fkleon/math-expressions
 documentation: http://fkleon.github.io/math_expressions
 dependencies:
