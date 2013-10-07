@@ -398,6 +398,13 @@ class Token {
   bool operator==(Token token) => (token.text == this.text)
       && (token.type == this.type);
 
+  int get hashCode {
+    int result = 17;
+    result = 37 * result + text.hashCode;
+    result = 37 * result + type.hashCode;
+    return result;
+  }
+  
   /// Creates a new Token with the given text and type.
   Token(String this.text, TokenType this.type);
 

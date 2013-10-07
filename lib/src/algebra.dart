@@ -80,6 +80,14 @@ class Point3D {
    */
   Vector4 toVec4() => new Vector4(this.x, this.y, this.z, 1.0);
 
+  int get hashCode {
+    int result = 17;
+    result = 37 * result + x.hashCode;
+    result = 37 * result + y.hashCode;
+    result = 37 * result + z.hashCode;
+    return result;
+  }
+  
   String toString() => "$x,$y,$z";
 }
 
@@ -331,6 +339,13 @@ class Interval implements Comparable {
   num length() => max - min;
 
   String toString() => '[${this.min},${this.max}]';
+  
+  int get hashCode {
+    int result = 17;
+    result = 37 * result + min.hashCode;
+    result = 37 * result + max.hashCode;
+    return result;
+  }
 
   int compareTo(Comparable other) {
     // For now, only allow compares to other intervals.
