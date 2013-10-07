@@ -8,26 +8,31 @@ class ExpressionTests extends TestSet {
   get name => 'Expression Tests';
 
   get testFunctions => {
-    'Expression REAL Creation': simpleRealCreation,
-    'Expression INTERVAL Creation': simpleIntervalCreation,
-    'Expression VECTOR Creation': simpleVectorCreation,
+    'Expression Creation [REAL]': simpleRealCreation,
+    'Expression Creation [INTERVAL]': simpleIntervalCreation,
+    'Expression Creation [VECTOR]': simpleVectorCreation,
     'Binary Op Convenience Creation': convenienceBinaryCreation,
     'Unary Op Convenience Creation': convenienceUnaryCreation,
     'Operator simplification': baseOperatorSimplification,
-    'Simple REAL evaluation': simpleRealEval,
-    'Simple INTERVAL evaluation': simpleIntervalEval,
-    'Simple VECTOR evaluation': simpleVectorEval,
+    'Operator differentiation': baseOperatorSimplification,
+    'Simple evaluation [REAL]': simpleRealEval,
+    'Simple evaluation [INTERVAL]': simpleIntervalEval,
+    'Simple evaluation [VECTOR]': simpleVectorEval,
     'Default Function Creation': defFuncCreation,
     'Default Function simplification': defFuncSimplification,
     'Default Function differentiation': defFuncDifferentiation,
-    'Default Function REAL evaluation': defFuncRealEval,
-    'Default Function INTERVAL evaluation': defFuncIntervalEval,
-    'Default Function VECTOR evaluation': defFuncVectorEval,
+    'Default Function evaluation [REAL]': defFuncRealEval,
+    'Default Function evaluation [INTERVAL]': defFuncIntervalEval,
+    'Default Function evaluation [VECTOR]': defFuncVectorEval,
     'Custom Function Creation': cusFuncCreation,
-    'Custom Function REAL evaluation': cusFuncRealEval,
-    'Custom Function INTERVAL evaluation': cusFuncIntervalEval,
-    'Custom Function VECTOR evaluation': cusFuncVectorEval,
+    'Custom Function simplification': cusFuncSimplification,
+    'Custom Function differentiation': cusFuncDifferentiation,
+    'Custom Function evaluation [REAL]': cusFuncRealEval,
+    'Custom Function evaluation [INTERVAL]': cusFuncIntervalEval,
+    'Custom Function evaluation [VECTOR]': cusFuncVectorEval,
     'Composite Function creation': compFunCreation,
+    'Composite Function simplification': compFuncSimplification,
+    'Composite Function differentiation': compFuncDifferentiation,
     'Composite Function evaluation': compFunEval
   };
 
@@ -312,6 +317,14 @@ class ExpressionTests extends TestSet {
     expect((exp.simplify() as Number).value == 0, isTrue);
   }
   
+  void baseOperatorDifferentiation() {
+    /*
+     * Plus
+     */
+    // TODO Implement a function matcher?
+    throw new UnimplementedError();
+  }
+  
   void simpleRealEval() {
     _createBasicExpressions(real);
 
@@ -434,11 +447,89 @@ class ExpressionTests extends TestSet {
   }
   
   void defFuncSimplification() {
+    /*
+     *  Exponential
+     */
+    // e^0 = 1
+    Expression exp = new Exponential(new Number(0));
+    expect(exp.simplify(), new isInstanceOf<Number>());
+    expect((exp.simplify() as Number).value == 1, isTrue);
+    
+    // e^1 = e
+    exp = new Exponential(new Number(1));
+    expect(exp.simplify(), new isInstanceOf<Number>());
+    expect((exp.simplify() as Number).value == Math.E, isTrue);
+    
+    // e^(x*ln(y)) = y^x
+    exp = new Exponential(new Variable('x') * new Ln(new Variable('y')));
+    expect(exp.simplify(), new isInstanceOf<Power>());
+    expect(_isVariable((exp.simplify() as Power).first, 'y'), isTrue);
+    expect(_isVariable((exp.simplify() as Power).second, 'x'), isTrue);
+
+    /*
+     *  Log
+     */
+    // Simplify base and argument
     //TODO
+    
+    /*
+     *  Ln
+     */
+    // ln(1) = 0
+    exp = new Ln(new Number(1));
+    expect(exp.simplify(), new isInstanceOf<Number>());
+    expect((exp.simplify() as Number).value == 0, isTrue);
+    
+    /*
+     * Root
+     */
+    // Simplify argument
+    //TODO
+    
+    /*
+     * Sqrt
+     */
+    // sqrt(x^2) = x
+    exp = new Sqrt(new Power('x', 2));
+    expect(_isVariable(exp.simplify(), 'x'), isTrue);
+
+    // sqrt(0) = 0
+    exp = new Sqrt(new Number(0));
+    expect(exp.simplify(), new isInstanceOf<Number>());
+    expect((exp.simplify() as Number).value == 0, isTrue);
+    
+    // sqrt(1) = 1
+    exp = new Sqrt(new Number(1));
+    expect(exp.simplify(), new isInstanceOf<Number>());
+    expect((exp.simplify() as Number).value == 1, isTrue);
+    
+    /*
+     * Sin
+     */
+    // sin(0) = 0
+    exp = new Sin(new Number(0));
+    expect(exp.simplify(), new isInstanceOf<Number>());
+    expect((exp.simplify() as Number).value == 0, isTrue);
+    
+    /*
+     * Cos
+     */
+    // cos(0) = 1
+    exp = new Cos(new Number(0));
+    expect(exp.simplify(), new isInstanceOf<Number>());
+    expect((exp.simplify() as Number).value == 1, isTrue);
+    
+    /*
+     * Tan
+     */
+    // tan(0) = 0
+    exp = new Tan(new Number(0));
+    expect(exp.simplify(), new isInstanceOf<Number>());
+    expect((exp.simplify() as Number).value == 0, isTrue);
   }
   
   void defFuncDifferentiation() {
-    //TODO
+    throw new UnimplementedError();
   }
 
   void defFuncRealEval() {
@@ -455,6 +546,14 @@ class ExpressionTests extends TestSet {
 
   void cusFuncCreation() {
     // Create some custom functions.
+    throw new UnimplementedError();
+  }
+  
+  void cusFuncSimplification() {
+    throw new UnimplementedError();
+  }
+  
+  void cusFuncDifferentiation() {
     throw new UnimplementedError();
   }
 
@@ -474,12 +573,21 @@ class ExpressionTests extends TestSet {
     // Create some composite functions.
     throw new UnimplementedError();
   }
+  
+  void compFuncSimplification() {
+    throw new UnimplementedError();
+  }
+  
+  void compFuncDifferentiation() {
+    throw new UnimplementedError();
+  }
 
   void compFunEval() {
     // Evaluate composite functions.
     throw new UnimplementedError();
   }
 
+  /// Checks if the given operator contains the given members.
   bool _hasMember(expr, m, [m2]) {
     if (m2 != null) {
       // Binary op.
