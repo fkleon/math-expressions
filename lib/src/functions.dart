@@ -479,8 +479,7 @@ class Root extends DefaultFunction {
   }
 
   evaluate(EvaluationType type, ContextModel context) {
-    //TODO use asPower
-    throw new UnimplementedError('Can not evaluate n-th root yet.');
+    return this.asPower().evaluate(type, context);
   }
 
   String toString() => 'nrt_$n(${arg.toString()})';
