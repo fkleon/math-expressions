@@ -10,6 +10,8 @@ perfect, the performance is not optimized and some features are still
 unimplemented. Basic REAL and INTERVAL evaluations should work though.
 Suggestions and pull requests are always welcome!
 
+[![Build Status](https://drone.io/github.com/fkleon/math-expressions/status.png)][droneBadge]
+
 ## Features ##
 
 * Parsing, simplification and derivation of mathematical expressions.
@@ -91,14 +93,15 @@ This example shows how to simplify and differentiate
   print(expDerived.simplify()); // = 1.0
 ```
 
-### 3. Interval arithmetics ###
-
-todo
-
 For more code, see [example.dart](example/example.dart).
 
+
+*math_expressions is distributed under the MIT license as described in the [LICENSE][] file.*
+
 [mathExpr]: http://www-sfb288.math.tu-berlin.de/~jtem/mathExpr/
+[droneBadge]: https://drone.io/github.com/fkleon/math-expressions/latest
 [dartdoc]: http://fkleon.github.io/math_expressions/
+[license]: LICENSE
 [exampleEq1]: http://latex.codecogs.com/gif.latex?%28x%5E2%2Bcos%28y%29%29%2F3
 [exampleEq1xy]: http://latex.codecogs.com/gif.latex?x%3D2%2Cy%3D%5Cpi
 [exampleEq2]: http://latex.codecogs.com/gif.latex?x*1-%28-5%29
