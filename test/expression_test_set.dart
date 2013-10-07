@@ -10,20 +10,21 @@ class ExpressionTests extends TestSet {
   get testFunctions => {
     'Expression Creation [REAL]': simpleRealCreation,
     'Expression Creation [INTERVAL]': simpleIntervalCreation,
-    'Expression Creation [VECTOR]': simpleVectorCreation,
+    //'Expression Creation [VECTOR]': simpleVectorCreation,
     'Binary Op Convenience Creation': convenienceBinaryCreation,
     'Unary Op Convenience Creation': convenienceUnaryCreation,
     'Operator simplification': baseOperatorSimplification,
     'Operator differentiation': baseOperatorSimplification,
     'Simple evaluation [REAL]': simpleRealEval,
     'Simple evaluation [INTERVAL]': simpleIntervalEval,
-    'Simple evaluation [VECTOR]': simpleVectorEval,
+    //'Simple evaluation [VECTOR]': simpleVectorEval,
     'Default Function Creation': defFuncCreation,
     'Default Function simplification': defFuncSimplification,
     'Default Function differentiation': defFuncDifferentiation,
     'Default Function evaluation [REAL]': defFuncRealEval,
     'Default Function evaluation [INTERVAL]': defFuncIntervalEval,
-    'Default Function evaluation [VECTOR]': defFuncVectorEval,
+    //'Default Function evaluation [VECTOR]': defFuncVectorEval,
+    /*
     'Custom Function Creation': cusFuncCreation,
     'Custom Function simplification': cusFuncSimplification,
     'Custom Function differentiation': cusFuncDifferentiation,
@@ -34,6 +35,7 @@ class ExpressionTests extends TestSet {
     'Composite Function simplification': compFuncSimplification,
     'Composite Function differentiation': compFuncDifferentiation,
     'Composite Function evaluation': compFunEval
+    */
   };
 
   void initTests() {
@@ -91,7 +93,9 @@ class ExpressionTests extends TestSet {
       return;
     }
 
-    //TODO vector
+    if (type == EvaluationType.VECTOR) {
+      //TODO vector
+    }
   }
 
   /// Test the constructors of expressions.
@@ -533,7 +537,205 @@ class ExpressionTests extends TestSet {
   }
 
   void defFuncRealEval() {
-    throw new UnimplementedError();
+    
+    Number zero, one, infinity, negInfty, e, pi ;
+    zero = new Number(0);
+    one = new Number(1);
+    infinity = new Number(double.INFINITY);
+    negInfty = new Number(double.NEGATIVE_INFINITY);
+    pi = new Number(Math.PI);
+    e = new Number(Math.E);
+    
+    /*
+     * Exponential
+     */
+    // 0 -> 1
+    double eval = new Exponential(zero).evaluate(real, cm);
+    expect(eval, equals(1.0));
+    // -1 -> 1/e
+    eval = new Exponential(-one).evaluate(real, cm);
+    expect(eval, equals(1.0/Math.E));
+    // 1 -> e
+    eval = new Exponential(one).evaluate(real, cm);
+    expect(eval, equals(Math.E));
+    // INFTY -> INFTY
+    eval = new Exponential(infinity).evaluate(real, cm);
+    expect(eval, equals(double.INFINITY));
+    // -INFTY -> 0.0
+    eval = new Exponential(-infinity).evaluate(real, cm);
+    expect(eval, equals(0.0));
+    
+    /*
+     * Log
+     */
+    Number base = new Number(2);
+    
+    // Log_2(0) -> -INFTY
+    eval = new Log(base, zero).evaluate(real, cm);
+    expect(eval, equals(double.NEGATIVE_INFINITY));
+    // Log_2(-1) -> NaN
+    eval = new Log(base, -one).evaluate(real, cm);
+    expect(eval, isNot(equals(eval))); // (Nan != NaN) = true
+    // Log_2(1) -> 0.0
+    eval = new Log(base, one).evaluate(real, cm);
+    expect(eval, equals(0.0));
+    // Log_2(INFTY) -> INFTY
+    eval = new Log(base, infinity).evaluate(real, cm);
+    expect(eval, equals(double.INFINITY));
+    // Log_2(-INFTY) -> INFTY
+    eval = new Log(base,negInfty).evaluate(real, cm);
+    //expect(eval, equals(double.INFINITY)); //TODO check this
+    expect(eval, isNot(equals(eval)));
+    
+    /*
+     * Ln
+     */
+    // Ln(0) -> -INFTY
+    eval = new Ln(zero).evaluate(real, cm);
+    expect(eval, equals(double.NEGATIVE_INFINITY));
+    // Ln(-1) -> NaN
+    eval = new Ln(-one).evaluate(real, cm);
+    expect(eval, isNot(equals(eval)));
+    // Ln(1) -> 0.0
+    eval = new Ln(one).evaluate(real, cm);
+    expect(eval, equals(0.0));
+    // Ln(e) -> 1.0
+    eval = new Ln(e).evaluate(real, cm);
+    expect(eval, equals(1.0));
+    // Ln(INFTY) -> 0.0
+    eval = new Ln(infinity).evaluate(real, cm);
+    expect(eval, equals(double.INFINITY));
+    // Ln(-INFTY) -> 0.0
+    eval = new Ln(negInfty).evaluate(real, cm);
+    //expect(eval, equals(double.INFINITY)); //TODO check this
+    expect(eval, isNot(equals(eval)));
+    
+    /*
+     * Cos
+     */
+    // cos(0) -> 1.0
+    eval = new Cos(zero).evaluate(real, cm);
+    expect(eval, equals(1.0));
+    // cos(-1) -> 0.540
+    eval = new Cos(-one).evaluate(real, cm);
+    expect(eval, closeTo(0.540, 0.001));
+    // cos(1) -> 0.540
+    eval = new Cos(one).evaluate(real, cm);
+    expect(eval, closeTo(0.540, 0.001));
+    // cos(PI) -> -1
+    eval = new Cos(pi).evaluate(real, cm);
+    expect(eval, equals(-1));
+    // cos(-PI) -> -1
+    eval = new Cos(-pi).evaluate(real, cm);
+    expect(eval, equals(-1));
+    // cos(INFTY) -> [-1,1] / NaN
+    eval = new Cos(infinity).evaluate(real, cm);
+    expect(eval, isNot(equals(eval))); // NaN
+    // cos(-INFTY) -> [-1,1] / NaN
+    eval = new Cos(-infinity).evaluate(real, cm);
+    expect(eval, isNot(equals(eval))); // NaN
+    
+    /*
+     * Sin
+     */
+    // sin(0) -> 0.0
+    eval = new Sin(zero).evaluate(real, cm);
+    expect(eval, equals(0.0));
+    // sin(-1) -> -0.841
+    eval = new Sin(-one).evaluate(real, cm);
+    expect(eval, closeTo(-0.841, 0.001));
+    // sin(1) -> 0.841
+    eval = new Sin(one).evaluate(real, cm);
+    expect(eval, closeTo(0.841, 0.001));
+    // sin(PI) -> 0
+    eval = new Sin(pi).evaluate(real, cm);
+    expect(eval, closeTo(0, 0.00001));
+    // sin(-PI) -> 0
+    eval = new Sin(-pi).evaluate(real, cm);
+    expect(eval, closeTo(0, 0.00001));
+    // sin(INFTY) -> [-1,1] / NaN
+    eval = new Sin(infinity).evaluate(real, cm);
+    expect(eval, isNot(equals(eval))); // NaN
+    // sin(-INFTY) -> [-1,1] / NaN
+    eval = new Sin(-infinity).evaluate(real, cm);
+    expect(eval, isNot(equals(eval))); // NaN
+    
+    /*
+     * Tan
+     */
+    // tan(0) -> 0.0
+    eval = new Tan(zero).evaluate(real, cm);
+    expect(eval, equals(0.0));
+    // tan(-1) -> -1.55740
+    eval = new Tan(-one).evaluate(real, cm);
+    expect(eval, closeTo(-1.55740, 0.00001));
+    // tan(1) -> 1.55740
+    eval = new Tan(one).evaluate(real, cm);
+    expect(eval, closeTo(1.55740, 0.00001));
+    // tan(PI) -> 0
+    eval = new Tan(pi).evaluate(real, cm);
+    expect(eval, closeTo(0, 0.00001));
+    // tan(-PI) -> 0
+    eval = new Tan(-pi).evaluate(real, cm);
+    expect(eval, closeTo(0, 0.00001));
+    // tan(INFTY) -> <INFTY / NaN
+    eval = new Tan(infinity).evaluate(real, cm);
+    expect(eval, isNot(equals(eval))); // NaN
+    // tan(-INFTY) -> <INFTY / NaN
+    eval = new Tan(-infinity).evaluate(real, cm);
+    expect(eval, isNot(equals(eval))); // NaN
+    
+    /*
+     * Root
+     */
+    int grade = 5;
+    
+    // root_5(0) = 0
+    eval = new Root(grade, zero).evaluate(real, cm);
+    expect(eval, equals(0.0));
+    // root_5(-1) = NaN
+    eval = new Root(grade, -one).evaluate(real, cm);
+    expect(eval, isNot(equals(eval)));
+    // root_5(1) = 1
+    eval = new Root(grade, one).evaluate(real, cm);
+    expect(eval, equals(1));
+    // root_5(2) = 1.14869
+    eval = new Root(grade, new Number(2)).evaluate(real, cm);
+    expect(eval, closeTo(1.14869, 0.00001));
+    // root_5(INFTY) -> INFTY
+    eval = new Root(grade, infinity).evaluate(real, cm);
+    expect(eval, equals(double.INFINITY));
+    /*
+     *  root_5(-INFTY) -> INFTY
+     *  as of IEEE Standard 754-2008 for power function.
+     *  
+     *  TODO  This is inconsistent with Sqrt(-INFTY),
+     *        which is Root(2, -INFTY).
+     */
+    eval = new Root(grade, -infinity).evaluate(real, cm);
+    expect(eval, equals(double.INFINITY));
+    
+    /*
+     * Sqrt
+     */
+    // sqrt(0) = 0
+    eval = new Sqrt(zero).evaluate(real, cm);
+    expect(eval, equals(0.0));
+    // sqrt(-1) = NaN
+    eval = new Sqrt(-one).evaluate(real, cm);
+    expect(eval, isNot(equals(eval)));
+    // sqrt(1) = 1
+    eval = new Sqrt(one).evaluate(real, cm);
+    expect(eval, equals(1));
+    // sqrt(2) = SQRT2
+    eval = new Sqrt(new Number(2)).evaluate(real, cm);
+    expect(eval, equals(Math.SQRT2));
+    // sqrt(INFTY) -> INFTY
+    eval = new Sqrt(infinity).evaluate(real, cm);
+    expect(eval, equals(double.INFINITY));
+    // sqrt(-INFTY) ->  NaN
+    eval = new Sqrt(-infinity).evaluate(real, cm);
+    expect(eval, isNot(equals(eval)));
   }
 
   void defFuncIntervalEval() {
