@@ -287,21 +287,21 @@ class Minus extends BinaryOperator {
    * Possible simplifications:
    *
    * 1. a - 0 = a
-   * 2. 0 - a = a
+   * 2. 0 - a = - a
    * 3. a - -(b) = a + b
    */
   Expression simplify() {
     Expression firstOp = first.simplify();
     Expression secondOp = second.simplify();
 
-    if (_isNumber(firstOp, 0)) {
-      return secondOp;
-    }
-
     if (_isNumber(secondOp, 0)) {
       return firstOp;
     }
 
+    if (_isNumber(firstOp, 0)) {
+      return -secondOp;
+    }
+    
     if (secondOp is UnaryMinus) {
       return firstOp + (secondOp as UnaryMinus).exp; // a - -(b) = a + b
     }
@@ -383,7 +383,8 @@ class Times extends BinaryOperator {
 
     // if temp result is not set, we return a multiplication
     if (tempResult == null) {
-      return new Times(firstOp, secondOp);
+      tempResult = new Times(firstOp, secondOp);
+      return negative ? -tempResult : tempResult;
     }
 
     // else we return the only constant and just check for sign before
@@ -426,9 +427,6 @@ class Divide extends BinaryOperator {
    * 3. -a / -b = a / b
    * 5. 0 / a = 0
    * 6. a / 1 = a
-   *
-   * This method throws an IntegerDivisionByZeroException,
-   * if a divide by zero is encountered.
    */
   Expression simplify() {
     Expression firstOp = first.simplify();
@@ -461,7 +459,10 @@ class Divide extends BinaryOperator {
     // TODO cancel down/out? - needs equals on literals (and expressions?)!
   }
 
-
+  /**
+   * This method throws an [IntegerDivisionByZeroException],
+   * if a divide by zero is encountered.
+   */
   evaluate(EvaluationType type, ContextModel context) {
     var firstEval = first.evaluate(type, context);
     var secondEval = second.evaluate(type, context);
