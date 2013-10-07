@@ -623,7 +623,7 @@ class Cos extends DefaultFunction {
    */
   Cos(arg): super._unary('cos', arg);
 
-  /// The argument of this sine function.
+  /// The argument of this cosine function.
   Expression get arg => getParam(0);
 
   Expression derive(String toVar) => new Sin(arg);
@@ -669,11 +669,11 @@ class Cos extends DefaultFunction {
 class Tan extends DefaultFunction {
 
   /**
-   * Creates a new cosine function with given argument expression.
+   * Creates a new tangens function with given argument expression.
    */
   Tan(arg): super._unary('tan', arg);
 
-  /// The argument of this sine function.
+  /// The argument of this tangens function.
   Expression get arg => getParam(0);
 
   Expression derive(String toVar) => asSinCos().derive(toVar);
