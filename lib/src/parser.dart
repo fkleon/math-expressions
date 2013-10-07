@@ -388,51 +388,66 @@ class Lexer {
  * A Token consists of text and has a [TokenType].
  */
 class Token {
-  //TODO
+  /// The test of this token.
   String text;
+  
+  /// The type of this token.
   final TokenType type;
 
+  /// Tokens equal, if they have equal text and types.
   bool operator==(Token token) => (token.text == this.text)
       && (token.type == this.type);
 
-  Token(var this.text, TokenType this.type);
+  /// Creates a new Token with the given text and type.
+  Token(String this.text, TokenType this.type);
 
-  String toString(){
+  String toString() {
     return "( $type , $text )";
   }
 }
 
 /**
- * A token type.
+ * A token type. Access token types via the static final fields.
+ * 
+ * For example, to access the token type PLUS:
+ *     plusType = TokenType.PLUS;
  */
 class TokenType {
-  static final TokenType VAR = const TokenType("VAR",10);
-  static final TokenType VAL = const TokenType("VAL",10);
+  static final TokenType VAR = const TokenType._internal("VAR",10);
+  static final TokenType VAL = const TokenType._internal("VAL",10);
 
   // Braces
-  static final TokenType LBRACE = const TokenType("LBRACE",-1);
-  static final TokenType RBRACE = const TokenType("RBRACE",-1);
+  static final TokenType LBRACE = const TokenType._internal("LBRACE",-1);
+  static final TokenType RBRACE = const TokenType._internal("RBRACE",-1);
 
   // Simple Operators
-  static final TokenType PLUS = const TokenType("PLUS",1);
-  static final TokenType MINUS = const TokenType("MINUS",1);
-  static final TokenType UNMINUS = const TokenType("UNMINUS",1);
-  static final TokenType TIMES = const TokenType("TIMES",2);
-  static final TokenType DIV = const TokenType("DIV",2);
+  static final TokenType PLUS = const TokenType._internal("PLUS",1);
+  static final TokenType MINUS = const TokenType._internal("MINUS",1);
+  static final TokenType UNMINUS = const TokenType._internal("UNMINUS",1);
+  static final TokenType TIMES = const TokenType._internal("TIMES",2);
+  static final TokenType DIV = const TokenType._internal("DIV",2);
 
   // Complex Operators
-  static final TokenType POW = const TokenType("POW",3);
-  static final TokenType SQRT = const TokenType("SQRT",3);
-  static final TokenType LOG = const TokenType("LOG",3);
-  static final TokenType LN = const TokenType("LN",3);
-  static final TokenType COS = const TokenType("COS",3);
-  static final TokenType SIN = const TokenType("SIN",3);
-  static final TokenType EFUNC = const TokenType("EFUNC",3);
+  static final TokenType POW = const TokenType._internal("POW",3);
+  static final TokenType SQRT = const TokenType._internal("SQRT",3);
+  static final TokenType LOG = const TokenType._internal("LOG",3);
+  static final TokenType LN = const TokenType._internal("LN",3);
+  static final TokenType COS = const TokenType._internal("COS",3);
+  static final TokenType SIN = const TokenType._internal("SIN",3);
+  static final TokenType EFUNC = const TokenType._internal("EFUNC",3);
 
+  /// The string value of this token type.
   final String value;
+  
+  /// The priority of this token type.
   final int priority;
 
-  const TokenType(String this.value, int this.priority);
+  /**
+   * Internal constructor for a [TokenType].
+   * To retrieve a token type, directly access the static final fields
+   * provided by this class.
+   */
+  const TokenType._internal(String this.value, int this.priority);
 
   String toString() {
     return value;

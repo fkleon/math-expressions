@@ -1,7 +1,7 @@
 # math_expressions #
 
-A math library supporting REAL, INTERVAL and VECTOR evaluations of
-mathematical expressions.
+A math library for parsing and evaluating expressions in real, interval and
+vector contexts. Also supports simplification and differentiation.
 
 It is partly inspired by [mathExpr][] for Java.
 
@@ -72,9 +72,9 @@ You can either create an mathematical expression programmatically or parse a str
   print(eval) // = 1.0
 ```
 
-### 2. Expression simplification and derivation ###
+### 2. Expression simplification and differentiation ###
 
-This example shows how to simplify and derive
+This example shows how to simplify and differentiate
 
 ![Example 2][exampleEq2]
 

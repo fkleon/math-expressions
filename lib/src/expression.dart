@@ -13,6 +13,7 @@ part of math_expressions;
  *
  *     * Number Literals (see [Number])
  *     * Variable Literals (see [Variable])
+ *     * Vector Literals (see [Vector])
  *     * Interval Literals (see [IntervalLiteral])
  * * Operators (support auto-wrapping of parameters into Literals)
  *
@@ -21,10 +22,11 @@ part of math_expressions;
  * * Functions (see [MathFunction])
  *
  *     * Pre-defined Functions (see [DefaultFunction])
+ *     * Composite Functions (see [CompositeFunction])
  *     * Custom Functions (see [CustomFunction])
  *
  * Pre-defined functions are [Exponential], [Log], [Ln], nth-[Root], [Sqrt],
- * [Sin] and [Cos].
+ * [Sin], [Cos] and [Tan].
  */
 abstract class Expression {
 
