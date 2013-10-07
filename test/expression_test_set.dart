@@ -13,10 +13,13 @@ class ExpressionTests extends TestSet {
     'Expression VECTOR Creation': simpleVectorCreation,
     'Binary Op Convenience Creation': convenienceBinaryCreation,
     'Unary Op Convenience Creation': convenienceUnaryCreation,
+    'Operator simplification': baseOperatorSimplification,
     'Simple REAL evaluation': simpleRealEval,
     'Simple INTERVAL evaluation': simpleIntervalEval,
     'Simple VECTOR evaluation': simpleVectorEval,
     'Default Function Creation': defFuncCreation,
+    'Default Function simplification': defFuncSimplification,
+    'Default Function differentiation': defFuncDifferentiation,
     'Default Function REAL evaluation': defFuncRealEval,
     'Default Function INTERVAL evaluation': defFuncIntervalEval,
     'Default Function VECTOR evaluation': defFuncVectorEval,
@@ -25,9 +28,7 @@ class ExpressionTests extends TestSet {
     'Custom Function INTERVAL evaluation': cusFuncIntervalEval,
     'Custom Function VECTOR evaluation': cusFuncVectorEval,
     'Composite Function creation': compFunCreation,
-    'Composite Function evaluation': compFunEval,
-    'Expression and Function differentiation': deriveTest,
-    'Expression and Function simplification': simplifyTest,
+    'Composite Function evaluation': compFunEval
   };
 
   void initTests() {
@@ -88,6 +89,7 @@ class ExpressionTests extends TestSet {
     //TODO vector
   }
 
+  /// Test the constructors of expressions.
   void simpleRealCreation() {
     _createBasicExpressions(real);
 
@@ -110,6 +112,7 @@ class ExpressionTests extends TestSet {
     expect(_hasMember(e6, n1), isTrue);
   }
 
+  /// Test the convenience constructors (binary, auto-wrapping).
   void convenienceBinaryCreation() {
     // Test Expression creation with convenience constructors.
     List<BinaryOperator> binOps = [new Times('x', 2), 
@@ -124,6 +127,7 @@ class ExpressionTests extends TestSet {
     }
   }
   
+  /// Test the convenience constructors (unary, auto-wrapping).
   void convenienceUnaryCreation() {
     List<UnaryOperator> unOps = [new UnaryMinus('x')]; 
     
@@ -132,6 +136,7 @@ class ExpressionTests extends TestSet {
     }
   }
   
+  /// Test the constructors.
   void simpleIntervalCreation() {
     _createBasicExpressions(interval);
 
@@ -155,13 +160,158 @@ class ExpressionTests extends TestSet {
     expect(_hasMember(e6, i1), isTrue);
   }
 
+  /// Test the constructors.
   void simpleVectorCreation() {
     _createBasicExpressions(vector);
 
     //TODO vector
     throw new UnimplementedError();
   }
+  
+  /// Test simplification of expressions.
+  void baseOperatorSimplification() {
+    /*
+     *  Plus
+     */
+    // a + 0 = a
+    Expression exp = new Plus('a', 0);
+    expect(_isVariable(exp.simplify(), 'a'), isTrue);
+    
+    // 0 + a = a
+    exp = new Plus(0, 'a');
+    expect(_isVariable(exp.simplify(), 'a'), isTrue);
+    
+    // a + -(b) = a - b
+    exp = new Plus('a', new UnaryMinus('b'));
+    expect(exp.simplify(), new isInstanceOf<Minus>());
+    expect((exp.simplify() as Minus).first, new isInstanceOf<Variable>());
+    expect((exp.simplify() as Minus).second, new isInstanceOf<Variable>());
+    
+    /*
+     *  Minus
+     */
+    // a - 0 = a
+    exp = new Minus('a', 0);
+    expect(_isVariable(exp.simplify(), 'a'), isTrue);
+    
+    // 0 - a = - a
+    exp = new Minus(0, 'a');
+    expect(exp.simplify(), new isInstanceOf<UnaryMinus>());
+    expect((exp.simplify() as UnaryMinus).exp, new isInstanceOf<Variable>());
+    
+    // a - -(b) = a + b
+    exp = new Minus('a', new UnaryMinus('b'));
+    expect(exp.simplify(), new isInstanceOf<Plus>());
+    expect((exp.simplify() as Plus).first, new isInstanceOf<Variable>());
+    expect((exp.simplify() as Plus).second, new isInstanceOf<Variable>());
+    
+    /*
+     *  Times
+     */
+    // -a * b = - (a * b)
+    exp = new Times(new UnaryMinus('a'), 'b');
+    expect(exp.simplify(), new isInstanceOf<UnaryMinus>());
+    expect((exp.simplify() as UnaryMinus).exp, new isInstanceOf<Times>());
+    expect(_isVariable(((exp.simplify() as UnaryMinus).exp as Times).first, 'a'), isTrue);
+    expect(_isVariable(((exp.simplify() as UnaryMinus).exp as Times).second, 'b'), isTrue);
 
+    // a * -b = - (a * b)
+    exp = new Times('a', new UnaryMinus('b'));
+    expect(exp.simplify(), new isInstanceOf<UnaryMinus>());
+    expect((exp.simplify() as UnaryMinus).exp, new isInstanceOf<Times>());
+    expect(_isVariable(((exp.simplify() as UnaryMinus).exp as Times).first, 'a'), isTrue);
+    expect(_isVariable(((exp.simplify() as UnaryMinus).exp as Times).second, 'b'), isTrue);
+    
+    // -a * -b = a * b
+    exp = new Times(new UnaryMinus('a'), new UnaryMinus('b'));
+    expect(exp.simplify(), new isInstanceOf<Times>());
+    expect(_isVariable((exp.simplify() as Times).first, 'a'), isTrue);
+    expect(_isVariable((exp.simplify() as Times).second, 'b'), isTrue);
+    
+    // a * 0 = 0
+    exp = new Times(new UnaryMinus('a'), 0);
+    expect(exp.simplify(), new isInstanceOf<Number>());
+    expect((exp.simplify() as Number).value == 0, isTrue);
+
+    // 0 * a = 0
+    exp = new Times(0, new Variable('a'));
+    expect(exp.simplify(), new isInstanceOf<Number>());
+    expect((exp.simplify() as Number).value == 0, isTrue);
+    
+    // a * 1 = a
+    exp = new Times(new Variable('a'), 1);
+    expect(_isVariable(exp.simplify(), 'a'), isTrue);
+    
+    // 1 * a = a
+    exp = new Times(1, new Variable('a'));
+    expect(_isVariable(exp.simplify(), 'a'), isTrue);
+    
+    /*
+     *  Divide
+     */
+    // -a / b = - (a / b)
+    exp = new Divide(new UnaryMinus('a'), 'b');
+    expect(exp.simplify(), new isInstanceOf<UnaryMinus>());
+    expect((exp.simplify() as UnaryMinus).exp, new isInstanceOf<Divide>());
+    expect(_isVariable(((exp.simplify() as UnaryMinus).exp as Divide).first, 'a'), isTrue);
+    expect(_isVariable(((exp.simplify() as UnaryMinus).exp as Divide).second, 'b'), isTrue);
+    
+    // a * -b = - (a / b)
+    exp = new Divide('a', new UnaryMinus('b'));
+    expect(exp.simplify(), new isInstanceOf<UnaryMinus>());
+    expect((exp.simplify() as UnaryMinus).exp, new isInstanceOf<Divide>());
+    expect(_isVariable(((exp.simplify() as UnaryMinus).exp as Divide).first, 'a'), isTrue);
+    expect(_isVariable(((exp.simplify() as UnaryMinus).exp as Divide).second, 'b'), isTrue);
+    
+    // -a / -b = a / b
+    exp = new Divide(new UnaryMinus('a'), new UnaryMinus('b'));
+    expect(exp.simplify(), new isInstanceOf<Divide>());
+    expect(_isVariable((exp.simplify() as Divide).first, 'a'), isTrue);
+    expect(_isVariable((exp.simplify() as Divide).second, 'b'), isTrue);
+    
+    // 0 / a = 0
+    exp = new Divide(0, new Variable('a'));
+    expect(exp.simplify(), new isInstanceOf<Number>());
+    expect((exp.simplify() as Number).value == 0, isTrue);
+    
+    // a / 1 = a
+    exp = new Divide(new Variable('a'), 1);
+    expect(_isVariable(exp.simplify(), 'a'), isTrue);
+    
+    /*
+     *  Power
+     */
+    // 0^x = 0
+    exp = new Power(0, 'x');
+    expect(exp.simplify(), new isInstanceOf<Number>());
+    expect((exp.simplify() as Number).value == 0, isTrue);
+    
+    // 1^x = 1
+    exp = new Power(1, 'x');
+    expect(exp.simplify(), new isInstanceOf<Number>());
+    expect((exp.simplify() as Number).value == 1, isTrue);
+    
+    // x^0 = 1
+    exp = new Power('x', 0);
+    expect(exp.simplify(), new isInstanceOf<Number>());
+    expect((exp.simplify() as Number).value == 1, isTrue);
+    
+    // x^1 = x
+    exp = new Power('x', 1);
+    expect(_isVariable(exp.simplify(), 'x'), isTrue);
+    
+    /*
+     *  Unary Minus
+     */
+    // -(-a) = a
+    exp = new UnaryMinus(new UnaryMinus('a'));
+    expect(_isVariable(exp.simplify(), 'a'), isTrue);
+    
+    // -0 = 0
+    exp = new UnaryMinus(0);
+    expect((exp.simplify() as Number).value == 0, isTrue);
+  }
+  
   void simpleRealEval() {
     _createBasicExpressions(real);
 
@@ -282,6 +432,14 @@ class ExpressionTests extends TestSet {
             new Sin(exp),
             new Tan(exp)];
   }
+  
+  void defFuncSimplification() {
+    //TODO
+  }
+  
+  void defFuncDifferentiation() {
+    //TODO
+  }
 
   void defFuncRealEval() {
     throw new UnimplementedError();
@@ -322,16 +480,6 @@ class ExpressionTests extends TestSet {
     throw new UnimplementedError();
   }
 
-  // TODO test simplify
-  // TODO test derive
-  void deriveTest() {
-    throw new UnimplementedError();
-  }
-
-  void simplifyTest() {
-    throw new UnimplementedError();
-  }
-
   bool _hasMember(expr, m, [m2]) {
     if (m2 != null) {
       // Binary op.
@@ -340,5 +488,17 @@ class ExpressionTests extends TestSet {
       // Unary op.
       return expr.exp == m;
     }
+  }
+  
+  /// Checks if given [expr] is a [Variable] and has the given [name].
+  bool _isVariable(expr, [name]) {
+    if (expr is Variable) {
+      if (name == null) {
+        return true;
+      } else {
+        return (expr as Variable).name == name;
+      }
+    }
+    return false;
   }
 }
