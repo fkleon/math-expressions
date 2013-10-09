@@ -24,9 +24,10 @@ class Parser {
 
     for (var i = 0; i < inputStream.length; i++){
       Token currentToken = inputStream[i];
+      Expression currentExpression;
 
       if(currentToken.type == TokenType.VAL) {
-        Expression currentExpression = new Number(double.parse(currentToken.text));
+        currentExpression = new Number(double.parse(currentToken.text));
         expressionStack.add(currentExpression);
         continue;
       }
@@ -38,101 +39,91 @@ class Parser {
       }
 
       if(currentToken.type == TokenType.PLUS) {
-        Expression rightOperand = expressionStack.last;
-        expressionStack.removeLast();
-        Expression leftOperand = expressionStack.last;
-        expressionStack.removeLast();
-        Expression currentExpression = leftOperand + rightOperand;
+        Expression rightOperand = expressionStack.removeLast();
+        Expression leftOperand = expressionStack.removeLast();
+        currentExpression = leftOperand + rightOperand;
         expressionStack.add(currentExpression);
         continue;
       }
 
       if(currentToken.type == TokenType.MINUS) {
-        Expression rightOperand = expressionStack.last;
-        expressionStack.removeLast();
-        Expression leftOperand = expressionStack.last;
-        expressionStack.removeLast();
-        Expression currentExpression = leftOperand - rightOperand;
+        Expression rightOperand = expressionStack.removeLast();
+        Expression leftOperand = expressionStack.removeLast();
+        currentExpression = leftOperand - rightOperand;
         expressionStack.add(currentExpression);
         continue;
       }
 
       if(currentToken.type == TokenType.TIMES) {
-        Expression rightOperand = expressionStack.last;
-        expressionStack.removeLast();
-        Expression leftOperand = expressionStack.last;
-        expressionStack.removeLast();
-        Expression currentExpression = leftOperand * rightOperand;
+        Expression rightOperand = expressionStack.removeLast();
+        Expression leftOperand = expressionStack.removeLast();
+        currentExpression = leftOperand * rightOperand;
         expressionStack.add(currentExpression);
         continue;
       }
 
       if(currentToken.type == TokenType.DIV) {
-        Expression rightOperand = expressionStack.last;
-        expressionStack.removeLast();
-        Expression leftOperand = expressionStack.last;
-        expressionStack.removeLast();
-        Expression currentExpression = leftOperand / rightOperand;
+        Expression rightOperand = expressionStack.removeLast();
+        Expression leftOperand = expressionStack.removeLast();
+        currentExpression = leftOperand / rightOperand;
         expressionStack.add(currentExpression);
         continue;
       }
 
       if(currentToken.type == TokenType.POW) {
-        Expression rightOperand = expressionStack.last;
-        expressionStack.removeLast();
-        Expression leftOperand = expressionStack.last;
-        expressionStack.removeLast();
-        Expression currentExpression = leftOperand ^ rightOperand;
+        Expression rightOperand = expressionStack.removeLast();
+        Expression leftOperand = expressionStack.removeLast();
+        currentExpression = leftOperand ^ rightOperand;
         expressionStack.add(currentExpression);
         continue;
       }
 
       if(currentToken.type == TokenType.UNMINUS) {
-        Expression operand = expressionStack.last;
-        expressionStack.removeLast();
-        Expression currentExpression = - operand;
+        Expression operand = expressionStack.removeLast();
+        currentExpression = - operand;
         expressionStack.add(currentExpression);
         continue;
       }
 
       if(currentToken.type == TokenType.LOG) {
-        Expression rightOperand = expressionStack.last;
-        expressionStack.removeLast();
-        Expression leftOperand = expressionStack.last;
-        expressionStack.removeLast();
-        Expression currentExpression = new Log(leftOperand, rightOperand);
+        Expression rightOperand = expressionStack.removeLast();
+        Expression leftOperand = expressionStack.removeLast();
+        currentExpression = new Log(leftOperand, rightOperand);
         expressionStack.add(currentExpression);
         continue;
       }
 
       if(currentToken.type == TokenType.LN) {
-        Expression operand = expressionStack.last;
-        expressionStack.removeLast();
-        Expression currentExpression = new Ln(operand);
+        Expression operand = expressionStack.removeLast();
+        currentExpression = new Ln(operand);
         expressionStack.add(currentExpression);
         continue;
       }
 
       if(currentToken.type == TokenType.SQRT) {
-        Expression operand = expressionStack.last;
-        expressionStack.removeLast();
-        Expression currentExpression = new Sqrt(operand);
+        Expression operand = expressionStack.removeLast();
+        currentExpression = new Sqrt(operand);
         expressionStack.add(currentExpression);
         continue;
       }
       
       if(currentToken.type == TokenType.COS) {
-        Expression operand = expressionStack.last;
-        expressionStack.removeLast();
-        Expression currentExpression = new Cos(operand);
+        Expression operand = expressionStack.removeLast();
+        currentExpression = new Cos(operand);
         expressionStack.add(currentExpression);
         continue;
       }
       
       if(currentToken.type == TokenType.SIN) {
-        Expression operand = expressionStack.last;
-        expressionStack.removeLast();
-        Expression currentExpression = new Sin(operand);
+        Expression operand = expressionStack.removeLast();
+        currentExpression = new Sin(operand);
+        expressionStack.add(currentExpression);
+        continue;
+      }
+      
+      if(currentToken.type == TokenType.EFUNC) {
+        Expression operand = expressionStack.removeLast();
+        currentExpression = new Exponential(operand);
         expressionStack.add(currentExpression);
         continue;
       }
@@ -156,7 +147,11 @@ class Parser {
  */
 class Lexer {
   final Map keywords = new Map<String, TokenType>();
+  
+  /// Buffer for numbers
   String intBuffer = "";
+  
+  /// Buffer for variable and function names
   String varBuffer = "";
 
   /**
@@ -168,12 +163,14 @@ class Lexer {
     keywords["*"] = TokenType.TIMES;
     keywords["/"] = TokenType.DIV;
     keywords["^"] = TokenType.POW;
+    keywords["rt"] = TokenType.ROOT;
     keywords["sqrt"] = TokenType.SQRT;
     keywords["log"] = TokenType.LOG;
     keywords["cos"] = TokenType.COS;
     keywords["sin"] = TokenType.SIN;
+    keywords["tan"] = TokenType.TAN;
     keywords["ln"] = TokenType.LN;
-    keywords["e"] = TokenType.EFUNC;
+    keywords["exp"] = TokenType.EFUNC;
     keywords["("] = TokenType.LBRACE;
     keywords[")"] = TokenType.RBRACE;
     keywords["{"] = TokenType.LBRACE;
@@ -187,7 +184,7 @@ class Lexer {
   List<Token> tokenize(String inputString) {
     List<Token> tempTokenStream = new List<Token>();
 
-    String clearedString = inputString.replaceAll(" ", "");
+    String clearedString = inputString.replaceAll(" ", "").trim();
 
     RuneIterator iter = clearedString.runes.iterator;
     int siInt;
@@ -227,7 +224,7 @@ class Lexer {
             continue;
           }
 
-          // The current string is not a number and not a simple keyword, so it has to be a variable or log or ln.
+          // The current string is not a number and not a simple keyword, so it has to be a variable or function.
           sb = new StringBuffer(varBuffer);
           if(intBuffer.length > 0) {
             /* 
@@ -283,11 +280,12 @@ class Lexer {
 
   /**
    * Transforms the lexer's token stream into RPN using the Shunting-yard
-   * algorithm. Returns a list of [Token] in RPN form.
+   * algorithm. Returns a list of [Token] in RPN form. Throws an
+   * [ArgumentError] if the list is empty.
    */
   List<Token> shuntingYard(List<Token> stream) {
     if(stream.isEmpty) {
-      throw new Exception("tokenStream was empty");
+      throw new ArgumentError("The given tokenStream was empty.");
     }
 
     List<Token> outputStream = new List<Token>();
@@ -385,7 +383,7 @@ class Lexer {
  * A Token consists of text and has a [TokenType].
  */
 class Token {
-  /// The test of this token.
+  /// The text of this token.
   String text;
   
   /// The type of this token.
@@ -415,8 +413,13 @@ class Token {
  * 
  * For example, to access the token type PLUS:
  *     plusType = TokenType.PLUS;
+ * 
+ * Also defines the priority (precedence) of the token.
+ *     (+,-) < (*,/) < (^) < functions
+ * 
  */
 class TokenType {
+  // Variables and values
   static final TokenType VAR = const TokenType._internal("VAR",10);
   static final TokenType VAL = const TokenType._internal("VAL",10);
 
@@ -424,21 +427,23 @@ class TokenType {
   static final TokenType LBRACE = const TokenType._internal("LBRACE",-1);
   static final TokenType RBRACE = const TokenType._internal("RBRACE",-1);
 
-  // Simple Operators
+  // Operators
   static final TokenType PLUS = const TokenType._internal("PLUS",1);
   static final TokenType MINUS = const TokenType._internal("MINUS",1);
-  static final TokenType UNMINUS = const TokenType._internal("UNMINUS",5);
   static final TokenType TIMES = const TokenType._internal("TIMES",2);
   static final TokenType DIV = const TokenType._internal("DIV",2);
+  static final TokenType POW = const TokenType._internal("POW",3);
+  static final TokenType UNMINUS = const TokenType._internal("UNMINUS",5);
 
-  // Complex Operators
-  static final TokenType POW = const TokenType._internal("POW",4);
-  static final TokenType SQRT = const TokenType._internal("SQRT",3);
-  static final TokenType LOG = const TokenType._internal("LOG",3);
-  static final TokenType LN = const TokenType._internal("LN",3);
-  static final TokenType COS = const TokenType._internal("COS",3);
-  static final TokenType SIN = const TokenType._internal("SIN",3);
-  static final TokenType EFUNC = const TokenType._internal("EFUNC",3);
+  // Functions
+  static final TokenType SQRT = const TokenType._internal("SQRT",4);
+  static final TokenType ROOT = const TokenType._internal("ROOT",4);
+  static final TokenType LOG = const TokenType._internal("LOG",4);
+  static final TokenType LN = const TokenType._internal("LN",4);
+  static final TokenType COS = const TokenType._internal("COS",4);
+  static final TokenType SIN = const TokenType._internal("SIN",4);
+  static final TokenType TAN = const TokenType._internal("TAN",4);
+  static final TokenType EFUNC = const TokenType._internal("EFUNC",4);
 
   /// The string value of this token type.
   final String value;
