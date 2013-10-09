@@ -14,7 +14,7 @@ class ExpressionTests extends TestSet {
     'Binary Op Convenience Creation': convenienceBinaryCreation,
     'Unary Op Convenience Creation': convenienceUnaryCreation,
     'Operator simplification': baseOperatorSimplification,
-    'Operator differentiation': baseOperatorSimplification,
+    'Operator differentiation': baseOperatorDifferentiation,
     'Simple evaluation [REAL]': simpleRealEval,
     'Simple evaluation [INTERVAL]': simpleIntervalEval,
     //'Simple evaluation [VECTOR]': simpleVectorEval,
@@ -22,7 +22,7 @@ class ExpressionTests extends TestSet {
     'Default Function simplification': defFuncSimplification,
     'Default Function differentiation': defFuncDifferentiation,
     'Default Function evaluation [REAL]': defFuncRealEval,
-    'Default Function evaluation [INTERVAL]': defFuncIntervalEval,
+    //'Default Function evaluation [INTERVAL]': defFuncIntervalEval,
     //'Default Function evaluation [VECTOR]': defFuncVectorEval,
     /*
     'Custom Function Creation': cusFuncCreation,
@@ -322,11 +322,28 @@ class ExpressionTests extends TestSet {
   }
   
   void baseOperatorDifferentiation() {
-    /*
-     * Plus
-     */
-    // TODO Implement a function matcher?
-    throw new UnimplementedError();
+    var diff = [
+                 // Expression,         deriveTo, output,     outputSimplified
+                 [new Plus (1, 'x'),    'x',      '0.0+1.0',  '1.0'],
+                 [new Plus (1, 1),      'x',      '0.0+0.0',  '0.0'],
+                 [new Minus (1, 'x') ,  'x',      '0.0-1.0',  '-1.0'],
+                 [new Minus ('x', 1) ,  'x',      '1.0-0.0',  '1.0'],
+                 [new Times('x', 1),    'x',      'x*0.0+1.0*1.0',  '1.0'],
+                 [new Divide('x',2),    'x',      '((1.0*2.0)-(x*0.0))/(2.0*2.0)',
+                  '2.0/(2.0*2.0)'],
+                 [new Power('x',2),     'x',      'exp(2.0 * ln(x)) * ((2.0 * (1.0 / x)) + (0.0 * ln(x)))',
+                  'x^2.0 * (2.0 * (1.0 / x))'],
+                ];
+                 
+    
+    for (List exprCase in diff) {
+      Expression exp = exprCase[0];
+      String deriveTo = exprCase[1];
+      String expected = exprCase[2];
+      String expectedSimpl = exprCase[3];
+      expect(exp.derive(deriveTo), _equalsExpression(expected, simplify:false));
+      expect(exp.derive(deriveTo), _equalsExpression(expectedSimpl));
+    }
   }
   
   void simpleRealEval() {
@@ -533,7 +550,28 @@ class ExpressionTests extends TestSet {
   }
   
   void defFuncDifferentiation() {
-    throw new UnimplementedError();
+    Variable x = new Variable('x');
+    Number base = new Number(2);
+    var diff = [
+                 // Expression,  deriveTo, output, outputSimplified
+                 [new Exponential(x), 'x', 'exp(x) * 1.0',  'exp(x)'],
+                 [new Ln(x),          'x', '1.0 / x',       '1.0 / x'],
+                 //[new Log(base, x),   'x', '1.0 / (x * log(2.0))', '1.0 / (x * log(2.0))'],
+                 //[new Sqrt(x),        'x', '0.0', '0.0'],
+                 //[new Root(2, x),     'x', '0.0', '0.0'],
+                 //[new Sin(x),         'x', 'cos(x)',  'cos(x)'], //TODO parser can't handle output
+                 //[new Cos(x),         'x', '-sin(x)', '-sin(x)'], //TODO parser can't handle output
+                 //[new Tan(x),          'x', '0.0',    '0.0']
+                ];
+    
+    for (List exprCase in diff) {
+      Expression exp = exprCase[0];
+      String deriveTo = exprCase[1];
+      String expected = exprCase[2];
+      String expectedSimpl = exprCase[3];
+      expect(exp.derive(deriveTo), _equalsExpression(expected, simplify:false));
+      expect(exp.derive(deriveTo), _equalsExpression(expectedSimpl));
+    }
   }
 
   void defFuncRealEval() {
@@ -811,4 +849,80 @@ class ExpressionTests extends TestSet {
     }
     return false;
   }
+  
+  Matcher _equalsExpression(String expr, {simplify: true}) => new ExpressionMatcher(expr, simplify:simplify);
+}
+
+/**
+ * This matcher compares [Expression]s.
+ * It uses a [Lexer] to convert the given expressions to RPN and then checks
+ * the token streams for equality.
+ */
+class ExpressionMatcher extends Matcher {
+  final List<Token> _exprRPN;
+  final String _expression;
+  final bool _simplify;
+  static final Lexer _lexer = new Lexer();
+  
+  /**
+   * Creates a new Expression matcher. If [simplify] is true, the expression to
+   * match will be simplified as much as possible before testing.
+   */
+  ExpressionMatcher(String expression, {simplify: true}):
+      this._expression = expression,
+      this._exprRPN = _lexer.tokenizeToRPN(expression),
+      this._simplify = simplify;
+  
+  bool matches(item, Map matchState) {
+    if (item is Expression) {
+      // Simplify and tokenize.
+      Expression expr = _simplify ? _simplifyExp((item as Expression)) : (item as Expression);
+      String itemStr = expr.toString();
+      List<Token> itemRPN = _lexer.tokenizeToRPN(itemStr);
+      
+      /*
+      print("exprStr: $_expression");
+      print("exprTKN: ${_lexer.tokenize(_expression)}");
+      print("exprRPN: $_exprRPN");
+      print("itemStr: $itemStr");
+      print("itemTKN: ${_lexer.tokenize(itemStr)}");
+      print("itemRPN: $itemRPN");
+      */
+      
+      // Save state
+      matchState["item"] = itemStr;
+      matchState["itemRPN"] = itemRPN;
+      
+      // Match with orderedEquals
+      return orderedEquals(_exprRPN).matches(itemRPN, matchState);
+    }
+    return false;
+  }
+  
+  /// Simplifies the given expression.
+  Expression _simplifyExp(Expression exp) {
+    String expString = exp.toString();
+    Expression expSimplified = exp.simplify();
+    //int i = 1;
+    while (expString != expSimplified.toString()) {
+      expSimplified = exp.simplify();
+      expString = expSimplified.toString();
+      //i++;
+    }
+    //print('simplified $i times.');
+    return expSimplified;
+  }
+  
+  Description describe(Description description) =>
+      description.add("expression to match ")
+        .addDescriptionOf(_expression)
+        .add(' with RPN: ')
+        .addDescriptionOf(_exprRPN);
+  
+  Description describeMismatch(item, Description mismatchDescription, Map matchState, bool verbose) =>
+      !_simplify ? mismatchDescription : 
+        mismatchDescription.add("was simplified to ")
+        .addDescriptionOf(matchState["state"]["item"].toString())
+        .add(' with RPN: ')
+        .addDescriptionOf(matchState["state"]["itemRPN"]);
 }

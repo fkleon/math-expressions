@@ -18,7 +18,11 @@ class ParserTests extends TestSet {
 
     inputStrings = ["x + 2",
                     "x * 2^2.5 * log(10)(100)",
-                    "log(10)(100)"];
+                    "log(10)(100)",
+                    "0 - 1",
+                    "(0 - 1)",
+                    //"-1"
+                    ];
     
     tokenStreams = new List(inputStrings.length);
     rpnTokenStreams = new List(inputStrings.length);
@@ -66,6 +70,31 @@ class ParserTests extends TestSet {
     rpnTokenStreams[2] = [new Token("10", TokenType.VAL),
                           new Token("100", TokenType.VAL),
                           new Token("log", TokenType.LOG)];
+    
+    tokenStreams[3] = [new Token("0", TokenType.VAL),
+                       new Token("-", TokenType.MINUS),
+                        new Token("1", TokenType.VAL)];
+    
+    rpnTokenStreams[3] = [new Token("0", TokenType.VAL),
+                          new Token("1", TokenType.VAL),
+                          new Token("-", TokenType.MINUS)];
+    
+    tokenStreams[4] = [new Token("(", TokenType.LBRACE),
+                       new Token("0", TokenType.VAL),
+                       new Token("-", TokenType.MINUS),
+                       new Token("1", TokenType.VAL),
+                       new Token(")", TokenType.RBRACE)];
+    
+    rpnTokenStreams[4] = [new Token("0", TokenType.VAL),
+                          new Token("1", TokenType.VAL),
+                          new Token("-", TokenType.MINUS)];
+    /*
+    tokenStreams[5] = [new Token("-", TokenType.UNMINUS),
+                       new Token("1", TokenType.VAL)];
+    
+    rpnTokenStreams[5] = [new Token("1", TokenType.VAL),
+                          new Token("-", TokenType.UNMINUS)];
+    */
   }
 
   /*
@@ -83,7 +112,7 @@ class ParserTests extends TestSet {
       String input = inputStrings[i];
       
       // Test infix streams
-      List<Token> infixStream = lex.createTokenStream(input);
+      List<Token> infixStream = lex.tokenize(input);
       expect(infixStream, orderedEquals(tokenStreams[i]));
       
       // Test RPN streams
