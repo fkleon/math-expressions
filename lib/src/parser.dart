@@ -20,10 +20,7 @@ class Parser {
    */
   Expression parse(String inputString) {
     List<Expression> expressionStack = new List<Expression>();
-    List<Token> inputStream;
-
-    lex.createRPNStream(inputString);
-    inputStream = lex.tokenStream;
+    List<Token> inputStream = lex.tokenizeToRPN(inputString);
 
     for (var i = 0; i < inputStream.length; i++){
       Token currentToken = inputStream[i];
@@ -158,8 +155,7 @@ class Parser {
  * (Reverse Polish Notation) for further processing by a [Parser].
  */
 class Lexer {
-  Map keywords = new Map<String, TokenType>();
-  List<Token> _tokenStream;
+  final Map keywords = new Map<String, TokenType>();
   String intBuffer = "";
   String varBuffer = "";
 
@@ -180,16 +176,15 @@ class Lexer {
     keywords["e"] = TokenType.EFUNC;
     keywords["("] = TokenType.LBRACE;
     keywords[")"] = TokenType.RBRACE;
-    _tokenStream = new List<Token>();
+    keywords["{"] = TokenType.LBRACE;
+    keywords["}"] = TokenType.RBRACE;
   }
-
-  List<Token> get tokenStream =>  _tokenStream;
 
   /**
    * Tokenizes a given input string.
    * Returns a list of [Token] in infix notation.
    */
-  List<Token> createTokenStream(String inputString) {
+  List<Token> tokenize(String inputString) {
     List<Token> tempTokenStream = new List<Token>();
 
     String clearedString = inputString.replaceAll(" ", "");
@@ -336,11 +331,13 @@ class Lexer {
        * buffer is of type LBRACE, the current Token is an unary minus, so the
        * token type has to be changed.
        */
-      if(tempToken.type == TokenType.MINUS && operatorBuffer.last.type == TokenType.LBRACE) {
-        Token newToken = new Token(tempToken.text, TokenType.UNMINUS);
-        operatorBuffer.add(newToken);
-        continue;
-      }
+//      if(tempToken.type == TokenType.MINUS && operatorBuffer.last.type == TokenType.LBRACE) {
+//        //TODO This is buggy. Handly unary minus as right-associated operator of higher prcedence.
+//        //TODO Or check if _isInfixOperator(last).
+//        Token newToken = new Token(tempToken.text, TokenType.UNMINUS);
+//        operatorBuffer.add(newToken);
+//        continue;
+//      }
       
       /* 
        * If the current token is an operator and it's priority is lower than the priority of the last
@@ -378,9 +375,9 @@ class Lexer {
    * stream and then invokes the shunting yard method to transform this stream
    * into a RPN (reverse polish notation) token stream.
    */
-  void createRPNStream(String inputString) {
-    List<Token> infixStream = createTokenStream(inputString);
-    _tokenStream = shuntingYard(infixStream);
+  List<Token> tokenizeToRPN(String inputString) {
+    List<Token> infixStream = tokenize(inputString);
+    return shuntingYard(infixStream);
   }
 }
 
@@ -409,7 +406,7 @@ class Token {
   Token(String this.text, TokenType this.type);
 
   String toString() {
-    return "( $type , $text )";
+    return "($type,$text)";
   }
 }
 
@@ -430,12 +427,12 @@ class TokenType {
   // Simple Operators
   static final TokenType PLUS = const TokenType._internal("PLUS",1);
   static final TokenType MINUS = const TokenType._internal("MINUS",1);
-  static final TokenType UNMINUS = const TokenType._internal("UNMINUS",1);
+  static final TokenType UNMINUS = const TokenType._internal("UNMINUS",5);
   static final TokenType TIMES = const TokenType._internal("TIMES",2);
   static final TokenType DIV = const TokenType._internal("DIV",2);
 
   // Complex Operators
-  static final TokenType POW = const TokenType._internal("POW",3);
+  static final TokenType POW = const TokenType._internal("POW",4);
   static final TokenType SQRT = const TokenType._internal("SQRT",3);
   static final TokenType LOG = const TokenType._internal("LOG",3);
   static final TokenType LN = const TokenType._internal("LN",3);
