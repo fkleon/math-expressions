@@ -323,7 +323,7 @@ class Exponential extends DefaultFunction {
     throw new UnimplementedError('Can not evaluate exp on ${type} yet.');
   }
 
-  String toString() => 'e^(${exp.toString()})';
+  String toString() => 'exp(${exp.toString()})';
 }
 
 /**
