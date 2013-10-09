@@ -595,7 +595,7 @@ class Power extends BinaryOperator {
 
   /**
    * Returns the exponential form of this operation.
-   * E.g. x^4 = e^(4x)
+   * E.g. x^4 = e^(4*ln(x))
    *
    * This method is used to determine the derivation of a power expression.
    */
