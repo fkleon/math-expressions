@@ -290,21 +290,6 @@ class Lexer {
         }
         continue;
       }
-     
-      /*
-       * Special case for unary minus: If the current token type is MINUS and the last
-       * token is of type LBRACE, the current token is considered an unary minus.
-       * 
-       * This allows unary minus in parenthesis to be parsed correctly.
-       * 
-       * TODO: This is buggy, find a better solution for unary minus.
-       */
-      /*
-      if( curToken.type.operator && curToken.type == TokenType.MINUS &&
-          !operatorBuffer.isEmpty && operatorBuffer.last.type == TokenType.LBRACE) {
-        operatorBuffer.add(new Token(curToken.text, TokenType.UNMINUS));
-      }
-      */
       
       /* 
        * If the current token is an operator and it's priority is lower than the priority of the last
@@ -333,10 +318,8 @@ class Lexer {
           outputStream.add(operatorBuffer.removeLast());
         }
         
-        // Remove left parenthesis
-        if(!operatorBuffer.isEmpty && operatorBuffer.last.type == TokenType.LBRACE) {
-          operatorBuffer.removeLast();
-        } else {
+        // Expect next token on stack to be left parenthesis and pop it
+        if(operatorBuffer.isEmpty || operatorBuffer.removeLast().type != TokenType.LBRACE) {
           throw new StateError('Mismatched parenthesis.');
         }
         
@@ -379,7 +362,7 @@ class Lexer {
  */
 class Token {
   /// The text of this token.
-  String text;
+  final String text;
   
   /// The type of this token.
   final TokenType type;
@@ -410,7 +393,7 @@ class Token {
  *     plusType = TokenType.PLUS;
  * 
  * The type defines the [priority] (precedence) of the token.
- *     (+,-) < (*,/) < (^) < functions
+ *     (+,-) < (*,/) < (^) < (-u) < functions
  *     
  * It also defines the [associativity] of the token. True stands for
  * left-associative, false for right-associative.
@@ -430,7 +413,7 @@ class TokenType {
   static const TokenType MINUS = const TokenType._internal("MINUS",1,operator:true);
   static const TokenType TIMES = const TokenType._internal("TIMES",2,operator:true);
   static const TokenType DIV = const TokenType._internal("DIV",2,operator:true);
-  static const TokenType POW = const TokenType._internal("POW",3,operator:true);
+  static const TokenType POW = const TokenType._internal("POW",3,leftAssociative:false,operator:true);
   static const TokenType UNMINUS = const TokenType._internal("UNMINUS",5,leftAssociative:false,operator:true);
 
   // Functions
