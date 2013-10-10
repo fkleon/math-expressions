@@ -1,5 +1,10 @@
 # Changelog - math_expressions
 
+### 0.0.4 - 2013-10-xx
+
+- Fix handling of operator associativity
+- Add support for default functions to Parser
+
 ### 0.0.3 - 2013-10-09
 
 - Add cli evaluator to examples

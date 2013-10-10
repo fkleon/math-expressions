@@ -42,7 +42,7 @@ void _example1() {
  */
 void _example2() {
   Parser p = new Parser();
-  Expression exp = p.parse("x*1 - (-5)");
+  Expression exp = p.parse("x*1 - (0-5)");
 
   print(exp);            // = ((x * 1.0) - -(5.0))
   print(exp.simplify()); // = (x + 5.0)
@@ -56,7 +56,7 @@ void _example2() {
 void _example3() {
   //TODO move to functional tests.
   Parser p = new Parser();
-  Expression exp = p.parse("x * 2^2.5 * log(10)(100)");
+  Expression exp = p.parse("x * 2^2.5 * log(10,100)");
   
   print(exp);
   
