@@ -326,7 +326,7 @@ class ExpressionTests extends TestSet {
                  // Expression,         deriveTo, output,     outputSimplified
                  [new Plus (1, 'x'),    'x',      '0.0+1.0',  '1.0'],
                  [new Plus (1, 1),      'x',      '0.0+0.0',  '0.0'],
-                 [new Minus (1, 'x') ,  'x',      '0.0-1.0',  '-1.0'],
+                 [new Minus (1, 'x') ,  'x',      '0.0-1.0',  '(-1.0)'],
                  [new Minus ('x', 1) ,  'x',      '1.0-0.0',  '1.0'],
                  [new Times('x', 1),    'x',      'x*0.0+1.0*1.0',  '1.0'],
                  [new Divide('x',2),    'x',      '((1.0*2.0)-(x*0.0))/(2.0*2.0)',
@@ -901,15 +901,13 @@ class ExpressionMatcher extends Matcher {
   
   /// Simplifies the given expression.
   Expression _simplifyExp(Expression exp) {
-    String expString = exp.toString();
-    Expression expSimplified = exp.simplify();
-    //int i = 1;
-    while (expString != expSimplified.toString()) {
-      expSimplified = exp.simplify();
+    String expString;
+    Expression expSimplified = exp;
+    do {
       expString = expSimplified.toString();
-      //i++;
-    }
-    //print('simplified $i times.');
+      expSimplified = exp.simplify();
+    } while (expString != expSimplified.toString());
+    
     return expSimplified;
   }
   

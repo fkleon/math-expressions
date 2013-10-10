@@ -20,8 +20,9 @@ const num EPS = 0.000001;
  */
 void main() {
   var testSets = [new AlgebraTests(),
-                  new ExpressionTests(),
-                  new ParserTests()];
+                  new ParserTests(),
+                  new ExpressionTests()
+                 ];
 
   new TestExecutor.initWith(testSets).runTests();
 }
