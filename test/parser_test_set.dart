@@ -24,6 +24,7 @@ class ParserTests extends TestSet {
                     "0 - 1",
                     "(0 - 1)",
                     "nrt(5,10-1)",
+                    "1^1^1",
                     //"(-1)"
                     ];
     
@@ -105,7 +106,19 @@ class ParserTests extends TestSet {
                           new Token("-", TokenType.MINUS),
                           new Token("nrt", TokenType.ROOT)];
     
-//    tokenStreams[6] = [new Token("-", TokenType.MINUS),
+    tokenStreams[6] = [new Token("1", TokenType.VAL),
+                       new Token("^", TokenType.POW),
+                       new Token("1", TokenType.VAL),
+                       new Token("^", TokenType.POW),
+                       new Token("1", TokenType.VAL)];
+    
+    rpnTokenStreams[6] = [new Token("1", TokenType.VAL),
+                          new Token("1", TokenType.VAL),
+                          new Token("1", TokenType.VAL),
+                          new Token("^", TokenType.POW),
+                          new Token("^", TokenType.POW)];
+
+    //    tokenStreams[6] = [new Token("-", TokenType.MINUS),
 //                       new Token("1", TokenType.VAL)];
 //    
 //    rpnTokenStreams[6] = [new Token("1", TokenType.VAL),
