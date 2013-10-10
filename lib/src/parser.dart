@@ -15,125 +15,95 @@ class Parser {
   Parser(): lex = new Lexer();
 
   /**
-   * Parses the given input string into an [Expression]. Throws a [StateError]
-   * if the token stream is invalid. Returns a valid [Expression].
+   * Parses the given input string into an [Expression]. Throws a [ArgumentError]
+   * if the given [inputString] is empty. Throws a [StateError]if the token stream
+   * is invalid. Returns a valid [Expression].
    */
   Expression parse(String inputString) {
-    List<Expression> expressionStack = new List<Expression>();
+    if (inputString == null || inputString.trim().isEmpty) {
+      throw new ArgumentError("The given input string was empty.");
+    }
+    
+    List<Expression> exprStack = new List<Expression>();
     List<Token> inputStream = lex.tokenizeToRPN(inputString);
 
-    for (var i = 0; i < inputStream.length; i++){
-      Token currentToken = inputStream[i];
-      Expression currentExpression;
+    for (Token currToken in inputStream){
+      Expression currExpr, left, right;
 
-      if(currentToken.type == TokenType.VAL) {
-        currentExpression = new Number(double.parse(currentToken.text));
-        expressionStack.add(currentExpression);
-        continue;
-      }
-
-      if(currentToken.type == TokenType.VAR) {
-        Expression currentExpression = new Variable(currentToken.text);
-        expressionStack.add(currentExpression);
-        continue;
-      }
-
-      if(currentToken.type == TokenType.PLUS) {
-        Expression rightOperand = expressionStack.removeLast();
-        Expression leftOperand = expressionStack.removeLast();
-        currentExpression = leftOperand + rightOperand;
-        expressionStack.add(currentExpression);
-        continue;
-      }
-
-      if(currentToken.type == TokenType.MINUS) {
-        Expression rightOperand = expressionStack.removeLast();
-        Expression leftOperand = expressionStack.removeLast();
-        currentExpression = leftOperand - rightOperand;
-        expressionStack.add(currentExpression);
-        continue;
-      }
-
-      if(currentToken.type == TokenType.TIMES) {
-        Expression rightOperand = expressionStack.removeLast();
-        Expression leftOperand = expressionStack.removeLast();
-        currentExpression = leftOperand * rightOperand;
-        expressionStack.add(currentExpression);
-        continue;
-      }
-
-      if(currentToken.type == TokenType.DIV) {
-        Expression rightOperand = expressionStack.removeLast();
-        Expression leftOperand = expressionStack.removeLast();
-        currentExpression = leftOperand / rightOperand;
-        expressionStack.add(currentExpression);
-        continue;
-      }
-
-      if(currentToken.type == TokenType.POW) {
-        Expression rightOperand = expressionStack.removeLast();
-        Expression leftOperand = expressionStack.removeLast();
-        currentExpression = leftOperand ^ rightOperand;
-        expressionStack.add(currentExpression);
-        continue;
-      }
-
-      if(currentToken.type == TokenType.UNMINUS) {
-        Expression operand = expressionStack.removeLast();
-        currentExpression = - operand;
-        expressionStack.add(currentExpression);
-        continue;
-      }
-
-      if(currentToken.type == TokenType.LOG) {
-        Expression rightOperand = expressionStack.removeLast();
-        Expression leftOperand = expressionStack.removeLast();
-        currentExpression = new Log(leftOperand, rightOperand);
-        expressionStack.add(currentExpression);
-        continue;
-      }
-
-      if(currentToken.type == TokenType.LN) {
-        Expression operand = expressionStack.removeLast();
-        currentExpression = new Ln(operand);
-        expressionStack.add(currentExpression);
-        continue;
-      }
-
-      if(currentToken.type == TokenType.SQRT) {
-        Expression operand = expressionStack.removeLast();
-        currentExpression = new Sqrt(operand);
-        expressionStack.add(currentExpression);
-        continue;
+      switch(currToken.type) {
+        case TokenType.VAL: 
+          currExpr = new Number(double.parse(currToken.text));
+          break;
+        case TokenType.VAR:
+          currExpr = new Variable(currToken.text);
+          break;
+        case TokenType.UNMINUS:
+          currExpr = -exprStack.removeLast();
+          break;
+        case TokenType.PLUS:
+          right = exprStack.removeLast();
+          left = exprStack.removeLast();
+          currExpr = left + right;
+          break;
+        case TokenType.MINUS:
+          right = exprStack.removeLast();
+          left = exprStack.removeLast();
+          currExpr = left - right;
+          break;
+        case TokenType.TIMES:
+          right = exprStack.removeLast();
+          left = exprStack.removeLast();
+          currExpr = left * right;
+          break;
+        case TokenType.DIV:
+          right = exprStack.removeLast();
+          left = exprStack.removeLast();
+          currExpr = left / right;
+          break;
+        case TokenType.POW:
+          right = exprStack.removeLast();
+          left = exprStack.removeLast();
+          currExpr = left ^ right;
+          break;
+        case TokenType.EFUNC:
+          currExpr = new Exponential(exprStack.removeLast());
+          break;
+        case TokenType.LOG:
+          right = exprStack.removeLast();
+          left = exprStack.removeLast();
+          currExpr = new Log(left, right);
+          break;
+        case TokenType.LN:
+          currExpr = new Ln(exprStack.removeLast());
+          break;
+        case TokenType.SQRT:
+          currExpr = new Sqrt(exprStack.removeLast());
+          break;
+        case TokenType.ROOT:
+          right = exprStack.removeLast();
+          left = exprStack.removeLast();
+          currExpr = new Root.fromExpr((left as Number), right);
+          break;
+        case TokenType.SIN:
+          currExpr = new Sin(exprStack.removeLast());
+          break;
+        case TokenType.COS:
+          currExpr = new Cos(exprStack.removeLast());
+          break;
+        case TokenType.TAN:
+          currExpr = new Tan(exprStack.removeLast());
+          break;
+        default: throw new ArgumentError('Unsupported token: $currToken');
       }
       
-      if(currentToken.type == TokenType.COS) {
-        Expression operand = expressionStack.removeLast();
-        currentExpression = new Cos(operand);
-        expressionStack.add(currentExpression);
-        continue;
-      }
-      
-      if(currentToken.type == TokenType.SIN) {
-        Expression operand = expressionStack.removeLast();
-        currentExpression = new Sin(operand);
-        expressionStack.add(currentExpression);
-        continue;
-      }
-      
-      if(currentToken.type == TokenType.EFUNC) {
-        Expression operand = expressionStack.removeLast();
-        currentExpression = new Exponential(operand);
-        expressionStack.add(currentExpression);
-        continue;
-      }
+      exprStack.add(currExpr);
     }
 
-    if(expressionStack.length > 1){
+    if(exprStack.length > 1) {
       throw new StateError("The input String is not a correct expression");
     }
 
-    return expressionStack.last;
+    return exprStack.last;
   }
 }
 
@@ -163,7 +133,7 @@ class Lexer {
     keywords["*"] = TokenType.TIMES;
     keywords["/"] = TokenType.DIV;
     keywords["^"] = TokenType.POW;
-    keywords["rt"] = TokenType.ROOT;
+    keywords["nrt"] = TokenType.ROOT;
     keywords["sqrt"] = TokenType.SQRT;
     keywords["log"] = TokenType.LOG;
     keywords["cos"] = TokenType.COS;
@@ -175,6 +145,7 @@ class Lexer {
     keywords[")"] = TokenType.RBRACE;
     keywords["{"] = TokenType.LBRACE;
     keywords["}"] = TokenType.RBRACE;
+    keywords[","] = TokenType.SEPAR;
   }
 
   /**
@@ -287,55 +258,53 @@ class Lexer {
     if(stream.isEmpty) {
       throw new ArgumentError("The given tokenStream was empty.");
     }
-
+    
     List<Token> outputStream = new List<Token>();
     List<Token> operatorBuffer = new List<Token>();
 
-    for(int i = 0; i < stream.length; i++) {
-      Token tempToken = stream[i];
-
+    for(Token curToken in stream) {
       // If the current Token is a value or a variable, put them into the output stream.
-      if(tempToken.type == TokenType.VAL || tempToken.type == TokenType.VAR) {
-        outputStream.add(tempToken);
+      if(curToken.type == TokenType.VAL || curToken.type == TokenType.VAR) {
+        outputStream.add(curToken);
         continue;
       }
-
-      // If the current Token is a left brace, put it on the operator buffer.
-      if(tempToken.type == TokenType.LBRACE) {
-        operatorBuffer.add(tempToken);
+      
+      // If the current Token is a function, put it onto the operator stack.
+      if(curToken.type.function) {
+        operatorBuffer.add(curToken);
         continue;
       }
-
-      // If the current Token is a right brace, empty the operator buffer until you find a left brace.
-      if(tempToken.type == TokenType.RBRACE) {
-        while(operatorBuffer.last.type != TokenType.LBRACE) {
-          outputStream.add(operatorBuffer.last);
-          operatorBuffer.removeLast();
-        }
-        operatorBuffer.removeLast();
-        continue;
-      }
+      
       /*
-       * If there is no other operator in the operator buffer, the current
-       * operator token is added to the operator buffer.
+       *  If the current Token is a function argument separator, pop operators
+       *  to output stream until a left brace is encountered.
        */
-      if(operatorBuffer.isEmpty){
-        operatorBuffer.add(tempToken);
+      if(curToken.type == TokenType.SEPAR) {
+        while(!operatorBuffer.isEmpty && operatorBuffer.last.type != TokenType.LBRACE) {
+          outputStream.add(operatorBuffer.removeLast());
+        }
+        // If no left brace is encountered, separator was misplaced or parenthesis mismatch
+        if(!operatorBuffer.isEmpty && operatorBuffer.last.type != TokenType.LBRACE) {
+          //TODO never reached, check this.
+          throw new StateError('Misplaced separator or mismatched parenthesis.');
+        }
         continue;
       }
-
-      /* 
-       * If the current Tokens type is MINUS and the last Token in the operator
-       * buffer is of type LBRACE, the current Token is an unary minus, so the
-       * token type has to be changed.
+     
+      /*
+       * Special case for unary minus: If the current token type is MINUS and the last
+       * token is of type LBRACE, the current token is considered an unary minus.
+       * 
+       * This allows unary minus in parenthesis to be parsed correctly.
+       * 
+       * TODO: This is buggy, find a better solution for unary minus.
        */
-//      if(tempToken.type == TokenType.MINUS && operatorBuffer.last.type == TokenType.LBRACE) {
-//        //TODO This is buggy. Handly unary minus as right-associated operator of higher prcedence.
-//        //TODO Or check if _isInfixOperator(last).
-//        Token newToken = new Token(tempToken.text, TokenType.UNMINUS);
-//        operatorBuffer.add(newToken);
-//        continue;
-//      }
+      /*
+      if( curToken.type.operator && curToken.type == TokenType.MINUS &&
+          !operatorBuffer.isEmpty && operatorBuffer.last.type == TokenType.LBRACE) {
+        operatorBuffer.add(new Token(curToken.text, TokenType.UNMINUS));
+      }
+      */
       
       /* 
        * If the current token is an operator and it's priority is lower than the priority of the last
@@ -343,26 +312,52 @@ class Lexer {
        * stream until you find an operator with a priority lower or equal as the current tokens.
        * Then add the current Token to the operator buffer.
        */
-      if(tempToken.type.priority < operatorBuffer.last.type.priority) {
-        while(operatorBuffer.length > 0 && operatorBuffer.last.type.priority > tempToken.type.priority) {
-          outputStream.add(operatorBuffer.last);
-          operatorBuffer.removeLast();
+      if(curToken.type.operator) {
+        while(!operatorBuffer.isEmpty && ((curToken.type.leftAssociative && curToken.type.priority <= operatorBuffer.last.type.priority)
+            || (!curToken.type.leftAssociative && curToken.type.priority < operatorBuffer.last.type.priority))) {
+          outputStream.add(operatorBuffer.removeLast());
         }
-        operatorBuffer.add(tempToken);
+        operatorBuffer.add(curToken);
         continue;
-      } else {
-        operatorBuffer.add(tempToken);
+      }
+      
+      // If the current Token is a left brace, put it on the operator buffer.
+      if(curToken.type == TokenType.LBRACE) {
+        operatorBuffer.add(curToken);
         continue;
+      }
+
+      // If the current Token is a right brace, empty the operator buffer until you find a left brace.
+      if(curToken.type == TokenType.RBRACE) {
+        while(!operatorBuffer.isEmpty && operatorBuffer.last.type != TokenType.LBRACE) {
+          outputStream.add(operatorBuffer.removeLast());
+        }
+        
+        // Remove left parenthesis
+        if(!operatorBuffer.isEmpty && operatorBuffer.last.type == TokenType.LBRACE) {
+          operatorBuffer.removeLast();
+        } else {
+          throw new StateError('Mismatched parenthesis.');
+        }
+        
+        // If the token at the top of the stack is a function token, pop it onto the output queue.
+        if (!operatorBuffer.isEmpty && operatorBuffer.last.type.function) {
+          outputStream.add(operatorBuffer.removeLast());
+        }
       }
     }
     
     /*
      * When the algorithm reaches the end of the input stream, we add the
-     * tokens in the operatorBuffer to the outputStream.
+     * tokens in the operatorBuffer to the outputStream. If the operator
+     * on top of the stack is a parenthesis, there are mismatched parenthesis.
      */
     while(!operatorBuffer.isEmpty) {
-      outputStream.add(operatorBuffer.last);
-      operatorBuffer.removeLast();
+      if (operatorBuffer.last.type == TokenType.LBRACE ||
+          operatorBuffer.last.type == TokenType.RBRACE) {
+        throw new StateError('Mismatched parenthesis.');
+      }
+      outputStream.add(operatorBuffer.removeLast());
     }
 
     return outputStream;
@@ -414,36 +409,39 @@ class Token {
  * For example, to access the token type PLUS:
  *     plusType = TokenType.PLUS;
  * 
- * Also defines the priority (precedence) of the token.
+ * The type defines the [priority] (precedence) of the token.
  *     (+,-) < (*,/) < (^) < functions
- * 
+ *     
+ * It also defines the [associativity] of the token. True stands for
+ * left-associative, false for right-associative.
  */
 class TokenType {
   // Variables and values
-  static final TokenType VAR = const TokenType._internal("VAR",10);
-  static final TokenType VAL = const TokenType._internal("VAL",10);
+  static const TokenType VAR = const TokenType._internal("VAR",10);
+  static const TokenType VAL = const TokenType._internal("VAL",10);
 
-  // Braces
-  static final TokenType LBRACE = const TokenType._internal("LBRACE",-1);
-  static final TokenType RBRACE = const TokenType._internal("RBRACE",-1);
+  // Braces and Separators
+  static const TokenType LBRACE = const TokenType._internal("LBRACE",-1);
+  static const TokenType RBRACE = const TokenType._internal("RBRACE",-1);
+  static const TokenType SEPAR = const TokenType._internal("SEPAR",-1);
 
   // Operators
-  static final TokenType PLUS = const TokenType._internal("PLUS",1);
-  static final TokenType MINUS = const TokenType._internal("MINUS",1);
-  static final TokenType TIMES = const TokenType._internal("TIMES",2);
-  static final TokenType DIV = const TokenType._internal("DIV",2);
-  static final TokenType POW = const TokenType._internal("POW",3);
-  static final TokenType UNMINUS = const TokenType._internal("UNMINUS",5);
+  static const TokenType PLUS = const TokenType._internal("PLUS",1,operator:true);
+  static const TokenType MINUS = const TokenType._internal("MINUS",1,operator:true);
+  static const TokenType TIMES = const TokenType._internal("TIMES",2,operator:true);
+  static const TokenType DIV = const TokenType._internal("DIV",2,operator:true);
+  static const TokenType POW = const TokenType._internal("POW",3,operator:true);
+  static const TokenType UNMINUS = const TokenType._internal("UNMINUS",5,leftAssociative:false,operator:true);
 
   // Functions
-  static final TokenType SQRT = const TokenType._internal("SQRT",4);
-  static final TokenType ROOT = const TokenType._internal("ROOT",4);
-  static final TokenType LOG = const TokenType._internal("LOG",4);
-  static final TokenType LN = const TokenType._internal("LN",4);
-  static final TokenType COS = const TokenType._internal("COS",4);
-  static final TokenType SIN = const TokenType._internal("SIN",4);
-  static final TokenType TAN = const TokenType._internal("TAN",4);
-  static final TokenType EFUNC = const TokenType._internal("EFUNC",4);
+  static const TokenType SQRT = const TokenType._internal("SQRT",4,function:true);
+  static const TokenType ROOT = const TokenType._internal("ROOT",4,function:true);
+  static const TokenType LOG = const TokenType._internal("LOG",4,function:true);
+  static const TokenType LN = const TokenType._internal("LN",4,function:true);
+  static const TokenType COS = const TokenType._internal("COS",4,function:true);
+  static const TokenType SIN = const TokenType._internal("SIN",4,function:true);
+  static const TokenType TAN = const TokenType._internal("TAN",4,function:true);
+  static const TokenType EFUNC = const TokenType._internal("EFUNC",4,function:true);
 
   /// The string value of this token type.
   final String value;
@@ -451,12 +449,22 @@ class TokenType {
   /// The priority of this token type.
   final int priority;
 
+  /// Associativity of this token type. true = left.
+  final bool leftAssociative;
+  
+  /// True, if this token is an operator.
+  final bool operator;
+  
+  /// True, if this token is a function.
+  final bool function;
+  
   /**
    * Internal constructor for a [TokenType].
    * To retrieve a token type, directly access the static final fields
    * provided by this class.
    */
-  const TokenType._internal(String this.value, int this.priority);
+  const TokenType._internal(String this.value, int this.priority,
+      {bool this.leftAssociative: true, bool this.operator: false, bool this.function: false});
 
   String toString() {
     return value;
