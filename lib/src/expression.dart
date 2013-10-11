@@ -208,7 +208,7 @@ class UnaryMinus extends UnaryOperator {
     return -(exp.evaluate(type, context)); //TODO check if unary minus is supported with interval & vector
   }
 
-  String toString() => '(-${exp.toString()})';
+  String toString() => '(_${exp.toString()})';
 }
 
 /**
