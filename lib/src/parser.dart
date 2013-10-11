@@ -130,6 +130,7 @@ class Lexer {
   Lexer() {
     keywords["+"] = TokenType.PLUS;
     keywords["-"] = TokenType.MINUS;
+    keywords["_"] = TokenType.UNMINUS;
     keywords["*"] = TokenType.TIMES;
     keywords["/"] = TokenType.DIV;
     keywords["^"] = TokenType.POW;

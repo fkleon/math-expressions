@@ -18,28 +18,31 @@ class ParserTests extends TestSet {
     pars = new Parser();
     lex = new Lexer();
 
-    inputStrings = ["x + 2",
-                    "x * 2^2.5 * log(10,100)",
-                    "log(10,100)",
-                    "0 - 1",
-                    "(0 - 1)",
-                    "nrt(5,10-1)",
-                    "1^1^1",
-                    //"(-1)"
-                    ];
+    inputStrings = new List();
+    tokenStreams = new List();
+    rpnTokenStreams = new List();
     
-    tokenStreams = new List(inputStrings.length);
-    rpnTokenStreams = new List(inputStrings.length);
-
-    tokenStreams[0] = [new Token("x", TokenType.VAR),
-                       new Token("+", TokenType.PLUS),
-                       new Token("2", TokenType.VAL)];
+    inputStrings.add("x + 2");
+    tokenStreams.add([new Token("x", TokenType.VAR),
+                      new Token("+", TokenType.PLUS),
+                      new Token("2", TokenType.VAL)]);
+    rpnTokenStreams.add([new Token("x", TokenType.VAR),
+                         new Token("2", TokenType.VAL),
+                         new Token("+", TokenType.PLUS)]);
     
-    rpnTokenStreams[0] = [new Token("x", TokenType.VAR),
-                          new Token("2", TokenType.VAL),
-                          new Token("+", TokenType.PLUS)];
-
-    tokenStreams[1] = [new Token("x", TokenType.VAR),
+    inputStrings.add("log(10,100)");
+    tokenStreams.add([new Token("log", TokenType.LOG),
+                    new Token("(", TokenType.LBRACE),
+                    new Token("10", TokenType.VAL),
+                    new Token(",", TokenType.SEPAR),
+                    new Token("100", TokenType.VAL),
+                    new Token(")", TokenType.RBRACE)]);
+    rpnTokenStreams.add([new Token("10", TokenType.VAL),
+                          new Token("100", TokenType.VAL),
+                          new Token("log", TokenType.LOG)]);
+    
+    inputStrings.add("x * 2^2.5 * log(10,100)");
+    tokenStreams.add([new Token("x", TokenType.VAR),
                       new Token("*", TokenType.TIMES),
                       new Token("2", TokenType.VAL),
                       new Token("^", TokenType.POW),
@@ -50,79 +53,83 @@ class ParserTests extends TestSet {
                       new Token("10", TokenType.VAL),
                       new Token(",", TokenType.SEPAR),
                       new Token("100", TokenType.VAL),
-                      new Token(")", TokenType.RBRACE)];
-
-    rpnTokenStreams[1] = [new Token("x", TokenType.VAR),
-                          new Token("2", TokenType.VAL),
-                          new Token("2.5", TokenType.VAL),
-                          new Token("^", TokenType.POW),
-                          new Token("*", TokenType.TIMES),
-                          new Token("10", TokenType.VAL),
-                          new Token("100", TokenType.VAL),
-                          new Token("log", TokenType.LOG),
-                          new Token("*", TokenType.TIMES)];
-
-    tokenStreams[2] = [new Token("log", TokenType.LOG),
-                    new Token("(", TokenType.LBRACE),
-                    new Token("10", TokenType.VAL),
-                    new Token(",", TokenType.SEPAR),
-                    new Token("100", TokenType.VAL),
-                    new Token(")", TokenType.RBRACE)];
+                      new Token(")", TokenType.RBRACE)]);
+    rpnTokenStreams.add([new Token("x", TokenType.VAR),
+                         new Token("2", TokenType.VAL),
+                         new Token("2.5", TokenType.VAL),
+                         new Token("^", TokenType.POW),
+                         new Token("*", TokenType.TIMES),
+                         new Token("10", TokenType.VAL),
+                         new Token("100", TokenType.VAL),
+                         new Token("log", TokenType.LOG),
+                         new Token("*", TokenType.TIMES)]);
     
-    rpnTokenStreams[2] = [new Token("10", TokenType.VAL),
-                          new Token("100", TokenType.VAL),
-                          new Token("log", TokenType.LOG)];
+    inputStrings.add("0 - 1");
+    tokenStreams.add([new Token("0", TokenType.VAL),
+                      new Token("-", TokenType.MINUS),
+                      new Token("1", TokenType.VAL)]);
+    rpnTokenStreams.add([new Token("0", TokenType.VAL),
+                         new Token("1", TokenType.VAL),
+                         new Token("-", TokenType.MINUS)]);
     
-    tokenStreams[3] = [new Token("0", TokenType.VAL),
-                       new Token("-", TokenType.MINUS),
-                        new Token("1", TokenType.VAL)];
+    inputStrings.add("(0 - 1)");
+    tokenStreams.add([new Token("(", TokenType.LBRACE),
+                      new Token("0", TokenType.VAL),
+                      new Token("-", TokenType.MINUS),
+                      new Token("1", TokenType.VAL),
+                      new Token(")", TokenType.RBRACE)]);
+    rpnTokenStreams.add([new Token("0", TokenType.VAL),
+                         new Token("1", TokenType.VAL),
+                         new Token("-", TokenType.MINUS)]);
     
-    rpnTokenStreams[3] = [new Token("0", TokenType.VAL),
-                          new Token("1", TokenType.VAL),
-                          new Token("-", TokenType.MINUS)];
+    inputStrings.add("nrt(5,10-1)");
+    tokenStreams.add([new Token("nrt", TokenType.ROOT),
+                      new Token("(", TokenType.LBRACE),
+                      new Token("5", TokenType.VAL),
+                      new Token(",", TokenType.SEPAR),
+                      new Token("10", TokenType.VAL),
+                      new Token("-", TokenType.MINUS),
+                      new Token("1", TokenType.VAL),
+                      new Token(")", TokenType.RBRACE)]);
+    rpnTokenStreams.add([new Token("5", TokenType.VAL),
+                         new Token("10", TokenType.VAL),
+                         new Token("1", TokenType.VAL),
+                         new Token("-", TokenType.MINUS),
+                         new Token("nrt", TokenType.ROOT)]);
     
-    tokenStreams[4] = [new Token("(", TokenType.LBRACE),
-                       new Token("0", TokenType.VAL),
-                       new Token("-", TokenType.MINUS),
-                       new Token("1", TokenType.VAL),
-                       new Token(")", TokenType.RBRACE)];
+    inputStrings.add("1^1^1");
+    tokenStreams.add([new Token("1", TokenType.VAL),
+                      new Token("^", TokenType.POW),
+                      new Token("1", TokenType.VAL),
+                      new Token("^", TokenType.POW),
+                      new Token("1", TokenType.VAL)]);
+    rpnTokenStreams.add([new Token("1", TokenType.VAL),
+                         new Token("1", TokenType.VAL),
+                         new Token("1", TokenType.VAL),
+                         new Token("^", TokenType.POW),
+                         new Token("^", TokenType.POW)]);
     
-    rpnTokenStreams[4] = [new Token("0", TokenType.VAL),
-                          new Token("1", TokenType.VAL),
-                          new Token("-", TokenType.MINUS)];
+    inputStrings.add("_1");
+    tokenStreams.add([new Token("_", TokenType.UNMINUS),
+                      new Token("1", TokenType.VAL)]);
+    rpnTokenStreams.add([new Token("1", TokenType.VAL),
+                         new Token("_", TokenType.UNMINUS)]);
     
-    tokenStreams[5] = [new Token("nrt", TokenType.ROOT),
-                       new Token("(", TokenType.LBRACE),
-                       new Token("5", TokenType.VAL),
-                       new Token(",", TokenType.SEPAR),
-                       new Token("10", TokenType.VAL),
-                       new Token("-", TokenType.MINUS),
-                       new Token("1", TokenType.VAL),
-                       new Token(")", TokenType.RBRACE)];
+    inputStrings.add("(_1)");
+    tokenStreams.add([new Token("(", TokenType.LBRACE),
+                      new Token("_", TokenType.UNMINUS),
+                      new Token("1", TokenType.VAL),
+                      new Token(")", TokenType.RBRACE)]);
+    rpnTokenStreams.add([new Token("1", TokenType.VAL),
+                         new Token("_", TokenType.UNMINUS)]);
     
-    rpnTokenStreams[5] = [new Token("5", TokenType.VAL),
-                          new Token("10", TokenType.VAL),
-                          new Token("1", TokenType.VAL),
-                          new Token("-", TokenType.MINUS),
-                          new Token("nrt", TokenType.ROOT)];
-    
-    tokenStreams[6] = [new Token("1", TokenType.VAL),
-                       new Token("^", TokenType.POW),
-                       new Token("1", TokenType.VAL),
-                       new Token("^", TokenType.POW),
-                       new Token("1", TokenType.VAL)];
-    
-    rpnTokenStreams[6] = [new Token("1", TokenType.VAL),
-                          new Token("1", TokenType.VAL),
-                          new Token("1", TokenType.VAL),
-                          new Token("^", TokenType.POW),
-                          new Token("^", TokenType.POW)];
-
-    //    tokenStreams[6] = [new Token("-", TokenType.MINUS),
-//                       new Token("1", TokenType.VAL)];
-//    
-//    rpnTokenStreams[6] = [new Token("1", TokenType.VAL),
-//                          new Token("-", TokenType.UNMINUS)];
+    inputStrings.add("_(1)");
+    tokenStreams.add([new Token("_", TokenType.UNMINUS),
+                      new Token("(", TokenType.LBRACE),
+                      new Token("1", TokenType.VAL),
+                      new Token(")", TokenType.RBRACE)]);
+    rpnTokenStreams.add([new Token("1", TokenType.VAL),
+                         new Token("_", TokenType.UNMINUS)]);
   }
 
   /*

@@ -42,7 +42,7 @@ void _example1() {
  */
 void _example2() {
   Parser p = new Parser();
-  Expression exp = p.parse("x*1 - (0-5)");
+  Expression exp = p.parse("x*1 - (_5)");
 
   print(exp);            // = ((x * 1.0) - -(5.0))
   print(exp.simplify()); // = (x + 5.0)
