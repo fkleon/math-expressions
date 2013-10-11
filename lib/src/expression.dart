@@ -175,7 +175,7 @@ class UnaryMinus extends UnaryOperator {
    *     minus_one = new UnaryMinus(one);
    *
    * or just:
-   *     minus_one = new UnaryMinus(-1);
+   *     minus_one = new UnaryMinus(1);
    */
   UnaryMinus(exp): super(exp);
 
@@ -205,7 +205,8 @@ class UnaryMinus extends UnaryOperator {
   }
 
   evaluate(EvaluationType type, ContextModel context) {
-    return -(exp.evaluate(type, context)); //TODO check if unary minus is supported with interval & vector
+    //TODO check if unary minus is supported with interval & vector
+    return -(exp.evaluate(type, context));
   }
 
   String toString() => '(_${exp.toString()})';
