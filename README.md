@@ -14,8 +14,8 @@ Suggestions and pull requests are always welcome!
 
 ## Features ##
 
-* Parsing, simplification and derivation of mathematical expressions.
-* Evaluation of expressions in different modes (Real, Vector, Interval).
+* Parsing, simplification and differantiation of mathematical expressions.
+* Evaluation of expressions in various modes (Real, Vector, Interval).
 * Supporting most basic functions out of the box.
 * Well documented.
 
@@ -82,7 +82,7 @@ This example shows how to simplify and differentiate
 
 * Expressions can be simplified and differentiated with respect to a given variable:
 ```
-  Expression exp = p.parse("x*1 - (-5)");
+  Expression exp = p.parse("x*1 - (_5)");
 
   print(exp);            // = ((x * 1.0) - -(5.0))
   print(exp.simplify()); // = (x + 5.0)
