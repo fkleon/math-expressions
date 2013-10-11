@@ -14,7 +14,7 @@ Suggestions and pull requests are always welcome!
 
 ## Features ##
 
-* Parsing, simplification and differantiation of mathematical expressions.
+* Parsing, simplification and differentiation of mathematical expressions.
 * Evaluation of expressions in various modes (Real, Vector, Interval).
 * Supporting most basic functions out of the box.
 * Well documented.
@@ -23,7 +23,6 @@ Suggestions and pull requests are always welcome!
 
 * Evaluations in vector space.
 * Composite functions.
-* Parser is a little rough.
 
 ## Documentation ##
 
