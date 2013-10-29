@@ -90,8 +90,8 @@ abstract class Expression {
    */
   bool _isNumber(Expression exp, [num value = 0]) {
     // Check for literal.
-    if (exp is Literal && (exp as Literal).isConstant()) {
-      return (exp as Literal).getConstantValue() == value;
+    if (exp is Literal && exp.isConstant()) {
+      return exp.getConstantValue() == value;
     }
 
     //TODO Remove this rubbish if we stick to BoundVariable
@@ -192,7 +192,7 @@ class UnaryMinus extends UnaryOperator {
 
     // double minus
     if (simplifiedOp is UnaryMinus) {
-      return (simplifiedOp as UnaryMinus).exp;
+      return simplifiedOp.exp;
     }
 
     // operand == 0
@@ -251,7 +251,7 @@ class Plus extends BinaryOperator {
     }
 
     if (secondOp is UnaryMinus) {
-      return firstOp - (secondOp as UnaryMinus).exp; // a + -(b) = a - b
+      return firstOp - secondOp.exp; // a + -(b) = a - b
     }
 
     return new Plus(firstOp, secondOp);
@@ -306,7 +306,7 @@ class Minus extends BinaryOperator {
     }
     
     if (secondOp is UnaryMinus) {
-      return firstOp + (secondOp as UnaryMinus).exp; // a - -(b) = a + b
+      return firstOp + secondOp.exp; // a - -(b) = a + b
     }
 
     return new Minus(firstOp, secondOp);

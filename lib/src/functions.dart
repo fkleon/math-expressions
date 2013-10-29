@@ -247,7 +247,7 @@ abstract class DefaultFunction extends MathFunction {
   Variable _wrapIntoVariable(Expression e) {
     if (e is Variable) {
       // Good to go..
-      return e as Variable;
+      return e;
     } else {
       // Need to wrap..
      return new BoundVariable(e);
@@ -297,10 +297,9 @@ class Exponential extends DefaultFunction {
       return new Number(Math.E); // e^1 = e
     }
 
-    if (expSimpl is Times && (expSimpl as Times).second is Ln) {
-     Times t = expSimpl as Times;
-     Ln ln = t.second;
-     return new Power(ln.arg, t.first); // e^(x*ln(y)) = y^x
+    if (expSimpl is Times && expSimpl.second is Ln) {
+     Ln ln = expSimpl.second;
+     return new Power(ln.arg, expSimpl.first); // e^(x*ln(y)) = y^x
     }
 
     return new Exponential(expSimpl);
@@ -528,10 +527,10 @@ class Sqrt extends Root {
     Expression argSimpl = arg.simplify();
 
     if (argSimpl is Power) {
-      Expression exponent = (argSimpl as Power).second;
+      Expression exponent = argSimpl.second;
       if (exponent is Number) {
-        if ((exponent as Number).value == 2) {
-          return (argSimpl as Power).first; // sqrt(x^2) = x
+        if (exponent.value == 2) {
+          return argSimpl.first; // sqrt(x^2) = x
         }
       }
     }
