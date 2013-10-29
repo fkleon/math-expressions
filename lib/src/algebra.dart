@@ -50,8 +50,7 @@ class Point3D {
    */
   bool operator==(Object o) {
     if (o is Point3D) {
-      Point3D other = o as Point3D;
-      return this.x == other.x && this.y == other.y && this.z == other.z;
+      return this.x == o.x && this.y == o.y && this.z == o.z;
     } else {
       return false;
     }
