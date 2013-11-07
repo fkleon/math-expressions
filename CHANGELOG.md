@@ -1,14 +1,23 @@
 # Changelog - math_expressions
 
+### 0.0.6-dev
+
+- Add compose operator for functions:
+  Use `&` to conveniently create a CompositeFunction from two existing
+  functions: `expr = f & g;`
+- Improve dartdoc generation
+
 ### 0.0.5 - 2013-11-06
+
 - Minor code cleanup
 - Prepare for Dart 1.0
 
 ### 0.0.4 - 2013-10-11
 
 - Fix handling of operator associativity
-- Add support for default functions to Parser
-- Add support for unary minus (input with underscore: e.g. _5 for -5)
+- Add support for default functions to parser
+- Add support for unary minus to parser:
+  Input with underscore. Instead of `'2*-5'` use `'2*_5'`.
 
 ### 0.0.3 - 2013-10-09
 
