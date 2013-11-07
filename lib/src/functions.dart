@@ -3,7 +3,7 @@ part of math_expressions;
 /**
  * A function with an arbitrary number of arguments.
  *
- * **Note:** Functions do not offer auto-wrapping of arguments into [Literal]s.
+ * __Note:__ Functions do not offer auto-wrapping of arguments into [Literal]s.
  */
 abstract class MathFunction extends Expression {
 

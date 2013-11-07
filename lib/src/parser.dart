@@ -1,10 +1,14 @@
 part of math_expressions;
 
 /**
- * The Parser creates a mathematical [Expression] from an input string.
+ * The Parser creates a mathematical [Expression] from a given input string.
  * 
  * It uses a [Lexer] to create a RPN token stream and then builds the
  * expression.
+ * 
+ * Usage example:
+ *     Parser p = new Parser();
+ *     Expression exp = p.parse("(x^2 + cos(y)) / 3");
  */
 class Parser {
   Lexer lex;
@@ -15,9 +19,10 @@ class Parser {
   Parser(): lex = new Lexer();
 
   /**
-   * Parses the given input string into an [Expression]. Throws a [ArgumentError]
-   * if the given [inputString] is empty. Throws a [StateError]if the token stream
-   * is invalid. Returns a valid [Expression].
+   * Parses the given input string into an [Expression]. Throws a
+   * [ArgumentError] if the given [inputString] is empty. Throws a
+   * [StateError] if the token stream is invalid. Returns a valid
+   * [Expression].
    */
   Expression parse(String inputString) {
     if (inputString == null || inputString.trim().isEmpty) {
