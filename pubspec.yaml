@@ -7,5 +7,6 @@ documentation: http://fkleon.github.io/math_expressions
 dependencies:
   vector_math: '>=1.3.5 <1.4.0'
 dev_dependencies:
-  benchmark_harness: any
-  unittest: any
+  unittest: '>=0.9.0 <0.10.0'
+environment:
+  sdk: '>=0.8.10+6 <2.0.0'
