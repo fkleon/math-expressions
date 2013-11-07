@@ -44,7 +44,7 @@ for
 You can either create an mathematical expression programmatically or parse a string.
 
 * Create the expression programmatically:
-```
+```dart
   Variable x = new Variable('x'), y = new Variable('y');
   Power xSquare = new Power(x, 2);
   Cos yCos = new Cos(y);
@@ -53,7 +53,7 @@ You can either create an mathematical expression programmatically or parse a str
 ```
 
 * Create the expression via the parser:
-```
+```dart
   Parser p = new Parser();
   Expression exp = p.parse("(x^2 + cos(y)) / 3");
 ```
@@ -61,7 +61,7 @@ You can either create an mathematical expression programmatically or parse a str
 #### Evaluate the expression ####
 
 * Bind variables and evaluate the expression as real number:
-```
+```dart
   // Bind variables:
   ContextModel cm = new ContextModel();
   cm.bindGlobalVariable(x, new Number(2.0));
@@ -80,7 +80,7 @@ This example shows how to simplify and differentiate
 ![Example 2][exampleEq2]
 
 * Expressions can be simplified and differentiated with respect to a given variable:
-```
+```dart
   Expression exp = p.parse("x*1 - (_5)");
 
   print(exp);            // = ((x * 1.0) - -(5.0))
