@@ -100,7 +100,7 @@ For more code, see [example.dart](example/example.dart).
 
 [mathExpr]: http://www-sfb288.math.tu-berlin.de/~jtem/mathExpr/
 [droneBadge]: https://drone.io/github.com/fkleon/math-expressions/latest
-[dartdoc]: http://fkleon.github.io/math_expressions/
+[dartdoc]: http://fkleon.github.io/math-expressions/
 [license]: LICENSE
 [exampleEq1]: http://latex.codecogs.com/gif.latex?%28x%5E2%2Bcos%28y%29%29%2F3
 [exampleEq1xy]: http://latex.codecogs.com/gif.latex?x%3D2%2Cy%3D%5Cpi
