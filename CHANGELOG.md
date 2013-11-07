@@ -1,11 +1,11 @@
 # Changelog - math_expressions
 
-### 0.0.6-dev
+### 0.0.6 - 2013-11-07
 
 - Add compose operator for functions:
   Use `&` to conveniently create a CompositeFunction from two existing
   functions: `expr = f & g;`
-- Improve dartdoc generation
+- Improve documentation and dartdoc generation
 
 ### 0.0.5 - 2013-11-06
 
