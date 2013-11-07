@@ -1,0 +1,308 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>Interval class / math_expressions Library / Dart Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="math_expressions" data-type="Interval">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Documentation</a>
+         &rsaquo; <a href="../math_expressions.html">math_expressions</a> &rsaquo; <a href="../math_expressions/Interval.html">Interval</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>Interval</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<p>An <a class="crossref" href="../math_expressions/Interval.html">Interval</a> is defined by its minimum and maximum values, where
+<em>min &lt;= max</em>.</p>
+<p>This implementation offers basic interval arithmetic operations like
+addition, subtraction, multiplication and division. Operations always
+return a new interval and will not modify the existing ones. Additionally
+this class implementions comparison relations for intervals.</p>
+<p>This implementation (partly) supports unbounded intervals with borders
+at +/- infinity and empty sets.</p>
+<p>Operator and comparison definitions are based on: 
+<em>Bohlender, Gerd, and Ulrich Kulisch. 2010.
+<a href="http://interval.louisiana.edu/reliable-computing-journal/volume-15/no-1/reliable-computing-15-pp-36-42.pdf">"Deﬁnition of the Arithmetic Operations and Comparison Relations for an Interval Arithmetic Standard"</a>.
+Reliable Computing 15 (1): 36–42.</em></p>
+<p><strong>Note</strong>: This implementation does not offer a complete set of operations yet:</p><ul><li>No handling of unbounded intervals in operators.</li><li>No proper rounding.</li></ul>
+</div>
+<h3>Implements</h3>
+<p>
+<span class="type-box"><span class="icon-class"></span><a href="../dart_core/Comparable.html">Comparable</a></span></p>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="">
+new <strong>Interval</strong>(num min, num max) <a class="anchor-link" href="#"
+              title="Permalink to Interval.Interval">#</a></h4>
+<div class="doc">
+<p>Creates a new interval with given borders.</p>
+<p>The parameter min must be smaller or equal than max for the interval
+to work properly.</p>
+</div>
+</div>
+<div class="method"><h4 id="empty">
+factory <strong>Interval.empty</strong>() <a class="anchor-link" href="#empty"
+              title="Permalink to Interval.Interval.empty">#</a></h4>
+<div class="doc">
+<p>Returns an immutable empty set.</p>
+</div>
+</div>
+</div>
+<div>
+<h3>Properties</h3>
+<div class="field"><h4 id="hashCode">
+final int         <strong>hashCode</strong> <a class="anchor-link"
+            href="#hashCode"
+            title="Permalink to Interval.hashCode">#</a>
+        </h4>
+        <div class="doc">
+<div class="inherited">
+<p>Get a hash code for this object.</p>
+<p>All objects have hash codes. Hash codes are guaranteed to be the
+same for objects that are equal when compared using the equality
+operator <code>==</code>. Other than that there are no guarantees about
+the hash codes. They will not be consistent between runs and
+there are no distribution guarantees.</p>
+<p>If a subclass overrides <a class="crossref" href="../math_expressions/Interval.html#hashCode">hashCode</a> it should override the
+equality operator as well to maintain consistency.</p>
+<div class="docs-inherited-from">docs inherited from Object </div></div>
+</div>
+</div>
+<div class="field"><h4 id="max">
+num         <strong>max</strong> <a class="anchor-link"
+            href="#max"
+            title="Permalink to Interval.max">#</a>
+        </h4>
+        <div class="doc">
+<p>Interval borders.</p>
+</div>
+</div>
+<div class="field"><h4 id="min">
+num         <strong>min</strong> <a class="anchor-link"
+            href="#min"
+            title="Permalink to Interval.min">#</a>
+        </h4>
+        <div class="doc">
+<p>Interval borders.</p>
+</div>
+</div>
+</div>
+<div>
+<h3>Operators</h3>
+<div class="method"><h4 id="+">
+dynamic <strong>operator +</strong>(<a href="../math_expressions/Interval.html">Interval</a> i) <a class="anchor-link" href="#+"
+              title="Permalink to Interval.operator +">#</a></h4>
+<div class="doc">
+<p>Performs an interval addition.</p>
+<pre><code>[a, b] + [c, d] = [a + c, b + d]
+</code></pre>
+</div>
+</div>
+<div class="method"><h4 id="unary-">
+dynamic <strong>operator -</strong>() <a class="anchor-link" href="#unary-"
+              title="Permalink to Interval.operator -">#</a></h4>
+<div class="doc">
+<p>Unary minus on intervals.</p>
+<pre><code>-[a, b] = [-b, -a]
+</code></pre>
+</div>
+</div>
+<div class="method"><h4 id="-">
+dynamic <strong>operator -</strong>(<a href="../math_expressions/Interval.html">Interval</a> i) <a class="anchor-link" href="#-"
+              title="Permalink to Interval.operator -">#</a></h4>
+<div class="doc">
+<p>Performs an interval subtraction.</p>
+<pre><code>[a, b] + [c, d] = [a - d, b - c]
+</code></pre>
+</div>
+</div>
+<div class="method"><h4 id="*">
+dynamic <strong>operator *</strong>(<a href="../math_expressions/Interval.html">Interval</a> i) <a class="anchor-link" href="#*"
+              title="Permalink to Interval.operator *">#</a></h4>
+<div class="doc">
+<p>Performs an interval multiplication.</p>
+<pre><code>[a, b] * [c, d] = [min(ac, ad, bc, bd), max(ac, ad, bc, bd)]
+</code></pre>
+</div>
+</div>
+<div class="method"><h4 id="/">
+dynamic <strong>operator /</strong>(<a href="../math_expressions/Interval.html">Interval</a> i) <a class="anchor-link" href="#/"
+              title="Permalink to Interval.operator /">#</a></h4>
+<div class="doc">
+<p>Performs an interval division.</p>
+<pre><code>[a, b] * [c, d] = [a, b] * (1/[c, d]) = [a, b] * [1/d, 1/c]
+</code></pre>
+<p><strong>Note:</strong> Does not handle division by zero and throws an <a class="crossref" href="../dart_core/ArgumentError.html">ArgumentError</a> instead.</p>
+</div>
+</div>
+<div class="method"><h4 id="<">
+dynamic <strong>operator <</strong>(<a href="../math_expressions/Interval.html">Interval</a> i) <a class="anchor-link" href="#<"
+              title="Permalink to Interval.operator <">#</a></h4>
+<div class="doc">
+<p>Less than operator on intervals.</p>
+<pre><code>[a, b] &lt; [c, d], if a &lt; c &amp;&amp; b &lt; d
+</code></pre>
+</div>
+</div>
+<div class="method"><h4 id="<=">
+dynamic <strong>operator <=</strong>(<a href="../math_expressions/Interval.html">Interval</a> i) <a class="anchor-link" href="#<="
+              title="Permalink to Interval.operator <=">#</a></h4>
+<div class="doc">
+<p>Less or equal than operator on intervals.</p>
+<pre><code>[a, b] &lt;= [c, d], if a &lt;= c &amp;&amp; b &lt;= d
+</code></pre>
+</div>
+</div>
+<div class="method"><h4 id=">">
+dynamic <strong>operator ></strong>(<a href="../math_expressions/Interval.html">Interval</a> i) <a class="anchor-link" href="#>"
+              title="Permalink to Interval.operator >">#</a></h4>
+<div class="doc">
+<p>Greater than operator on intervals.</p>
+<pre><code>[a, b] &gt; [c, d], if a &gt; c &amp;&amp; b &gt; d
+</code></pre>
+</div>
+</div>
+<div class="method"><h4 id=">=">
+dynamic <strong>operator >=</strong>(<a href="../math_expressions/Interval.html">Interval</a> i) <a class="anchor-link" href="#>="
+              title="Permalink to Interval.operator >=">#</a></h4>
+<div class="doc">
+<p>Greater or equal than operator on intervals.</p>
+<pre><code>[a, b] &gt;= [c, d], if a &gt;= c &amp;&amp; b &gt;= d
+</code></pre>
+</div>
+</div>
+<div class="method"><h4 id="==">
+dynamic <strong>operator ==</strong>(<a href="../math_expressions/Interval.html">Interval</a> i) <a class="anchor-link" href="#=="
+              title="Permalink to Interval.operator ==">#</a></h4>
+<div class="doc">
+<p>Equals operator on intervals.</p>
+<pre><code>[a, b] == [c, d], if a == c &amp;&amp; b == d
+</code></pre>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="compareTo">
+int <strong>compareTo</strong>(Comparable other) <a class="anchor-link" href="#compareTo"
+              title="Permalink to Interval.compareTo">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Compares this object to another <a class="crossref" href="../dart_core/Comparable.html">Comparable</a></p>
+<p>Returns a value like a <a class="crossref" href="../dart_core/Comparator.html">Comparator</a> when comparing <code>this</code> to 
+<span class="param">other</span>.</p>
+<p>May throw an <a class="crossref" href="../dart_core/ArgumentError.html">ArgumentError</a> if 
+<span class="param">other</span> is of a type that
+is not comparable to <code>this</code>.</p>
+<div class="docs-inherited-from">docs inherited from Comparable </div></div>
+</div>
+</div>
+<div class="method"><h4 id="contains">
+bool <strong>contains</strong>(num element) <a class="anchor-link" href="#contains"
+              title="Permalink to Interval.contains">#</a></h4>
+<div class="doc">
+<p>Element-of relation. Returns true, if given element is included
+in this interval.
+Defined on a real number i and an interval:</p>
+<pre><code>i element of [a, b] &lt;=&gt; a &lt;= i &amp;&amp; i &lt;= b
+</code></pre>
+</div>
+</div>
+<div class="method"><h4 id="containsZero">
+bool <strong>containsZero</strong>() <a class="anchor-link" href="#containsZero"
+              title="Permalink to Interval.containsZero">#</a></h4>
+<div class="doc">
+<p>Returns true, if this interval contains zero (min &lt;= 0 &lt;= max).</p>
+</div>
+</div>
+<div class="method"><h4 id="glb">
+<a href="../math_expressions/Interval.html">Interval</a> <strong>glb</strong>(<a href="../math_expressions/Interval.html">Interval</a> i) <a class="anchor-link" href="#glb"
+              title="Permalink to Interval.glb">#</a></h4>
+<div class="doc">
+<p>Returns the greatest lower bound.</p>
+</div>
+</div>
+<div class="method"><h4 id="includes">
+bool <strong>includes</strong>(<a href="../math_expressions/Interval.html">Interval</a> i) <a class="anchor-link" href="#includes"
+              title="Permalink to Interval.includes">#</a></h4>
+<div class="doc">
+<p>Inclusion relation. Returns true, if the given interval is included
+in this interval.</p>
+<pre><code>[a, b] subset of [c, d] &lt;=&gt; c &lt;= a &amp;&amp; b &gt;= d
+</code></pre>
+</div>
+</div>
+<div class="method"><h4 id="isBound">
+bool <strong>isBound</strong>() <a class="anchor-link" href="#isBound"
+              title="Permalink to Interval.isBound">#</a></h4>
+<div class="doc">
+<p>Returns true, if neither min or max values are infinite.</p>
+</div>
+</div>
+<div class="method"><h4 id="isEmpty">
+bool <strong>isEmpty</strong>() <a class="anchor-link" href="#isEmpty"
+              title="Permalink to Interval.isEmpty">#</a></h4>
+<div class="doc">
+<p>Returns true, if this is the empty set.</p>
+</div>
+</div>
+<div class="method"><h4 id="isPositive">
+bool <strong>isPositive</strong>() <a class="anchor-link" href="#isPositive"
+              title="Permalink to Interval.isPositive">#</a></h4>
+<div class="doc">
+<p>Returns true, if this interval is positive (min >= 0)</p>
+</div>
+</div>
+<div class="method"><h4 id="length">
+num <strong>length</strong>() <a class="anchor-link" href="#length"
+              title="Permalink to Interval.length">#</a></h4>
+<div class="doc">
+<p>Returns the length of this interval.</p>
+</div>
+</div>
+<div class="method"><h4 id="lub">
+<a href="../math_expressions/Interval.html">Interval</a> <strong>lub</strong>(<a href="../math_expressions/Interval.html">Interval</a> i) <a class="anchor-link" href="#lub"
+              title="Permalink to Interval.lub">#</a></h4>
+<div class="doc">
+<p>Returns the least upper bound.</p>
+</div>
+</div>
+<div class="method"><h4 id="toString">
+String <strong>toString</strong>() <a class="anchor-link" href="#toString"
+              title="Permalink to Interval.toString">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Returns a string representation of this object.</p>
+<div class="docs-inherited-from">docs inherited from Object </div></div>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          <div>This page was generated at 2013-11-07 14:52:08.132</div>
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

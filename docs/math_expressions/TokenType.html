@@ -1,0 +1,269 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>TokenType class / math_expressions Library / Dart Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="math_expressions" data-type="TokenType">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Documentation</a>
+         &rsaquo; <a href="../math_expressions.html">math_expressions</a> &rsaquo; <a href="../math_expressions/TokenType.html">TokenType</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>TokenType</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<p>A token type. Access token types via the static final fields.</p>
+<p>For example, to access the token type PLUS:</p>
+<pre><code>plusType = TokenType.PLUS;
+</code></pre>
+<p>The type defines the <a href="precedence">priority</a> of the token.</p>
+<pre><code>(+,-) &lt; (*,/) &lt; (^) &lt; (-u) &lt; functions
+
+</code></pre>
+<p>It also defines the <code>associativity</code> of the token. True stands for
+left-associative, false for right-associative.</p>
+</div>
+<div>
+<h3>Static Properties</h3>
+<div class="field"><h4 id="COS">
+const <a href="../math_expressions/TokenType.html">TokenType</a>         <strong>COS</strong> <a class="anchor-link"
+            href="#COS"
+            title="Permalink to TokenType.COS">#</a>
+        </h4>
+        <div class="doc">
+</div>
+</div>
+<div class="field"><h4 id="DIV">
+const <a href="../math_expressions/TokenType.html">TokenType</a>         <strong>DIV</strong> <a class="anchor-link"
+            href="#DIV"
+            title="Permalink to TokenType.DIV">#</a>
+        </h4>
+        <div class="doc">
+</div>
+</div>
+<div class="field"><h4 id="EFUNC">
+const <a href="../math_expressions/TokenType.html">TokenType</a>         <strong>EFUNC</strong> <a class="anchor-link"
+            href="#EFUNC"
+            title="Permalink to TokenType.EFUNC">#</a>
+        </h4>
+        <div class="doc">
+</div>
+</div>
+<div class="field"><h4 id="LBRACE">
+const <a href="../math_expressions/TokenType.html">TokenType</a>         <strong>LBRACE</strong> <a class="anchor-link"
+            href="#LBRACE"
+            title="Permalink to TokenType.LBRACE">#</a>
+        </h4>
+        <div class="doc">
+</div>
+</div>
+<div class="field"><h4 id="LN">
+const <a href="../math_expressions/TokenType.html">TokenType</a>         <strong>LN</strong> <a class="anchor-link"
+            href="#LN"
+            title="Permalink to TokenType.LN">#</a>
+        </h4>
+        <div class="doc">
+</div>
+</div>
+<div class="field"><h4 id="LOG">
+const <a href="../math_expressions/TokenType.html">TokenType</a>         <strong>LOG</strong> <a class="anchor-link"
+            href="#LOG"
+            title="Permalink to TokenType.LOG">#</a>
+        </h4>
+        <div class="doc">
+</div>
+</div>
+<div class="field"><h4 id="MINUS">
+const <a href="../math_expressions/TokenType.html">TokenType</a>         <strong>MINUS</strong> <a class="anchor-link"
+            href="#MINUS"
+            title="Permalink to TokenType.MINUS">#</a>
+        </h4>
+        <div class="doc">
+</div>
+</div>
+<div class="field"><h4 id="PLUS">
+const <a href="../math_expressions/TokenType.html">TokenType</a>         <strong>PLUS</strong> <a class="anchor-link"
+            href="#PLUS"
+            title="Permalink to TokenType.PLUS">#</a>
+        </h4>
+        <div class="doc">
+</div>
+</div>
+<div class="field"><h4 id="POW">
+const <a href="../math_expressions/TokenType.html">TokenType</a>         <strong>POW</strong> <a class="anchor-link"
+            href="#POW"
+            title="Permalink to TokenType.POW">#</a>
+        </h4>
+        <div class="doc">
+</div>
+</div>
+<div class="field"><h4 id="RBRACE">
+const <a href="../math_expressions/TokenType.html">TokenType</a>         <strong>RBRACE</strong> <a class="anchor-link"
+            href="#RBRACE"
+            title="Permalink to TokenType.RBRACE">#</a>
+        </h4>
+        <div class="doc">
+</div>
+</div>
+<div class="field"><h4 id="ROOT">
+const <a href="../math_expressions/TokenType.html">TokenType</a>         <strong>ROOT</strong> <a class="anchor-link"
+            href="#ROOT"
+            title="Permalink to TokenType.ROOT">#</a>
+        </h4>
+        <div class="doc">
+</div>
+</div>
+<div class="field"><h4 id="SEPAR">
+const <a href="../math_expressions/TokenType.html">TokenType</a>         <strong>SEPAR</strong> <a class="anchor-link"
+            href="#SEPAR"
+            title="Permalink to TokenType.SEPAR">#</a>
+        </h4>
+        <div class="doc">
+</div>
+</div>
+<div class="field"><h4 id="SIN">
+const <a href="../math_expressions/TokenType.html">TokenType</a>         <strong>SIN</strong> <a class="anchor-link"
+            href="#SIN"
+            title="Permalink to TokenType.SIN">#</a>
+        </h4>
+        <div class="doc">
+</div>
+</div>
+<div class="field"><h4 id="SQRT">
+const <a href="../math_expressions/TokenType.html">TokenType</a>         <strong>SQRT</strong> <a class="anchor-link"
+            href="#SQRT"
+            title="Permalink to TokenType.SQRT">#</a>
+        </h4>
+        <div class="doc">
+</div>
+</div>
+<div class="field"><h4 id="TAN">
+const <a href="../math_expressions/TokenType.html">TokenType</a>         <strong>TAN</strong> <a class="anchor-link"
+            href="#TAN"
+            title="Permalink to TokenType.TAN">#</a>
+        </h4>
+        <div class="doc">
+</div>
+</div>
+<div class="field"><h4 id="TIMES">
+const <a href="../math_expressions/TokenType.html">TokenType</a>         <strong>TIMES</strong> <a class="anchor-link"
+            href="#TIMES"
+            title="Permalink to TokenType.TIMES">#</a>
+        </h4>
+        <div class="doc">
+</div>
+</div>
+<div class="field"><h4 id="UNMINUS">
+const <a href="../math_expressions/TokenType.html">TokenType</a>         <strong>UNMINUS</strong> <a class="anchor-link"
+            href="#UNMINUS"
+            title="Permalink to TokenType.UNMINUS">#</a>
+        </h4>
+        <div class="doc">
+</div>
+</div>
+<div class="field"><h4 id="VAL">
+const <a href="../math_expressions/TokenType.html">TokenType</a>         <strong>VAL</strong> <a class="anchor-link"
+            href="#VAL"
+            title="Permalink to TokenType.VAL">#</a>
+        </h4>
+        <div class="doc">
+</div>
+</div>
+<div class="field"><h4 id="VAR">
+const <a href="../math_expressions/TokenType.html">TokenType</a>         <strong>VAR</strong> <a class="anchor-link"
+            href="#VAR"
+            title="Permalink to TokenType.VAR">#</a>
+        </h4>
+        <div class="doc">
+</div>
+</div>
+</div>
+<div>
+<h3>Properties</h3>
+<div class="field"><h4 id="function">
+final bool         <strong>function</strong> <a class="anchor-link"
+            href="#function"
+            title="Permalink to TokenType.function">#</a>
+        </h4>
+        <div class="doc">
+<p>True, if this token is a function.</p>
+</div>
+</div>
+<div class="field"><h4 id="leftAssociative">
+final bool         <strong>leftAssociative</strong> <a class="anchor-link"
+            href="#leftAssociative"
+            title="Permalink to TokenType.leftAssociative">#</a>
+        </h4>
+        <div class="doc">
+<p>Associativity of this token type. true = left.</p>
+</div>
+</div>
+<div class="field"><h4 id="operator">
+final bool         <strong>operator</strong> <a class="anchor-link"
+            href="#operator"
+            title="Permalink to TokenType.operator">#</a>
+        </h4>
+        <div class="doc">
+<p>True, if this token is an operator.</p>
+</div>
+</div>
+<div class="field"><h4 id="priority">
+final int         <strong>priority</strong> <a class="anchor-link"
+            href="#priority"
+            title="Permalink to TokenType.priority">#</a>
+        </h4>
+        <div class="doc">
+<p>The priority of this token type.</p>
+</div>
+</div>
+<div class="field"><h4 id="value">
+final String         <strong>value</strong> <a class="anchor-link"
+            href="#value"
+            title="Permalink to TokenType.value">#</a>
+        </h4>
+        <div class="doc">
+<p>The string value of this token type.</p>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="toString">
+String <strong>toString</strong>() <a class="anchor-link" href="#toString"
+              title="Permalink to TokenType.toString">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Returns a string representation of this object.</p>
+<div class="docs-inherited-from">docs inherited from Object </div></div>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          <div>This page was generated at 2013-11-07 14:52:07.571</div>
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

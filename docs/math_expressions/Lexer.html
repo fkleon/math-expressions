@@ -1,0 +1,118 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>Lexer class / math_expressions Library / Dart Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="math_expressions" data-type="Lexer">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Documentation</a>
+         &rsaquo; <a href="../math_expressions.html">math_expressions</a> &rsaquo; <a href="../math_expressions/Lexer.html">Lexer</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>Lexer</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<p>The lexer creates tokens (see <a class="crossref" href="../math_expressions/TokenType.html">TokenType</a> and <a class="crossref" href="../math_expressions/Token.html">Token</a>) from an input string.
+The input string is expected to be in
+<a href="https://en.wikipedia.org/wiki/Infix_notation">infix notation form</a>.
+The lexer can convert an infix stream into a
+<a href="https://en.wikipedia.org/wiki/Reverse_Polish_notation">postfix stream</a>
+(Reverse Polish Notation) for further processing by a <a class="crossref" href="../math_expressions/Parser.html">Parser</a>.</p>
+</div>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="">
+new <strong>Lexer</strong>() <a class="anchor-link" href="#"
+              title="Permalink to Lexer.Lexer">#</a></h4>
+<div class="doc">
+<p>Creates a new lexer.</p>
+</div>
+</div>
+</div>
+<div>
+<h3>Properties</h3>
+<div class="field"><h4 id="intBuffer">
+String         <strong>intBuffer</strong> <a class="anchor-link"
+            href="#intBuffer"
+            title="Permalink to Lexer.intBuffer">#</a>
+        </h4>
+        <div class="doc">
+<p>Buffer for numbers</p>
+</div>
+</div>
+<div class="field"><h4 id="keywords">
+final Map         <strong>keywords</strong> <a class="anchor-link"
+            href="#keywords"
+            title="Permalink to Lexer.keywords">#</a>
+        </h4>
+        <div class="doc">
+</div>
+</div>
+<div class="field"><h4 id="varBuffer">
+String         <strong>varBuffer</strong> <a class="anchor-link"
+            href="#varBuffer"
+            title="Permalink to Lexer.varBuffer">#</a>
+        </h4>
+        <div class="doc">
+<p>Buffer for variable and function names</p>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="shuntingYard">
+List&lt;<a href="../math_expressions/Token.html">Token</a>&gt; <strong>shuntingYard</strong>(List&lt;<a href="../math_expressions/Token.html">Token</a>&gt; stream) <a class="anchor-link" href="#shuntingYard"
+              title="Permalink to Lexer.shuntingYard">#</a></h4>
+<div class="doc">
+<p>Transforms the lexer's token stream into RPN using the Shunting-yard
+algorithm. Returns a list of <a class="crossref" href="../math_expressions/Token.html">Token</a> in RPN form. Throws an
+<a class="crossref" href="../dart_core/ArgumentError.html">ArgumentError</a> if the list is empty.</p>
+</div>
+</div>
+<div class="method"><h4 id="tokenize">
+List&lt;<a href="../math_expressions/Token.html">Token</a>&gt; <strong>tokenize</strong>(String inputString) <a class="anchor-link" href="#tokenize"
+              title="Permalink to Lexer.tokenize">#</a></h4>
+<div class="doc">
+<p>Tokenizes a given input string.
+Returns a list of <a class="crossref" href="../math_expressions/Token.html">Token</a> in infix notation.</p>
+</div>
+</div>
+<div class="method"><h4 id="tokenizeToRPN">
+List&lt;<a href="../math_expressions/Token.html">Token</a>&gt; <strong>tokenizeToRPN</strong>(String inputString) <a class="anchor-link" href="#tokenizeToRPN"
+              title="Permalink to Lexer.tokenizeToRPN">#</a></h4>
+<div class="doc">
+<p>This method invokes the createTokenStream methode to create an infix token
+stream and then invokes the shunting yard method to transform this stream
+into a RPN (reverse polish notation) token stream.</p>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          <div>This page was generated at 2013-11-07 14:52:07.616</div>
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

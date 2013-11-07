@@ -1,0 +1,189 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>Point3D class / math_expressions Library / Dart Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="math_expressions" data-type="Point3D">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Documentation</a>
+         &rsaquo; <a href="../math_expressions.html">math_expressions</a> &rsaquo; <a href="../math_expressions/Point3D.html">Point3D</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>Point3D</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<p>A point in 3-dimensional space.
+This implementation supplies common mathematical operations on points.</p>
+</div>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="">
+new <strong>Point3D</strong>(double x, double y, double z) <a class="anchor-link" href="#"
+              title="Permalink to Point3D.Point3D">#</a></h4>
+<div class="doc">
+<p>Creates a new Point3D with the given coordinates.</p>
+</div>
+</div>
+<div class="method"><h4 id="splat">
+new <strong>Point3D.splat</strong>(num val) <a class="anchor-link" href="#splat"
+              title="Permalink to Point3D.Point3D.splat">#</a></h4>
+<div class="doc">
+<p>Creates a new Point3D and "splats" the given value to each coordinate.</p>
+</div>
+</div>
+<div class="method"><h4 id="vec">
+new <strong>Point3D.vec</strong>(vec) <a class="anchor-link" href="#vec"
+              title="Permalink to Point3D.Point3D.vec">#</a></h4>
+<div class="doc">
+<p>Creates a new Point3D from given vector3 / vector4.</p>
+</div>
+</div>
+<div class="method"><h4 id="zero">
+new <strong>Point3D.zero</strong>() <a class="anchor-link" href="#zero"
+              title="Permalink to Point3D.Point3D.zero">#</a></h4>
+<div class="doc">
+<p>Creates a new Point3D at the coordinate origin.</p>
+</div>
+</div>
+</div>
+<div>
+<h3>Properties</h3>
+<div class="field"><h4 id="hashCode">
+final int         <strong>hashCode</strong> <a class="anchor-link"
+            href="#hashCode"
+            title="Permalink to Point3D.hashCode">#</a>
+        </h4>
+        <div class="doc">
+<div class="inherited">
+<p>Get a hash code for this object.</p>
+<p>All objects have hash codes. Hash codes are guaranteed to be the
+same for objects that are equal when compared using the equality
+operator <code>==</code>. Other than that there are no guarantees about
+the hash codes. They will not be consistent between runs and
+there are no distribution guarantees.</p>
+<p>If a subclass overrides <a class="crossref" href="../math_expressions/Point3D.html#hashCode">hashCode</a> it should override the
+equality operator as well to maintain consistency.</p>
+<div class="docs-inherited-from">docs inherited from Object </div></div>
+</div>
+</div>
+<div class="field"><h4 id="x">
+double         <strong>x</strong> <a class="anchor-link"
+            href="#x"
+            title="Permalink to Point3D.x">#</a>
+        </h4>
+        <div class="doc">
+</div>
+</div>
+<div class="field"><h4 id="y">
+double         <strong>y</strong> <a class="anchor-link"
+            href="#y"
+            title="Permalink to Point3D.y">#</a>
+        </h4>
+        <div class="doc">
+</div>
+</div>
+<div class="field"><h4 id="z">
+double         <strong>z</strong> <a class="anchor-link"
+            href="#z"
+            title="Permalink to Point3D.z">#</a>
+        </h4>
+        <div class="doc">
+</div>
+</div>
+</div>
+<div>
+<h3>Operators</h3>
+<div class="method"><h4 id="+">
+<a href="../math_expressions/Point3D.html">Point3D</a> <strong>operator +</strong>(Vector3 v) <a class="anchor-link" href="#+"
+              title="Permalink to Point3D.operator +">#</a></h4>
+<div class="doc">
+<p>Returns a new point which position is determined by moving the old point
+along the given vector.</p>
+</div>
+</div>
+<div class="method"><h4 id="unary-">
+<a href="../math_expressions/Point3D.html">Point3D</a> <strong>operator -</strong>() <a class="anchor-link" href="#unary-"
+              title="Permalink to Point3D.operator -">#</a></h4>
+<div class="doc">
+<p>Negates the point's components.</p>
+</div>
+</div>
+<div class="method"><h4 id="-">
+Vector3 <strong>operator -</strong>(<a href="../math_expressions/Point3D.html">Point3D</a> p2) <a class="anchor-link" href="#-"
+              title="Permalink to Point3D.operator -">#</a></h4>
+<div class="doc">
+<p>Returns the <a class="crossref" href="../vector_math/Vector3.html">Vector3</a> pointing from the given point to this point.</p>
+</div>
+</div>
+<div class="method"><h4 id="==">
+bool <strong>operator ==</strong>(Object o) <a class="anchor-link" href="#=="
+              title="Permalink to Point3D.operator ==">#</a></h4>
+<div class="doc">
+<p>Checks for equality. Two points are considered equal, if their coordinates
+match.</p>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="lerp">
+<a href="../math_expressions/Point3D.html">Point3D</a> <strong>lerp</strong>(<a href="../math_expressions/Point3D.html">Point3D</a> p2, num coeff) <a class="anchor-link" href="#lerp"
+              title="Permalink to Point3D.lerp">#</a></h4>
+<div class="doc">
+<p>Performs a linear interpolation between two points.</p>
+</div>
+</div>
+<div class="method"><h4 id="toString">
+String <strong>toString</strong>() <a class="anchor-link" href="#toString"
+              title="Permalink to Point3D.toString">#</a></h4>
+<div class="doc">
+<div class="inherited">
+<p>Returns a string representation of this object.</p>
+<div class="docs-inherited-from">docs inherited from Object </div></div>
+</div>
+</div>
+<div class="method"><h4 id="toVec3">
+Vector3 <strong>toVec3</strong>() <a class="anchor-link" href="#toVec3"
+              title="Permalink to Point3D.toVec3">#</a></h4>
+<div class="doc">
+<p>Transforms the point to its vector representation.</p>
+</div>
+</div>
+<div class="method"><h4 id="toVec4">
+Vector4 <strong>toVec4</strong>() <a class="anchor-link" href="#toVec4"
+              title="Permalink to Point3D.toVec4">#</a></h4>
+<div class="doc">
+<p>Transforms the point to its homogeneous vector4 representation.
+The w component is set to 1.</p>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          <div>This page was generated at 2013-11-07 14:52:08.154</div>
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

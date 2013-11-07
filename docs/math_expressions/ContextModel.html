@@ -1,0 +1,115 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>ContextModel class / math_expressions Library / Dart Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="math_expressions" data-type="ContextModel">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Documentation</a>
+         &rsaquo; <a href="../math_expressions.html">math_expressions</a> &rsaquo; <a href="../math_expressions/ContextModel.html">ContextModel</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>ContextModel</strong>
+          class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<p>The context model keeps track of all known variables and functions.</p>
+</div>
+<div>
+<h3>Constructors</h3>
+<div class="method"><h4 id="">
+new <strong>ContextModel</strong>() <a class="anchor-link" href="#"
+              title="Permalink to ContextModel.ContextModel">#</a></h4>
+<div class="doc">
+<p>Creates a new, empty context model.</p>
+</div>
+</div>
+</div>
+<div>
+<h3>Properties</h3>
+<div class="field"><h4 id="functions">
+Set&lt;<a href="../math_expressions/MathFunction.html">MathFunction</a>&gt;         <strong>functions</strong> <a class="anchor-link"
+            href="#functions"
+            title="Permalink to ContextModel.functions">#</a>
+        </h4>
+        <div class="doc">
+</div>
+</div>
+<div class="field"><h4 id="variables">
+Map&lt;String, <a href="../math_expressions/Expression.html">Expression</a>&gt;         <strong>variables</strong> <a class="anchor-link"
+            href="#variables"
+            title="Permalink to ContextModel.variables">#</a>
+        </h4>
+        <div class="doc">
+<p>Variable map (name -> bound expression).</p>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="bindGlobalFunction">
+void <strong>bindGlobalFunction</strong>(<a href="../math_expressions/MathFunction.html">MathFunction</a> f) <a class="anchor-link" href="#bindGlobalFunction"
+              title="Permalink to ContextModel.bindGlobalFunction">#</a></h4>
+<div class="doc">
+<p>Binds a function to this context.</p>
+</div>
+</div>
+<div class="method"><h4 id="bindGlobalVariable">
+void <strong>bindGlobalVariable</strong>(<a href="../math_expressions/Variable.html">Variable</a> v, <a href="../math_expressions/Expression.html">Expression</a> e) <a class="anchor-link" href="#bindGlobalVariable"
+              title="Permalink to ContextModel.bindGlobalVariable">#</a></h4>
+<div class="doc">
+<p>Binds a variable to an expression in this context.</p>
+</div>
+</div>
+<div class="method"><h4 id="bindGlobalVariableName">
+void <strong>bindGlobalVariableName</strong>(String vName, <a href="../math_expressions/Expression.html">Expression</a> e) <a class="anchor-link" href="#bindGlobalVariableName"
+              title="Permalink to ContextModel.bindGlobalVariableName">#</a></h4>
+<div class="doc">
+<p>Binds a variable name to an expression in this context.</p>
+</div>
+</div>
+<div class="method"><h4 id="getExpression">
+<a href="../math_expressions/Expression.html">Expression</a> <strong>getExpression</strong>(String varName) <a class="anchor-link" href="#getExpression"
+              title="Permalink to ContextModel.getExpression">#</a></h4>
+<div class="doc">
+<p>Returns the bound expression for the given variable.</p>
+<p>Throws a StateError, if variable is not bound.</p>
+</div>
+</div>
+<div class="method"><h4 id="getFunction">
+<a href="../math_expressions/MathFunction.html">MathFunction</a> <strong>getFunction</strong>(String name) <a class="anchor-link" href="#getFunction"
+              title="Permalink to ContextModel.getFunction">#</a></h4>
+<div class="doc">
+<p>Returns the function for the given function name.</p>
+<p>Throws a StateError, if function is not bound.</p>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          <div>This page was generated at 2013-11-07 14:52:07.526</div>
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        

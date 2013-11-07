@@ -1,0 +1,134 @@
+        <!DOCTYPE html>
+        <html>
+        <head>
+                <meta charset="utf-8">
+        <title>Expression abstract class / math_expressions Library / Dart Documentation</title>
+        <link rel="stylesheet" type="text/css"
+            href="../styles.css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans:400,600,700,800" rel="stylesheet" type="text/css">
+        <link rel="shortcut icon" href="../favicon.ico">
+        
+        </head>
+        <body data-library="math_expressions" data-type="Expression">
+        <div class="page">
+        <div class="header">
+          <a href="../index.html"><div class="logo"></div></a>
+          <a href="../index.html">Dart Documentation</a>
+         &rsaquo; <a href="../math_expressions.html">math_expressions</a> &rsaquo; <a href="../math_expressions/Expression.html">Expression</a>        <div id="search-box">
+          <input type="search" name="q" id="q" autocomplete="off"
+              class="search-input" placeholder="Search API">
+        </div>
+        
+      </div>
+      <div class="drop-down" id="drop-down"></div>
+      
+        <div class="nav">
+        
+</div>
+<div class="content">
+        <h2><strong>Expression</strong>
+          abstract class
+        </h2>
+        
+<button id="show-inherited" class="show-inherited">Hide inherited</button>
+<div class="doc">
+<p>Any Expression supports basic mathematical operations like
+addition, subtraction, multiplication, division, power and negate.</p>
+<p>Furthermore, any expression can be differentiated with respect to
+a given variable. Also expressions know how to simplify themselves.</p>
+<p>There are different classes of expressions:</p><ul><li>
+<p>Literals (see <a class="crossref" href="../math_expressions/Literal.html">Literal</a>)</p><ul><li>Number Literals (see <a class="crossref" href="../math_expressions/Number.html">Number</a>)</li><li>Variable Literals (see <a class="crossref" href="../math_expressions/Variable.html">Variable</a>)</li><li>Vector Literals (see <a class="crossref" href="../math_expressions/Vector.html">Vector</a>)</li><li>Interval Literals (see <a class="crossref" href="../math_expressions/IntervalLiteral.html">IntervalLiteral</a>)</li></ul></li><li>
+<p>Operators (support auto-wrapping of parameters into Literals)</p><ul><li>Unary Operators (see <a class="crossref" href="../math_expressions/UnaryOperator.html">UnaryOperator</a>)</li><li>Binary Operators (see <a class="crossref" href="../math_expressions/BinaryOperator.html">BinaryOperator</a>)</li></ul></li><li>
+<p>Functions (see <a class="crossref" href="../math_expressions/MathFunction.html">MathFunction</a>)</p><ul><li>Pre-defined Functions (see <a class="crossref" href="../math_expressions/DefaultFunction.html">DefaultFunction</a>)</li><li>Composite Functions (see <a class="crossref" href="../math_expressions/CompositeFunction.html">CompositeFunction</a>)</li><li>Custom Functions (see <a class="crossref" href="../math_expressions/CustomFunction.html">CustomFunction</a>)</li></ul></li></ul>
+<p>Pre-defined functions are <a class="crossref" href="../math_expressions/Exponential.html">Exponential</a>, <a class="crossref" href="../math_expressions/Log.html">Log</a>, <a class="crossref" href="../math_expressions/Ln.html">Ln</a>, nth-<a class="crossref" href="../math_expressions/Root.html">Root</a>, <a class="crossref" href="../math_expressions/Sqrt.html">Sqrt</a>,
+<a class="crossref" href="../math_expressions/Sin.html">Sin</a>, <a class="crossref" href="../math_expressions/Cos.html">Cos</a> and <a class="crossref" href="../math_expressions/Tan.html">Tan</a>.</p>
+</div>
+<h3>Subclasses</h3>
+<p>
+<span class="type-box"><span class="icon-class"></span><a href="../math_expressions/BinaryOperator.html">BinaryOperator</a></span>, <span class="type-box"><span class="icon-class"></span><a href="../math_expressions/Literal.html">Literal</a></span>, <span class="type-box"><span class="icon-class"></span><a href="../math_expressions/MathFunction.html">MathFunction</a></span>, <span class="type-box"><span class="icon-class"></span><a href="../math_expressions/UnaryOperator.html">UnaryOperator</a></span></p>
+<div>
+<h3>Operators</h3>
+<div class="method"><h4 id="+">
+<a href="../math_expressions/Expression.html">Expression</a> <strong>operator +</strong>(<a href="../math_expressions/Expression.html">Expression</a> exp) <a class="anchor-link" href="#+"
+              title="Permalink to Expression.operator +">#</a></h4>
+<div class="doc">
+<p>Add operator. Creates a <a class="crossref" href="../math_expressions/Plus.html">Plus</a> expression.</p>
+</div>
+</div>
+<div class="method"><h4 id="unary-">
+<a href="../math_expressions/Expression.html">Expression</a> <strong>operator -</strong>() <a class="anchor-link" href="#unary-"
+              title="Permalink to Expression.operator -">#</a></h4>
+<div class="doc">
+<p>Unary minus operator. Creates a <a class="crossref" href="../math_expressions/UnaryMinus.html">UnaryMinus</a> expression.</p>
+</div>
+</div>
+<div class="method"><h4 id="-">
+<a href="../math_expressions/Expression.html">Expression</a> <strong>operator -</strong>(<a href="../math_expressions/Expression.html">Expression</a> exp) <a class="anchor-link" href="#-"
+              title="Permalink to Expression.operator -">#</a></h4>
+<div class="doc">
+<p>Subtract operator. Creates a <a class="crossref" href="../math_expressions/Minus.html">Minus</a> expression.</p>
+</div>
+</div>
+<div class="method"><h4 id="*">
+<a href="../math_expressions/Expression.html">Expression</a> <strong>operator *</strong>(<a href="../math_expressions/Expression.html">Expression</a> exp) <a class="anchor-link" href="#*"
+              title="Permalink to Expression.operator *">#</a></h4>
+<div class="doc">
+<p>Multiply operator. Creates a <a class="crossref" href="../math_expressions/Times.html">Times</a> expression.</p>
+</div>
+</div>
+<div class="method"><h4 id="/">
+<a href="../math_expressions/Expression.html">Expression</a> <strong>operator /</strong>(<a href="../math_expressions/Expression.html">Expression</a> exp) <a class="anchor-link" href="#/"
+              title="Permalink to Expression.operator /">#</a></h4>
+<div class="doc">
+<p>Divide operator. Creates a <a class="crossref" href="../math_expressions/Divide.html">Divide</a> expression.</p>
+</div>
+</div>
+<div class="method"><h4 id="^">
+<a href="../math_expressions/Expression.html">Expression</a> <strong>operator ^</strong>(<a href="../math_expressions/Expression.html">Expression</a> exp) <a class="anchor-link" href="#^"
+              title="Permalink to Expression.operator ^">#</a></h4>
+<div class="doc">
+<p>Power operator. Creates a <a class="crossref" href="../math_expressions/Power.html">Power</a> expression.</p>
+</div>
+</div>
+</div>
+<div>
+<h3>Methods</h3>
+<div class="method"><h4 id="derive">
+abstract <a href="../math_expressions/Expression.html">Expression</a> <strong>derive</strong>(String toVar) <a class="anchor-link" href="#derive"
+              title="Permalink to Expression.derive">#</a></h4>
+<div class="doc">
+<p>Derives this expression with respect to the given variable.</p>
+</div>
+</div>
+<div class="method"><h4 id="evaluate">
+abstract dynamic <strong>evaluate</strong>(<a href="../math_expressions/EvaluationType.html">EvaluationType</a> type, <a href="../math_expressions/ContextModel.html">ContextModel</a> context) <a class="anchor-link" href="#evaluate"
+              title="Permalink to Expression.evaluate">#</a></h4>
+<div class="doc">
+<p>Evaluates this expression according to given type and context.</p>
+</div>
+</div>
+<div class="method"><h4 id="simplify">
+<a href="../math_expressions/Expression.html">Expression</a> <strong>simplify</strong>() <a class="anchor-link" href="#simplify"
+              title="Permalink to Expression.simplify">#</a></h4>
+<div class="doc">
+<p>Returns a simplified version of this expression.
+Subclasses should overwrite this method, if applicable.</p>
+</div>
+</div>
+<div class="method"><h4 id="toString">
+abstract String <strong>toString</strong>() <a class="anchor-link" href="#toString"
+              title="Permalink to Expression.toString">#</a></h4>
+<div class="doc">
+<p>Sublcasses should override this method.</p>
+</div>
+</div>
+</div>
+        </div>
+        <div class="clear"></div>
+        </div>
+        <div class="footer">
+          <div>This page was generated at 2013-11-07 14:52:08.099</div>
+        </div>
+        <script async src="../client-live-nav.js"></script>
+        </body></html>
+        
