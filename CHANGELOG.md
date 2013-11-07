@@ -1,5 +1,9 @@
 # Changelog - math_expressions
 
+### 0.0.5 - 2013-11-06
+- Minor code cleanup
+- Prepare for Dart 1.0
+
 ### 0.0.4 - 2013-10-11
 
 - Fix handling of operator associativity
