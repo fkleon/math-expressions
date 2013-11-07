@@ -6,6 +6,10 @@ part of math_expressions;
  * **Note:** Functions do not offer auto-wrapping of arguments into [Literal]s.
  */
 abstract class MathFunction extends Expression {
+
+  /// Compose operator. Creates a [CompositeFunction].
+  MathFunction operator&(MathFunction g) => new CompositeFunction(this, g);
+  
   /// Name of this function.
   String name;
 
