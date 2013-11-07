@@ -144,7 +144,7 @@ class AlgebraTests extends TestSet {
   }
 
   void expectEmptyInterval(i) {
-    expect(i.emptySet == true, isTrue);
+    expect(i.isEmpty(), isTrue);
     expect(i.min.isNaN, i.max.isNaN);
   }
 
