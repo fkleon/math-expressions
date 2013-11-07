@@ -10,3 +10,7 @@ packages
 # Folders #
 packages/
 web/out/
+
+# Documentation #
+docs/
+index.html
