@@ -78,7 +78,7 @@ abstract class Expression {
    *
    * Throws ArgumentError, if given arg is not an Expression, num oder String.
    *
-   * _Note_: Does not handle negative numbers, will treat them as positives!
+   * __Note__: Does not handle negative numbers, will treat them as positives!
    */
   Expression _toExpression(var arg) {
     if (arg is Expression) {

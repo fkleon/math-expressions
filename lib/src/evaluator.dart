@@ -11,7 +11,7 @@ part of math_expressions;
  * - VECTOR
  * - INTERVAL
  *
- * _Note_: This class emulates an enumeration, since they are not supported
+ * __Note__: This class emulates an enumeration, since they are not supported
  * by Dart yet.
  */
 class EvaluationType {

@@ -22,6 +22,14 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/**
+ * A math library for parsing and evaluating expressions in real, interval and
+ * vector contexts. It also supports simplification and differentiation of
+ * expressions.
+ * 
+ * The libary supports the three basic data types [Number], [Interval]s and
+ * [Vector]. It includes a [Parser] to create [Expression]s from Strings.
+ */
 library math_expressions;
 
 import 'dart:math' as Math;

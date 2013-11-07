@@ -91,19 +91,27 @@ class Point3D {
 }
 
 /**
- * An [Interval] is defined by its minimum and maximum values, where min <= max.
+ * An [Interval] is defined by its minimum and maximum values, where
+ * _min <= max_.
  *
- * It supports basic interval arithmetic operations like addition,
- * subtraction, multiplication and division. Operations return a new
- * interval and will not modify the existing ones.
+ * This implementation offers basic interval arithmetic operations like
+ * addition, subtraction, multiplication and division. Operations always
+ * return a new interval and will not modify the existing ones. Additionally
+ * this class implementions comparison relations for intervals.
  *
- * This implementation also (partly) supports unbounded intervals with borders
+ * This implementation (partly) supports unbounded intervals with borders
  * at +/- infinity and empty sets.
  *
- * __Note__: This implementaion does not offer a complete set of operations yet:
+ * Operator and comparison definitions are based on: 
+ * _Bohlender, Gerd, and Ulrich Kulisch. 2010.
+ * ["Deﬁnition of the Arithmetic Operations and Comparison Relations for an Interval Arithmetic Standard"]
+ * (http://interval.louisiana.edu/reliable-computing-journal/volume-15/no-1/reliable-computing-15-pp-36-42.pdf).
+ * Reliable Computing 15 (1): 36–42._
+ * 
+ * __Note__: This implementation does not offer a complete set of operations yet:
  *
- * - No handling of unbounded intervals in operators.
- * - No proper rounding.
+ * * No handling of unbounded intervals in operators.
+ * * No proper rounding.
  */
 class Interval implements Comparable {
 
@@ -182,7 +190,7 @@ class Interval implements Comparable {
    *
    *     [a, b] * [c, d] = [a, b] * (1/[c, d]) = [a, b] * [1/d, 1/c]
    *
-   * Note: Does not handle division by zero and throws an ArgumentError instead.
+   * __Note:__ Does not handle division by zero and throws an [ArgumentError] instead.
    */
   operator/(Interval i) {
     if (this.isEmpty() || i.isEmpty()) return new Interval.empty();
