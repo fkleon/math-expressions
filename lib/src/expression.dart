@@ -31,30 +31,43 @@ part of math_expressions;
 abstract class Expression {
 
   // Basic operations.
+  /// Add operator. Creates a [Plus] expression.
   Expression operator+(Expression exp) => new Plus(this, exp);
+  /// Subtract operator. Creates a [Minus] expression.
   Expression operator-(Expression exp) => new Minus(this, exp);
+  /// Multiply operator. Creates a [Times] expression.
   Expression operator*(Expression exp) => new Times(this, exp);
+  /// Divide operator. Creates a [Divide] expression.
   Expression operator/(Expression exp) => new Divide(this, exp);
+  /// Power operator. Creates a [Power] expression.
   Expression operator^(Expression exp) => new Power(this, exp);
+  /// Unary minus operator. Creates a [UnaryMinus] expression.
   Expression operator-() => new UnaryMinus(this);
 
   /**
    * Derives this expression with respect to the given variable.
    */
   Expression derive(String toVar);
-  //TODO return simplified version on of derivation in each expression
+  // TODO: Return simplified version of derivation. This might not be possible
+  //       with the current model. Probably needs some kind of evaluator
+  //       construct.
 
   /**
    * Returns a simplified version of this expression.
    * Subclasses should overwrite this method, if applicable.
    */
   Expression simplify() => this;
+  // TODO: Return maximally simplified version of expression. This might not be
+  //       possible with the current model, see above.
 
   /**
    * Evaluates this expression according to given type and context.
    */
   evaluate(EvaluationType type, ContextModel context);
 
+  /**
+   * Sublcasses should override this method.
+   */
   String toString();
 
   /**
@@ -65,7 +78,7 @@ abstract class Expression {
    *
    * Throws ArgumentError, if given arg is not an Expression, num oder String.
    *
-   * Note: Does not handle negative numbers, will treat them as positives!
+   * _Note_: Does not handle negative numbers, will treat them as positives!
    */
   Expression _toExpression(var arg) {
     if (arg is Expression) {
@@ -261,7 +274,7 @@ class Plus extends BinaryOperator {
 
 
   evaluate(EvaluationType type, ContextModel context) {
-    return first.evaluate(type, context) +  second.evaluate(type, context);
+    return first.evaluate(type, context) + second.evaluate(type, context);
   }
 
   String toString() => '(${first.toString()} + ${second.toString()})';
@@ -313,7 +326,6 @@ class Minus extends BinaryOperator {
     //TODO -a + b = b - a
     //TODO -a - b = - (a + b)
   }
-
 
   evaluate(EvaluationType type, ContextModel context) {
     return first.evaluate(type, context) - second.evaluate(type, context);
@@ -384,13 +396,13 @@ class Times extends BinaryOperator {
       tempResult = firstOp;
     }
 
-    // if temp result is not set, we return a multiplication
+    // If temp result is not set, we return a multiplication
     if (tempResult == null) {
       tempResult = new Times(firstOp, secondOp);
       return negative ? -tempResult : tempResult;
     }
 
-    // else we return the only constant and just check for sign before
+    // Otherwise we return the only constant and just check for sign before
     return negative ? new UnaryMinus(tempResult) : tempResult;
   }
 
@@ -488,7 +500,7 @@ class Power extends BinaryOperator {
    *     pow = new Power('x', 3);
    *
    * or:
-   *     pow = new Variable('x') ^ new Number(3);
+   *     pow = new Variable('x') ^ new Number(3.0);
    */
   Power(x, exp): super(x, exp);
 
@@ -625,7 +637,7 @@ abstract class Literal extends Expression {
   /**
    * Returns the constant value of this literal.
    * Throws StateError if literal is not constant, check before usage with
-   * isConstant().
+   * `isConstant()`.
    */
   num getConstantValue() {
     throw new StateError('Literal ${this} is not constant.');

@@ -18,8 +18,8 @@ class EvaluationType {
 
   /// Our type map.
   static Map<int, EvaluationType> _cache;
-  int type;
-  String _text;
+  final int type;
+  final String _text;
 
   /**
    * Private singleton constructor, no need to instantiate new objects
@@ -80,7 +80,7 @@ class EvaluationType {
 class ContextModel {
 
   /// Variable map (name -> bound expression).
-  Map <String, Expression> variables;
+  Map<String, Expression> variables;
 
   // Function set.
   Set<MathFunction> functions;
