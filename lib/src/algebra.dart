@@ -119,7 +119,7 @@ class Interval implements Comparable {
   num min, max;
 
   /// True, if this represents the empty set.
-  bool emptySet;
+  final bool _emptySet;
 
   /// Immutable singleton instance of empty set.
   static final Interval _emptyInterval = new Interval._empty();
@@ -130,7 +130,7 @@ class Interval implements Comparable {
    * The parameter min must be smaller or equal than max for the interval
    * to work properly.
    */
-  Interval(this.min, this.max): this.emptySet = false;
+  Interval(this.min, this.max): this._emptySet = false;
 
   /**
    * Returns an immutable empty set.
@@ -142,7 +142,7 @@ class Interval implements Comparable {
    */
   Interval._empty():  this.min = double.NAN,
                       this.max = double.NAN,
-                      this.emptySet = true;
+                      this._emptySet = true;
 
   /**
    * Performs an interval addition.
@@ -328,7 +328,7 @@ class Interval implements Comparable {
   /**
    * Returns true, if this is the empty set.
    */
-  bool isEmpty() => this.emptySet;
+  bool isEmpty() => this._emptySet;
 
   /**
    * Returns the minimal value of four given values.
