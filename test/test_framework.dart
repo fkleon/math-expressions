@@ -1,3 +1,12 @@
+/**
+ * A simple extension to the unittest library.
+ * Supports grouping of tets by defining [TestSet]s and the execution of
+ * sets by a [TestExecutor].
+ * 
+ * This library was developed prior to the existence of dedicated test
+ * frameworks like [bench](http://pub.dartlang.org/packages/bench), but
+ * still gets the job done.
+ */
 library test_framework;
 
 import 'package:unittest/unittest.dart';
