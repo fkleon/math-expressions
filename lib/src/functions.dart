@@ -13,11 +13,10 @@ abstract class MathFunction extends Expression {
   /// Name of this function.
   String name;
 
-  /// List of arguments of this function.
-  /// Must be a variable.
+  /// List of arguments of this function. Arguments ust be of type [Variable].
   List<Variable> args;
 
-  //TODO
+  // TODO
   // isComplete() => all bound?
 
   /**
@@ -128,8 +127,9 @@ class CompositeFunction extends MathFunction {
   }
 
   evaluate(EvaluationType type, ContextModel context) {
-    //TODO check if necessary variables have been bound to context.
-    //TODO type checks.
+    //TODO - Check if necessary variables have been bound to context.
+    //     - Type checks.
+    //     - Utilise ContextModel scopes to avoid overwriting global vars.
     var fEval;
 
     // We expect result to be of dimension gDomainDimension.
@@ -144,27 +144,33 @@ class CompositeFunction extends MathFunction {
     if (gDomainDimension == 2) {
       fEval = f.evaluate(EvaluationType.VECTOR, context);
       // Should be a 2 dimensional vector then.
-      context.bindGlobalVariable(g.getParam(0), _toExpression(fEval));
-      context.bindGlobalVariable(g.getParam(1), _toExpression(fEval));
+      context.bindGlobalVariable(g.getParam(0), _toExpression(fEval.x));
+      context.bindGlobalVariable(g.getParam(1), _toExpression(fEval.y));
       return g.evaluate(type, context);
     }
 
     if (gDomainDimension == 3) {
+      print("Evaluate f: $f with $context");
       fEval = f.evaluate(EvaluationType.VECTOR, context);
+      print("result f: $fEval");
       // Should be a 3 dimensional vector then.
-      context.bindGlobalVariable(g.getParam(0), _toExpression(fEval));
-      context.bindGlobalVariable(g.getParam(1), _toExpression(fEval));
-      context.bindGlobalVariable(g.getParam(2), _toExpression(fEval));
-      return g.evaluate(type, context);
+      context.bindGlobalVariable(g.getParam(0), _toExpression(fEval.x));
+      context.bindGlobalVariable(g.getParam(1), _toExpression(fEval.y));
+      context.bindGlobalVariable(g.getParam(2), _toExpression(fEval.z));
+      print("Evaluate g: ${g.toFullString()} with $context");
+
+      var gEval = g.evaluate(type, context);
+      print("result g: $gEval");
+      return gEval;
     }
 
     if (gDomainDimension == 4) {
       fEval = f.evaluate(EvaluationType.VECTOR, context);
       // Should be a 4 dimensional vector then.
-      context.bindGlobalVariable(g.getParam(0), fEval.x);
-      context.bindGlobalVariable(g.getParam(1), fEval.y);
-      context.bindGlobalVariable(g.getParam(2), fEval.z);
-      context.bindGlobalVariable(g.getParam(3), fEval.w);
+      context.bindGlobalVariable(g.getParam(0), _toExpression(fEval.x));
+      context.bindGlobalVariable(g.getParam(1), _toExpression(fEval.y));
+      context.bindGlobalVariable(g.getParam(2), _toExpression(fEval.z));
+      context.bindGlobalVariable(g.getParam(3), _toExpression(fEval.w));
       return g.evaluate(type, context);
     }
 
@@ -194,10 +200,14 @@ class CustomFunction extends MathFunction {
 
   Expression simplify() => new CustomFunction(name, args, expression.simplify());
 
-  //TODO variablen ersetzen/einsetzen?
-
+  // TODO: Substitute external variables?
+  //       => Shouldn't be necessary as context model is handed over.
+  //          (FL 2013-11-08)
   evaluate(EvaluationType type, ContextModel context) {
-    //TODO First check if all necessary variables are bound.
+    // TODO: First check if all necessary variables are bound.
+    //       => Not necessary with current system, has to be handled by calling
+    //          instance (throws unbound variable exception).
+    //          (FL 2013-11-08)
     return expression.evaluate(type, context);
   }
 
@@ -473,7 +483,8 @@ class Root extends DefaultFunction {
    * For example, to create the square root of x:
    *     sqrt = new Root.sqrt(new Variable('x'));
    *
-   * Note: For better simplification and display, use the [Sqrt] class.
+   * __Note__:
+   * For better simplification and display, use the [Sqrt] class.
    */
   Root.sqrt(arg): super._unary('sqrt', arg), n = 2;
 
@@ -524,8 +535,9 @@ class Sqrt extends Root {
    * 2. sqrt(0) = 0
    * 3. sqrt(1) = 1
    *
-   * Note: This simplification works _only_ for real numbers and
-   * _not_ for complex numbers.
+   * __Note__:
+   * This simplification works _only_ for real numbers and _not_ for complex
+   * numbers.
    */
   Expression simplify() {
     Expression argSimpl = arg.simplify();
@@ -610,7 +622,7 @@ class Sin extends DefaultFunction {
     }
 
     if (type == EvaluationType.VECTOR) {
-      //TODO apply function to all vector elements
+      //TODO Apply function to all vector elements
     }
 
     if (type == EvaluationType.INTERVAL) {

@@ -79,6 +79,8 @@ class EvaluationType {
  */
 class ContextModel {
 
+  // TODO Scopes: Global and namespaces for functions/composites.
+  
   /// Variable map (name -> bound expression).
   Map<String, Expression> variables;
 
@@ -144,6 +146,10 @@ class ContextModel {
     //TODO force non-duplicates.
     functions.add(f);
   }
+  
+  String toString() => "ContextModel"
+                       "[VARS: ${variables.toString()}, "
+                       "FUNCS: ${functions.toString()}]";
 
 }
 

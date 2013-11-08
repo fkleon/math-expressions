@@ -24,14 +24,18 @@ class ExpressionTests extends TestSet {
     'Default Function evaluation [REAL]': defFuncRealEval,
     //'Default Function evaluation [INTERVAL]': defFuncIntervalEval,
     //'Default Function evaluation [VECTOR]': defFuncVectorEval,
-    /*
     'Custom Function Creation': cusFuncCreation,
+    /*
     'Custom Function simplification': cusFuncSimplification,
     'Custom Function differentiation': cusFuncDifferentiation,
+    */
     'Custom Function evaluation [REAL]': cusFuncRealEval,
+    /*
     'Custom Function evaluation [INTERVAL]': cusFuncIntervalEval,
     'Custom Function evaluation [VECTOR]': cusFuncVectorEval,
+    */
     'Composite Function creation': compFunCreation,
+    /*
     'Composite Function simplification': compFuncSimplification,
     'Composite Function differentiation': compFuncDifferentiation,
     'Composite Function evaluation': compFunEval
@@ -786,7 +790,14 @@ class ExpressionTests extends TestSet {
 
   void cusFuncCreation() {
     // Create some custom functions.
-    throw new UnimplementedError();
+    Variable x = new Variable("x");
+    List<Variable> vars = [x];
+    CustomFunction cf = new CustomFunction("sqrt", vars, new Sqrt(x));
+    
+    expect(cf.domainDimension, equals(vars.length));
+    expect(cf.expression, new isInstanceOf<Sqrt>());
+    
+    //TODO more tests.
   }
   
   void cusFuncSimplification() {
@@ -797,8 +808,39 @@ class ExpressionTests extends TestSet {
     throw new UnimplementedError();
   }
 
+  /// Tests custom functions: `R^n -> R`
   void cusFuncRealEval() {
-    throw new UnimplementedError();
+    Variable x,y,z;
+    CustomFunction cf;
+    List<Variable> vars;
+    x = new Variable("x");
+    y = new Variable("y");
+    z = new Variable("z");
+    ContextModel cm = new ContextModel();
+
+    // Custom SQRT (R -> R)
+    vars = [x];
+    cf = new CustomFunction("sqrt", vars, new Sqrt(x));
+    cm.bindGlobalVariable(x, new Number(4));
+    
+    expect(cf.evaluate(real, cm), equals(2));
+    
+    // Custom ADD (R^2 -> R)
+    vars = [x, y];
+    cf = new CustomFunction("add", vars, x+y);
+    cm.bindGlobalVariable(y, new Number(1));
+    
+    expect(cf.evaluate(real, cm), equals(5));
+    
+    // Custom Vector LENGTH (R^3 -> R)
+    vars = [x, y, z];
+    Expression two = new Number(2);
+    cf = new CustomFunction("length", vars, new Sqrt((x^two)+(y^two)+(z^two)));
+    cm.bindGlobalVariable(x, two);
+    cm.bindGlobalVariable(y, two);
+    cm.bindGlobalVariable(z, new Number(3));
+
+    expect(cf.evaluate(real, cm), closeTo(4.1231, 0.0001));
   }
 
   void cusFuncIntervalEval() {
@@ -806,12 +848,58 @@ class ExpressionTests extends TestSet {
   }
 
   void cusFuncVectorEval() {
-    throw new UnimplementedError();
+    Variable x,y;
+    CustomFunction cf;
+    List<Variable> vars;
+    x = new Variable("x");
+    ContextModel cm = new ContextModel();
+
+    // Custom Vector Length
+    vars = [x];
+    Expression two = new Number(2);
+    // TODO This doesn't work yet.
+    cf = new CustomFunction("length", vars, new Sqrt(x[1]^two+x[2]^two));
+    cm.bindGlobalVariable(x, new Vector([new Number(2), new Number(2)]));
+    
+    expect(cf.evaluate(vector, cm), closeTo(2.82842, 0.00001));
   }
 
   void compFunCreation() {
-    // Create some composite functions.
-    throw new UnimplementedError();
+    Variable x, y, z, w;
+    CustomFunction f, g;
+    List<Variable> vars;
+    x = new Variable("x");
+    y = new Variable("y");
+    z = new Variable("z");
+    w = new Variable("w");
+    ContextModel cm = new ContextModel();
+
+    // Custom SPLAT (R -> R^3)
+    Expression three = new Number(3);
+    f = new CustomFunction("splat", [x], new Vector([x,x,x]));
+    cm.bindGlobalVariable(x, three);
+    
+    //expect(f.evaluate(vector, cm), equals(new Vector([three, three, three])));
+    //expect(f.evaluate(vector, cm), everyElement(equals(3.0)));
+
+    // Custom Vector LENGTH (R^3 -> R)
+    Expression two = new Number(2);
+    g = new CustomFunction("length", [w, y, z], new Sqrt((x^two)+(y^two)+(z^two)));
+    // Don't accidentally overwrite global x!
+
+    // Composite R -> R^3 -> R
+    CompositeFunction comp = f & g;
+    
+    print(f.toFullString());
+    print(g.toFullString());
+    print(comp.toFullString());
+    
+    expect(comp.domainDimension, equals(1));
+    expect(comp.gDomainDimension, equals(3));
+    expect(comp.f, equals(f));
+    expect(comp.g, equals(g));
+    
+    expect(comp.evaluate(real, cm), closeTo(5.1961, 0.0001));
   }
   
   void compFuncSimplification() {
