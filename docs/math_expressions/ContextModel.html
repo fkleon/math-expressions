@@ -40,7 +40,7 @@
 new <strong>ContextModel</strong>() <a class="anchor-link" href="#"
               title="Permalink to ContextModel.ContextModel">#</a></h4>
 <div class="doc">
-<p>Creates a new, empty context model.</p>
+<p>Creates a new, empty root context model.</p>
 </div>
 </div>
 </div>
@@ -52,6 +52,16 @@ Set&lt;<a href="../math_expressions/MathFunction.html">MathFunction</a>&gt;     
             title="Permalink to ContextModel.functions">#</a>
         </h4>
         <div class="doc">
+<p>Function set of this scope.</p>
+</div>
+</div>
+<div class="field"><h4 id="parentScope">
+<a href="../math_expressions/ContextModel.html">ContextModel</a>         <strong>parentScope</strong> <a class="anchor-link"
+            href="#parentScope"
+            title="Permalink to ContextModel.parentScope">#</a>
+        </h4>
+        <div class="doc">
+<p>The parent scope.</p>
 </div>
 </div>
 <div class="field"><h4 id="variables">
@@ -60,47 +70,56 @@ Map&lt;String, <a href="../math_expressions/Expression.html">Expression</a>&gt; 
             title="Permalink to ContextModel.variables">#</a>
         </h4>
         <div class="doc">
-<p>Variable map (name -> bound expression).</p>
+<p>Variable map of this scope (name -> bound expression).</p>
 </div>
 </div>
 </div>
 <div>
 <h3>Methods</h3>
-<div class="method"><h4 id="bindGlobalFunction">
-void <strong>bindGlobalFunction</strong>(<a href="../math_expressions/MathFunction.html">MathFunction</a> f) <a class="anchor-link" href="#bindGlobalFunction"
-              title="Permalink to ContextModel.bindGlobalFunction">#</a></h4>
+<div class="method"><h4 id="bindFunction">
+void <strong>bindFunction</strong>(<a href="../math_expressions/MathFunction.html">MathFunction</a> f) <a class="anchor-link" href="#bindFunction"
+              title="Permalink to ContextModel.bindFunction">#</a></h4>
 <div class="doc">
 <p>Binds a function to this context.</p>
 </div>
 </div>
-<div class="method"><h4 id="bindGlobalVariable">
-void <strong>bindGlobalVariable</strong>(<a href="../math_expressions/Variable.html">Variable</a> v, <a href="../math_expressions/Expression.html">Expression</a> e) <a class="anchor-link" href="#bindGlobalVariable"
-              title="Permalink to ContextModel.bindGlobalVariable">#</a></h4>
+<div class="method"><h4 id="bindVariable">
+void <strong>bindVariable</strong>(<a href="../math_expressions/Variable.html">Variable</a> v, <a href="../math_expressions/Expression.html">Expression</a> e) <a class="anchor-link" href="#bindVariable"
+              title="Permalink to ContextModel.bindVariable">#</a></h4>
 <div class="doc">
 <p>Binds a variable to an expression in this context.</p>
 </div>
 </div>
-<div class="method"><h4 id="bindGlobalVariableName">
-void <strong>bindGlobalVariableName</strong>(String vName, <a href="../math_expressions/Expression.html">Expression</a> e) <a class="anchor-link" href="#bindGlobalVariableName"
-              title="Permalink to ContextModel.bindGlobalVariableName">#</a></h4>
+<div class="method"><h4 id="bindVariableName">
+void <strong>bindVariableName</strong>(String vName, <a href="../math_expressions/Expression.html">Expression</a> e) <a class="anchor-link" href="#bindVariableName"
+              title="Permalink to ContextModel.bindVariableName">#</a></h4>
 <div class="doc">
 <p>Binds a variable name to an expression in this context.</p>
+</div>
+</div>
+<div class="method"><h4 id="createChildScope">
+<a href="../math_expressions/ContextModel.html">ContextModel</a> <strong>createChildScope</strong>() <a class="anchor-link" href="#createChildScope"
+              title="Permalink to ContextModel.createChildScope">#</a></h4>
+<div class="doc">
+<p>Returns a new child scope of this scope.</p>
 </div>
 </div>
 <div class="method"><h4 id="getExpression">
 <a href="../math_expressions/Expression.html">Expression</a> <strong>getExpression</strong>(String varName) <a class="anchor-link" href="#getExpression"
               title="Permalink to ContextModel.getExpression">#</a></h4>
 <div class="doc">
-<p>Returns the bound expression for the given variable.</p>
-<p>Throws a StateError, if variable is not bound.</p>
+<p>Returns the bound expression for the given variable.
+Performs recursive lookup through <code>parentScope</code>.</p>
+<p>Throws a <a class="crossref" href="../dart_core/StateError.html">StateError</a>, if variable is still unbound at the root scope.</p>
 </div>
 </div>
 <div class="method"><h4 id="getFunction">
 <a href="../math_expressions/MathFunction.html">MathFunction</a> <strong>getFunction</strong>(String name) <a class="anchor-link" href="#getFunction"
               title="Permalink to ContextModel.getFunction">#</a></h4>
 <div class="doc">
-<p>Returns the function for the given function name.</p>
-<p>Throws a StateError, if function is not bound.</p>
+<p>Returns the function for the given function name.
+Performs recursive lookup through <code>parentScope</code>.</p>
+<p>Throws a <a class="crossref" href="../dart_core/StateError.html">StateError</a>, if function is still unbound at the root scope.</p>
 </div>
 </div>
 <div class="method"><h4 id="toString">
@@ -117,7 +136,7 @@ String <strong>toString</strong>() <a class="anchor-link" href="#toString"
         <div class="clear"></div>
         </div>
         <div class="footer">
-          <div>This page was generated at 2013-11-08 13:37:30.450</div>
+          <div>This page was generated at 2013-11-08 18:08:31.731</div>
         </div>
         <script async src="../client-live-nav.js"></script>
         </body></html>

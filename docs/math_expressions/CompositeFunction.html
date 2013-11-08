@@ -193,9 +193,14 @@ String         <strong>name</strong> <a class="anchor-link"
 dynamic <strong>evaluate</strong>(<a href="../math_expressions/EvaluationType.html">EvaluationType</a> type, <a href="../math_expressions/ContextModel.html">ContextModel</a> context) <a class="anchor-link" href="#evaluate"
               title="Permalink to CompositeFunction.evaluate">#</a></h4>
 <div class="doc">
-<div class="inherited">
-<p>Evaluates this expression according to given type and context.</p>
-<div class="docs-inherited-from">docs inherited from <a href="../math_expressions/Expression.html">Expression</a> </div></div>
+<p>The EvaluationType of <code>f</code> is detected automatically based on
+the domain dimension of <code>g</code>. This is because the input of
+<code>g</code> is the output of <code>f</code> (composite function).</p>
+<p>The given EvaluationType is used for <code>g</code> because there is no
+information on the expected output.</p>
+<p>Furthermore <code>g</code> is assigned a separate child scope of the given
+<code>context</code>, so that variable naming does not interfer with the
+evaluation.</p>
 </div>
 </div>
 <div class="method inherited"><h4 id="getParam">
@@ -237,7 +242,7 @@ compatible with the <a class="crossref" href="../math_expressions/Parser.html">P
         <div class="clear"></div>
         </div>
         <div class="footer">
-          <div>This page was generated at 2013-11-08 13:37:30.994</div>
+          <div>This page was generated at 2013-11-08 18:08:32.275</div>
         </div>
         <script async src="../client-live-nav.js"></script>
         </body></html>
