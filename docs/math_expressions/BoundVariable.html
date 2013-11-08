@@ -133,7 +133,7 @@ dynamic <strong>evaluate</strong>(<a href="../math_expressions/EvaluationType.ht
 </div>
 </div>
 <div class="method"><h4 id="getConstantValue">
-num <strong>getConstantValue</strong>() <a class="anchor-link" href="#getConstantValue"
+dynamic <strong>getConstantValue</strong>() <a class="anchor-link" href="#getConstantValue"
               title="Permalink to BoundVariable.getConstantValue">#</a></h4>
 <div class="doc">
 <div class="inherited">
@@ -167,7 +167,9 @@ String <strong>toString</strong>() <a class="anchor-link" href="#toString"
               title="Permalink to BoundVariable.toString">#</a></h4>
 <div class="doc">
 <div class="inherited">
-<p>Sublcasses should override this method.</p>
+<p>Returns a string version of this expresson.
+Subclasses should override this method. The output should be kept
+compatible with the <a class="crossref" href="../math_expressions/Parser.html">Parser</a>.</p>
 <div class="docs-inherited-from">docs inherited from <a href="../math_expressions/Expression.html">Expression</a> </div></div>
 </div>
 </div>
@@ -176,7 +178,7 @@ String <strong>toString</strong>() <a class="anchor-link" href="#toString"
         <div class="clear"></div>
         </div>
         <div class="footer">
-          <div>This page was generated at 2013-11-07 14:52:07.908</div>
+          <div>This page was generated at 2013-11-08 13:37:31.083</div>
         </div>
         <script async src="../client-live-nav.js"></script>
         </body></html>

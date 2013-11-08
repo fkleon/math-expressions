@@ -67,7 +67,8 @@ new <strong>Root.sqrt</strong>(arg) <a class="anchor-link" href="#sqrt"
 <p>For example, to create the square root of x:</p>
 <pre><code>sqrt = new Root.sqrt(new Variable('x'));
 </code></pre>
-<p>Note: For better simplification and display, use the <a class="crossref" href="../math_expressions/Sqrt.html">Sqrt</a> class.</p>
+<p><strong>Note</strong>:
+For better simplification and display, use the <a class="crossref" href="../math_expressions/Sqrt.html">Sqrt</a> class.</p>
 </div>
 </div>
 </div>
@@ -87,8 +88,7 @@ List&lt;<a href="../math_expressions/Variable.html">Variable</a>&gt;         <st
             title="Permalink to Root.args">#</a>
         </h4>
         <div class="inherited-from">inherited from <a href="../math_expressions/MathFunction.html">MathFunction</a> </div><div class="doc">
-<p>List of arguments of this function.
-Must be a variable.</p>
+<p>List of arguments of this function. Arguments ust be of type <a class="crossref" href="../math_expressions/Variable.html">Variable</a>.</p>
 </div>
 </div>
 <div class="field inherited"><h4 id="domainDimension">
@@ -229,7 +229,9 @@ String <strong>toString</strong>() <a class="anchor-link" href="#toString"
               title="Permalink to Root.toString">#</a></h4>
 <div class="doc">
 <div class="inherited">
-<p>Sublcasses should override this method.</p>
+<p>Returns a string version of this expresson.
+Subclasses should override this method. The output should be kept
+compatible with the <a class="crossref" href="../math_expressions/Parser.html">Parser</a>.</p>
 <div class="docs-inherited-from">docs inherited from <a href="../math_expressions/Expression.html">Expression</a> </div></div>
 </div>
 </div>
@@ -238,7 +240,7 @@ String <strong>toString</strong>() <a class="anchor-link" href="#toString"
         <div class="clear"></div>
         </div>
         <div class="footer">
-          <div>This page was generated at 2013-11-07 14:52:07.735</div>
+          <div>This page was generated at 2013-11-08 13:37:30.794</div>
         </div>
         <script async src="../client-live-nav.js"></script>
         </body></html>
