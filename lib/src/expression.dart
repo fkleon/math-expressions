@@ -66,7 +66,9 @@ abstract class Expression {
   evaluate(EvaluationType type, ContextModel context);
 
   /**
-   * Sublcasses should override this method.
+   * Returns a string version of this expresson.
+   * Subclasses should override this method. The output should be kept
+   * compatible with the [Parser].
    */
   String toString();
 
