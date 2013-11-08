@@ -821,14 +821,14 @@ class ExpressionTests extends TestSet {
     // Custom SQRT (R -> R)
     vars = [x];
     cf = new CustomFunction("sqrt", vars, new Sqrt(x));
-    cm.bindGlobalVariable(x, new Number(4));
+    cm.bindVariable(x, new Number(4));
     
     expect(cf.evaluate(real, cm), equals(2));
     
     // Custom ADD (R^2 -> R)
     vars = [x, y];
     cf = new CustomFunction("add", vars, x+y);
-    cm.bindGlobalVariable(y, new Number(1));
+    cm.bindVariable(y, new Number(1));
     
     expect(cf.evaluate(real, cm), equals(5));
     
@@ -836,9 +836,9 @@ class ExpressionTests extends TestSet {
     vars = [x, y, z];
     Expression two = new Number(2);
     cf = new CustomFunction("length", vars, new Sqrt((x^two)+(y^two)+(z^two)));
-    cm.bindGlobalVariable(x, two);
-    cm.bindGlobalVariable(y, two);
-    cm.bindGlobalVariable(z, new Number(3));
+    cm.bindVariable(x, two);
+    cm.bindVariable(y, two);
+    cm.bindVariable(z, new Number(3));
 
     expect(cf.evaluate(real, cm), closeTo(4.1231, 0.0001));
   }
@@ -859,47 +859,65 @@ class ExpressionTests extends TestSet {
     Expression two = new Number(2);
     // TODO This doesn't work yet.
     cf = new CustomFunction("length", vars, new Sqrt(x[1]^two+x[2]^two));
-    cm.bindGlobalVariable(x, new Vector([new Number(2), new Number(2)]));
+    cm.bindVariable(x, new Vector([new Number(2), new Number(2)]));
     
     expect(cf.evaluate(vector, cm), closeTo(2.82842, 0.00001));
   }
 
   void compFunCreation() {
-    Variable x, y, z, w;
+    Variable x, y, z;
     CustomFunction f, g;
     List<Variable> vars;
     x = new Variable("x");
     y = new Variable("y");
     z = new Variable("z");
-    w = new Variable("w");
     ContextModel cm = new ContextModel();
 
-    // Custom SPLAT (R -> R^3)
+    // Custom FUNKYSPLAT (R -> R^3)
     Expression three = new Number(3);
-    f = new CustomFunction("splat", [x], new Vector([x,x,x]));
-    cm.bindGlobalVariable(x, three);
+    f = new CustomFunction("funkysplat", [x], new Vector([x-three,x,x+three]));
+    cm.bindVariable(x, three);
     
-    //expect(f.evaluate(vector, cm), equals(new Vector([three, three, three])));
-    //expect(f.evaluate(vector, cm), everyElement(equals(3.0)));
+    // Should evaluate to a Vector3[0.0,3.0,6.0]
+    Vector3 v3 = f.evaluate(vector, cm);
+    expect(v3.x, equals(0.0));
+    expect(v3.y, equals(3.0));
+    expect(v3.z, equals(6.0));
 
     // Custom Vector LENGTH (R^3 -> R)
     Expression two = new Number(2);
-    g = new CustomFunction("length", [w, y, z], new Sqrt((x^two)+(y^two)+(z^two)));
-    // Don't accidentally overwrite global x!
+    g = new CustomFunction("length", [x, y, z], new Sqrt((x^two)+(y^two)+(z^two)));
 
-    // Composite R -> R^3 -> R
+    /*
+     * Simple Composite of two functions: R -> R^3 -> R
+     */
     CompositeFunction comp = f & g;
-    
-    print(f.toFullString());
-    print(g.toFullString());
-    print(comp.toFullString());
     
     expect(comp.domainDimension, equals(1));
     expect(comp.gDomainDimension, equals(3));
     expect(comp.f, equals(f));
     expect(comp.g, equals(g));
     
-    expect(comp.evaluate(real, cm), closeTo(5.1961, 0.0001));
+    // Should evaluate to the length of v3
+    expect(comp.evaluate(real, cm), closeTo(v3.length, 0.0001));
+ 
+    /*
+     * Extended Composite of three functions: R -> R^3 -> R -> R^3
+     */
+    CompositeFunction comp2 = comp & f; // = f & g & f
+
+    expect(comp2.domainDimension, equals(1));
+    expect(comp2.gDomainDimension, equals(1));
+    expect(comp2.f, new isInstanceOf<CompositeFunction>());
+    expect(comp2.f, equals(comp));
+    expect(comp2.g, equals(f));
+    
+    // Should evaluate to a Vector3[v3.len-3,v3.len,v3.len+3]
+    // Note: Need to use EvaluationType.VECTOR here.
+    Vector3 v3_2 = comp2.evaluate(vector, cm);
+    expect(v3_2.x, closeTo(v3.length-3.0, 0.0001));
+    expect(v3_2.y, closeTo(v3.length, 0.0001));
+    expect(v3_2.z, closeTo(v3.length+3.0, 0.0001));
   }
   
   void compFuncSimplification() {

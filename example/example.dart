@@ -28,8 +28,8 @@ void _example1() {
 
   // (2) Bind variables:
   ContextModel cm = new ContextModel();
-  cm.bindGlobalVariable(x, new Number(2.0));
-  cm.bindGlobalVariable(y, new Number(Math.PI));
+  cm.bindVariable(x, new Number(2.0));
+  cm.bindVariable(y, new Number(Math.PI));
   
   // (3) Evaluate expression:
   double eval = exp.evaluate(EvaluationType.REAL, cm);
@@ -61,7 +61,7 @@ void _example3() {
   print(exp);
   
   ContextModel cm = new ContextModel();
-  cm.bindGlobalVariableName('x', new Number(1.0));
+  cm.bindVariableName('x', new Number(1.0));
   
   double eval = exp.evaluate(EvaluationType.REAL, cm);
   print(eval);
@@ -155,7 +155,7 @@ void _evaluateTest() {
   _print('mul',mul);
   _print('mul =',mul.evaluate(type, context));
 
-  context.bindGlobalVariable(x, new Number(2));
+  context.bindVariable(x, new Number(2));
   Expression sqrt = new Sqrt(exp);
   print('sqrt: ${sqrt.toString()}');
   print('sqrtD: ${sqrt.derive('x').toString()}');

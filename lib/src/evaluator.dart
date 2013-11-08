@@ -79,30 +79,42 @@ class EvaluationType {
  */
 class ContextModel {
 
-  // TODO Scopes: Global and namespaces for functions/composites.
+  /// The parent scope.
+  ContextModel parentScope;
   
-  /// Variable map (name -> bound expression).
-  Map<String, Expression> variables;
+  /// Variable map of this scope (name -> bound expression).
+  Map<String, Expression> variables = new Map();
 
-  // Function set.
-  Set<MathFunction> functions;
+  /// Function set of this scope.
+  // TODO: Do we even need to track function names?
+  Set<MathFunction> functions = new Set();
 
   /**
-   * Creates a new, empty context model.
+   * Creates a new, empty root context model.
    */
-  ContextModel() {
-    variables = new Map();
-    functions = new Set();
-  }
+  ContextModel();
+  
+  /**
+   * Internal constructor for creating a child scope.
+   */
+  ContextModel._child(ContextModel this.parentScope);
+  
+  /**
+   * Returns a new child scope of this scope.
+   */
+  ContextModel createChildScope() => new ContextModel._child(this);
 
   /**
    * Returns the bound expression for the given variable.
-   *
-   * Throws a StateError, if variable is not bound.
+   * Performs recursive lookup through `parentScope`.
+   * 
+   * Throws a [StateError], if variable is still unbound at the root scope.
    */
   Expression getExpression(String varName) {
     if (variables.containsKey(varName)) {
       return variables[varName];
+    } else if (parentScope != null) {
+      return parentScope.getExpression(varName);
     } else {
       throw new StateError('Variable not bound: $varName');
     }
@@ -110,8 +122,9 @@ class ContextModel {
 
   /**
    * Returns the function for the given function name.
-   *
-   * Throws a StateError, if function is not bound.
+   * Performs recursive lookup through `parentScope`.
+   * 
+   * Throws a [StateError], if function is still unbound at the root scope.
    */
   MathFunction getFunction(String name) {
     var candidates = functions.where((mathFunction) => mathFunction.name == name).toSet();
@@ -120,6 +133,8 @@ class ContextModel {
         // just grab first - should not contain doubles.
         return fun;
       }
+    } else if (parentScope != null) {
+      return parentScope.getFunction(name);
     } else {
       throw new StateError('Function not bound: $name');
     }
@@ -128,27 +143,28 @@ class ContextModel {
   /**
    * Binds a variable to an expression in this context.
    */
-  void bindGlobalVariable(Variable v, Expression e) {
+  void bindVariable(Variable v, Expression e) {
     variables[v.name] = e;
   }
 
   /**
    * Binds a variable name to an expression in this context.
    */
-  void bindGlobalVariableName(String vName, Expression e) {
+  void bindVariableName(String vName, Expression e) {
     variables[vName] = e;
   }
 
   /**
    * Binds a function to this context.
    */
-  void bindGlobalFunction(MathFunction f) {
+  void bindFunction(MathFunction f) {
     //TODO force non-duplicates.
     functions.add(f);
   }
   
-  String toString() => "ContextModel"
-                       "[VARS: ${variables.toString()}, "
+  String toString() => "ContextModel["
+                       "PARENT: ${parentScope}, "
+                       "VARS: ${variables.toString()}, "
                        "FUNCS: ${functions.toString()}]";
 
 }

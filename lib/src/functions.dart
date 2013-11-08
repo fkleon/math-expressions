@@ -126,52 +126,61 @@ class CompositeFunction extends MathFunction {
     return new CompositeFunction(fSimpl, gSimpl);
   }
 
+  /**
+   * The EvaluationType of `f` is detected automatically based on
+   * the domain dimension of `g`. This is because the input of
+   * `g` is the output of `f` (composite function).
+   * 
+   * The given EvaluationType is used for `g` because there is no
+   * information on the expected output.
+   * 
+   * Furthermore `g` is assigned a separate child scope of the given
+   * `context`, so that variable naming does not interfer with the
+   * evaluation.
+   */
   evaluate(EvaluationType type, ContextModel context) {
     //TODO - Check if necessary variables have been bound to context.
     //     - Type checks.
-    //     - Utilise ContextModel scopes to avoid overwriting global vars.
     var fEval;
-
+    ContextModel childScope = context.createChildScope();
+    
     // We expect result to be of dimension gDomainDimension.
     if (gDomainDimension == 1) {
+      // Expect f to evaluate to a real.
       fEval = f.evaluate(EvaluationType.REAL, context);
-      // Should be a real. Bind (single) input of g to fEval.
-      context.bindGlobalVariable(g.getParam(0), _toExpression(fEval));
-      // and try to evaluate..
-      return g.evaluate(type, context);
+      // Create new context and bind (single) input of g to fEval.
+      childScope.bindVariable(g.getParam(0), _toExpression(fEval));
+      return g.evaluate(type, childScope);
     }
 
     if (gDomainDimension == 2) {
+      // Expect f to evaluate to a 2-dimensional vector.
       fEval = f.evaluate(EvaluationType.VECTOR, context);
-      // Should be a 2 dimensional vector then.
-      context.bindGlobalVariable(g.getParam(0), _toExpression(fEval.x));
-      context.bindGlobalVariable(g.getParam(1), _toExpression(fEval.y));
-      return g.evaluate(type, context);
+      childScope.bindVariable(g.getParam(0), _toExpression(fEval.x));
+      childScope.bindVariable(g.getParam(1), _toExpression(fEval.y));
+      return g.evaluate(type, childScope);
     }
 
     if (gDomainDimension == 3) {
-      print("Evaluate f: $f with $context");
+      // Expect f to evaluate to a 3-dimensional vector.
+      //print("Evaluate f: $f with $context");
       fEval = f.evaluate(EvaluationType.VECTOR, context);
-      print("result f: $fEval");
-      // Should be a 3 dimensional vector then.
-      context.bindGlobalVariable(g.getParam(0), _toExpression(fEval.x));
-      context.bindGlobalVariable(g.getParam(1), _toExpression(fEval.y));
-      context.bindGlobalVariable(g.getParam(2), _toExpression(fEval.z));
-      print("Evaluate g: ${g.toFullString()} with $context");
-
-      var gEval = g.evaluate(type, context);
-      print("result g: $gEval");
-      return gEval;
+      //print("result f: $fEval");
+      childScope.bindVariable(g.getParam(0), _toExpression(fEval.x));
+      childScope.bindVariable(g.getParam(1), _toExpression(fEval.y));
+      childScope.bindVariable(g.getParam(2), _toExpression(fEval.z));
+      //print("Evaluate g: ${g.toFullString()} with $childScope");
+      return g.evaluate(type, childScope);
     }
 
     if (gDomainDimension == 4) {
+      // Expect f to evaluate to a 4-dimensional vector.
       fEval = f.evaluate(EvaluationType.VECTOR, context);
-      // Should be a 4 dimensional vector then.
-      context.bindGlobalVariable(g.getParam(0), _toExpression(fEval.x));
-      context.bindGlobalVariable(g.getParam(1), _toExpression(fEval.y));
-      context.bindGlobalVariable(g.getParam(2), _toExpression(fEval.z));
-      context.bindGlobalVariable(g.getParam(3), _toExpression(fEval.w));
-      return g.evaluate(type, context);
+      childScope.bindVariable(g.getParam(0), _toExpression(fEval.x));
+      childScope.bindVariable(g.getParam(1), _toExpression(fEval.y));
+      childScope.bindVariable(g.getParam(2), _toExpression(fEval.z));
+      childScope.bindVariable(g.getParam(3), _toExpression(fEval.w));
+      return g.evaluate(type, childScope);
     }
 
     if (gDomainDimension > 4) {
