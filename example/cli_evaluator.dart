@@ -76,7 +76,7 @@ void _setVar(String input) {
   String varName = input.split('=')[0].trim();
   String expression = input.split('=')[1].trim();
   var expr = new Parser().parse(expression);
-  _contextModel.bindGlobalVariableName(varName, expr);
+  _contextModel.bindVariableName(varName, expr);
   print('Bound variable $varName to $expr.');
 }
 

@@ -1,6 +1,7 @@
 # Changelog - math_expressions
 
 ### 0.0.7
+- Introduce nested context/naming scopes
 - Improve vector evaluation
 - Add some missing methods
 - Improve test coverage (custom and composite functions)
