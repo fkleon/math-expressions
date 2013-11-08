@@ -1,5 +1,10 @@
 # Changelog - math_expressions
 
+### 0.0.7
+- Improve vector evaluation
+- Add some missing methods
+- Improve test coverage (custom and composite functions)
+
 ### 0.0.6 - 2013-11-07
 
 - Add compose operator for functions:
