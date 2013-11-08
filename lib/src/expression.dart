@@ -109,19 +109,6 @@ abstract class Expression {
       return exp.getConstantValue() == value;
     }
 
-    //TODO Remove this rubbish if we stick to BoundVariable
-    /*
-    // Check for number literal
-    if (exp is Number) {
-      return (exp as Number).value == value;
-    }
-
-    // Check for BoundVariable
-    if (exp is BoundVariable) {
-      return _isNumber(exp.value, value);
-    }
-    */
-
     return false;
   }
 }
@@ -685,6 +672,9 @@ class Number extends Literal {
  */
 class Vector extends Literal {
 
+  /// Convenience operator to access vector elements.
+  Expression operator[](int i) => elements[i];
+  
   /**
    * Creates a vector with the given element expressions.
    *
@@ -772,7 +762,14 @@ class Vector extends Literal {
     throw new UnsupportedError('Vector $this with length $length can not be interpreted as: ${type}');
   }
 
-  //TODO isConstant / getConstantValue
+  bool isConstant() => elements.fold(true, (prev, elem) => prev && (elem is Literal && elem.isConstant()));
+  
+  getConstantValue() {
+    // TODO unit test
+    List<Expression> constVals = [];
+    elements.forEach((e) => constVals.add(e.getConstantValue()));
+    return new Vector(constVals);
+  }
 }
 
 /**
@@ -808,12 +805,10 @@ class BoundVariable extends Variable {
     this.value = expr;
   }
 
-  //TODO check again
-  //TODO isConstant on every expression -> recursion?
-  bool isConstant() => value is Number ? true : false;
+  // TODO Make this work on arbitrary expressions, not just literals? 
+  bool isConstant() => value is Literal ? value.isConstant() : false;
 
-  //TODO getConstantValue on every expression -> recursion?
-  num getConstantValue() => value.value;
+  getConstantValue() => value.value;
 
   // Anonymous, bound variable, derive content and unbox.
   Expression derive(String toVar) => value.derive(toVar); //TODO Needs boxing?
@@ -843,6 +838,7 @@ class IntervalLiteral extends Literal {
 
   Expression derive(String toVar) {
     // Can not derive this yet..
+    // TODO Implement interval differentiation.
     throw new UnimplementedError('Interval differentiation not supported yet.');
   }
 
@@ -871,5 +867,9 @@ class IntervalLiteral extends Literal {
   }
 
   String toString() => 'I[$min, $max]';
-  //TODO constant / getConstant
+  
+  bool isConstant() => min is Literal && (min as Literal).isConstant()
+                    && max is Literal && (max as Literal).isConstant();
+  
+  getConstantValue() => new Interval(min.getConstantValue(), max.getConstantValue());
 }
