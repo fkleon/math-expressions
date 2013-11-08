@@ -27,7 +27,7 @@
  * vector contexts. It also supports simplification and differentiation of
  * expressions.
  * 
- * The libary supports the three basic data types [Number], [Interval]s and
+ * The libary supports the three basic data types [Number], [Interval] and
  * [Vector]. It includes a [Parser] to create [Expression]s from Strings.
  */
 library math_expressions;
