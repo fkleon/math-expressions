@@ -76,13 +76,15 @@ class EvaluationType {
 
 /**
  * The context model keeps track of all known variables and functions.
+ * 
+ * It is structured hierarchically to offer nested scopes.
  */
 class ContextModel {
 
   /// The parent scope.
   ContextModel parentScope;
   
-  /// Variable map of this scope (name -> bound expression).
+  /// Variable map of this scope (name -> expression).
   Map<String, Expression> variables = new Map();
 
   /// Function set of this scope.
@@ -127,12 +129,10 @@ class ContextModel {
    * Throws a [StateError], if function is still unbound at the root scope.
    */
   MathFunction getFunction(String name) {
-    var candidates = functions.where((mathFunction) => mathFunction.name == name).toSet();
-    if (candidates.length > 1) {
-      for (MathFunction fun in candidates) {
-        // just grab first - should not contain doubles.
-        return fun;
-      }
+    var candidates = functions.where((mathFunction) => mathFunction.name == name);
+    if (candidates.isNotEmpty) {
+      // just grab first - should not contain doubles.
+      return candidates.first;
     } else if (parentScope != null) {
       return parentScope.getFunction(name);
     } else {

@@ -34,9 +34,14 @@ abstract class MathFunction extends Expression {
   MathFunction._empty(this.name);
 
   /**
-   * Returns the i-th parameter of this function.
+   * Returns the i-th parameter of this function (0-based).
    */
   Variable getParam(int i) => args[i];
+  
+  /**
+   * Returns the parameter with the given name.
+   */
+  Variable getParamByName(String name) => args.singleWhere((e) => e.name == name);
 
   /// The dimension of the domain of definition of this function.
   int get domainDimension => args.length;
