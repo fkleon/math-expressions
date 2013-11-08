@@ -7,8 +7,8 @@ It is partly inspired by [mathExpr][] for Java.
 
 **Note:** This library is still in an early state, the test coverage is not
 perfect, the performance is not optimized and some features are still
-unimplemented. Basic REAL and INTERVAL evaluations should work though.
-Suggestions and pull requests are always welcome!
+unimplemented. Most REAL and basic INTERVAL and VECTOR evaluations should work
+though. Suggestions and pull requests are always welcome!
 
 [![Build Status](https://drone.io/github.com/fkleon/math-expressions/status.png)][droneBadge]
 
@@ -21,12 +21,14 @@ Suggestions and pull requests are always welcome!
 
 ### What's not working yet? ###
 
-* Evaluations in vector space.
-* Composite functions.
+* Some evaluations in vector and interval space (especially functions).
+* Parser only works for real numbers.
+* Complex numbers.
 
 ## Documentation ##
 
-See [DartDoc][dartdoc].
+See the [DartDocs][dartdoc] and the example code. For even more details,
+have a look into the unit tests.
 
 ## Examples ##
 
