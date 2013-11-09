@@ -127,7 +127,7 @@ String         <strong>name</strong> <a class="anchor-link"
 </div>
 </div>
 </div>
-<div class="inherited">
+<div>
 <h3>Methods</h3>
 <div class="method inherited"><h4 id="derive">
 abstract <a href="../math_expressions/Expression.html">Expression</a> <strong>derive</strong>(String toVar) <a class="anchor-link" href="#derive"
@@ -147,7 +147,14 @@ abstract dynamic <strong>evaluate</strong>(<a href="../math_expressions/Evaluati
 <a href="../math_expressions/Variable.html">Variable</a> <strong>getParam</strong>(int i) <a class="anchor-link" href="#getParam"
               title="Permalink to DefaultFunction.getParam">#</a></h4>
 <div class="inherited-from">inherited from <a href="../math_expressions/MathFunction.html">MathFunction</a> </div><div class="doc">
-<p>Returns the i-th parameter of this function.</p>
+<p>Returns the i-th parameter of this function (0-based).</p>
+</div>
+</div>
+<div class="method inherited"><h4 id="getParamByName">
+<a href="../math_expressions/Variable.html">Variable</a> <strong>getParamByName</strong>(String name) <a class="anchor-link" href="#getParamByName"
+              title="Permalink to DefaultFunction.getParamByName">#</a></h4>
+<div class="inherited-from">inherited from <a href="../math_expressions/MathFunction.html">MathFunction</a> </div><div class="doc">
+<p>Returns the parameter with the given name.</p>
 </div>
 </div>
 <div class="method inherited"><h4 id="simplify">
@@ -167,10 +174,10 @@ This could include the name, variables and expression.</p>
 <p>Any subclass should decide whether to override this method.</p>
 </div>
 </div>
-<div class="method inherited"><h4 id="toString">
+<div class="method"><h4 id="toString">
 String <strong>toString</strong>() <a class="anchor-link" href="#toString"
               title="Permalink to DefaultFunction.toString">#</a></h4>
-<div class="inherited-from">inherited from <a href="../math_expressions/MathFunction.html">MathFunction</a> </div><div class="doc">
+<div class="doc">
 <div class="inherited">
 <p>Returns a string version of this expresson.
 Subclasses should override this method. The output should be kept
@@ -183,7 +190,7 @@ compatible with the <a class="crossref" href="../math_expressions/Parser.html">P
         <div class="clear"></div>
         </div>
         <div class="footer">
-          <div>This page was generated at 2013-11-08 18:08:32.213</div>
+          <div>This page was generated at 2013-11-09 10:59:57.640</div>
         </div>
         <script async src="../client-live-nav.js"></script>
         </body></html>
