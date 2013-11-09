@@ -66,8 +66,8 @@ You can either create an mathematical expression programmatically or parse a str
 ```dart
   // Bind variables:
   ContextModel cm = new ContextModel();
-  cm.bindGlobalVariable(x, new Number(2.0));
-  cm.bindGlobalVariable(y, new Number(Math.PI));
+  cm.bindVariable(x, new Number(2.0));
+  cm.bindVariable(y, new Number(Math.PI));
   
   // Evaluate expression:
   double eval = exp.evaluate(EvaluationType.REAL, cm);

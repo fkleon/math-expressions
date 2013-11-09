@@ -558,16 +558,30 @@ class ExpressionTests extends TestSet {
     Number base = new Number(2);
     var diff = [
                  // Expression,  deriveTo, output, outputSimplified
-                 [new Exponential(x), 'x', 'exp(x) * 1.0',  'exp(x)'],
-                 [new Ln(x),          'x', '1.0 / x',       '1.0 / x'],
-                 //[new Log(base, x),   'x', '1.0 / (x * log(2.0))', '1.0 / (x * log(2.0))'],
+                 [new Exponential(x), 'x',
+                                      'exp(x) * 1.0',
+                                      'exp(x)'],
+                 [new Ln(x),          'x',
+                                      '1.0 / x',
+                                      '1.0 / x'],
+                 // TODO Simplify can't cancel out terms yet, so the
+                 //      simplified version is still a but ugly:
+                 [new Log(base, x),   'x',
+                                      '((((1.0 / x) * ln(2.0)) - (ln(x) * (0.0 / 2.0))) / (ln(2.0) * ln(2.0)))',
+                                      '(((1.0 / x) * ln(2.0)) / (ln(2.0) * ln(2.0)))'],
+                                      //'1.0 / (x * ln(2.0))'],
+                 
+                 // TODO Roots are internally handled as Powers:
                  //[new Sqrt(x),        'x', '0.0', '0.0'],
                  //[new Root(2, x),     'x', '0.0', '0.0'],
-                 //[new Sin(x),         'x', 'cos(x)',  'cos(x)'], //TODO parser can't handle output
-                 //[new Cos(x),         'x', '-sin(x)', '-sin(x)'], //TODO parser can't handle output
+                 
+                 [new Sin(x),         'x', 'cos(x)',  'cos(x)'],
+                 [new Cos(x),         'x', '_sin(x)', '_sin(x)'],
+                 
+                 // TODO Tan is internally handled as sin/cos:
                  //[new Tan(x),          'x', '0.0',    '0.0']
                 ];
-    
+
     for (List exprCase in diff) {
       Expression exp = exprCase[0];
       String deriveTo = exprCase[1];

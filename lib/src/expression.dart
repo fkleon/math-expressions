@@ -211,7 +211,7 @@ class UnaryMinus extends UnaryOperator {
     return -(exp.evaluate(type, context));
   }
 
-  String toString() => '(_${exp.toString()})';
+  String toString() => '(_$exp)';
 }
 
 /**
@@ -266,7 +266,7 @@ class Plus extends BinaryOperator {
     return first.evaluate(type, context) + second.evaluate(type, context);
   }
 
-  String toString() => '(${first.toString()} + ${second.toString()})';
+  String toString() => '($first + $second)';
 }
 
 /**
@@ -320,7 +320,7 @@ class Minus extends BinaryOperator {
     return first.evaluate(type, context) - second.evaluate(type, context);
   }
 
-  String toString() => '(${first.toString()} - ${second.toString()})';
+  String toString() => '($first - $second)';
 }
 
 /**
@@ -400,7 +400,7 @@ class Times extends BinaryOperator {
     return first.evaluate(type, context) * second.evaluate(type, context);
   }
 
-  String toString() => '(${first.toString()} * ${second.toString()})';
+  String toString() => '($first * $second)';
 }
 
 /**
@@ -474,7 +474,7 @@ class Divide extends BinaryOperator {
     return firstEval / secondEval;
   }
 
-  String toString() => '(${first.toString()} / ${second.toString()})';
+  String toString() => '($first / $second)';
 }
 
 /**
@@ -593,7 +593,7 @@ class Power extends BinaryOperator {
     throw new UnimplementedError('Evaluate Power with type ${type} not supported yet.');
   }
 
-  String toString() => '(${first.toString()}^${second.toString()})';
+  String toString() => '($first^$second)';
 
   /**
    * Returns the exponential form of this operation.
@@ -603,7 +603,6 @@ class Power extends BinaryOperator {
    */
   Expression asE() => new Exponential(second * new Ln(first));
 }
-
 
 
 /**
@@ -759,7 +758,7 @@ class Vector extends Literal {
       return elements[0].evaluate(type, context);
     }
 
-    throw new UnsupportedError('Vector $this with length $length can not be interpreted as: ${type}');
+    throw new UnsupportedError('Vector $this with length $length can not be interpreted as: $type');
   }
 
   bool isConstant() => elements.fold(true, (prev, elem) => prev && (elem is Literal && elem.isConstant()));
@@ -813,10 +812,13 @@ class BoundVariable extends Variable {
   // Anonymous, bound variable, derive content and unbox.
   Expression derive(String toVar) => value.derive(toVar); //TODO Needs boxing?
 
-  Expression simplify() => value.simplify(); //TODO Might need boxing in another variable? How to reassign anonymous variables to functions?
+  // TODO Might need boxing in another variable?
+  //      How to reassign anonymous variables to functions?
+  Expression simplify() => value.simplify();
 
   evaluate(EvaluationType type, ContextModel context) => value.evaluate(type, context);
 
+  /// Put bound variable in curly brackets to make them distinguishable.
   String toString() => '{$value}';
 }
 
@@ -847,19 +849,19 @@ class IntervalLiteral extends Literal {
   }
 
   evaluate(EvaluationType type, ContextModel context) {
+    // Interval borders should evaluate to real numbers..
+    num minEval = min.evaluate(EvaluationType.REAL, context);
+    num maxEval = max.evaluate(EvaluationType.REAL, context);
+    
     if (type == EvaluationType.INTERVAL) {
-      // Interval borders should evaluate to real numbers..
-      num minEval = min.evaluate(EvaluationType.REAL, context);
-      num maxEval = max.evaluate(EvaluationType.REAL, context);
-
       return new Interval(minEval, maxEval);
     }
 
     if (type == EvaluationType.REAL) {
       // If min == max, we can interpret an interval as real.
       //TODO But should we?
-      if (min == max) {
-        return min;
+      if (minEval == maxEval) {
+        return minEval;
       }
     }
 
