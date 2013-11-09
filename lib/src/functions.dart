@@ -225,7 +225,7 @@ class CustomFunction extends MathFunction {
     return expression.evaluate(type, context);
   }
 
-  String toFullString() => '$name($args) = ${expression.toString()}';
+  String toFullString() => '$name($args) = $expression';
 }
 
 /**
@@ -281,6 +281,9 @@ abstract class DefaultFunction extends MathFunction {
      return new BoundVariable(e);
     }
   }
+  
+  String toString() => args.length == 1 ? "$name(${args[0]})" :
+                                          "$name(${args[0]},${args[1]})";
 }
 
 /**
@@ -349,8 +352,6 @@ class Exponential extends DefaultFunction {
 
     throw new UnimplementedError('Can not evaluate exp on ${type} yet.');
   }
-
-  String toString() => 'exp(${exp.toString()})';
 }
 
 /**
@@ -405,7 +406,7 @@ class Log extends DefaultFunction {
     throw new UnimplementedError('Can not evaluate log on ${type} yet.');
   }
 
-  String toString() => 'log_${base.toString()}(${arg.toString()})';
+  String toString() => 'log_$base($arg)';
 
   /**
    * Returns the natural from of this logarithm.
@@ -464,12 +465,14 @@ class Ln extends Log {
 
     throw new UnimplementedError('Can not evaluate ln on ${type} yet.');
   }
-
-  String toString() => 'ln(${arg.toString()})';
+  
+  String toString() => 'ln($arg)';
 }
 
 /**
  * The n-th root function. n needs to be a natural number.
+ * 
+ * TODO: Allow n to be an expression?
  */
 class Root extends DefaultFunction {
 
@@ -517,7 +520,7 @@ class Root extends DefaultFunction {
     return this.asPower().evaluate(type, context);
   }
 
-  String toString() => 'nrt_$n(${arg.toString()})';
+  String toString() => 'nrt_$n($arg)';
 
   /**
    * Returns the power form of this root.
@@ -595,7 +598,7 @@ class Sqrt extends Root {
     throw new UnimplementedError('Can not evaluate sqrt on ${type} yet.');
   }
 
-  String toString() => 'sqrt(${arg.toString()})';
+  String toString() => 'sqrt($arg)';
 }
 
 /**
