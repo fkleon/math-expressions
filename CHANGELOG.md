@@ -1,5 +1,7 @@
 # Changelog - math_expressions
 
+### 0.0.8
+
 ### 0.0.7 - 2013-11-09
 
 - Introduce nested context/naming scopes
@@ -10,7 +12,7 @@
 
 ### 0.0.6 - 2013-11-07
 
-- Add compose operator for functions:
+- Add compose operator for functions:  
   Use `&` to conveniently create a CompositeFunction from two existing
   functions: `expr = f & g;`
 - Improve documentation and dartdoc generation
@@ -24,7 +26,7 @@
 
 - Fix handling of operator associativity
 - Add support for default functions to parser
-- Add support for unary minus to parser:
+- Add support for unary minus to parser:  
   Input with underscore. Instead of `'2*-5'` use `'2*_5'`.
 
 ### 0.0.3 - 2013-10-09

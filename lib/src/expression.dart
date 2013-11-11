@@ -66,7 +66,7 @@ abstract class Expression {
   evaluate(EvaluationType type, ContextModel context);
 
   /**
-   * Returns a string version of this expresson.
+   * Returns a string version of this expression.
    * Subclasses should override this method. The output should be kept
    * compatible with the [Parser].
    */
@@ -80,7 +80,8 @@ abstract class Expression {
    *
    * Throws ArgumentError, if given arg is not an Expression, num oder String.
    *
-   * __Note__: Does not handle negative numbers, will treat them as positives!
+   * __Note__:
+   * Does not handle negative numbers, will treat them as positives!
    */
   Expression _toExpression(var arg) {
     if (arg is Expression) {
@@ -207,7 +208,6 @@ class UnaryMinus extends UnaryOperator {
   }
 
   evaluate(EvaluationType type, ContextModel context) {
-    //TODO check if unary minus is supported with interval & vector
     return -(exp.evaluate(type, context));
   }
 
