@@ -11,7 +11,7 @@ part of math_expressions;
  *     Expression exp = p.parse("(x^2 + cos(y)) / 3");
  */
 class Parser {
-  Lexer lex;
+  final Lexer lex;
 
   /**
    * Creates a new parser.
@@ -387,21 +387,19 @@ class Token {
   /// Creates a new Token with the given text and type.
   Token(String this.text, TokenType this.type);
 
-  String toString() {
-    return "($type,$text)";
-  }
+  String toString() => "($type: $text)";
 }
 
 /**
- * A token type. Access token types via the static final fields.
+ * A token type. Access token types via the static fields.
  * 
  * For example, to access the token type PLUS:
  *     plusType = TokenType.PLUS;
  * 
- * The type defines the [priority] (precedence) of the token.
- *     (+,-) < (*,/) < (^) < (-u) < functions
- *     
- * It also defines the [associativity] of the token. True stands for
+ * The type defines the `priority` (precedence) of the token.
+ *     (+,-) < (*,/) < (^) < functions < (-u)
+ * 
+ * It also defines the associativity of the token. True stands for
  * left-associative, false for right-associative.
  */
 class TokenType {
@@ -453,10 +451,9 @@ class TokenType {
    * provided by this class.
    */
   const TokenType._internal(String this.value, int this.priority,
-      {bool this.leftAssociative: true, bool this.operator: false, bool this.function: false});
+      {bool this.leftAssociative: true, bool this.operator: false,
+       bool this.function: false});
 
-  String toString() {
-    return value;
-  }
+  String toString() => value;
 }
 
