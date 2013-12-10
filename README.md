@@ -83,7 +83,7 @@ This example shows how to simplify and differentiate
 
 * Expressions can be simplified and differentiated with respect to a given variable:
 ```dart
-  Expression exp = p.parse("x*1 - (_5)");
+  Expression exp = p.parse("x*1 - (-5)");
 
   print(exp);            // = ((x * 1.0) - -(5.0))
   print(exp.simplify()); // = (x + 5.0)

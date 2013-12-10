@@ -1,6 +1,8 @@
 # Changelog - math_expressions
 
 ### 0.0.8
+- Bring back standard syntax for unary minus: `-5` works now. (by [markhats](https://github.com/markhats))
+- Add parser support for `e^x` additional to `exp(x)`. (by [markhats](https://github.com/markhats))
 
 ### 0.0.7 - 2013-11-09
 
@@ -27,7 +29,7 @@
 - Fix handling of operator associativity
 - Add support for default functions to parser
 - Add support for unary minus to parser:  
-  Input with underscore. Instead of `'2*-5'` use `'2*_5'`.
+  Input with underscore. Instead of `2*-5` use `2*_5`.
 
 ### 0.0.3 - 2013-10-09
 
