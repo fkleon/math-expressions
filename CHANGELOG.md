@@ -1,6 +1,7 @@
 # Changelog - math_expressions
 
-### 0.0.8
+### 0.0.8 - 2013-12-10
+
 - Bring back standard syntax for unary minus: `-5` works now. (by [markhats](https://github.com/markhats))
 - Add parser support for `e^x` additional to `exp(x)`. (by [markhats](https://github.com/markhats))
 
