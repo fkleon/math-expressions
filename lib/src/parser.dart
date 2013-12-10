@@ -2,10 +2,10 @@ part of math_expressions;
 
 /**
  * The Parser creates a mathematical [Expression] from a given input string.
- * 
+ *
  * It uses a [Lexer] to create a RPN token stream and then builds the
  * expression.
- * 
+ *
  * Usage example:
  *     Parser p = new Parser();
  *     Expression exp = p.parse("(x^2 + cos(y)) / 3");
@@ -28,7 +28,7 @@ class Parser {
     if (inputString == null || inputString.trim().isEmpty) {
       throw new ArgumentError("The given input string was empty.");
     }
-    
+
     List<Expression> exprStack = new List<Expression>();
     List<Token> inputStream = lex.tokenizeToRPN(inputString);
 
@@ -36,7 +36,7 @@ class Parser {
       Expression currExpr, left, right;
 
       switch(currToken.type) {
-        case TokenType.VAL: 
+        case TokenType.VAL:
           currExpr = new Number(double.parse(currToken.text));
           break;
         case TokenType.VAR:
@@ -100,7 +100,7 @@ class Parser {
           break;
         default: throw new ArgumentError('Unsupported token: $currToken');
       }
-      
+
       exprStack.add(currExpr);
     }
 
@@ -122,10 +122,10 @@ class Parser {
  */
 class Lexer {
   final Map keywords = new Map<String, TokenType>();
-  
+
   /// Buffer for numbers
   String intBuffer = "";
-  
+
   /// Buffer for variable and function names
   String varBuffer = "";
 
@@ -169,7 +169,7 @@ class Lexer {
     while (iter.moveNext()) {
       String si = iter.currentAsString;
 
-      /* 
+      /*
        * Check if the current Character is a keyword. If it is a keyword, check if the intBuffer is not empty and add
        * a Value Token for the intBuffer and the corresponding Token for the keyword.
        */
@@ -204,7 +204,7 @@ class Lexer {
           // The current string is not a number and not a simple keyword, so it has to be a variable or function.
           sb = new StringBuffer(varBuffer);
           if(intBuffer.length > 0) {
-            /* 
+            /*
              * The intBuffer contains a string and the current string is a
              * variable or part of a complex keyword, so the value is added
              * to the token stream and the current string is added to the
@@ -264,23 +264,27 @@ class Lexer {
     if(stream.isEmpty) {
       throw new ArgumentError("The given tokenStream was empty.");
     }
-    
+
     List<Token> outputStream = new List<Token>();
     List<Token> operatorBuffer = new List<Token>();
+
+    Token prevToken;
 
     for(Token curToken in stream) {
       // If the current Token is a value or a variable, put them into the output stream.
       if(curToken.type == TokenType.VAL || curToken.type == TokenType.VAR) {
         outputStream.add(curToken);
+        prevToken = curToken;
         continue;
       }
-      
+
       // If the current Token is a function, put it onto the operator stack.
       if(curToken.type.function) {
         operatorBuffer.add(curToken);
+        prevToken = curToken;
         continue;
       }
-      
+
       /*
        *  If the current Token is a function argument separator, pop operators
        *  to output stream until a left brace is encountered.
@@ -294,10 +298,22 @@ class Lexer {
           //TODO never reached, check this.
           throw new StateError('Misplaced separator or mismatched parenthesis.');
         }
+        prevToken = curToken;
         continue;
       }
-      
-      /* 
+
+      /* if the current Tokens type is MINUS and the previous Token is an operator or type LBRACE
+       * or we're at the beginning of the expression (prevToken == null) the current Token is
+       * an unary minus, so the tokentype has to be changed.
+       */
+      if(curToken.type == TokenType.MINUS && (prevToken == null || prevToken.type.operator || prevToken.type == TokenType.LBRACE)) {
+        Token newToken = new Token(curToken.text, TokenType.UNMINUS);
+        operatorBuffer.add(newToken);
+        prevToken = newToken;
+        continue;
+      }
+
+      /*
        * If the current token is an operator and it's priority is lower than the priority of the last
        * operator in the operator buffer, than put the operators from the operator buffer into the output
        * stream until you find an operator with a priority lower or equal as the current tokens.
@@ -309,12 +325,14 @@ class Lexer {
           outputStream.add(operatorBuffer.removeLast());
         }
         operatorBuffer.add(curToken);
+        prevToken = curToken;
         continue;
       }
-      
+
       // If the current Token is a left brace, put it on the operator buffer.
       if(curToken.type == TokenType.LBRACE) {
         operatorBuffer.add(curToken);
+        prevToken = curToken;
         continue;
       }
 
@@ -323,19 +341,20 @@ class Lexer {
         while(!operatorBuffer.isEmpty && operatorBuffer.last.type != TokenType.LBRACE) {
           outputStream.add(operatorBuffer.removeLast());
         }
-        
+
         // Expect next token on stack to be left parenthesis and pop it
         if(operatorBuffer.isEmpty || operatorBuffer.removeLast().type != TokenType.LBRACE) {
           throw new StateError('Mismatched parenthesis.');
         }
-        
+
         // If the token at the top of the stack is a function token, pop it onto the output queue.
         if (!operatorBuffer.isEmpty && operatorBuffer.last.type.function) {
           outputStream.add(operatorBuffer.removeLast());
         }
       }
+      prevToken = curToken;
     }
-    
+
     /*
      * When the algorithm reaches the end of the input stream, we add the
      * tokens in the operatorBuffer to the outputStream. If the operator
@@ -369,7 +388,7 @@ class Lexer {
 class Token {
   /// The text of this token.
   final String text;
-  
+
   /// The type of this token.
   final TokenType type;
 
@@ -383,7 +402,7 @@ class Token {
     result = 37 * result + type.hashCode;
     return result;
   }
-  
+
   /// Creates a new Token with the given text and type.
   Token(String this.text, TokenType this.type);
 
@@ -392,13 +411,13 @@ class Token {
 
 /**
  * A token type. Access token types via the static fields.
- * 
+ *
  * For example, to access the token type PLUS:
  *     plusType = TokenType.PLUS;
- * 
+ *
  * The type defines the `priority` (precedence) of the token.
  *     (+,-) < (*,/) < (^) < functions < (-u)
- * 
+ *
  * It also defines the associativity of the token. True stands for
  * left-associative, false for right-associative.
  */
@@ -432,19 +451,19 @@ class TokenType {
 
   /// The string value of this token type.
   final String value;
-  
+
   /// The priority of this token type.
   final int priority;
 
   /// Associativity of this token type. true = left.
   final bool leftAssociative;
-  
+
   /// True, if this token is an operator.
   final bool operator;
-  
+
   /// True, if this token is a function.
   final bool function;
-  
+
   /**
    * Internal constructor for a [TokenType].
    * To retrieve a token type, directly access the static final fields
