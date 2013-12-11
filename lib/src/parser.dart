@@ -146,7 +146,6 @@ class Lexer {
     keywords["sin"] = TokenType.SIN;
     keywords["tan"] = TokenType.TAN;
     keywords["ln"] = TokenType.LN;
-    keywords["exp"] = TokenType.EFUNC;
     keywords["e"] = TokenType.EFUNC;
     keywords["("] = TokenType.LBRACE;
     keywords[")"] = TokenType.RBRACE;
@@ -182,9 +181,10 @@ class Lexer {
         if(varBuffer.length > 0) {
           _doVarBuffer(tempTokenStream);
         }
-        // MH - Bit of a hack here to handle exponentials of the form e^x rather than exp(x)
+        // MH - Bit of a hack here to handle exponentials of the form e^x rather than e(x)
         if (keywords[si] == TokenType.POW && tempTokenStream.last.type == TokenType.EFUNC) {
           // Clear varBuffer since we have nothing to add to the stream as EFUNC is already in it
+          //_doVarBuffer(tempTokenStream);
           varBuffer = "";
         } else {
           // Normal behaviour
