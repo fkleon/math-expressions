@@ -310,8 +310,6 @@ class ParserTests extends TestSet {
                         ')': throwsStateError,
                         '1+1)': throwsStateError,
                         '(1+1': throwsStateError,
-//                        'log(,1)': throws,
-//                        'log(1,)': throws,
                         'log(1,': throwsStateError,
     };
 

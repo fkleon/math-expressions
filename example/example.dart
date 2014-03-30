@@ -2,7 +2,6 @@ import 'package:math_expressions/math_expressions.dart';
 import 'dart:math' as Math;
 
 //TODO Documentation
-//TODO Extend and offer CLI/Web Interface
 void main() {
   //_expressionTest();
   //_evaluateTest();
@@ -18,7 +17,7 @@ void _example1() {
   // (1a) Parse expression:
   Parser p = new Parser();
   Expression exp = p.parse("(x^2 + cos(y)) / 3");
-  
+
   // (1b) Build expression: (x^2 + cos(y)) / 3
   Variable x = new Variable('x'), y = new Variable('y');
   Power xSquare = new Power(x, 2);
@@ -30,7 +29,7 @@ void _example1() {
   ContextModel cm = new ContextModel();
   cm.bindVariable(x, new Number(2.0));
   cm.bindVariable(y, new Number(Math.PI));
-  
+
   // (3) Evaluate expression:
   double eval = exp.evaluate(EvaluationType.REAL, cm);
 
@@ -48,7 +47,7 @@ void _example2() {
   print(exp.simplify()); // = (x + 5.0)
 
   Expression expDerived = exp.derive('x');
-  
+
   print(expDerived);            // = (((x * 0.0) + (1.0 * 1.0)) - -(0.0))
   print(expDerived.simplify()); // = 1.0
 }
@@ -57,12 +56,12 @@ void _example3() {
   //TODO move to functional tests.
   Parser p = new Parser();
   Expression exp = p.parse("x * 2^2.5 * log(10,100)");
-  
+
   print(exp);
-  
+
   ContextModel cm = new ContextModel();
   cm.bindVariableName('x', new Number(1.0));
-  
+
   double eval = exp.evaluate(EvaluationType.REAL, cm);
   print(eval);
 }

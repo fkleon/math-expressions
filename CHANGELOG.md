@@ -1,5 +1,11 @@
 # Changelog - math_expressions
 
+### 0.0.9 2014-03-30
+
+- To create exponentials, use `e(x)` or `e^x`. Consequently, removed support for `exp(x)`.
+- Improve test coverage
+- Update dependencies
+
 ### 0.0.8 - 2013-12-10
 
 - Bring back standard syntax for unary minus: `-5` works now. (by [markhats](https://github.com/markhats))
