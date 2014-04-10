@@ -9,7 +9,7 @@ abstract class MathFunction extends Expression {
 
   /// Compose operator. Creates a [CompositeFunction].
   MathFunction operator&(MathFunction g) => new CompositeFunction(this, g);
-  
+
   /// Name of this function.
   String name;
 
@@ -37,7 +37,7 @@ abstract class MathFunction extends Expression {
    * Returns the i-th parameter of this function (0-based).
    */
   Variable getParam(int i) => args[i];
-  
+
   /**
    * Returns the parameter with the given name.
    */
@@ -135,10 +135,10 @@ class CompositeFunction extends MathFunction {
    * The EvaluationType of `f` is detected automatically based on
    * the domain dimension of `g`. This is because the input of
    * `g` is the output of `f` (composite function).
-   * 
+   *
    * The given EvaluationType is used for `g` because there is no
    * information on the expected output.
-   * 
+   *
    * Furthermore `g` is assigned a separate child scope of the given
    * `context`, so that variable naming does not interfer with the
    * evaluation.
@@ -148,7 +148,7 @@ class CompositeFunction extends MathFunction {
     //     - Type checks.
     var fEval;
     ContextModel childScope = context.createChildScope();
-    
+
     // We expect result to be of dimension gDomainDimension.
     if (gDomainDimension == 1) {
       // Expect f to evaluate to a real.
@@ -281,7 +281,7 @@ abstract class DefaultFunction extends MathFunction {
      return new BoundVariable(e);
     }
   }
-  
+
   String toString() => args.length == 1 ? "$name(${args[0]})" :
                                           "$name(${args[0]},${args[1]})";
 }
@@ -465,13 +465,13 @@ class Ln extends Log {
 
     throw new UnimplementedError('Can not evaluate ln on ${type} yet.');
   }
-  
+
   String toString() => 'ln($arg)';
 }
 
 /**
  * The n-th root function. n needs to be a natural number.
- * 
+ *
  * TODO: Allow n to be an expression?
  */
 class Root extends DefaultFunction {
@@ -493,7 +493,7 @@ class Root extends DefaultFunction {
   Root.fromExpr(Number n, arg): super._unary('root', arg) {
     this.n = n.getConstantValue().toInt();
   }
-  
+
   /**
    * Creates the square root of arg.
    *
@@ -751,4 +751,43 @@ class Tan extends DefaultFunction {
    * `tan(x) = sin(x) / cos(x)`
    */
   Expression asSinCos() => new Sin(arg) / new Cos(arg);
+}
+
+/**
+ * The absolute value function.
+ */
+class Abs extends DefaultFunction {
+
+  /**
+   * Creates a new absolute value function with given argument expression.
+   */
+  Abs(arg): super._unary('abs', arg);
+
+  /// The argument of this absolute value function.
+  Expression get arg => getParam(0);
+
+  Expression derive(String toVar) => new Abs(arg.derive(toVar));
+
+  /**
+   * Possible simplifications:
+   */
+  Expression simplify() {
+    Expression argSimpl = arg.simplify();
+
+    return new Abs(argSimpl);
+  }
+
+  evaluate(EvaluationType type, ContextModel context) {
+    var argEval = arg.evaluate(type, context);
+
+    if (type == EvaluationType.REAL) {
+      return argEval.abs();
+    }
+
+    if (type == EvaluationType.VECTOR) {
+      //TODO apply function to all vector elements
+    }
+
+    throw new UnimplementedError('Can not evaluate abs on ${type} yet.');
+  }
 }
