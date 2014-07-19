@@ -211,7 +211,7 @@ class UnaryMinus extends UnaryOperator {
     return -(exp.evaluate(type, context));
   }
 
-  String toString() => '(_$exp)';
+  String toString() => '(-$exp)';
 }
 
 /**
@@ -306,7 +306,7 @@ class Minus extends BinaryOperator {
     if (_isNumber(firstOp, 0)) {
       return -secondOp;
     }
-    
+
     if (secondOp is UnaryMinus) {
       return firstOp + secondOp.exp; // a - -(b) = a + b
     }
@@ -673,7 +673,7 @@ class Vector extends Literal {
 
   /// Convenience operator to access vector elements.
   Expression operator[](int i) => elements[i];
-  
+
   /**
    * Creates a vector with the given element expressions.
    *
@@ -762,7 +762,7 @@ class Vector extends Literal {
   }
 
   bool isConstant() => elements.fold(true, (prev, elem) => prev && (elem is Literal && elem.isConstant()));
-  
+
   getConstantValue() {
     // TODO unit test
     List<Expression> constVals = [];
@@ -804,7 +804,7 @@ class BoundVariable extends Variable {
     this.value = expr;
   }
 
-  // TODO Make this work on arbitrary expressions, not just literals? 
+  // TODO Make this work on arbitrary expressions, not just literals?
   bool isConstant() => value is Literal ? value.isConstant() : false;
 
   getConstantValue() => value.value;
@@ -852,7 +852,7 @@ class IntervalLiteral extends Literal {
     // Interval borders should evaluate to real numbers..
     num minEval = min.evaluate(EvaluationType.REAL, context);
     num maxEval = max.evaluate(EvaluationType.REAL, context);
-    
+
     if (type == EvaluationType.INTERVAL) {
       return new Interval(minEval, maxEval);
     }
@@ -869,9 +869,9 @@ class IntervalLiteral extends Literal {
   }
 
   String toString() => 'I[$min, $max]';
-  
+
   bool isConstant() => min is Literal && (min as Literal).isConstant()
                     && max is Literal && (max as Literal).isConstant();
-  
+
   getConstantValue() => new Interval(min.getConstantValue(), max.getConstantValue());
 }
