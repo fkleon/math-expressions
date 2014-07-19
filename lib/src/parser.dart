@@ -101,6 +101,9 @@ class Parser {
         case TokenType.ABS:
           currExpr = new Abs(exprStack.removeLast());
           break;
+        case TokenType.SGN:
+          currExpr = new Sgn(exprStack.removeLast());
+          break;
         default: throw new ArgumentError('Unsupported token: $currToken');
       }
 
@@ -149,6 +152,7 @@ class Lexer {
     keywords["sin"] = TokenType.SIN;
     keywords["tan"] = TokenType.TAN;
     keywords["abs"] = TokenType.ABS;
+    keywords["sgn"] = TokenType.SGN;
     keywords["ln"] = TokenType.LN;
     keywords["e"] = TokenType.EFUNC;
     keywords["("] = TokenType.LBRACE;
@@ -460,6 +464,7 @@ class TokenType {
   static const TokenType SIN = const TokenType._internal("SIN",4,function:true);
   static const TokenType TAN = const TokenType._internal("TAN",4,function:true);
   static const TokenType ABS = const TokenType._internal("ABS",4,function:true);
+  static const TokenType SGN = const TokenType._internal("SGN",4,function:true);
   static const TokenType EFUNC = const TokenType._internal("EFUNC",4,function:true);
 
   /// The string value of this token type.

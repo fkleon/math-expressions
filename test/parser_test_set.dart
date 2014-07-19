@@ -199,6 +199,23 @@ class ParserTests extends TestSet {
     rpnTokenStreams.add([new Token("10", TokenType.VAL),
                          new Token("tan", TokenType.TAN)]);
 
+    // Abs
+    inputStrings.add("abs(10)");
+    tokenStreams.add([new Token("abs", TokenType.ABS),
+                    new Token("(", TokenType.LBRACE),
+                    new Token("10", TokenType.VAL),
+                    new Token(")", TokenType.RBRACE)]);
+    rpnTokenStreams.add([new Token("10", TokenType.VAL),
+                         new Token("abs", TokenType.ABS)]);
+    // Sgn
+    inputStrings.add("sgn(10)");
+    tokenStreams.add([new Token("sgn", TokenType.SGN),
+                    new Token("(", TokenType.LBRACE),
+                    new Token("10", TokenType.VAL),
+                    new Token(")", TokenType.RBRACE)]);
+    rpnTokenStreams.add([new Token("10", TokenType.VAL),
+                         new Token("sgn", TokenType.SGN)]);
+
     // n-th root
     inputStrings.add("nrt(2,10)");
     tokenStreams.add([new Token("nrt", TokenType.ROOT),
