@@ -766,15 +766,15 @@ class Abs extends DefaultFunction {
   /// The argument of this absolute value function.
   Expression get arg => getParam(0);
 
-  Expression derive(String toVar) => new Abs(arg.derive(toVar));
+  /// The differentiation of Abs is Sgn
+  //TODO No differentiation possible for x = 0
+  Expression derive(String toVar) => new Sgn(arg);
 
   /**
    * Possible simplifications:
    */
   Expression simplify() {
-    Expression argSimpl = arg.simplify();
-
-    return new Abs(argSimpl);
+    return new Abs(arg.simplify());
   }
 
   evaluate(EvaluationType type, ContextModel context) {
@@ -790,4 +790,36 @@ class Abs extends DefaultFunction {
 
     throw new UnimplementedError('Can not evaluate abs on ${type} yet.');
   }
+}
+
+/**
+ * The sign function.
+ */
+class Sgn extends DefaultFunction {
+
+  /**
+   * Creates a new sign function with given argument expression.
+   */
+  Sgn(arg): super._unary('sgn', arg);
+
+  /// The argument of this sign function.
+  Expression get arg => getParam(0);
+
+  Expression derive(String toVar) => throw new UnimplementedError('Can not differentiate sgn.');
+
+  Expression simplify() {
+    return new Sgn(arg.simplify());
+  }
+
+  evaluate(EvaluationType type, ContextModel context) {
+      var argEval = arg.evaluate(type, context);
+
+      if (type == EvaluationType.REAL) {
+        if(argEval < 0) return -1.0;
+        if(argEval == 0) return 0.0;
+        if(argEval > 0) return 1.0;
+      }
+
+      throw new UnimplementedError('Can not evaluate sgn on ${type} yet.');
+    }
 }

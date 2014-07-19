@@ -102,7 +102,7 @@ class ExpressionTests extends TestSet {
     }
   }
 
-  /// Test the constructors of expressions.
+  /// Tests the constructors of expressions.
   void simpleRealCreation() {
     _createBasicExpressions(real);
 
@@ -125,10 +125,10 @@ class ExpressionTests extends TestSet {
     expect(_hasMember(e6, n1), isTrue);
   }
 
-  /// Test the convenience constructors (binary, auto-wrapping).
+  /// Tests the convenience constructors (binary, auto-wrapping).
   void convenienceBinaryCreation() {
     // Test Expression creation with convenience constructors.
-    List<BinaryOperator> binOps = [new Times('x', 2), 
+    List<BinaryOperator> binOps = [new Times('x', 2),
                                    new Divide('x', 2),
                                    new Plus('x', 2),
                                    new Minus('x', 2),
@@ -139,17 +139,17 @@ class ExpressionTests extends TestSet {
       expect(binOp.second, new isInstanceOf<Number>());
     }
   }
-  
-  /// Test the convenience constructors (unary, auto-wrapping).
+
+  /// Tests the convenience constructors (unary, auto-wrapping).
   void convenienceUnaryCreation() {
-    List<UnaryOperator> unOps = [new UnaryMinus('x')]; 
-    
+    List<UnaryOperator> unOps = [new UnaryMinus('x')];
+
     for (UnaryOperator unOp in unOps) {
       expect(unOp.exp, new isInstanceOf<Variable>());
     }
   }
-  
-  /// Test the constructors.
+
+  /// Tests the interval constructors.
   void simpleIntervalCreation() {
     _createBasicExpressions(interval);
 
@@ -173,15 +173,15 @@ class ExpressionTests extends TestSet {
     expect(_hasMember(e6, i1), isTrue);
   }
 
-  /// Test the constructors.
+  /// Tests the vector constructors.
   void simpleVectorCreation() {
     _createBasicExpressions(vector);
 
     //TODO vector
     throw new UnimplementedError();
   }
-  
-  /// Test simplification of expressions.
+
+  /// Tests simplification of basic operator expressions.
   void baseOperatorSimplification() {
     /*
      *  Plus
@@ -189,35 +189,35 @@ class ExpressionTests extends TestSet {
     // a + 0 = a
     Expression exp = new Plus('a', 0);
     expect(_isVariable(exp.simplify(), 'a'), isTrue);
-    
+
     // 0 + a = a
     exp = new Plus(0, 'a');
     expect(_isVariable(exp.simplify(), 'a'), isTrue);
-    
+
     // a + -(b) = a - b
     exp = new Plus('a', new UnaryMinus('b'));
     expect(exp.simplify(), new isInstanceOf<Minus>());
     expect((exp.simplify() as Minus).first, new isInstanceOf<Variable>());
     expect((exp.simplify() as Minus).second, new isInstanceOf<Variable>());
-    
+
     /*
      *  Minus
      */
     // a - 0 = a
     exp = new Minus('a', 0);
     expect(_isVariable(exp.simplify(), 'a'), isTrue);
-    
+
     // 0 - a = - a
     exp = new Minus(0, 'a');
     expect(exp.simplify(), new isInstanceOf<UnaryMinus>());
     expect((exp.simplify() as UnaryMinus).exp, new isInstanceOf<Variable>());
-    
+
     // a - -(b) = a + b
     exp = new Minus('a', new UnaryMinus('b'));
     expect(exp.simplify(), new isInstanceOf<Plus>());
     expect((exp.simplify() as Plus).first, new isInstanceOf<Variable>());
     expect((exp.simplify() as Plus).second, new isInstanceOf<Variable>());
-    
+
     /*
      *  Times
      */
@@ -234,13 +234,13 @@ class ExpressionTests extends TestSet {
     expect((exp.simplify() as UnaryMinus).exp, new isInstanceOf<Times>());
     expect(_isVariable(((exp.simplify() as UnaryMinus).exp as Times).first, 'a'), isTrue);
     expect(_isVariable(((exp.simplify() as UnaryMinus).exp as Times).second, 'b'), isTrue);
-    
+
     // -a * -b = a * b
     exp = new Times(new UnaryMinus('a'), new UnaryMinus('b'));
     expect(exp.simplify(), new isInstanceOf<Times>());
     expect(_isVariable((exp.simplify() as Times).first, 'a'), isTrue);
     expect(_isVariable((exp.simplify() as Times).second, 'b'), isTrue);
-    
+
     // a * 0 = 0
     exp = new Times(new UnaryMinus('a'), 0);
     expect(exp.simplify(), new isInstanceOf<Number>());
@@ -250,15 +250,15 @@ class ExpressionTests extends TestSet {
     exp = new Times(0, new Variable('a'));
     expect(exp.simplify(), new isInstanceOf<Number>());
     expect((exp.simplify() as Number).value == 0, isTrue);
-    
+
     // a * 1 = a
     exp = new Times(new Variable('a'), 1);
     expect(_isVariable(exp.simplify(), 'a'), isTrue);
-    
+
     // 1 * a = a
     exp = new Times(1, new Variable('a'));
     expect(_isVariable(exp.simplify(), 'a'), isTrue);
-    
+
     /*
      *  Divide
      */
@@ -268,29 +268,29 @@ class ExpressionTests extends TestSet {
     expect((exp.simplify() as UnaryMinus).exp, new isInstanceOf<Divide>());
     expect(_isVariable(((exp.simplify() as UnaryMinus).exp as Divide).first, 'a'), isTrue);
     expect(_isVariable(((exp.simplify() as UnaryMinus).exp as Divide).second, 'b'), isTrue);
-    
+
     // a * -b = - (a / b)
     exp = new Divide('a', new UnaryMinus('b'));
     expect(exp.simplify(), new isInstanceOf<UnaryMinus>());
     expect((exp.simplify() as UnaryMinus).exp, new isInstanceOf<Divide>());
     expect(_isVariable(((exp.simplify() as UnaryMinus).exp as Divide).first, 'a'), isTrue);
     expect(_isVariable(((exp.simplify() as UnaryMinus).exp as Divide).second, 'b'), isTrue);
-    
+
     // -a / -b = a / b
     exp = new Divide(new UnaryMinus('a'), new UnaryMinus('b'));
     expect(exp.simplify(), new isInstanceOf<Divide>());
     expect(_isVariable((exp.simplify() as Divide).first, 'a'), isTrue);
     expect(_isVariable((exp.simplify() as Divide).second, 'b'), isTrue);
-    
+
     // 0 / a = 0
     exp = new Divide(0, new Variable('a'));
     expect(exp.simplify(), new isInstanceOf<Number>());
     expect((exp.simplify() as Number).value == 0, isTrue);
-    
+
     // a / 1 = a
     exp = new Divide(new Variable('a'), 1);
     expect(_isVariable(exp.simplify(), 'a'), isTrue);
-    
+
     /*
      *  Power
      */
@@ -298,39 +298,40 @@ class ExpressionTests extends TestSet {
     exp = new Power(0, 'x');
     expect(exp.simplify(), new isInstanceOf<Number>());
     expect((exp.simplify() as Number).value == 0, isTrue);
-    
+
     // 1^x = 1
     exp = new Power(1, 'x');
     expect(exp.simplify(), new isInstanceOf<Number>());
     expect((exp.simplify() as Number).value == 1, isTrue);
-    
+
     // x^0 = 1
     exp = new Power('x', 0);
     expect(exp.simplify(), new isInstanceOf<Number>());
     expect((exp.simplify() as Number).value == 1, isTrue);
-    
+
     // x^1 = x
     exp = new Power('x', 1);
     expect(_isVariable(exp.simplify(), 'x'), isTrue);
-    
+
     /*
      *  Unary Minus
      */
     // -(-a) = a
     exp = new UnaryMinus(new UnaryMinus('a'));
     expect(_isVariable(exp.simplify(), 'a'), isTrue);
-    
+
     // -0 = 0
     exp = new UnaryMinus(0);
     expect((exp.simplify() as Number).value == 0, isTrue);
   }
-  
+
+  /// Tests differentiation of bsaic operators.
   void baseOperatorDifferentiation() {
     var diff = [
                  // Expression,         deriveTo, output,     outputSimplified
                  [new Plus (1, 'x'),    'x',      '0.0+1.0',  '1.0'],
                  [new Plus (1, 1),      'x',      '0.0+0.0',  '0.0'],
-                 [new Minus (1, 'x') ,  'x',      '0.0-1.0',  '_1.0'],
+                 [new Minus (1, 'x') ,  'x',      '0.0-1.0',  '-1.0'],
                  [new Minus ('x', 1) ,  'x',      '1.0-0.0',  '1.0'],
                  [new Times('x', 1),    'x',      'x*0.0+1.0*1.0',  '1.0'],
                  [new Divide('x',2),    'x',      '((1.0*2.0)-(x*0.0))/(2.0*2.0)',
@@ -338,8 +339,8 @@ class ExpressionTests extends TestSet {
                  [new Power('x',2),     'x',      'exp(2.0 * ln(x)) * ((2.0 * (1.0 / x)) + (0.0 * ln(x)))',
                   'x^2.0 * (2.0 * (1.0 / x))'],
                 ];
-                 
-    
+
+
     for (List exprCase in diff) {
       Expression exp = exprCase[0];
       String deriveTo = exprCase[1];
@@ -349,7 +350,8 @@ class ExpressionTests extends TestSet {
       expect(exp.derive(deriveTo), _equalsExpression(expectedSimpl));
     }
   }
-  
+
+  /// Tests REAL evaluation of basic operators.
   void simpleRealEval() {
     _createBasicExpressions(real);
 
@@ -375,6 +377,7 @@ class ExpressionTests extends TestSet {
     expect(eval, equals(- num1));
   }
 
+  /// Tests INTERVAL evaluation of basic operators.
   void simpleIntervalEval() {
     // Interpret REAL as INTERVAL
     _createBasicExpressions(real);
@@ -431,34 +434,37 @@ class ExpressionTests extends TestSet {
     expect(eval, equals(- int1));
   }
 
+  /// Tests VECTOR evaluation of basic operators.
   void simpleVectorEval() {
     // TODO test eval
     throw new UnimplementedError();
   }
 
+  /// Tests creation of default functions.
   void defFuncCreation() {
     // Create all the default functions:
     // Log, Ln, Cos, Sin, Tan, Pow, etc.
-   
+
     // Test with number literal
     Expression exp = n2;
     List<MathFunction> functions = _createDefaultFunctions(n2);
-    
+
     for (MathFunction fun in functions) {
       // Numbers get boxed into BoundVariable, check for those instead of contains
       expect(fun.args, anyElement(new isInstanceOf<BoundVariable>()));
     }
-    
+
     // Test with variable
     exp = new Variable('x');
     functions = _createDefaultFunctions(exp);
-    
+
     for (MathFunction fun in functions) {
       // Variables should not get boxed, test for contains
       expect(fun.args, contains(exp));
     }
   }
-  
+
+  /// Helper function to create a list of all default functions.
   List<MathFunction> _createDefaultFunctions(Expression exp) {
     return [new Cos(exp),
             new Exponential(exp),
@@ -468,9 +474,12 @@ class ExpressionTests extends TestSet {
             new Root.sqrt(exp),
             new Sqrt(exp),
             new Sin(exp),
-            new Tan(exp)];
+            new Tan(exp),
+            new Abs(exp),
+            new Sgn(exp)];
   }
-  
+
+  /// Tests simplification of default functions.
   void defFuncSimplification() {
     /*
      *  Exponential
@@ -479,12 +488,12 @@ class ExpressionTests extends TestSet {
     Expression exp = new Exponential(new Number(0));
     expect(exp.simplify(), new isInstanceOf<Number>());
     expect((exp.simplify() as Number).value == 1, isTrue);
-    
+
     // e^1 = e
     exp = new Exponential(new Number(1));
     expect(exp.simplify(), new isInstanceOf<Number>());
     expect((exp.simplify() as Number).value == Math.E, isTrue);
-    
+
     // e^(x*ln(y)) = y^x
     exp = new Exponential(new Variable('x') * new Ln(new Variable('y')));
     expect(exp.simplify(), new isInstanceOf<Power>());
@@ -496,7 +505,7 @@ class ExpressionTests extends TestSet {
      */
     // Simplify base and argument
     //TODO
-    
+
     /*
      *  Ln
      */
@@ -504,13 +513,13 @@ class ExpressionTests extends TestSet {
     exp = new Ln(new Number(1));
     expect(exp.simplify(), new isInstanceOf<Number>());
     expect((exp.simplify() as Number).value == 0, isTrue);
-    
+
     /*
      * Root
      */
     // Simplify argument
     //TODO
-    
+
     /*
      * Sqrt
      */
@@ -522,12 +531,12 @@ class ExpressionTests extends TestSet {
     exp = new Sqrt(new Number(0));
     expect(exp.simplify(), new isInstanceOf<Number>());
     expect((exp.simplify() as Number).value == 0, isTrue);
-    
+
     // sqrt(1) = 1
     exp = new Sqrt(new Number(1));
     expect(exp.simplify(), new isInstanceOf<Number>());
     expect((exp.simplify() as Number).value == 1, isTrue);
-    
+
     /*
      * Sin
      */
@@ -535,7 +544,7 @@ class ExpressionTests extends TestSet {
     exp = new Sin(new Number(0));
     expect(exp.simplify(), new isInstanceOf<Number>());
     expect((exp.simplify() as Number).value == 0, isTrue);
-    
+
     /*
      * Cos
      */
@@ -543,7 +552,7 @@ class ExpressionTests extends TestSet {
     exp = new Cos(new Number(0));
     expect(exp.simplify(), new isInstanceOf<Number>());
     expect((exp.simplify() as Number).value == 1, isTrue);
-    
+
     /*
      * Tan
      */
@@ -551,8 +560,23 @@ class ExpressionTests extends TestSet {
     exp = new Tan(new Number(0));
     expect(exp.simplify(), new isInstanceOf<Number>());
     expect((exp.simplify() as Number).value == 0, isTrue);
+
+    /*
+     * Abs
+     */
+    exp = new Abs(new Number(0));
+    expect(exp.simplify(), new isInstanceOf<Abs>());
+    expect((exp.simplify() as Abs).arg, new isInstanceOf<BoundVariable>());
+
+    /*
+     * Sgn
+     */
+    exp = new Sgn(new Number(0));
+    expect(exp.simplify(), new isInstanceOf<Sgn>());
+    expect((exp.simplify() as Sgn).arg, new isInstanceOf<BoundVariable>());
   }
-  
+
+  /// Tests differentiation of default functions.
   void defFuncDifferentiation() {
     Variable x = new Variable('x');
     Number base = new Number(2);
@@ -570,16 +594,18 @@ class ExpressionTests extends TestSet {
                                       '((((1.0 / x) * ln(2.0)) - (ln(x) * (0.0 / 2.0))) / (ln(2.0) * ln(2.0)))',
                                       '(((1.0 / x) * ln(2.0)) / (ln(2.0) * ln(2.0)))'],
                                       //'1.0 / (x * ln(2.0))'],
-                 
+
                  // TODO Roots are internally handled as Powers:
                  //[new Sqrt(x),        'x', '0.0', '0.0'],
                  //[new Root(2, x),     'x', '0.0', '0.0'],
-                 
+
                  [new Sin(x),         'x', 'cos(x)',  'cos(x)'],
-                 [new Cos(x),         'x', '_sin(x)', '_sin(x)'],
-                 
+                 [new Cos(x),         'x', '-sin(x)', '-sin(x)'],
+
                  // TODO Tan is internally handled as sin/cos:
                  //[new Tan(x),          'x', '0.0',    '0.0']
+
+                 [new Abs(x),          'x', 'sgn(x)', 'sgn(x)']
                 ];
 
     for (List exprCase in diff) {
@@ -592,8 +618,9 @@ class ExpressionTests extends TestSet {
     }
   }
 
+  /// Tests REAL evaluation of default functions.
   void defFuncRealEval() {
-    
+
     Number zero, one, infinity, negInfty, e, pi ;
     zero = new Number(0);
     one = new Number(1);
@@ -601,7 +628,7 @@ class ExpressionTests extends TestSet {
     negInfty = new Number(double.NEGATIVE_INFINITY);
     pi = new Number(Math.PI);
     e = new Number(Math.E);
-    
+
     /*
      * Exponential
      */
@@ -620,12 +647,12 @@ class ExpressionTests extends TestSet {
     // -INFTY -> 0.0
     eval = new Exponential(-infinity).evaluate(real, cm);
     expect(eval, equals(0.0));
-    
+
     /*
      * Log
      */
     Number base = new Number(2);
-    
+
     // Log_2(0) -> -INFTY
     eval = new Log(base, zero).evaluate(real, cm);
     expect(eval, equals(double.NEGATIVE_INFINITY));
@@ -642,7 +669,7 @@ class ExpressionTests extends TestSet {
     eval = new Log(base,negInfty).evaluate(real, cm);
     //expect(eval, equals(double.INFINITY)); //TODO check this
     expect(eval, isNot(equals(eval)));
-    
+
     /*
      * Ln
      */
@@ -665,7 +692,7 @@ class ExpressionTests extends TestSet {
     eval = new Ln(negInfty).evaluate(real, cm);
     //expect(eval, equals(double.INFINITY)); //TODO check this
     expect(eval, isNot(equals(eval)));
-    
+
     /*
      * Cos
      */
@@ -690,7 +717,7 @@ class ExpressionTests extends TestSet {
     // cos(-INFTY) -> [-1,1] / NaN
     eval = new Cos(-infinity).evaluate(real, cm);
     expect(eval, isNot(equals(eval))); // NaN
-    
+
     /*
      * Sin
      */
@@ -715,7 +742,7 @@ class ExpressionTests extends TestSet {
     // sin(-INFTY) -> [-1,1] / NaN
     eval = new Sin(-infinity).evaluate(real, cm);
     expect(eval, isNot(equals(eval))); // NaN
-    
+
     /*
      * Tan
      */
@@ -740,12 +767,12 @@ class ExpressionTests extends TestSet {
     // tan(-INFTY) -> <INFTY / NaN
     eval = new Tan(-infinity).evaluate(real, cm);
     expect(eval, isNot(equals(eval))); // NaN
-    
+
     /*
      * Root
      */
     int grade = 5;
-    
+
     // root_5(0) = 0
     eval = new Root(grade, zero).evaluate(real, cm);
     expect(eval, equals(0.0));
@@ -764,13 +791,13 @@ class ExpressionTests extends TestSet {
     /*
      *  root_5(-INFTY) -> INFTY
      *  as of IEEE Standard 754-2008 for power function.
-     *  
+     *
      *  TODO  This is inconsistent with Sqrt(-INFTY),
      *        which is Root(2, -INFTY).
      */
     eval = new Root(grade, -infinity).evaluate(real, cm);
     expect(eval, equals(double.INFINITY));
-    
+
     /*
      * Sqrt
      */
@@ -792,37 +819,86 @@ class ExpressionTests extends TestSet {
     // sqrt(-INFTY) ->  NaN
     eval = new Sqrt(-infinity).evaluate(real, cm);
     expect(eval, isNot(equals(eval)));
+
+    /*
+     * Abs
+     */
+    // abs(0) = 0
+    eval = new Abs(zero).evaluate(real, cm);
+    expect(eval, equals(0.0));
+    // abs(-1) = 1
+    eval = new Abs(-one).evaluate(real, cm);
+    expect(eval, equals(1.0));
+    // abs(1) = 1
+    eval = new Abs(one).evaluate(real, cm);
+    expect(eval, equals(1.0));
+    // abs(2) = 2
+    eval = new Abs(new Number(2)).evaluate(real, cm);
+    expect(eval, equals(2.0));
+    // abs(INFTY) -> INFTY
+    eval = new Abs(infinity).evaluate(real, cm);
+    expect(eval, equals(double.INFINITY));
+    // abs(-INFTY) -> INFTY
+    eval = new Abs(-infinity).evaluate(real, cm);
+    expect(eval, equals(double.INFINITY));
+
+    /*
+     * Sgn
+     */
+    // sgn(0) = 0
+    eval = new Sgn(zero).evaluate(real, cm);
+    expect(eval, equals(0.0));
+    // sgn(-1) = -1
+    eval = new Sgn(-one).evaluate(real, cm);
+    expect(eval, equals(-1.0));
+    // sgn(1) = 1
+    eval = new Sgn(one).evaluate(real, cm);
+    expect(eval, equals(1.0));
+    // sgn(2) = 1
+    eval = new Sgn(new Number(2)).evaluate(real, cm);
+    expect(eval, equals(1.0));
+    // sgn(INFTY) -> 1
+    eval = new Sgn(infinity).evaluate(real, cm);
+    expect(eval, equals(1.0));
+    // sgn(-INFTY) -> -1
+    eval = new Sgn(-infinity).evaluate(real, cm);
+    expect(eval, equals(-1.0));
   }
 
+  /// Tests INTERVAL evaluation of default functions.
   void defFuncIntervalEval() {
     throw new UnimplementedError();
   }
 
+  /// Tests VECTOR evaluation of default functions.
   void defFuncVectorEval() {
     throw new UnimplementedError();
   }
 
+  /// Tests creation of custom functions.
   void cusFuncCreation() {
     // Create some custom functions.
     Variable x = new Variable("x");
     List<Variable> vars = [x];
     CustomFunction cf = new CustomFunction("sqrt", vars, new Sqrt(x));
-    
+
     expect(cf.domainDimension, equals(vars.length));
     expect(cf.expression, new isInstanceOf<Sqrt>());
-    
+
     //TODO more tests.
   }
-  
+
+  /// Tests simplification of custom functions.
   void cusFuncSimplification() {
     throw new UnimplementedError();
   }
-  
+
+  /// Tests differentiation of custom functions.
   void cusFuncDifferentiation() {
     throw new UnimplementedError();
   }
 
-  /// Tests custom functions: `R^n -> R`
+  /// Testss REAL evaluation of custom functions: `R^n -> R`
   void cusFuncRealEval() {
     Variable x,y,z;
     CustomFunction cf;
@@ -836,16 +912,16 @@ class ExpressionTests extends TestSet {
     vars = [x];
     cf = new CustomFunction("sqrt", vars, new Sqrt(x));
     cm.bindVariable(x, new Number(4));
-    
+
     expect(cf.evaluate(real, cm), equals(2));
-    
+
     // Custom ADD (R^2 -> R)
     vars = [x, y];
     cf = new CustomFunction("add", vars, x+y);
     cm.bindVariable(y, new Number(1));
-    
+
     expect(cf.evaluate(real, cm), equals(5));
-    
+
     // Custom Vector LENGTH (R^3 -> R)
     vars = [x, y, z];
     Expression two = new Number(2);
@@ -857,10 +933,12 @@ class ExpressionTests extends TestSet {
     expect(cf.evaluate(real, cm), closeTo(4.1231, 0.0001));
   }
 
+  /// Testss INTERVAL evaluation of custom functions
   void cusFuncIntervalEval() {
     throw new UnimplementedError();
   }
 
+  /// Testss VECTOR evaluation of custom functions
   void cusFuncVectorEval() {
     Variable x,y;
     CustomFunction cf;
@@ -874,10 +952,11 @@ class ExpressionTests extends TestSet {
     // TODO This doesn't work yet.
     cf = new CustomFunction("length", vars, new Sqrt(x[1]^two+x[2]^two));
     cm.bindVariable(x, new Vector([new Number(2), new Number(2)]));
-    
+
     expect(cf.evaluate(vector, cm), closeTo(2.82842, 0.00001));
   }
 
+  /// Tests creation of composite functions.
   void compFunCreation() {
     Variable x, y, z;
     CustomFunction f, g;
@@ -891,7 +970,7 @@ class ExpressionTests extends TestSet {
     Expression three = new Number(3);
     f = new CustomFunction("funkysplat", [x], new Vector([x-three,x,x+three]));
     cm.bindVariable(x, three);
-    
+
     // Should evaluate to a Vector3[0.0,3.0,6.0]
     Vector3 v3 = f.evaluate(vector, cm);
     expect(v3.x, equals(0.0));
@@ -906,15 +985,15 @@ class ExpressionTests extends TestSet {
      * Simple Composite of two functions: R -> R^3 -> R
      */
     CompositeFunction comp = f & g;
-    
+
     expect(comp.domainDimension, equals(1));
     expect(comp.gDomainDimension, equals(3));
     expect(comp.f, equals(f));
     expect(comp.g, equals(g));
-    
+
     // Should evaluate to the length of v3
     expect(comp.evaluate(real, cm), closeTo(v3.length, 0.0001));
- 
+
     /*
      * Extended Composite of three functions: R -> R^3 -> R -> R^3
      */
@@ -925,7 +1004,7 @@ class ExpressionTests extends TestSet {
     expect(comp2.f, new isInstanceOf<CompositeFunction>());
     expect(comp2.f, equals(comp));
     expect(comp2.g, equals(f));
-    
+
     // Should evaluate to a Vector3[v3.len-3,v3.len,v3.len+3]
     // Note: Need to use EvaluationType.VECTOR here.
     Vector3 v3_2 = comp2.evaluate(vector, cm);
@@ -933,15 +1012,18 @@ class ExpressionTests extends TestSet {
     expect(v3_2.y, closeTo(v3.length, 0.0001));
     expect(v3_2.z, closeTo(v3.length+3.0, 0.0001));
   }
-  
+
+  /// Tests simplification of composite functions.
   void compFuncSimplification() {
     throw new UnimplementedError();
   }
-  
+
+  /// Tests differentiation of composite functions.
   void compFuncDifferentiation() {
     throw new UnimplementedError();
   }
 
+  /// Tests evaluation of composite functions.
   void compFunEval() {
     // Evaluate composite functions.
     throw new UnimplementedError();
@@ -957,7 +1039,7 @@ class ExpressionTests extends TestSet {
       return expr.exp == m;
     }
   }
-  
+
   /// Checks if given [expr] is a [Variable] and has the given [name].
   bool _isVariable(expr, [name]) {
     if (expr is Variable) {
@@ -969,7 +1051,7 @@ class ExpressionTests extends TestSet {
     }
     return false;
   }
-  
+
   Matcher _equalsExpression(String expr, {simplify: true}) => new ExpressionMatcher(expr, simplify:simplify);
 }
 
@@ -983,7 +1065,7 @@ class ExpressionMatcher extends Matcher {
   final String _expression;
   final bool _simplify;
   static final Lexer _lexer = new Lexer();
-  
+
   /**
    * Creates a new Expression matcher. If [simplify] is true, the expression to
    * match will be simplified as much as possible before testing.
@@ -992,14 +1074,14 @@ class ExpressionMatcher extends Matcher {
       this._expression = expression,
       this._exprRPN = _lexer.tokenizeToRPN(expression),
       this._simplify = simplify;
-  
+
   bool matches(item, Map matchState) {
     if (item is Expression) {
       // Simplify and tokenize.
       Expression expr = _simplify ? _simplifyExp((item as Expression)) : (item as Expression);
       String itemStr = expr.toString();
       List<Token> itemRPN = _lexer.tokenizeToRPN(itemStr);
-      
+
       /*
       print("exprStr: $_expression");
       print("exprTKN: ${_lexer.tokenize(_expression)}");
@@ -1008,17 +1090,17 @@ class ExpressionMatcher extends Matcher {
       print("itemTKN: ${_lexer.tokenize(itemStr)}");
       print("itemRPN: $itemRPN");
       */
-      
+
       // Save state
       matchState["item"] = itemStr;
       matchState["itemRPN"] = itemRPN;
-      
+
       // Match with orderedEquals
       return orderedEquals(_exprRPN).matches(itemRPN, matchState);
     }
     return false;
   }
-  
+
   /// Simplifies the given expression.
   Expression _simplifyExp(Expression exp) {
     String expString;
@@ -1027,18 +1109,18 @@ class ExpressionMatcher extends Matcher {
       expString = expSimplified.toString();
       expSimplified = exp.simplify();
     } while (expString != expSimplified.toString());
-    
+
     return expSimplified;
   }
-  
+
   Description describe(Description description) =>
       description.add("expression to match ")
         .addDescriptionOf(_expression)
         .add(' with RPN: ')
         .addDescriptionOf(_exprRPN);
-  
+
   Description describeMismatch(item, Description mismatchDescription, Map matchState, bool verbose) =>
-      !_simplify ? mismatchDescription : 
+      !_simplify ? mismatchDescription :
         mismatchDescription.add("was simplified to ")
         .addDescriptionOf(matchState["state"]["item"].toString())
         .add(' with RPN: ')
