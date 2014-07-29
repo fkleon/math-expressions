@@ -26,7 +26,7 @@ part of math_expressions;
  *     * Custom Functions (see [CustomFunction])
  *
  * Pre-defined functions are [Exponential], [Log], [Ln], nth-[Root], [Sqrt],
- * [Sin], [Cos] and [Tan].
+ * [Abs], [Sgn], [Sin], [Cos] and [Tan].
  */
 abstract class Expression {
 
