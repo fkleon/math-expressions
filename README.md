@@ -102,7 +102,7 @@ For more code, see [example.dart](example/example.dart).
 
 [mathExpr]: http://www-sfb288.math.tu-berlin.de/~jtem/mathExpr/
 [droneBadge]: https://drone.io/github.com/fkleon/math-expressions/latest
-[dartdoc]: http://www.dartdocs.org/documentation/math_expressions/0.1.0
+[dartdoc]: http://www.dartdocs.org/documentation/math_expressions/latest
 [license]: LICENSE
 [exampleEq1]: http://latex.codecogs.com/gif.latex?%28x%5E2%2Bcos%28y%29%29%2F3
 [exampleEq1xy]: http://latex.codecogs.com/gif.latex?x%3D2%2Cy%3D%5Cpi
