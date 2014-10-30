@@ -1,13 +1,11 @@
-# Changelog - math_expressions
-
-### 0.1.0 2014-07-19
+### 0.1.0 - 2014-07-19
 
 - Add absolute value function (by [markhats](https://github.com/markhats))
 - Add sign function
 - Improve test coverage
 - Adapt string representation of unary minus to standard syntax
 
-### 0.0.9 2014-03-30
+### 0.0.9 - 2014-03-30
 
 - To create exponentials, use `e(x)` or `e^x`. Consequently, removed support for `exp(x)`.
 - Improve test coverage
