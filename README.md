@@ -94,8 +94,9 @@ This example shows how to simplify and differentiate
   print(expDerived.simplify()); // = 1.0
 ```
 
-For a CLI evaluator, see [cli_evaluator.dart](example/cli_evaluator.dart).  
-For more code, see [example.dart](example/example.dart).
+### 3. More Examples
+For a simple CLI evaluator, see [cli_evaluator.dart](example/cli_evaluator.dart).  
+For more example code, see [example.dart](example/example.dart).
 
 
 *math_expressions is distributed under the MIT license as described in the [LICENSE][] file.*
