@@ -5,7 +5,7 @@ library math_expressions_test;
 
 import 'dart:math' as Math;
 
-import 'package:unittest/unittest.dart';
+import 'package:test/test.dart';
 import 'package:vector_math/vector_math.dart' show Vector3;
 import 'package:math_expressions/math_expressions.dart';
 
