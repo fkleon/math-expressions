@@ -1,3 +1,9 @@
+### 0.2.0 - 2015-11-19
+
+- Add support for basic vector operations
+- Switch to using `test` instead of `unittest` package
+- **Warning:** Depends on git version of `vector_math` as latest pub release is severely outdated
+
 ### 0.1.0 - 2014-07-19
 
 - Add absolute value function (by [markhats](https://github.com/markhats))
