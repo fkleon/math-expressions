@@ -10,14 +10,14 @@ class ExpressionTests extends TestSet {
   get testFunctions => {
     'Expression creation [REAL]': simpleRealCreation,
     'Expression creation [INTERVAL]': simpleIntervalCreation,
-    //'Expression Creation [VECTOR]': simpleVectorCreation,
+    'Expression Creation [VECTOR]': simpleVectorCreation,
     'Binary Op Convenience creation': convenienceBinaryCreation,
     'Unary Op Convenience creation': convenienceUnaryCreation,
     'Operator simplification': baseOperatorSimplification,
     'Operator differentiation': baseOperatorDifferentiation,
     'Simple evaluation [REAL]': simpleRealEval,
     'Simple evaluation [INTERVAL]': simpleIntervalEval,
-    //'Simple evaluation [VECTOR]': simpleVectorEval,
+    'Simple evaluation [VECTOR]': simpleVectorEval,
     'Default Function creation': defFuncCreation,
     'Default Function simplification': defFuncSimplification,
     'Default Function differentiation': defFuncDifferentiation,
@@ -44,7 +44,7 @@ class ExpressionTests extends TestSet {
 
   void initTests() {
     num1 = 2.25;
-    num2 = 5;
+    num2 = 5.0;
     num3 = 199.9999999;
     n1 = new Number(num1);
     n2 = new Number(num2);
@@ -58,10 +58,10 @@ class ExpressionTests extends TestSet {
     i2 = new IntervalLiteral(n2, n3);
     i3 = new IntervalLiteral(-n3, n2);
 
-    v1 = new Vector([n1, n2, n3]);
-    v1 = new Vector([n1, n2, n3]);
-    //v2 = new Vector3(1.0, 2.0, 3.0);
-    //v3 = new Vector3(1.0, 2.0, 3.0);
+    v1 = new Vector([n1, n1, n1]);
+    v2 = new Vector([n2, n2, n2]);
+    v3 = new Vector([n3, n3, n3]);
+    //v4 = new Vector([n4, n4, n4]);
 
     real = EvaluationType.REAL;
     interval = EvaluationType.INTERVAL;
@@ -95,7 +95,7 @@ class ExpressionTests extends TestSet {
     if (type == EvaluationType.INTERVAL) {
       e1 = i1 * i2;
       e2 = i1 / i2;
-      //e3 = i1 ^ i2;
+      e3 = i1 ^ i2;
       e4 = i1 + i2;
       e5 = i1 - i2;
       e6 = -i1;
@@ -103,7 +103,13 @@ class ExpressionTests extends TestSet {
     }
 
     if (type == EvaluationType.VECTOR) {
-      //TODO vector
+      e1 = v1 * v2;
+      e2 = v1 / v2;
+      e3 = v1 ^ v2;
+      e4 = v1 + v2;
+      e5 = v1 - v2;
+      e6 = -v1;
+      return;
     }
   }
 
@@ -164,9 +170,8 @@ class ExpressionTests extends TestSet {
     expect(e2 is Divide, isTrue);
     expect(_hasMember(e2, i1, i2), isTrue);
 
-    // no power OP on intervals yet
-//    expect(e3 is Power, isTrue);
-//    expect(_hasMember(e3, i1, i2), isTrue);
+    expect(e3 is Power, isTrue);
+    expect(_hasMember(e3, i1, i2), isTrue);
 
     expect(e4 is Plus, isTrue);
     expect(_hasMember(e4, i1, i2), isTrue);
@@ -182,8 +187,23 @@ class ExpressionTests extends TestSet {
   void simpleVectorCreation() {
     _createBasicExpressions(vector);
 
-    //TODO vector
-    throw new UnimplementedError();
+    expect(e1 is Times, isTrue);
+    expect(_hasMember(e1, v1, v2), isTrue);
+
+    expect(e2 is Divide, isTrue);
+    expect(_hasMember(e2, v1, v2), isTrue);
+
+    expect(e3 is Power, isTrue);
+    expect(_hasMember(e3, v1, v2), isTrue);
+
+    expect(e4 is Plus, isTrue);
+    expect(_hasMember(e4, v1, v2), isTrue);
+
+    expect(e5 is Minus, isTrue);
+    expect(_hasMember(e5, v1, v2), isTrue);
+
+    expect(e6 is UnaryMinus, isTrue);
+    expect(_hasMember(e6, v1), isTrue);
   }
 
   /// Tests simplification of basic operator expressions.
@@ -366,9 +386,6 @@ class ExpressionTests extends TestSet {
     eval = e2.evaluate(real, cm);
     expect(eval, equals(num1 / num2));
 
-    eval = e2.evaluate(real, cm);
-    expect(eval, equals(num1 / num2));
-
     eval = e3.evaluate(real, cm);
     expect(eval, equals(Math.pow(num1, num2)));
 
@@ -397,12 +414,9 @@ class ExpressionTests extends TestSet {
     eval = e2.evaluate(interval, cm);
     expect(eval, equals(ri1 / ri2));
 
-    eval = e2.evaluate(interval, cm);
-    expect(eval, equals(ri1 / ri2));
-
-    //TODO
-//    eval = e3.evaluate(interval, cm);
-//    expect(eval, equals(ri1 ^ ri2));
+    //TODO power op on intervals not supported yet
+    //eval = e3.evaluate(interval, cm);
+    //expect(eval, equals(ri1 ^ ri2));
 
     eval = e4.evaluate(interval, cm);
     expect(eval, equals(ri1 + ri2));
@@ -422,12 +436,9 @@ class ExpressionTests extends TestSet {
     eval = e2.evaluate(interval, cm);
     expect(eval, equals(int1 / int2));
 
-    eval = e2.evaluate(interval, cm);
-    expect(eval, equals(int1 / int2));
-
-    //TODO
-//    eval = e3.evaluate(interval, cm);
-//    expect(eval, equals(i1 ^ i2));
+    //TODO power op on intervals not supported yet
+    //eval = e3.evaluate(interval, cm);
+    //expect(eval, equals(i1 ^ i2));
 
     eval = e4.evaluate(interval, cm);
     expect(eval, equals(int1 + int2));
@@ -441,8 +452,42 @@ class ExpressionTests extends TestSet {
 
   /// Tests VECTOR evaluation of basic operators.
   void simpleVectorEval() {
-    // TODO test eval
-    throw new UnimplementedError();
+    _createBasicExpressions(vector);
+
+    Vector3 vec1 = new Vector3.all(num1);
+    Vector3 vec2 = new Vector3.all(num2);
+
+    var eval = e1.evaluate(vector, cm);
+    expect(eval, equals(vec1.multiply(vec2))); // modifies vec1
+
+    vec1 = new Vector3.all(num1);
+    eval = e2.evaluate(vector, cm);
+    expect(eval, equals(vec1.divide(vec2))); // modifies vec1
+
+    //TODO power op on vectors not supported yet
+    //eval = e3.evaluate(vector, cm);
+    //expect(eval, equals(Math.pow(num1, num2)));
+
+    vec1 = new Vector3.all(num1);
+    eval = e4.evaluate(vector, cm);
+    expect(eval, equals(vec1 + vec2));
+
+    eval = e5.evaluate(vector, cm);
+    expect(eval, equals(vec1 - vec2));
+
+    eval = e6.evaluate(vector, cm);
+    expect(eval, equals(- vec1));
+
+    // scalars (vector first, then scalar!)
+    vec1 = new Vector3.all(num1);
+    Expression e1_1 = new Vector([n1, n1, n1]) * n2;
+    eval = e1_1.evaluate(vector, cm);
+    expect(eval, equals(vec1 * num2));
+
+    vec1 = new Vector3.all(num1);
+    Expression e1_2 = new Vector([n1, n1, n1]) / n2;
+    eval = e1_2.evaluate(vector, cm);
+    expect(eval, equals(vec1 / num2));
   }
 
   /// Tests creation of default functions.

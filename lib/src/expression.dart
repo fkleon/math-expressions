@@ -396,8 +396,19 @@ class Times extends BinaryOperator {
   }
 
   evaluate(EvaluationType type, ContextModel context) {
-    // TODO check for case number *  vector -> scalar product with vector.scale()
-    return first.evaluate(type, context) * second.evaluate(type, context);
+    var firstEval = first.evaluate(type, context);
+    var secondEval = second.evaluate(type, context);
+
+    if (type == EvaluationType.VECTOR) {
+      if (secondEval is double) {
+        // scale - nothing special to do
+      } else {
+        // multiply
+        return firstEval.multiply(secondEval);
+      }
+    }
+
+    return firstEval * secondEval;
   }
 
   String toString() => '($first * $second)';
@@ -470,6 +481,15 @@ class Divide extends BinaryOperator {
   evaluate(EvaluationType type, ContextModel context) {
     var firstEval = first.evaluate(type, context);
     var secondEval = second.evaluate(type, context);
+
+    if (type == EvaluationType.VECTOR) {
+      if (secondEval is double) {
+        // scale - nothing special to do
+      } else {
+        // divide
+        return firstEval.divide(secondEval);
+      }
+    }
 
     return firstEval / secondEval;
   }
@@ -658,6 +678,11 @@ class Number extends Literal {
       // interpret number as interval
       IntervalLiteral intLit = new IntervalLiteral.fromSingle(this);
       return intLit.evaluate(type, context);
+    }
+
+    if (type == EvaluationType.VECTOR) {
+      // interpret number as scalar
+      return value;
     }
 
     throw new UnsupportedError('Number $this can not be interpreted as: ${type}');
