@@ -12,5 +12,4 @@ packages/
 web/out/
 
 # Documentation #
-docs/
-index.html
+doc/
