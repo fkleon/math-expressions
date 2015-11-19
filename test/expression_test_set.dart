@@ -52,11 +52,16 @@ class ExpressionTests extends TestSet {
 
     int1 = new Interval(num1, num2);
     int2 = new Interval(num2, num3);
-    int3 = new Interval(-num3, num2);;
+    int3 = new Interval(-num3, num2);
 
     i1 = new IntervalLiteral(n1, n2);
     i2 = new IntervalLiteral(n2, n3);
     i3 = new IntervalLiteral(-n3, n2);
+
+    v1 = new Vector([n1, n2, n3]);
+    v1 = new Vector([n1, n2, n3]);
+    //v2 = new Vector3(1.0, 2.0, 3.0);
+    //v3 = new Vector3(1.0, 2.0, 3.0);
 
     real = EvaluationType.REAL;
     interval = EvaluationType.INTERVAL;
@@ -70,7 +75,7 @@ class ExpressionTests extends TestSet {
 
   Number n1, n2, n3, n4;
   IntervalLiteral i1, i2, i3;
-  Variable v1, v2, v3;
+  Vector v1, v2, v3;
   Expression e1, e2, e3, e4, e5, e6;
 
   EvaluationType real, interval, vector;
