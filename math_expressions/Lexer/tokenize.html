@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="generator" content="made with love by dartdoc 0.8.0">
+  <title>tokenize method - Lexer class - math_expressions library - Dart API</title>
+  <!-- required because all the links are pseudo-absolute -->
+  <base href="../..">
+
+  <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro|Roboto:500,400italic,300,400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="static-assets/prettify.css">
+  <link rel="stylesheet" href="static-assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="static-assets/styles.css">
+
+  <meta name="description" content="API docs for the tokenize method from the Lexer class, for the Dart programming language.">
+  <link rel="icon" href="static-assets/favicon.png">
+
+  <!-- Do not remove placeholder -->
+  <!-- Header Placeholder -->
+</head>
+
+<body>
+
+<div id="overlay-under-drawer"></div>
+
+<header class="container-fluid" id="title">
+  <nav class="navbar navbar-fixed-top">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12 contents">
+          <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+          <ol class="breadcrumbs gt-separated hidden-xs">
+            <li><a href="index.html">math_expressions</a></li>
+            <li><a href="math_expressions/math_expressions-library.html">math_expressions</a></li>
+            <li><a href="math_expressions/Lexer-class.html">Lexer</a></li>
+            <li class="self-crumb">tokenize</li>
+          </ol>
+          <div class="self-name">tokenize</div>
+          <form class="search navbar-right" role="search">
+            <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+          </form>
+        </div> <!-- /col -->
+      </div> <!-- /row -->
+    </div> <!-- /container -->
+  </nav>
+
+  <div class="container masthead">
+    <div class="row">
+      <div class="col-sm-12 contents">
+        <ol class="breadcrumbs gt-separated visible-xs">
+          <li><a href="index.html">math_expressions</a></li>
+          <li><a href="math_expressions/math_expressions-library.html">math_expressions</a></li>
+          <li><a href="math_expressions/Lexer-class.html">Lexer</a></li>
+          <li class="self-crumb">tokenize</li>
+        </ol>
+        <div class="title-description">
+          <h1 class="title">
+            <span class="kind">method</span> tokenize
+          </h1>
+        </div>
+        <ul class="subnav">
+          <li><a href="math_expressions/Lexer/tokenize.html#source">Source</a></li>
+        </ul>
+      </div> <!-- /col -->
+    </div> <!-- /row -->
+  </div> <!-- /container -->
+
+</header>
+
+<div class="container body">
+  <div class="row">
+
+  <div class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <h5><a href="index.html">math_expressions</a></h5>
+    <h5><a href="math_expressions/math_expressions-library.html">math_expressions</a></h5>
+    <h5><a href="math_expressions/Lexer-class.html">Lexer</a></h5>
+
+    <ol>
+    
+    
+    
+      <li class="section-title"><a href="math_expressions/Lexer-class.html#constructors">Constructors</a></li>
+      <li><a href="math_expressions/Lexer/Lexer.html">Lexer</a></li>
+    
+      <li class="section-title">
+        <a href="math_expressions/Lexer-class.html#instance-properties">Properties</a>
+      </li>
+      <li class="inherited"><a class="" href="math_expressions/Lexer/hashCode.html">hashCode</a></li>
+      <li><a class="" href="math_expressions/Lexer/intBuffer.html">intBuffer</a></li>
+      <li><a class="" href="math_expressions/Lexer/keywords.html">keywords</a></li>
+      <li class="inherited"><a class="" href="math_expressions/Lexer/runtimeType.html">runtimeType</a></li>
+      <li><a class="" href="math_expressions/Lexer/varBuffer.html">varBuffer</a></li>
+    
+      <li class="section-title inherited"><a href="math_expressions/Lexer-class.html#operators">Operators</a></li>
+      <li class="inherited"><a class="" href="math_expressions/Lexer/operator_equals.html">operator ==</a></li>
+    
+      <li class="section-title"><a href="math_expressions/Lexer-class.html#instance-methods">Methods</a></li>
+      <li class="inherited"><a class="" href="math_expressions/Lexer/noSuchMethod.html">noSuchMethod</a></li>
+      <li><a class="" href="math_expressions/Lexer/shuntingYard.html">shuntingYard</a></li>
+      <li><a class="" href="math_expressions/Lexer/tokenize.html">tokenize</a></li>
+      <li><a class="" href="math_expressions/Lexer/tokenizeToRPN.html">tokenizeToRPN</a></li>
+      <li class="inherited"><a class="" href="math_expressions/Lexer/toString.html">toString</a></li>
+    </ol>
+
+  </div><!--/.sidebar-offcanvas-->
+
+  <div class="col-xs-12 col-sm-9 col-md-8 main-content">
+
+    <section class="multi-line-signature">
+        <span class="returntype">List&lt;<a class="" href="math_expressions/Token-class.html">Token</a>&gt;</span>
+        <span class="name ">tokenize</span>(<wbr><span class="parameter" id="tokenize-param-inputString"><span class="type-annotation">String</span> <span class="parameter-name">inputString</span></span>)
+    </section>
+
+    <section class="desc markdown">
+      <p>Tokenizes a given input string.
+Returns a list of <a class="" href="math_expressions/Token-class.html">Token</a> in infix notation.</p>
+    </section>
+    
+    <section class="summary source-code" id="source">
+      <h2><span>Source</span> </h2>
+      <pre><code class="prettyprint lang-dart">List&lt;Token&gt; tokenize(String inputString) {
+  List&lt;Token&gt; tempTokenStream = new List&lt;Token&gt;();
+
+  String clearedString = inputString.replaceAll(&quot; &quot;, &quot;&quot;).trim();
+
+  RuneIterator iter = clearedString.runes.iterator;
+  int siInt;
+
+  while (iter.moveNext()) {
+    String si = iter.currentAsString;
+
+    /*
+     * Check if the current Character is a keyword. If it is a keyword, check if the intBuffer is not empty and add
+     * a Value Token for the intBuffer and the corresponding Token for the keyword.
+     */
+    if(keywords.containsKey(si)) {
+      // check and or do intBuffer and varBuffer
+      if(intBuffer.length &gt; 0) {
+        _doIntBuffer(tempTokenStream);
+      }
+      if(varBuffer.length &gt; 0) {
+        _doVarBuffer(tempTokenStream);
+      }
+      // MH - Bit of a hack here to handle exponentials of the form e^x rather than e(x)
+      if (keywords[si] == TokenType.POW &amp;&amp; tempTokenStream.last.type == TokenType.EFUNC) {
+        // Clear varBuffer since we have nothing to add to the stream as EFUNC is already in it
+        //_doVarBuffer(tempTokenStream);
+        varBuffer = &quot;&quot;;
+      } else {
+        // Normal behaviour
+        tempTokenStream.add(new Token(si, keywords[si]));
+      }
+    } else {
+      // Check if the current string is a Number. If it&apos;s the case add the string to the intBuffer.
+      StringBuffer sb = new StringBuffer(intBuffer);
+      try {
+        siInt = int.parse(si);
+        // The current string is a number and it is added to the intBuffer.
+        sb.write(si);
+        intBuffer = sb.toString();
+        if(varBuffer.length &gt; 0) {
+          _doVarBuffer(tempTokenStream);
+        }
+      } on FormatException {
+        // Check if the current string is part of a floating point input
+        if(si==&quot;.&quot;){
+          sb.write(si);
+          intBuffer = sb.toString();
+          continue;
+        }
+
+        // The current string is not a number and not a simple keyword, so it has to be a variable or function.
+        sb = new StringBuffer(varBuffer);
+        if(intBuffer.length &gt; 0) {
+          /*
+           * The intBuffer contains a string and the current string is a
+           * variable or part of a complex keyword, so the value is added
+           * to the token stream and the current string is added to the
+           * var buffer.
+           */
+          _doIntBuffer(tempTokenStream);
+          sb.write(si);
+          varBuffer = sb.toString();
+        } else {
+          // intBuffer contains no string and the current string is a variable, so both Tokens are added to the tokenStream.
+          sb.write(si);
+          varBuffer = sb.toString();
+        }
+      }
+    }
+  }
+
+  if(intBuffer.length &gt; 0) {
+    // There are no more symbols in the input string but there is still an int in the intBuffer
+    _doIntBuffer(tempTokenStream);
+  }
+  if(varBuffer.length &gt; 0) {
+    // There are no more symbols in the input string but there is still a variable or keyword in the varBuffer
+    _doVarBuffer(tempTokenStream);
+  }
+  return tempTokenStream;
+}</code></pre>
+    </section>
+
+  </div> <!-- /.main-content -->
+
+</div> <!-- row -->
+</div> <!-- container -->
+
+<footer>
+  <div class="container-fluid">
+    <div class="container">
+      <p class="text-center">
+        <span class="no-break">
+          math_expressions 0.1.1
+        </span>
+        &bull;
+        <span class="no-break">
+          <a href="https://www.dartlang.org">
+            <img src="static-assets/favicon.png" alt="Dart" title="Dart" width="16" height="16">
+          </a>
+        </span>
+        &bull;
+        <span class="copyright no-break">
+          <a href="http://creativecommons.org/licenses/by-sa/4.0/">cc license</a>
+        </span>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="static-assets/typeahead.bundle.min.js"></script>
+<script src="static-assets/prettify.js"></script>
+<script src="static-assets/script.js"></script>
+<!-- Do not remove placeholder -->
+<!-- Footer Placeholder -->
+
+</body>
+
+</html>

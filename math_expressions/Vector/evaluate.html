@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="generator" content="made with love by dartdoc 0.8.0">
+  <title>evaluate method - Vector class - math_expressions library - Dart API</title>
+  <!-- required because all the links are pseudo-absolute -->
+  <base href="../..">
+
+  <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro|Roboto:500,400italic,300,400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="static-assets/prettify.css">
+  <link rel="stylesheet" href="static-assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="static-assets/styles.css">
+
+  <meta name="description" content="API docs for the evaluate method from the Vector class, for the Dart programming language.">
+  <link rel="icon" href="static-assets/favicon.png">
+
+  <!-- Do not remove placeholder -->
+  <!-- Header Placeholder -->
+</head>
+
+<body>
+
+<div id="overlay-under-drawer"></div>
+
+<header class="container-fluid" id="title">
+  <nav class="navbar navbar-fixed-top">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12 contents">
+          <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+          <ol class="breadcrumbs gt-separated hidden-xs">
+            <li><a href="index.html">math_expressions</a></li>
+            <li><a href="math_expressions/math_expressions-library.html">math_expressions</a></li>
+            <li><a href="math_expressions/Vector-class.html">Vector</a></li>
+            <li class="self-crumb">evaluate</li>
+          </ol>
+          <div class="self-name">evaluate</div>
+          <form class="search navbar-right" role="search">
+            <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+          </form>
+        </div> <!-- /col -->
+      </div> <!-- /row -->
+    </div> <!-- /container -->
+  </nav>
+
+  <div class="container masthead">
+    <div class="row">
+      <div class="col-sm-12 contents">
+        <ol class="breadcrumbs gt-separated visible-xs">
+          <li><a href="index.html">math_expressions</a></li>
+          <li><a href="math_expressions/math_expressions-library.html">math_expressions</a></li>
+          <li><a href="math_expressions/Vector-class.html">Vector</a></li>
+          <li class="self-crumb">evaluate</li>
+        </ol>
+        <div class="title-description">
+          <h1 class="title">
+            <span class="kind">method</span> evaluate
+          </h1>
+        </div>
+        <ul class="subnav">
+          <li><a href="math_expressions/Vector/evaluate.html#source">Source</a></li>
+        </ul>
+      </div> <!-- /col -->
+    </div> <!-- /row -->
+  </div> <!-- /container -->
+
+</header>
+
+<div class="container body">
+  <div class="row">
+
+  <div class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <h5><a href="index.html">math_expressions</a></h5>
+    <h5><a href="math_expressions/math_expressions-library.html">math_expressions</a></h5>
+    <h5><a href="math_expressions/Vector-class.html">Vector</a></h5>
+
+    <ol>
+    
+    
+    
+      <li class="section-title"><a href="math_expressions/Vector-class.html#constructors">Constructors</a></li>
+      <li><a href="math_expressions/Vector/Vector.html">Vector</a></li>
+    
+      <li class="section-title">
+        <a href="math_expressions/Vector-class.html#instance-properties">Properties</a>
+      </li>
+      <li><a class="" href="math_expressions/Vector/elements.html">elements</a></li>
+      <li class="inherited"><a class="" href="math_expressions/Vector/hashCode.html">hashCode</a></li>
+      <li><a class="" href="math_expressions/Vector/length.html">length</a></li>
+      <li class="inherited"><a class="" href="math_expressions/Vector/runtimeType.html">runtimeType</a></li>
+      <li class="inherited"><a class="" href="math_expressions/Literal/value.html">value</a></li>
+    
+      <li class="section-title"><a href="math_expressions/Vector-class.html#operators">Operators</a></li>
+      <li class="inherited"><a class="" href="math_expressions/Expression/operator_multiply.html">operator *</a></li>
+      <li class="inherited"><a class="" href="math_expressions/Expression/operator_plus.html">operator +</a></li>
+      <li class="inherited"><a class="" href="math_expressions/Expression/operator_minus.html">operator -</a></li>
+      <li class="inherited"><a class="" href="math_expressions/Expression/operator_divide.html">operator /</a></li>
+      <li class="inherited"><a class="" href="math_expressions/Vector/operator_equals.html">operator ==</a></li>
+      <li class="inherited"><a class="" href="math_expressions/Expression/operator_unary_minus.html">operator unary-</a></li>
+      <li><a class="" href="math_expressions/Vector/operator_get.html">operator []</a></li>
+      <li class="inherited"><a class="" href="math_expressions/Expression/operator_bitwise_exclusive_or.html">operator ^</a></li>
+    
+      <li class="section-title"><a href="math_expressions/Vector-class.html#instance-methods">Methods</a></li>
+      <li><a class="" href="math_expressions/Vector/derive.html">derive</a></li>
+      <li><a class="" href="math_expressions/Vector/evaluate.html">evaluate</a></li>
+      <li><a class="" href="math_expressions/Vector/getConstantValue.html">getConstantValue</a></li>
+      <li><a class="" href="math_expressions/Vector/isConstant.html">isConstant</a></li>
+      <li class="inherited"><a class="" href="math_expressions/Vector/noSuchMethod.html">noSuchMethod</a></li>
+      <li><a class="" href="math_expressions/Vector/simplify.html">simplify</a></li>
+      <li class="inherited"><a class="" href="math_expressions/Literal/toString.html">toString</a></li>
+    </ol>
+
+  </div><!--/.sidebar-offcanvas-->
+
+  <div class="col-xs-12 col-sm-9 col-md-8 main-content">
+
+    <section class="multi-line-signature">
+        <span class="returntype">dynamic</span>
+        <span class="name ">evaluate</span>(<wbr><span class="parameter" id="evaluate-param-type"><span class="type-annotation"><a class="" href="math_expressions/EvaluationType-class.html">EvaluationType</a></span> <span class="parameter-name">type</span></span>, <span class="parameter" id="evaluate-param-context"><span class="type-annotation"><a class="" href="math_expressions/ContextModel-class.html">ContextModel</a></span> <span class="parameter-name">context</span></span>)
+    </section>
+
+    <section class="desc markdown">
+      <p>Evaluates this expression according to given type and context.</p>
+    </section>
+    
+    <section class="summary source-code" id="source">
+      <h2><span>Source</span> </h2>
+      <pre><code class="prettyprint lang-dart">evaluate(EvaluationType type, ContextModel context) {
+  if (type == EvaluationType.VECTOR) {
+    EvaluationType elementType = EvaluationType.REAL;
+
+    if (length == 1) {
+      // Does not seem to be a vector, try to return REAL.
+      return elements[0].evaluate(elementType, context);
+    }
+
+    // Interpret vector elements as REAL.
+    if (length == 2) {
+      double x,y;
+      x = elements[0].evaluate(elementType, context);
+      y = elements[1].evaluate(elementType, context);
+      return new Vector2(x, y);
+    }
+
+    if (length == 3) {
+      double x,y,z;
+      x = elements[0].evaluate(elementType, context);
+      y = elements[1].evaluate(elementType, context);
+      z = elements[2].evaluate(elementType, context);
+      return new Vector3(x, y, z);
+    }
+
+    if (length == 4) {
+      double x,y,z,w;
+      x = elements[0].evaluate(elementType, context);
+      y = elements[1].evaluate(elementType, context);
+      z = elements[2].evaluate(elementType, context);
+      w = elements[3].evaluate(elementType, context);
+      return new Vector4(x, y, z, w);
+    }
+
+    if (length &gt; 4) {
+      throw new UnimplementedError(&quot;Vector of arbitrary length (&gt; 4) are not supported yet.&quot;);
+    }
+  }
+
+  if (type == EvaluationType.REAL &amp;&amp; length == 1) {
+    // Interpret vector as real number.
+    return elements[0].evaluate(type, context);
+  }
+
+  throw new UnsupportedError(&apos;Vector $this with length $length can not be interpreted as: $type&apos;);
+}</code></pre>
+    </section>
+
+  </div> <!-- /.main-content -->
+
+</div> <!-- row -->
+</div> <!-- container -->
+
+<footer>
+  <div class="container-fluid">
+    <div class="container">
+      <p class="text-center">
+        <span class="no-break">
+          math_expressions 0.1.1
+        </span>
+        &bull;
+        <span class="no-break">
+          <a href="https://www.dartlang.org">
+            <img src="static-assets/favicon.png" alt="Dart" title="Dart" width="16" height="16">
+          </a>
+        </span>
+        &bull;
+        <span class="copyright no-break">
+          <a href="http://creativecommons.org/licenses/by-sa/4.0/">cc license</a>
+        </span>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="static-assets/typeahead.bundle.min.js"></script>
+<script src="static-assets/prettify.js"></script>
+<script src="static-assets/script.js"></script>
+<!-- Do not remove placeholder -->
+<!-- Footer Placeholder -->
+
+</body>
+
+</html>

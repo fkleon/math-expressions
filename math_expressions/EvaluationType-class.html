@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="generator" content="made with love by dartdoc 0.8.0">
+  <title>EvaluationType class - math_expressions library - Dart API</title>
+  <!-- required because all the links are pseudo-absolute -->
+  <base href="..">
+
+  <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro|Roboto:500,400italic,300,400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="static-assets/prettify.css">
+  <link rel="stylesheet" href="static-assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="static-assets/styles.css">
+
+  <meta name="description" content="API docs for the EvaluationType class from the math_expressions library, for the Dart programming language.">
+  <link rel="icon" href="static-assets/favicon.png">
+
+  <!-- Do not remove placeholder -->
+  <!-- Header Placeholder -->
+</head>
+
+<body>
+
+<div id="overlay-under-drawer"></div>
+
+<header class="container-fluid" id="title">
+  <nav class="navbar navbar-fixed-top">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12 contents">
+          <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+          <ol class="breadcrumbs gt-separated hidden-xs">
+            <li><a href="index.html">math_expressions</a></li>
+            <li><a href="math_expressions/math_expressions-library.html">math_expressions</a></li>
+            <li class="self-crumb">EvaluationType</li>
+          </ol>
+          <div class="self-name">EvaluationType</div>
+          <form class="search navbar-right" role="search">
+            <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+          </form>
+        </div> <!-- /col -->
+      </div> <!-- /row -->
+    </div> <!-- /container -->
+  </nav>
+
+  <div class="container masthead">
+    <div class="row">
+      <div class="col-sm-12 contents">
+        <ol class="breadcrumbs gt-separated visible-xs">
+          <li><a href="index.html">math_expressions</a></li>
+          <li><a href="math_expressions/math_expressions-library.html">math_expressions</a></li>
+          <li class="self-crumb">EvaluationType</li>
+        </ol>
+        <div class="title-description">
+          <h1 class="title">
+            <span class="kind">class</span> EvaluationType
+          </h1>
+        </div>
+        <ul class="subnav">
+          <li><a href="math_expressions/EvaluationType-class.html#static-properties">Static Properties</a></li>
+          <li><a href="math_expressions/EvaluationType-class.html#instance-properties">Properties</a></li>
+          <li><a href="math_expressions/EvaluationType-class.html#operators">Operators</a></li>
+          <li><a href="math_expressions/EvaluationType-class.html#instance-methods">Methods</a></li>
+        </ul>
+      </div> <!-- /col -->
+    </div> <!-- /row -->
+  </div> <!-- /container -->
+
+</header>
+
+<div class="container body">
+  <div class="row">
+
+  <div class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <h5><a href="index.html">math_expressions</a></h5>
+    <h5><a href="math_expressions/math_expressions-library.html">math_expressions</a></h5>
+
+    <ol>
+    
+    
+    
+    
+    
+      <li class="section-title"><a href="math_expressions/math_expressions-library.html#classes">Classes</a></li>
+      <li><a class="" href="math_expressions/Abs-class.html">Abs</a></li>
+      <li><a class="" href="math_expressions/BinaryOperator-class.html">BinaryOperator</a></li>
+      <li><a class="" href="math_expressions/BoundVariable-class.html">BoundVariable</a></li>
+      <li><a class="" href="math_expressions/CompositeFunction-class.html">CompositeFunction</a></li>
+      <li><a class="" href="math_expressions/ContextModel-class.html">ContextModel</a></li>
+      <li><a class="" href="math_expressions/Cos-class.html">Cos</a></li>
+      <li><a class="" href="math_expressions/CustomFunction-class.html">CustomFunction</a></li>
+      <li><a class="" href="math_expressions/DefaultFunction-class.html">DefaultFunction</a></li>
+      <li><a class="" href="math_expressions/Divide-class.html">Divide</a></li>
+      <li><a class="" href="math_expressions/EvaluationType-class.html">EvaluationType</a></li>
+      <li><a class="" href="math_expressions/Exponential-class.html">Exponential</a></li>
+      <li><a class="" href="math_expressions/Expression-class.html">Expression</a></li>
+      <li><a class="" href="math_expressions/Interval-class.html">Interval</a></li>
+      <li><a class="" href="math_expressions/IntervalLiteral-class.html">IntervalLiteral</a></li>
+      <li><a class="" href="math_expressions/Lexer-class.html">Lexer</a></li>
+      <li><a class="" href="math_expressions/Literal-class.html">Literal</a></li>
+      <li><a class="" href="math_expressions/Ln-class.html">Ln</a></li>
+      <li><a class="" href="math_expressions/Log-class.html">Log</a></li>
+      <li><a class="" href="math_expressions/MathFunction-class.html">MathFunction</a></li>
+      <li><a class="" href="math_expressions/Minus-class.html">Minus</a></li>
+      <li><a class="" href="math_expressions/Number-class.html">Number</a></li>
+      <li><a class="" href="math_expressions/Parser-class.html">Parser</a></li>
+      <li><a class="" href="math_expressions/Plus-class.html">Plus</a></li>
+      <li><a class="" href="math_expressions/Point3D-class.html">Point3D</a></li>
+      <li><a class="" href="math_expressions/Power-class.html">Power</a></li>
+      <li><a class="" href="math_expressions/Root-class.html">Root</a></li>
+      <li><a class="" href="math_expressions/Sgn-class.html">Sgn</a></li>
+      <li><a class="" href="math_expressions/Sin-class.html">Sin</a></li>
+      <li><a class="" href="math_expressions/Sqrt-class.html">Sqrt</a></li>
+      <li><a class="" href="math_expressions/Tan-class.html">Tan</a></li>
+      <li><a class="" href="math_expressions/Times-class.html">Times</a></li>
+      <li><a class="" href="math_expressions/Token-class.html">Token</a></li>
+      <li><a class="" href="math_expressions/TokenType-class.html">TokenType</a></li>
+      <li><a class="" href="math_expressions/UnaryMinus-class.html">UnaryMinus</a></li>
+      <li><a class="" href="math_expressions/UnaryOperator-class.html">UnaryOperator</a></li>
+      <li><a class="" href="math_expressions/Variable-class.html">Variable</a></li>
+      <li><a class="" href="math_expressions/Vector-class.html">Vector</a></li>
+    
+    </ol>
+  </div>
+
+  <div class="col-xs-12 col-sm-9 col-md-8 main-content">
+
+    <section class="desc markdown">
+      <p>Mathematical expressions must be evaluated under a certain <a class="" href="math_expressions/EvaluationType-class.html">EvaluationType</a>.</p>
+<p>Currently there are three types, but not all expressions support each type.
+If you try to evaluate an expression with an unsupported type, it will raise an
+<code>UnimplementedError</code> or <code>UnsupportedError</code>.</p><ul><li>REAL</li><li>VECTOR</li><li>INTERVAL</li></ul>
+<p><strong>Note</strong>: This class emulates an enumeration, since they are not supported
+by Dart yet.</p>
+    </section>
+    
+
+
+    <section class="summary offset-anchor" id="static-properties">
+      <h2>Static Properties</h2>
+
+      <dl class="properties">
+        <dt id="INTERVAL" class="property">
+          <span class="name"><a class="" href="math_expressions/EvaluationType/INTERVAL.html">INTERVAL</a></span>
+          <span class="signature">&#8594; <a class="" href="math_expressions/EvaluationType-class.html">EvaluationType</a></span>
+        </dt>
+        <dd>
+          <p>Public constructor for INTERVAL types. Always returns the same instance of a INTERVAL type.</p>
+          <div class="features">
+    read-only
+  </div>
+</dd>
+        <dt id="INTERVAL_INT" class="property">
+          <span class="name"><a class="" href="math_expressions/EvaluationType/INTERVAL_INT.html">INTERVAL_INT</a></span>
+          <span class="signature">&#8594; int</span>
+        </dt>
+        <dd>
+          <p>Internal integer value for INTERVAL type.</p>
+          <div class="features">
+    read-only
+  </div>
+</dd>
+        <dt id="REAL" class="property">
+          <span class="name"><a class="" href="math_expressions/EvaluationType/REAL.html">REAL</a></span>
+          <span class="signature">&#8594; <a class="" href="math_expressions/EvaluationType-class.html">EvaluationType</a></span>
+        </dt>
+        <dd>
+          <p>Public constructor for REAL types. Always returns the same instance of a REAL type.</p>
+          <div class="features">
+    read-only
+  </div>
+</dd>
+        <dt id="REAL_INT" class="property">
+          <span class="name"><a class="" href="math_expressions/EvaluationType/REAL_INT.html">REAL_INT</a></span>
+          <span class="signature">&#8594; int</span>
+        </dt>
+        <dd>
+          <p>Internal integer value for REAL type.</p>
+          <div class="features">
+    read-only
+  </div>
+</dd>
+        <dt id="VECTOR" class="property">
+          <span class="name"><a class="" href="math_expressions/EvaluationType/VECTOR.html">VECTOR</a></span>
+          <span class="signature">&#8594; <a class="" href="math_expressions/EvaluationType-class.html">EvaluationType</a></span>
+        </dt>
+        <dd>
+          <p>Public constructor for VECTOR types. Always returns the same instance of a VECTOR type.</p>
+          <div class="features">
+    read-only
+  </div>
+</dd>
+        <dt id="VECTOR_INT" class="property">
+          <span class="name"><a class="" href="math_expressions/EvaluationType/VECTOR_INT.html">VECTOR_INT</a></span>
+          <span class="signature">&#8594; int</span>
+        </dt>
+        <dd>
+          <p>Internal integer value for VECTOR type.</p>
+          <div class="features">
+    read-only
+  </div>
+</dd>
+      </dl>
+    </section>
+
+
+
+    <section class="summary offset-anchor" id="instance-properties">
+      <h2>Properties</h2>
+
+      <dl class="properties">
+        <dt id="hashCode" class="property">
+          <span class="name"><a class="" href="math_expressions/EvaluationType/hashCode.html">hashCode</a></span>
+          <span class="signature">&#8594; int</span>
+        </dt>
+        <dd>
+          <p></p>
+          <div class="features">
+    read-only
+  </div>
+</dd>
+        <dt id="runtimeType" class="property inherited">
+          <span class="name"><a class="" href="math_expressions/EvaluationType/runtimeType.html">runtimeType</a></span>
+          <span class="signature">&#8594; Type</span>
+        </dt>
+        <dd class="inherited">
+          <p>A representation of the runtime type of the object.</p>
+          <div class="features">
+    read-only, inherited
+  </div>
+</dd>
+        <dt id="type" class="property">
+          <span class="name"><a class="" href="math_expressions/EvaluationType/type.html">type</a></span>
+          <span class="signature">&#8594; int</span>
+        </dt>
+        <dd>
+          <p></p>
+          <div class="features">
+    read-only
+  </div>
+</dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="operators">
+      <h2>Operators</h2>
+      <dl class="callables">
+        <dt id="operator ==" class="callable">
+          <span class="name "><a class="" href="math_expressions/EvaluationType/operator_equals.html">operator ==</a></span><span class="signature">(<wbr><span class="parameter" id="==-param-et"><span class="type-annotation"><a class="" href="math_expressions/EvaluationType-class.html">EvaluationType</a></span> <span class="parameter-name">et</span></span>)
+            <span class="returntype parameter">&#8594; dynamic</span>
+          </span>
+        </dt>
+        <dd>
+          <p>Two types are equal, if their internal int matches.</p>
+        </dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="instance-methods">
+      <h2>Methods</h2>
+      <dl class="callables">
+        <dt id="noSuchMethod" class="callable inherited">
+          <span class="name "><a class="" href="math_expressions/EvaluationType/noSuchMethod.html">noSuchMethod</a></span><span class="signature">(<wbr><span class="parameter" id="noSuchMethod-param-invocation"><span class="type-annotation">Invocation</span> <span class="parameter-name">invocation</span></span>)
+            <span class="returntype parameter">&#8594; dynamic</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          <p><code>noSuchMethod</code> is invoked when users invoke a non-existent method
+on an object. The name of the method and the arguments of the
+invocation are passed to <code>noSuchMethod</code> in an <code>Invocation</code>.
+If <code>noSuchMethod</code> returns a value, that value becomes the result of
+the original invocation.<a href="math_expressions/EvaluationType/noSuchMethod.html">&hellip;</a>
+</p>
+          <div class="features">inherited</div>
+        </dd>
+        <dt id="toString" class="callable">
+          <span class="name "><a class="" href="math_expressions/EvaluationType/toString.html">toString</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; String</span>
+          </span>
+        </dt>
+        <dd>
+          <p>Returns a string representation of this object.</p>
+        </dd>
+      </dl>
+    </section>
+
+  </div> <!-- /.main-content -->
+
+  <div class="col-xs-6 col-sm-6 col-md-2 sidebar sidebar-offcanvas-right">
+    <h5>EvaluationType</h5>
+    <ol>
+    
+      <li class="section-title"><a href="math_expressions/EvaluationType-class.html#static-properties">Static properties</a></li>
+      <li><a class="" href="math_expressions/EvaluationType/INTERVAL.html">INTERVAL</a></li>
+      <li><a class="" href="math_expressions/EvaluationType/INTERVAL_INT.html">INTERVAL_INT</a></li>
+      <li><a class="" href="math_expressions/EvaluationType/REAL.html">REAL</a></li>
+      <li><a class="" href="math_expressions/EvaluationType/REAL_INT.html">REAL_INT</a></li>
+      <li><a class="" href="math_expressions/EvaluationType/VECTOR.html">VECTOR</a></li>
+      <li><a class="" href="math_expressions/EvaluationType/VECTOR_INT.html">VECTOR_INT</a></li>
+    
+    
+    
+      <li class="section-title">
+        <a href="math_expressions/EvaluationType-class.html#instance-properties">Properties</a>
+      </li>
+      <li><a class="" href="math_expressions/EvaluationType/hashCode.html">hashCode</a></li>
+      <li class="inherited"><a class="" href="math_expressions/EvaluationType/runtimeType.html">runtimeType</a></li>
+      <li><a class="" href="math_expressions/EvaluationType/type.html">type</a></li>
+    
+      <li class="section-title"><a href="math_expressions/EvaluationType-class.html#operators">Operators</a></li>
+      <li><a class="" href="math_expressions/EvaluationType/operator_equals.html">operator ==</a></li>
+    
+      <li class="section-title"><a href="math_expressions/EvaluationType-class.html#instance-methods">Methods</a></li>
+      <li class="inherited"><a class="" href="math_expressions/EvaluationType/noSuchMethod.html">noSuchMethod</a></li>
+      <li><a class="" href="math_expressions/EvaluationType/toString.html">toString</a></li>
+    </ol>
+  </div><!--/.sidebar-offcanvas-->
+
+</div> <!-- row -->
+</div> <!-- container -->
+
+<footer>
+  <div class="container-fluid">
+    <div class="container">
+      <p class="text-center">
+        <span class="no-break">
+          math_expressions 0.1.1
+        </span>
+        &bull;
+        <span class="no-break">
+          <a href="https://www.dartlang.org">
+            <img src="static-assets/favicon.png" alt="Dart" title="Dart" width="16" height="16">
+          </a>
+        </span>
+        &bull;
+        <span class="copyright no-break">
+          <a href="http://creativecommons.org/licenses/by-sa/4.0/">cc license</a>
+        </span>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="static-assets/typeahead.bundle.min.js"></script>
+<script src="static-assets/prettify.js"></script>
+<script src="static-assets/script.js"></script>
+<!-- Do not remove placeholder -->
+<!-- Footer Placeholder -->
+
+</body>
+
+</html>

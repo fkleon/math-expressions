@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="generator" content="made with love by dartdoc 0.8.0">
+  <title>Interval class - math_expressions library - Dart API</title>
+  <!-- required because all the links are pseudo-absolute -->
+  <base href="..">
+
+  <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro|Roboto:500,400italic,300,400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="static-assets/prettify.css">
+  <link rel="stylesheet" href="static-assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="static-assets/styles.css">
+
+  <meta name="description" content="API docs for the Interval class from the math_expressions library, for the Dart programming language.">
+  <link rel="icon" href="static-assets/favicon.png">
+
+  <!-- Do not remove placeholder -->
+  <!-- Header Placeholder -->
+</head>
+
+<body>
+
+<div id="overlay-under-drawer"></div>
+
+<header class="container-fluid" id="title">
+  <nav class="navbar navbar-fixed-top">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12 contents">
+          <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+          <ol class="breadcrumbs gt-separated hidden-xs">
+            <li><a href="index.html">math_expressions</a></li>
+            <li><a href="math_expressions/math_expressions-library.html">math_expressions</a></li>
+            <li class="self-crumb">Interval</li>
+          </ol>
+          <div class="self-name">Interval</div>
+          <form class="search navbar-right" role="search">
+            <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+          </form>
+        </div> <!-- /col -->
+      </div> <!-- /row -->
+    </div> <!-- /container -->
+  </nav>
+
+  <div class="container masthead">
+    <div class="row">
+      <div class="col-sm-12 contents">
+        <ol class="breadcrumbs gt-separated visible-xs">
+          <li><a href="index.html">math_expressions</a></li>
+          <li><a href="math_expressions/math_expressions-library.html">math_expressions</a></li>
+          <li class="self-crumb">Interval</li>
+        </ol>
+        <div class="title-description">
+          <h1 class="title">
+            <span class="kind">class</span> Interval
+          </h1>
+        </div>
+        <ul class="subnav">
+          <li><a href="math_expressions/Interval-class.html#instance-properties">Properties</a></li>
+          <li><a href="math_expressions/Interval-class.html#constructors">Constructors</a></li>
+          <li><a href="math_expressions/Interval-class.html#operators">Operators</a></li>
+          <li><a href="math_expressions/Interval-class.html#instance-methods">Methods</a></li>
+        </ul>
+      </div> <!-- /col -->
+    </div> <!-- /row -->
+  </div> <!-- /container -->
+
+</header>
+
+<div class="container body">
+  <div class="row">
+
+  <div class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <h5><a href="index.html">math_expressions</a></h5>
+    <h5><a href="math_expressions/math_expressions-library.html">math_expressions</a></h5>
+
+    <ol>
+    
+    
+    
+    
+    
+      <li class="section-title"><a href="math_expressions/math_expressions-library.html#classes">Classes</a></li>
+      <li><a class="" href="math_expressions/Abs-class.html">Abs</a></li>
+      <li><a class="" href="math_expressions/BinaryOperator-class.html">BinaryOperator</a></li>
+      <li><a class="" href="math_expressions/BoundVariable-class.html">BoundVariable</a></li>
+      <li><a class="" href="math_expressions/CompositeFunction-class.html">CompositeFunction</a></li>
+      <li><a class="" href="math_expressions/ContextModel-class.html">ContextModel</a></li>
+      <li><a class="" href="math_expressions/Cos-class.html">Cos</a></li>
+      <li><a class="" href="math_expressions/CustomFunction-class.html">CustomFunction</a></li>
+      <li><a class="" href="math_expressions/DefaultFunction-class.html">DefaultFunction</a></li>
+      <li><a class="" href="math_expressions/Divide-class.html">Divide</a></li>
+      <li><a class="" href="math_expressions/EvaluationType-class.html">EvaluationType</a></li>
+      <li><a class="" href="math_expressions/Exponential-class.html">Exponential</a></li>
+      <li><a class="" href="math_expressions/Expression-class.html">Expression</a></li>
+      <li><a class="" href="math_expressions/Interval-class.html">Interval</a></li>
+      <li><a class="" href="math_expressions/IntervalLiteral-class.html">IntervalLiteral</a></li>
+      <li><a class="" href="math_expressions/Lexer-class.html">Lexer</a></li>
+      <li><a class="" href="math_expressions/Literal-class.html">Literal</a></li>
+      <li><a class="" href="math_expressions/Ln-class.html">Ln</a></li>
+      <li><a class="" href="math_expressions/Log-class.html">Log</a></li>
+      <li><a class="" href="math_expressions/MathFunction-class.html">MathFunction</a></li>
+      <li><a class="" href="math_expressions/Minus-class.html">Minus</a></li>
+      <li><a class="" href="math_expressions/Number-class.html">Number</a></li>
+      <li><a class="" href="math_expressions/Parser-class.html">Parser</a></li>
+      <li><a class="" href="math_expressions/Plus-class.html">Plus</a></li>
+      <li><a class="" href="math_expressions/Point3D-class.html">Point3D</a></li>
+      <li><a class="" href="math_expressions/Power-class.html">Power</a></li>
+      <li><a class="" href="math_expressions/Root-class.html">Root</a></li>
+      <li><a class="" href="math_expressions/Sgn-class.html">Sgn</a></li>
+      <li><a class="" href="math_expressions/Sin-class.html">Sin</a></li>
+      <li><a class="" href="math_expressions/Sqrt-class.html">Sqrt</a></li>
+      <li><a class="" href="math_expressions/Tan-class.html">Tan</a></li>
+      <li><a class="" href="math_expressions/Times-class.html">Times</a></li>
+      <li><a class="" href="math_expressions/Token-class.html">Token</a></li>
+      <li><a class="" href="math_expressions/TokenType-class.html">TokenType</a></li>
+      <li><a class="" href="math_expressions/UnaryMinus-class.html">UnaryMinus</a></li>
+      <li><a class="" href="math_expressions/UnaryOperator-class.html">UnaryOperator</a></li>
+      <li><a class="" href="math_expressions/Variable-class.html">Variable</a></li>
+      <li><a class="" href="math_expressions/Vector-class.html">Vector</a></li>
+    
+    </ol>
+  </div>
+
+  <div class="col-xs-12 col-sm-9 col-md-8 main-content">
+
+    <section class="desc markdown">
+      <p>An <a class="" href="math_expressions/Interval-class.html">Interval</a> is defined by its minimum and maximum values, where
+<em>min &lt;= max</em>.</p>
+<p>This implementation offers basic interval arithmetic operations like
+addition, subtraction, multiplication and division. Operations always
+return a new interval and will not modify the existing ones. Additionally
+this class implementions comparison relations for intervals.</p>
+<p>This implementation (partly) supports unbounded intervals with borders
+at +/- infinity and empty sets.</p>
+<p>Operator and comparison definitions are based on: 
+<em>Bohlender, Gerd, and Ulrich Kulisch. 2010.
+<a href="http://interval.louisiana.edu/reliable-computing-journal/volume-15/no-1/reliable-computing-15-pp-36-42.pdf">"Deﬁnition of the Arithmetic Operations and Comparison Relations for an Interval Arithmetic Standard"</a>.
+Reliable Computing 15 (1): 36–42.</em></p>
+<p><strong>Note</strong>: This implementation does not offer a complete set of operations yet:</p><ul><li>No handling of unbounded intervals in operators.</li><li>No proper rounding.</li></ul>
+    </section>
+    
+    <section>
+      <dl class="dl-horizontal">
+
+        <dt>Implements</dt>
+        <dd>
+          <ul class="comma-separated clazz-relationships">
+            <li>Comparable</li>
+          </ul>
+        </dd>
+
+
+
+      </dl>
+    </section>
+
+
+
+
+    <section class="summary offset-anchor" id="constructors">
+      <h2>Constructors</h2>
+
+      <dl class="constructor-summary-list">
+        <dt id="Interval" class="callable">
+          <span class="name"><a class="" href="math_expressions/Interval/Interval.html">Interval</a></span><span class="signature">(<span class="parameter" id="-param-min"><span class="type-annotation">num</span> <span class="parameter-name">min</span></span>, <span class="parameter" id="-param-max"><span class="type-annotation">num</span> <span class="parameter-name">max</span></span>)</span>
+        </dt>
+        <dd>
+          <p>Creates a new interval with given borders.<a href="math_expressions/Interval/Interval.html">&hellip;</a>
+</p>
+        </dd>
+        <dt id="Interval.empty" class="callable">
+          <span class="name"><a class="" href="math_expressions/Interval/Interval.empty.html">Interval.empty</a></span><span class="signature">()</span>
+        </dt>
+        <dd>
+          <p>Returns an immutable empty set.</p>
+          <div class="constructor-modifier features">factory</div>
+        </dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="instance-properties">
+      <h2>Properties</h2>
+
+      <dl class="properties">
+        <dt id="hashCode" class="property">
+          <span class="name"><a class="" href="math_expressions/Interval/hashCode.html">hashCode</a></span>
+          <span class="signature">&#8594; int</span>
+        </dt>
+        <dd>
+          <p></p>
+          <div class="features">
+    read-only
+  </div>
+</dd>
+        <dt id="max" class="property">
+          <span class="name"><a class="" href="math_expressions/Interval/max.html">max</a></span>
+          <span class="signature">&#8594; num</span>
+        </dt>
+        <dd>
+          <p>Interval borders.</p>
+          <div class="features">
+    read / write
+  </div>
+</dd>
+        <dt id="min" class="property">
+          <span class="name"><a class="" href="math_expressions/Interval/min.html">min</a></span>
+          <span class="signature">&#8594; num</span>
+        </dt>
+        <dd>
+          <p>Interval borders.</p>
+          <div class="features">
+    read / write
+  </div>
+</dd>
+        <dt id="runtimeType" class="property inherited">
+          <span class="name"><a class="" href="math_expressions/Interval/runtimeType.html">runtimeType</a></span>
+          <span class="signature">&#8594; Type</span>
+        </dt>
+        <dd class="inherited">
+          <p>A representation of the runtime type of the object.</p>
+          <div class="features">
+    read-only, inherited
+  </div>
+</dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="operators">
+      <h2>Operators</h2>
+      <dl class="callables">
+        <dt id="operator *" class="callable">
+          <span class="name "><a class="" href="math_expressions/Interval/operator_multiply.html">operator *</a></span><span class="signature">(<wbr><span class="parameter" id="*-param-i"><span class="type-annotation"><a class="" href="math_expressions/Interval-class.html">Interval</a></span> <span class="parameter-name">i</span></span>)
+            <span class="returntype parameter">&#8594; dynamic</span>
+          </span>
+        </dt>
+        <dd>
+          <p>Performs an interval multiplication.<a href="math_expressions/Interval/operator_multiply.html">&hellip;</a>
+</p>
+        </dd>
+        <dt id="operator +" class="callable">
+          <span class="name "><a class="" href="math_expressions/Interval/operator_plus.html">operator +</a></span><span class="signature">(<wbr><span class="parameter" id="+-param-i"><span class="type-annotation"><a class="" href="math_expressions/Interval-class.html">Interval</a></span> <span class="parameter-name">i</span></span>)
+            <span class="returntype parameter">&#8594; dynamic</span>
+          </span>
+        </dt>
+        <dd>
+          <p>Performs an interval addition.<a href="math_expressions/Interval/operator_plus.html">&hellip;</a>
+</p>
+        </dd>
+        <dt id="operator -" class="callable">
+          <span class="name "><a class="" href="math_expressions/Interval/operator_minus.html">operator -</a></span><span class="signature">(<wbr><span class="parameter" id="--param-i"><span class="type-annotation"><a class="" href="math_expressions/Interval-class.html">Interval</a></span> <span class="parameter-name">i</span></span>)
+            <span class="returntype parameter">&#8594; dynamic</span>
+          </span>
+        </dt>
+        <dd>
+          <p>Performs an interval subtraction.<a href="math_expressions/Interval/operator_minus.html">&hellip;</a>
+</p>
+        </dd>
+        <dt id="operator /" class="callable">
+          <span class="name "><a class="" href="math_expressions/Interval/operator_divide.html">operator /</a></span><span class="signature">(<wbr><span class="parameter" id="/-param-i"><span class="type-annotation"><a class="" href="math_expressions/Interval-class.html">Interval</a></span> <span class="parameter-name">i</span></span>)
+            <span class="returntype parameter">&#8594; dynamic</span>
+          </span>
+        </dt>
+        <dd>
+          <p>Performs an interval division.<a href="math_expressions/Interval/operator_divide.html">&hellip;</a>
+</p>
+        </dd>
+        <dt id="operator &lt;" class="callable">
+          <span class="name "><a class="" href="math_expressions/Interval/operator_less.html">operator <</a></span><span class="signature">(<wbr><span class="parameter" id="<-param-i"><span class="type-annotation"><a class="" href="math_expressions/Interval-class.html">Interval</a></span> <span class="parameter-name">i</span></span>)
+            <span class="returntype parameter">&#8594; dynamic</span>
+          </span>
+        </dt>
+        <dd>
+          <p>Less than operator on intervals.<a href="math_expressions/Interval/operator_less.html">&hellip;</a>
+</p>
+        </dd>
+        <dt id="operator &lt;=" class="callable">
+          <span class="name "><a class="" href="math_expressions/Interval/operator_less_equal.html">operator <=</a></span><span class="signature">(<wbr><span class="parameter" id="<=-param-i"><span class="type-annotation"><a class="" href="math_expressions/Interval-class.html">Interval</a></span> <span class="parameter-name">i</span></span>)
+            <span class="returntype parameter">&#8594; dynamic</span>
+          </span>
+        </dt>
+        <dd>
+          <p>Less or equal than operator on intervals.<a href="math_expressions/Interval/operator_less_equal.html">&hellip;</a>
+</p>
+        </dd>
+        <dt id="operator ==" class="callable">
+          <span class="name "><a class="" href="math_expressions/Interval/operator_equals.html">operator ==</a></span><span class="signature">(<wbr><span class="parameter" id="==-param-i"><span class="type-annotation"><a class="" href="math_expressions/Interval-class.html">Interval</a></span> <span class="parameter-name">i</span></span>)
+            <span class="returntype parameter">&#8594; dynamic</span>
+          </span>
+        </dt>
+        <dd>
+          <p>Equals operator on intervals.<a href="math_expressions/Interval/operator_equals.html">&hellip;</a>
+</p>
+        </dd>
+        <dt id="operator &gt;" class="callable">
+          <span class="name "><a class="" href="math_expressions/Interval/operator_greater.html">operator ></a></span><span class="signature">(<wbr><span class="parameter" id=">-param-i"><span class="type-annotation"><a class="" href="math_expressions/Interval-class.html">Interval</a></span> <span class="parameter-name">i</span></span>)
+            <span class="returntype parameter">&#8594; dynamic</span>
+          </span>
+        </dt>
+        <dd>
+          <p>Greater than operator on intervals.<a href="math_expressions/Interval/operator_greater.html">&hellip;</a>
+</p>
+        </dd>
+        <dt id="operator &gt;=" class="callable">
+          <span class="name "><a class="" href="math_expressions/Interval/operator_greater_equal.html">operator >=</a></span><span class="signature">(<wbr><span class="parameter" id=">=-param-i"><span class="type-annotation"><a class="" href="math_expressions/Interval-class.html">Interval</a></span> <span class="parameter-name">i</span></span>)
+            <span class="returntype parameter">&#8594; dynamic</span>
+          </span>
+        </dt>
+        <dd>
+          <p>Greater or equal than operator on intervals.<a href="math_expressions/Interval/operator_greater_equal.html">&hellip;</a>
+</p>
+        </dd>
+        <dt id="operator unary-" class="callable">
+          <span class="name "><a class="" href="math_expressions/Interval/operator_unary_minus.html">operator unary-</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; dynamic</span>
+          </span>
+        </dt>
+        <dd>
+          <p>Unary minus on intervals.<a href="math_expressions/Interval/operator_unary_minus.html">&hellip;</a>
+</p>
+        </dd>
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="instance-methods">
+      <h2>Methods</h2>
+      <dl class="callables">
+        <dt id="compareTo" class="callable">
+          <span class="name "><a class="" href="math_expressions/Interval/compareTo.html">compareTo</a></span><span class="signature">(<wbr><span class="parameter" id="compareTo-param-other"><span class="type-annotation">Comparable</span> <span class="parameter-name">other</span></span>)
+            <span class="returntype parameter">&#8594; int</span>
+          </span>
+        </dt>
+        <dd>
+          <p>Compares this object to another <code>Comparable</code><a href="math_expressions/Interval/compareTo.html">&hellip;</a>
+</p>
+        </dd>
+        <dt id="contains" class="callable">
+          <span class="name "><a class="" href="math_expressions/Interval/contains.html">contains</a></span><span class="signature">(<wbr><span class="parameter" id="contains-param-element"><span class="type-annotation">num</span> <span class="parameter-name">element</span></span>)
+            <span class="returntype parameter">&#8594; bool</span>
+          </span>
+        </dt>
+        <dd>
+          <p>Element-of relation. Returns true, if given element is included
+in this interval.
+Defined on a real number i and an interval:<a href="math_expressions/Interval/contains.html">&hellip;</a>
+</p>
+        </dd>
+        <dt id="containsZero" class="callable">
+          <span class="name "><a class="" href="math_expressions/Interval/containsZero.html">containsZero</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; bool</span>
+          </span>
+        </dt>
+        <dd>
+          <p>Returns true, if this interval contains zero (min &lt;= 0 &lt;= max).</p>
+        </dd>
+        <dt id="glb" class="callable">
+          <span class="name "><a class="" href="math_expressions/Interval/glb.html">glb</a></span><span class="signature">(<wbr><span class="parameter" id="glb-param-i"><span class="type-annotation"><a class="" href="math_expressions/Interval-class.html">Interval</a></span> <span class="parameter-name">i</span></span>)
+            <span class="returntype parameter">&#8594; <a class="" href="math_expressions/Interval-class.html">Interval</a></span>
+          </span>
+        </dt>
+        <dd>
+          <p>Returns the greatest lower bound.</p>
+        </dd>
+        <dt id="includes" class="callable">
+          <span class="name "><a class="" href="math_expressions/Interval/includes.html">includes</a></span><span class="signature">(<wbr><span class="parameter" id="includes-param-i"><span class="type-annotation"><a class="" href="math_expressions/Interval-class.html">Interval</a></span> <span class="parameter-name">i</span></span>)
+            <span class="returntype parameter">&#8594; bool</span>
+          </span>
+        </dt>
+        <dd>
+          <p>Inclusion relation. Returns true, if the given interval is included
+in this interval.<a href="math_expressions/Interval/includes.html">&hellip;</a>
+</p>
+        </dd>
+        <dt id="isBound" class="callable">
+          <span class="name "><a class="" href="math_expressions/Interval/isBound.html">isBound</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; bool</span>
+          </span>
+        </dt>
+        <dd>
+          <p>Returns true, if neither min or max values are infinite.</p>
+        </dd>
+        <dt id="isEmpty" class="callable">
+          <span class="name "><a class="" href="math_expressions/Interval/isEmpty.html">isEmpty</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; bool</span>
+          </span>
+        </dt>
+        <dd>
+          <p>Returns true, if this is the empty set.</p>
+        </dd>
+        <dt id="isPositive" class="callable">
+          <span class="name "><a class="" href="math_expressions/Interval/isPositive.html">isPositive</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; bool</span>
+          </span>
+        </dt>
+        <dd>
+          <p>Returns true, if this interval is positive (min &gt;= 0)</p>
+        </dd>
+        <dt id="length" class="callable">
+          <span class="name "><a class="" href="math_expressions/Interval/length.html">length</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; num</span>
+          </span>
+        </dt>
+        <dd>
+          <p>Returns the length of this interval.</p>
+        </dd>
+        <dt id="lub" class="callable">
+          <span class="name "><a class="" href="math_expressions/Interval/lub.html">lub</a></span><span class="signature">(<wbr><span class="parameter" id="lub-param-i"><span class="type-annotation"><a class="" href="math_expressions/Interval-class.html">Interval</a></span> <span class="parameter-name">i</span></span>)
+            <span class="returntype parameter">&#8594; <a class="" href="math_expressions/Interval-class.html">Interval</a></span>
+          </span>
+        </dt>
+        <dd>
+          <p>Returns the least upper bound.</p>
+        </dd>
+        <dt id="noSuchMethod" class="callable inherited">
+          <span class="name "><a class="" href="math_expressions/Interval/noSuchMethod.html">noSuchMethod</a></span><span class="signature">(<wbr><span class="parameter" id="noSuchMethod-param-invocation"><span class="type-annotation">Invocation</span> <span class="parameter-name">invocation</span></span>)
+            <span class="returntype parameter">&#8594; dynamic</span>
+          </span>
+        </dt>
+        <dd class="inherited">
+          <p><code>noSuchMethod</code> is invoked when users invoke a non-existent method
+on an object. The name of the method and the arguments of the
+invocation are passed to <code>noSuchMethod</code> in an <code>Invocation</code>.
+If <code>noSuchMethod</code> returns a value, that value becomes the result of
+the original invocation.<a href="math_expressions/Interval/noSuchMethod.html">&hellip;</a>
+</p>
+          <div class="features">inherited</div>
+        </dd>
+        <dt id="toString" class="callable">
+          <span class="name "><a class="" href="math_expressions/Interval/toString.html">toString</a></span><span class="signature">(<wbr>)
+            <span class="returntype parameter">&#8594; String</span>
+          </span>
+        </dt>
+        <dd>
+          <p>Returns a string representation of this object.</p>
+        </dd>
+      </dl>
+    </section>
+
+  </div> <!-- /.main-content -->
+
+  <div class="col-xs-6 col-sm-6 col-md-2 sidebar sidebar-offcanvas-right">
+    <h5>Interval</h5>
+    <ol>
+    
+    
+    
+      <li class="section-title"><a href="math_expressions/Interval-class.html#constructors">Constructors</a></li>
+      <li><a href="math_expressions/Interval/Interval.html">Interval</a></li>
+      <li><a href="math_expressions/Interval/Interval.empty.html">empty</a></li>
+    
+      <li class="section-title">
+        <a href="math_expressions/Interval-class.html#instance-properties">Properties</a>
+      </li>
+      <li><a class="" href="math_expressions/Interval/hashCode.html">hashCode</a></li>
+      <li><a class="" href="math_expressions/Interval/max.html">max</a></li>
+      <li><a class="" href="math_expressions/Interval/min.html">min</a></li>
+      <li class="inherited"><a class="" href="math_expressions/Interval/runtimeType.html">runtimeType</a></li>
+    
+      <li class="section-title"><a href="math_expressions/Interval-class.html#operators">Operators</a></li>
+      <li><a class="" href="math_expressions/Interval/operator_multiply.html">operator *</a></li>
+      <li><a class="" href="math_expressions/Interval/operator_plus.html">operator +</a></li>
+      <li><a class="" href="math_expressions/Interval/operator_minus.html">operator -</a></li>
+      <li><a class="" href="math_expressions/Interval/operator_divide.html">operator /</a></li>
+      <li><a class="" href="math_expressions/Interval/operator_less.html">operator <</a></li>
+      <li><a class="" href="math_expressions/Interval/operator_less_equal.html">operator <=</a></li>
+      <li><a class="" href="math_expressions/Interval/operator_equals.html">operator ==</a></li>
+      <li><a class="" href="math_expressions/Interval/operator_greater.html">operator ></a></li>
+      <li><a class="" href="math_expressions/Interval/operator_greater_equal.html">operator >=</a></li>
+      <li><a class="" href="math_expressions/Interval/operator_unary_minus.html">operator unary-</a></li>
+    
+      <li class="section-title"><a href="math_expressions/Interval-class.html#instance-methods">Methods</a></li>
+      <li><a class="" href="math_expressions/Interval/compareTo.html">compareTo</a></li>
+      <li><a class="" href="math_expressions/Interval/contains.html">contains</a></li>
+      <li><a class="" href="math_expressions/Interval/containsZero.html">containsZero</a></li>
+      <li><a class="" href="math_expressions/Interval/glb.html">glb</a></li>
+      <li><a class="" href="math_expressions/Interval/includes.html">includes</a></li>
+      <li><a class="" href="math_expressions/Interval/isBound.html">isBound</a></li>
+      <li><a class="" href="math_expressions/Interval/isEmpty.html">isEmpty</a></li>
+      <li><a class="" href="math_expressions/Interval/isPositive.html">isPositive</a></li>
+      <li><a class="" href="math_expressions/Interval/length.html">length</a></li>
+      <li><a class="" href="math_expressions/Interval/lub.html">lub</a></li>
+      <li class="inherited"><a class="" href="math_expressions/Interval/noSuchMethod.html">noSuchMethod</a></li>
+      <li><a class="" href="math_expressions/Interval/toString.html">toString</a></li>
+    </ol>
+  </div><!--/.sidebar-offcanvas-->
+
+</div> <!-- row -->
+</div> <!-- container -->
+
+<footer>
+  <div class="container-fluid">
+    <div class="container">
+      <p class="text-center">
+        <span class="no-break">
+          math_expressions 0.1.1
+        </span>
+        &bull;
+        <span class="no-break">
+          <a href="https://www.dartlang.org">
+            <img src="static-assets/favicon.png" alt="Dart" title="Dart" width="16" height="16">
+          </a>
+        </span>
+        &bull;
+        <span class="copyright no-break">
+          <a href="http://creativecommons.org/licenses/by-sa/4.0/">cc license</a>
+        </span>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="static-assets/typeahead.bundle.min.js"></script>
+<script src="static-assets/prettify.js"></script>
+<script src="static-assets/script.js"></script>
+<!-- Do not remove placeholder -->
+<!-- Footer Placeholder -->
+
+</body>
+
+</html>

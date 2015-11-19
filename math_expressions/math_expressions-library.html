@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="generator" content="made with love by dartdoc 0.8.0">
+  <title>math_expressions library - Dart API</title>
+  <!-- required because all the links are pseudo-absolute -->
+  <base href="..">
+
+  <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro|Roboto:500,400italic,300,400' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="static-assets/prettify.css">
+  <link rel="stylesheet" href="static-assets/css/bootstrap.min.css">
+  <link rel="stylesheet" href="static-assets/styles.css">
+
+  <meta name="description" content="math_expressions library API docs, for the Dart programming language.">
+  <link rel="icon" href="static-assets/favicon.png">
+
+  <!-- Do not remove placeholder -->
+  <!-- Header Placeholder -->
+</head>
+
+<body>
+
+<div id="overlay-under-drawer"></div>
+
+<header class="container-fluid" id="title">
+  <nav class="navbar navbar-fixed-top">
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12 contents">
+          <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+          <ol class="breadcrumbs gt-separated hidden-xs">
+            <li><a href="index.html">math_expressions</a></li>
+            <li class="self-crumb">math_expressions</li>
+          </ol>
+          <div class="self-name">math_expressions</div>
+          <form class="search navbar-right" role="search">
+            <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+          </form>
+        </div> <!-- /col -->
+      </div> <!-- /row -->
+    </div> <!-- /container -->
+  </nav>
+
+  <div class="container masthead">
+    <div class="row">
+      <div class="col-sm-12 contents">
+        <ol class="breadcrumbs gt-separated visible-xs">
+          <li><a href="index.html">math_expressions</a></li>
+          <li class="self-crumb">math_expressions</li>
+        </ol>
+        <div class="title-description">
+          <h1 class="title">
+            <span class="kind">library</span> math_expressions
+          </h1>
+        </div>
+        <ul class="subnav">
+          <li><a href="math_expressions/math_expressions-library.html#classes">Classes</a></li>
+        </ul>
+      </div> <!-- /col -->
+    </div> <!-- /row -->
+  </div> <!-- /container -->
+
+</header>
+
+<div class="container body">
+  <div class="row">
+
+  <div class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <h5><a href="index.html">math_expressions</a></h5>
+
+    <ol>
+      <li class="section-title"><a href="index.html">Libraries</a></li>
+      <li><a href="math_expressions/math_expressions-library.html">math_expressions</a></li>
+    </ol>
+  </div>
+
+  <div class="col-xs-12 col-sm-9 col-md-8 main-content">
+
+    <section class="desc markdown">
+      <p>A math library for parsing and evaluating expressions in real, interval and
+vector contexts. It also supports simplification and differentiation of
+expressions.</p>
+<p>The libary supports the three basic data types <a class="" href="math_expressions/Number-class.html">Number</a>, <a class="" href="math_expressions/Interval-class.html">Interval</a> and
+<a class="" href="math_expressions/Vector-class.html">Vector</a>. It includes a <a class="" href="math_expressions/Parser-class.html">Parser</a> to create <a class="" href="math_expressions/Expression-class.html">Expression</a>s from Strings.</p>
+    </section>
+    
+
+
+
+
+
+    <section class="summary offset-anchor" id="classes">
+      <h2>Classes</h2>
+
+      <dl>
+        <dt id="Abs">
+          <span class="name "><a class="" href="math_expressions/Abs-class.html">Abs</a></span>
+        </dt>
+        <dd>
+          <p>The absolute value function.</p>
+        </dd>
+        <dt id="BinaryOperator">
+          <span class="name "><a class="" href="math_expressions/BinaryOperator-class.html">BinaryOperator</a></span>
+        </dt>
+        <dd>
+          <p>A binary operator takes two expressions and performs an operation on them.</p>
+        </dd>
+        <dt id="BoundVariable">
+          <span class="name "><a class="" href="math_expressions/BoundVariable-class.html">BoundVariable</a></span>
+        </dt>
+        <dd>
+          <p>A bound variable is an anonymous variable, e.g. a variable without name,
+which is bound to an expression.</p>
+        </dd>
+        <dt id="CompositeFunction">
+          <span class="name "><a class="" href="math_expressions/CompositeFunction-class.html">CompositeFunction</a></span>
+        </dt>
+        <dd>
+          <p>A composition of two given <a class="" href="math_expressions/MathFunction-class.html">MathFunction</a>s.</p>
+        </dd>
+        <dt id="ContextModel">
+          <span class="name "><a class="" href="math_expressions/ContextModel-class.html">ContextModel</a></span>
+        </dt>
+        <dd>
+          <p>The context model keeps track of all known variables and functions.<a href="math_expressions/ContextModel-class.html">&hellip;</a>
+</p>
+        </dd>
+        <dt id="Cos">
+          <span class="name "><a class="" href="math_expressions/Cos-class.html">Cos</a></span>
+        </dt>
+        <dd>
+          <p>The cosine function.</p>
+        </dd>
+        <dt id="CustomFunction">
+          <span class="name "><a class="" href="math_expressions/CustomFunction-class.html">CustomFunction</a></span>
+        </dt>
+        <dd>
+          <p>Any user-created function is a CustomFunction.</p>
+        </dd>
+        <dt id="DefaultFunction">
+          <span class="name "><a class="" href="math_expressions/DefaultFunction-class.html">DefaultFunction</a></span>
+        </dt>
+        <dd>
+          <p>A default function is predefined in this library.
+It contains no expression, because the appropriate <code>Evaluator</code> knows
+how to handle them.<a href="math_expressions/DefaultFunction-class.html">&hellip;</a>
+</p>
+        </dd>
+        <dt id="Divide">
+          <span class="name "><a class="" href="math_expressions/Divide-class.html">Divide</a></span>
+        </dt>
+        <dd>
+          <p>The divide operator performs a division.</p>
+        </dd>
+        <dt id="EvaluationType">
+          <span class="name "><a class="" href="math_expressions/EvaluationType-class.html">EvaluationType</a></span>
+        </dt>
+        <dd>
+          <p>Mathematical expressions must be evaluated under a certain <a class="" href="math_expressions/EvaluationType-class.html">EvaluationType</a>.<a href="math_expressions/EvaluationType-class.html">&hellip;</a>
+</p>
+        </dd>
+        <dt id="Exponential">
+          <span class="name "><a class="" href="math_expressions/Exponential-class.html">Exponential</a></span>
+        </dt>
+        <dd>
+          <p>The exponential function.</p>
+        </dd>
+        <dt id="Expression">
+          <span class="name "><a class="" href="math_expressions/Expression-class.html">Expression</a></span>
+        </dt>
+        <dd>
+          <p>Any Expression supports basic mathematical operations like
+addition, subtraction, multiplication, division, power and negate.<a href="math_expressions/Expression-class.html">&hellip;</a>
+</p>
+        </dd>
+        <dt id="Interval">
+          <span class="name "><a class="" href="math_expressions/Interval-class.html">Interval</a></span>
+        </dt>
+        <dd>
+          <p>An <a class="" href="math_expressions/Interval-class.html">Interval</a> is defined by its minimum and maximum values, where
+<em>min &lt;= max</em>.<a href="math_expressions/Interval-class.html">&hellip;</a>
+</p>
+        </dd>
+        <dt id="IntervalLiteral">
+          <span class="name "><a class="" href="math_expressions/IntervalLiteral-class.html">IntervalLiteral</a></span>
+        </dt>
+        <dd>
+          <p>An interval literal.</p>
+        </dd>
+        <dt id="Lexer">
+          <span class="name "><a class="" href="math_expressions/Lexer-class.html">Lexer</a></span>
+        </dt>
+        <dd>
+          <p>The lexer creates tokens (see <a class="" href="math_expressions/TokenType-class.html">TokenType</a> and <a class="" href="math_expressions/Token-class.html">Token</a>) from an input string.
+The input string is expected to be in
+<a href="https://en.wikipedia.org/wiki/Infix_notation">infix notation form</a>.
+The lexer can convert an infix stream into a
+<a href="https://en.wikipedia.org/wiki/Reverse_Polish_notation">postfix stream</a>
+(Reverse Polish Notation) for further processing by a <a class="" href="math_expressions/Parser-class.html">Parser</a>.</p>
+        </dd>
+        <dt id="Literal">
+          <span class="name "><a class="" href="math_expressions/Literal-class.html">Literal</a></span>
+        </dt>
+        <dd>
+          <p>A literal can be a number, a constant or a variable.</p>
+        </dd>
+        <dt id="Ln">
+          <span class="name "><a class="" href="math_expressions/Ln-class.html">Ln</a></span>
+        </dt>
+        <dd>
+          <p>The natural logarithm (log based e).</p>
+        </dd>
+        <dt id="Log">
+          <span class="name "><a class="" href="math_expressions/Log-class.html">Log</a></span>
+        </dt>
+        <dd>
+          <p>The logarithm function.</p>
+        </dd>
+        <dt id="MathFunction">
+          <span class="name "><a class="" href="math_expressions/MathFunction-class.html">MathFunction</a></span>
+        </dt>
+        <dd>
+          <p>A function with an arbitrary number of arguments.<a href="math_expressions/MathFunction-class.html">&hellip;</a>
+</p>
+        </dd>
+        <dt id="Minus">
+          <span class="name "><a class="" href="math_expressions/Minus-class.html">Minus</a></span>
+        </dt>
+        <dd>
+          <p>The minus operator performs a subtraction.</p>
+        </dd>
+        <dt id="Number">
+          <span class="name "><a class="" href="math_expressions/Number-class.html">Number</a></span>
+        </dt>
+        <dd>
+          <p>A number is a constant number literal.</p>
+        </dd>
+        <dt id="Parser">
+          <span class="name "><a class="" href="math_expressions/Parser-class.html">Parser</a></span>
+        </dt>
+        <dd>
+          <p>The Parser creates a mathematical <a class="" href="math_expressions/Expression-class.html">Expression</a> from a given input string.<a href="math_expressions/Parser-class.html">&hellip;</a>
+</p>
+        </dd>
+        <dt id="Plus">
+          <span class="name "><a class="" href="math_expressions/Plus-class.html">Plus</a></span>
+        </dt>
+        <dd>
+          <p>The plus operator performs an addition.</p>
+        </dd>
+        <dt id="Point3D">
+          <span class="name "><a class="" href="math_expressions/Point3D-class.html">Point3D</a></span>
+        </dt>
+        <dd>
+          <p>A point in 3-dimensional space.
+This implementation supplies common mathematical operations on points.</p>
+        </dd>
+        <dt id="Power">
+          <span class="name "><a class="" href="math_expressions/Power-class.html">Power</a></span>
+        </dt>
+        <dd>
+          <p>The power operator.</p>
+        </dd>
+        <dt id="Root">
+          <span class="name "><a class="" href="math_expressions/Root-class.html">Root</a></span>
+        </dt>
+        <dd>
+          <p>The n-th root function. n needs to be a natural number.<a href="math_expressions/Root-class.html">&hellip;</a>
+</p>
+        </dd>
+        <dt id="Sgn">
+          <span class="name "><a class="" href="math_expressions/Sgn-class.html">Sgn</a></span>
+        </dt>
+        <dd>
+          <p>The sign function.</p>
+        </dd>
+        <dt id="Sin">
+          <span class="name "><a class="" href="math_expressions/Sin-class.html">Sin</a></span>
+        </dt>
+        <dd>
+          <p>The sine function.</p>
+        </dd>
+        <dt id="Sqrt">
+          <span class="name "><a class="" href="math_expressions/Sqrt-class.html">Sqrt</a></span>
+        </dt>
+        <dd>
+          <p>The square root function.</p>
+        </dd>
+        <dt id="Tan">
+          <span class="name "><a class="" href="math_expressions/Tan-class.html">Tan</a></span>
+        </dt>
+        <dd>
+          <p>The tangens function.</p>
+        </dd>
+        <dt id="Times">
+          <span class="name "><a class="" href="math_expressions/Times-class.html">Times</a></span>
+        </dt>
+        <dd>
+          <p>The times operator performs a multiplication.</p>
+        </dd>
+        <dt id="Token">
+          <span class="name "><a class="" href="math_expressions/Token-class.html">Token</a></span>
+        </dt>
+        <dd>
+          <p>A Token consists of text and has a <a class="" href="math_expressions/TokenType-class.html">TokenType</a>.</p>
+        </dd>
+        <dt id="TokenType">
+          <span class="name "><a class="" href="math_expressions/TokenType-class.html">TokenType</a></span>
+        </dt>
+        <dd>
+          <p>A token type. Access token types via the static fields.<a href="math_expressions/TokenType-class.html">&hellip;</a>
+</p>
+        </dd>
+        <dt id="UnaryMinus">
+          <span class="name "><a class="" href="math_expressions/UnaryMinus-class.html">UnaryMinus</a></span>
+        </dt>
+        <dd>
+          <p>The unary minus negates its argument.</p>
+        </dd>
+        <dt id="UnaryOperator">
+          <span class="name "><a class="" href="math_expressions/UnaryOperator-class.html">UnaryOperator</a></span>
+        </dt>
+        <dd>
+          <p>A unary operator takes one argument and performs an operation on it.</p>
+        </dd>
+        <dt id="Variable">
+          <span class="name "><a class="" href="math_expressions/Variable-class.html">Variable</a></span>
+        </dt>
+        <dd>
+          <p>A variable is a named literal.</p>
+        </dd>
+        <dt id="Vector">
+          <span class="name "><a class="" href="math_expressions/Vector-class.html">Vector</a></span>
+        </dt>
+        <dd>
+          <p>A vector of arbitrary size.</p>
+        </dd>
+      </dl>
+    </section>
+
+
+  </div> <!-- /.main-content -->
+
+  <div class="col-xs-6 col-sm-6 col-md-2 sidebar sidebar-offcanvas-right">
+    <h5>math_expressions</h5>
+    <ol>
+    
+    
+    
+    
+    
+      <li class="section-title"><a href="math_expressions/math_expressions-library.html#classes">Classes</a></li>
+      <li><a class="" href="math_expressions/Abs-class.html">Abs</a></li>
+      <li><a class="" href="math_expressions/BinaryOperator-class.html">BinaryOperator</a></li>
+      <li><a class="" href="math_expressions/BoundVariable-class.html">BoundVariable</a></li>
+      <li><a class="" href="math_expressions/CompositeFunction-class.html">CompositeFunction</a></li>
+      <li><a class="" href="math_expressions/ContextModel-class.html">ContextModel</a></li>
+      <li><a class="" href="math_expressions/Cos-class.html">Cos</a></li>
+      <li><a class="" href="math_expressions/CustomFunction-class.html">CustomFunction</a></li>
+      <li><a class="" href="math_expressions/DefaultFunction-class.html">DefaultFunction</a></li>
+      <li><a class="" href="math_expressions/Divide-class.html">Divide</a></li>
+      <li><a class="" href="math_expressions/EvaluationType-class.html">EvaluationType</a></li>
+      <li><a class="" href="math_expressions/Exponential-class.html">Exponential</a></li>
+      <li><a class="" href="math_expressions/Expression-class.html">Expression</a></li>
+      <li><a class="" href="math_expressions/Interval-class.html">Interval</a></li>
+      <li><a class="" href="math_expressions/IntervalLiteral-class.html">IntervalLiteral</a></li>
+      <li><a class="" href="math_expressions/Lexer-class.html">Lexer</a></li>
+      <li><a class="" href="math_expressions/Literal-class.html">Literal</a></li>
+      <li><a class="" href="math_expressions/Ln-class.html">Ln</a></li>
+      <li><a class="" href="math_expressions/Log-class.html">Log</a></li>
+      <li><a class="" href="math_expressions/MathFunction-class.html">MathFunction</a></li>
+      <li><a class="" href="math_expressions/Minus-class.html">Minus</a></li>
+      <li><a class="" href="math_expressions/Number-class.html">Number</a></li>
+      <li><a class="" href="math_expressions/Parser-class.html">Parser</a></li>
+      <li><a class="" href="math_expressions/Plus-class.html">Plus</a></li>
+      <li><a class="" href="math_expressions/Point3D-class.html">Point3D</a></li>
+      <li><a class="" href="math_expressions/Power-class.html">Power</a></li>
+      <li><a class="" href="math_expressions/Root-class.html">Root</a></li>
+      <li><a class="" href="math_expressions/Sgn-class.html">Sgn</a></li>
+      <li><a class="" href="math_expressions/Sin-class.html">Sin</a></li>
+      <li><a class="" href="math_expressions/Sqrt-class.html">Sqrt</a></li>
+      <li><a class="" href="math_expressions/Tan-class.html">Tan</a></li>
+      <li><a class="" href="math_expressions/Times-class.html">Times</a></li>
+      <li><a class="" href="math_expressions/Token-class.html">Token</a></li>
+      <li><a class="" href="math_expressions/TokenType-class.html">TokenType</a></li>
+      <li><a class="" href="math_expressions/UnaryMinus-class.html">UnaryMinus</a></li>
+      <li><a class="" href="math_expressions/UnaryOperator-class.html">UnaryOperator</a></li>
+      <li><a class="" href="math_expressions/Variable-class.html">Variable</a></li>
+      <li><a class="" href="math_expressions/Vector-class.html">Vector</a></li>
+    
+    </ol>
+  </div><!--/sidebar-offcanvas-right-->
+
+</div> <!-- row -->
+</div> <!-- container -->
+
+<footer>
+  <div class="container-fluid">
+    <div class="container">
+      <p class="text-center">
+        <span class="no-break">
+          math_expressions 0.1.1
+        </span>
+        &bull;
+        <span class="no-break">
+          <a href="https://www.dartlang.org">
+            <img src="static-assets/favicon.png" alt="Dart" title="Dart" width="16" height="16">
+          </a>
+        </span>
+        &bull;
+        <span class="copyright no-break">
+          <a href="http://creativecommons.org/licenses/by-sa/4.0/">cc license</a>
+        </span>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="static-assets/typeahead.bundle.min.js"></script>
+<script src="static-assets/prettify.js"></script>
+<script src="static-assets/script.js"></script>
+<!-- Do not remove placeholder -->
+<!-- Footer Placeholder -->
+
+</body>
+
+</html>
