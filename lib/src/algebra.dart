@@ -1,55 +1,50 @@
 part of math_expressions;
 
 /**
- * A point in 3-dimensional space.
+ * A point in 3-dimensional space, which is a Vector3.
  * This implementation supplies common mathematical operations on points.
  */
-class Point3D {
-
-  double x, y, z;
+class Point3 extends Vector3 {
 
   /**
-   * Creates a new Point3D with the given coordinates.
+   * Creates a new Point3 with the given coordinates.
    */
-  Point3D(double this.x, double this.y, double this.z);
+  factory Point3(double x, double y, double z) =>
+    new Point3.zero()..setValues(x, y, z);
+
+    /**
+     * Creates a new Point3 from the given Vector3.
+     */
+  factory Point3.vec(Vector3 other) =>
+    new Point3.zero()..setFrom(other);
 
   /**
-   * Creates a new Point3D from given vector3 / vector4.
+   * Creates a new Point3 at the coordinate origin.
    */
-  Point3D.vec(var vec): this.x = vec.x, this.y = vec.y, this.z = vec.z;
-
-  /**
-   * Creates a new Point3D and "splats" the given value to each coordinate.
-   */
-  Point3D.splat(num val): this.x = val, this.y = val, this.z = val;
-
-  /**
-   * Creates a new Point3D at the coordinate origin.
-   */
-  Point3D.zero(): x = 0.0, y = 0.0, z = 0.0;
+  Point3.zero(): super.zero();
 
   /**
    * Returns a new point which position is determined by moving the old point
    * along the given vector.
    */
-  Point3D operator+(Vector3 v) => new Point3D(this.x + v.x, this.y + v.y, this.z + v.z);
+  Point3 operator+(Vector3 v) => new Point3(this.x + v.x, this.y + v.y, this.z + v.z);
 
   /**
    * Returns the [Vector3] pointing from the given point to this point.
    */
-  Vector3 operator-(Point3D p2) => new Vector3(this.x - p2.x, this.y - p2.y, this.z - p2.z);
+  Vector3 operator-(Point3 p2) => new Vector3(this.x - p2.x, this.y - p2.y, this.z - p2.z);
 
   /**
    * Negates the point's components.
    */
-  Point3D operator-() => new Point3D(-this.x, -this.y, -this.z);
+  Point3 operator-() => new Point3(-this.x, -this.y, -this.z);
 
   /**
    * Checks for equality. Two points are considered equal, if their coordinates
    * match.
    */
   bool operator==(Object o) {
-    if (o is Point3D) {
+    if (o is Point3) {
       return this.x == o.x && this.y == o.y && this.z == o.z;
     } else {
       return false;
@@ -59,19 +54,14 @@ class Point3D {
   /**
    * Performs a linear interpolation between two points.
    */
-  Point3D lerp(Point3D p2, num coeff) {
-    return new Point3D(
+  Point3 lerp(Point3 p2, num coeff) {
+    return new Point3(
         this.x * coeff + p2.x * (1-coeff),
         this.y * coeff + p2.y * (1-coeff),
         this.z * coeff + p2.z * (1-coeff)
     );
   }
   // TODO 3d lerp?
-
-  /**
-   * Transforms the point to its vector representation.
-   */
-  Vector3 toVec3() => new Vector3(this.x, this.y, this.z);
 
   /**
    * Transforms the point to its homogeneous vector4 representation.
@@ -86,7 +76,7 @@ class Point3D {
     result = 37 * result + z.hashCode;
     return result;
   }
-  
+
   String toString() => "$x,$y,$z";
 }
 

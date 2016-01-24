@@ -20,9 +20,9 @@ class AlgebraTests extends TestSet {
   // Initialises the test points and vectors
   void initTests() {
     // do some funky stuff
-    p0 = new Point3D.zero();
-    p1 = new Point3D(1.0, 2.0, 3.0);
-    p2 = new Point3D(4.0, -5.0, 7.0);
+    p0 = new Point3.zero();
+    p1 = new Point3(1.0, 2.0, 3.0);
+    p2 = new Point3(4.0, -5.0, 7.0);
     v1 = new Vector3(1.0, -2.0, 5.0);
     v2 = new Vector3(-1.0, 0.0, -7.0);
 
@@ -39,7 +39,7 @@ class AlgebraTests extends TestSet {
   /*
    *  Tests and variables.
    */
-  Point3D p0,p1,p2;
+  Point3 p0,p1,p2;
   Vector3 v1,v2;
   Interval i, iNull1, iNull2, iPos, iNeg, iZero, iEmpty;
 
@@ -70,7 +70,7 @@ class AlgebraTests extends TestSet {
   // Tests the unary minus and point subtraction operators.
   pointSubtraction() {
     // unary minus
-    Point3D pMinus = -p0;
+    Point3 pMinus = -p0;
     expect(pMinus.x, equals(0));
     expect(pMinus.y, equals(0));
     expect(pMinus.z, equals(0));
@@ -114,9 +114,9 @@ class AlgebraTests extends TestSet {
   pointLerp() {
     var coeff = 0.6;
     var lerped = p1.lerp(p0, coeff);
-    expect(lerped.x, equals(p1.x*coeff));
-    expect(lerped.y, equals(p1.y*coeff));
-    expect(lerped.z, equals(p1.z*coeff));
+    expect(lerped.x, closeTo(p1.x*coeff, EPS));
+    expect(lerped.y, closeTo(p1.y*coeff, EPS));
+    expect(lerped.z, closeTo(p1.z*coeff, EPS));
 
     coeff = 0.41;
     lerped = p1.lerp(p2, coeff);
