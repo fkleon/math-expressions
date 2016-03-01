@@ -1,3 +1,8 @@
+### 0.3.0
+
+- Rename `Point3D` to `Point3`
+- `Point3` now is a subtype of `Vector3`
+
 ### 0.2.0+1 - 2015-12-30
 
 - Depend on `vector_math` 1.4.4 or greater
