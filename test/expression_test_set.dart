@@ -361,6 +361,9 @@ class ExpressionTests extends TestSet {
                  [new Times('x', 1),    'x',      'x*0.0+1.0*1.0',  '1.0'],
                  [new Divide('x',2),    'x',      '((1.0*2.0)-(x*0.0))/(2.0*2.0)',
                   '2.0/(2.0*2.0)'],
+                 [new Modulo('x', 'x'), 'x',
+                  '1.0 - floor(x / abs(x)) * (sgn(x) * 1.0)',
+                  '1.0 - floor(x / abs(x)) * sgn(x)'],
                  [new Power('x',2),     'x',      'exp(2.0 * ln(x)) * ((2.0 * (1.0 / x)) + (0.0 * ln(x)))',
                   'x^2.0 * (2.0 * (1.0 / x))'],
                 ];
@@ -617,6 +620,18 @@ class ExpressionTests extends TestSet {
     exp = new Abs(new Number(0));
     expect(exp.simplify(), new isInstanceOf<Abs>());
     expect((exp.simplify() as Abs).arg, new isInstanceOf<BoundVariable>());
+
+    /*
+     * Ceil
+     */
+    exp = new Ceil(new Floor(new Variable("x")));
+    expect((exp.simplify() as Floor).arg, new isInstanceOf<Variable>());
+
+    /*
+     * Floor
+     */
+    exp = new Floor(new Ceil(new Variable("x")));
+    expect((exp.simplify() as Ceil).arg, new isInstanceOf<Variable>());
 
     /*
      * Sgn

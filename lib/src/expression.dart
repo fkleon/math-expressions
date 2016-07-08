@@ -26,7 +26,7 @@ part of math_expressions;
  *     * Custom Functions (see [CustomFunction])
  *
  * Pre-defined functions are [Exponential], [Log], [Ln], nth-[Root], [Sqrt],
- * [Abs], [Sgn], [Sin], [Cos] and [Tan].
+ * [Abs], [Ceil], [Floor], [Sgn], [Sin], [Cos] and [Tan].
  */
 abstract class Expression {
 
@@ -39,6 +39,8 @@ abstract class Expression {
   Expression operator*(Expression exp) => new Times(this, exp);
   /// Divide operator. Creates a [Divide] expression.
   Expression operator/(Expression exp) => new Divide(this, exp);
+  /// Modulo operator. Creates a [Modulo] expression.
+  Expression operator%(Expression exp) => new Modulo(this, exp);
   /// Power operator. Creates a [Power] expression.
   Expression operator^(Expression exp) => new Power(this, exp);
   /// Unary minus operator. Creates a [UnaryMinus] expression.
@@ -438,7 +440,7 @@ class Divide extends BinaryOperator {
    * Possible simplifications:
    *
    * 1. -a / b = - (a / b)
-   * 2. a * -b = - (a / b)
+   * 2. a / -b = - (a / b)
    * 3. -a / -b = a / b
    * 5. 0 / a = 0
    * 6. a / 1 = a
@@ -495,6 +497,64 @@ class Divide extends BinaryOperator {
   }
 
   String toString() => '($first / $second)';
+}
+
+/**
+ * The modulo operator performs a Euclidean modulo operation, as Dart performs
+ * it. That is, a % b = a - floor(a / |b|) |b|. For positive integers, this is a
+ * remainder.
+ */
+class Modulo extends BinaryOperator {
+
+  /**
+   * Creates a modulo operation on the given expressions.
+   *
+   * For example, to create x % (y+2):
+   *     r = new Modulo('x', new Plus('y', 2));
+   *
+   * or:
+   *     r = new Variable('x') % (new Variable('y') + new Number(2));
+   */
+  Modulo(dividend, divisor): super(dividend, divisor);
+
+  Expression derive(String toVar) {
+    final Abs a2 = new Abs(second);
+    return first.derive(toVar) - new Floor(first / a2) * a2.derive(toVar);
+  }
+
+  /**
+   * Possible simplifications:
+   *
+   * 1. a % -b = a % b
+   * 2. 0 % a = 0
+   */
+  Expression simplify() {
+    Expression firstOp = first.simplify();
+    Expression secondOp = second.simplify();
+
+    if (_isNumber(firstOp, 0)) {
+      return firstOp; // = 0
+    }
+
+    if (secondOp is UnaryMinus) {
+      secondOp = (secondOp as UnaryMinus).exp;
+    }
+
+    return new Modulo(firstOp, secondOp);
+  }
+
+  evaluate(EvaluationType type, ContextModel context) {
+    var firstEval = first.evaluate(type, context);
+    var secondEval = second.evaluate(type, context);
+
+    if (type == EvaluationType.REAL) {
+      return firstEval % secondEval;
+    }
+
+    throw new UnimplementedError('Evaluate Modulo with type ${type} not supported yet.');
+  }
+
+  String toString() => '($first % $second)';
 }
 
 /**
