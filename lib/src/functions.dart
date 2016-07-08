@@ -614,7 +614,7 @@ class Sin extends DefaultFunction {
   /// The argument of this sine function.
   Expression get arg => getParam(0);
 
-  Expression derive(String toVar) => new Cos(arg);
+  Expression derive(String toVar) => new Cos(arg) * arg.derive(toVar);
 
   /**
    * Possible simplifications:
@@ -664,7 +664,7 @@ class Cos extends DefaultFunction {
   /// The argument of this cosine function.
   Expression get arg => getParam(0);
 
-  Expression derive(String toVar) => -new Sin(arg);
+  Expression derive(String toVar) => -new Sin(arg) * arg.derive(toVar);
 
   /**
    * Possible simplifications:
@@ -768,7 +768,7 @@ class Abs extends DefaultFunction {
 
   /// The differentiation of Abs is Sgn
   //TODO No differentiation possible for x = 0
-  Expression derive(String toVar) => new Sgn(arg);
+  Expression derive(String toVar) => new Sgn(arg) * arg.derive(toVar);
 
   /**
    * Possible simplifications:
@@ -891,7 +891,8 @@ class Sgn extends DefaultFunction {
   /// The argument of this sign function.
   Expression get arg => getParam(0);
 
-  Expression derive(String toVar) => throw new UnimplementedError('Can not differentiate sgn.');
+  //TODO not differentiable at 0.
+  Expression derive(String toVar) => new Number(0);
 
   Expression simplify() {
     return new Sgn(arg.simplify());
