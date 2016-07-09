@@ -65,6 +65,11 @@ class Parser {
           left = exprStack.removeLast();
           currExpr = left / right;
           break;
+        case TokenType.MOD:
+          right = exprStack.removeLast();
+          left = exprStack.removeLast();
+          currExpr = left % right;
+          break;
         case TokenType.POW:
           right = exprStack.removeLast();
           left = exprStack.removeLast();
@@ -100,6 +105,12 @@ class Parser {
           break;
         case TokenType.ABS:
           currExpr = new Abs(exprStack.removeLast());
+          break;
+        case TokenType.CEIL:
+          currExpr = new Ceil(exprStack.removeLast());
+          break;
+        case TokenType.FLOOR:
+          currExpr = new Floor(exprStack.removeLast());
           break;
         case TokenType.SGN:
           currExpr = new Sgn(exprStack.removeLast());
@@ -144,6 +155,7 @@ class Lexer {
     keywords["_"] = TokenType.UNMINUS;
     keywords["*"] = TokenType.TIMES;
     keywords["/"] = TokenType.DIV;
+    keywords["%"] = TokenType.MOD;
     keywords["^"] = TokenType.POW;
     keywords["nrt"] = TokenType.ROOT;
     keywords["sqrt"] = TokenType.SQRT;
@@ -152,6 +164,8 @@ class Lexer {
     keywords["sin"] = TokenType.SIN;
     keywords["tan"] = TokenType.TAN;
     keywords["abs"] = TokenType.ABS;
+    keywords["ceil"] = TokenType.CEIL;
+    keywords["floor"] = TokenType.FLOOR;
     keywords["sgn"] = TokenType.SGN;
     keywords["ln"] = TokenType.LN;
     keywords["e"] = TokenType.EFUNC;
@@ -452,6 +466,7 @@ class TokenType {
   static const TokenType MINUS = const TokenType._internal("MINUS",1,operator:true);
   static const TokenType TIMES = const TokenType._internal("TIMES",2,operator:true);
   static const TokenType DIV = const TokenType._internal("DIV",2,operator:true);
+  static const TokenType MOD = const TokenType._internal("MOD",2,operator:true);
   static const TokenType POW = const TokenType._internal("POW",3,leftAssociative:false,operator:true);
   static const TokenType UNMINUS = const TokenType._internal("UNMINUS",5,leftAssociative:false,operator:true);
 
@@ -464,6 +479,8 @@ class TokenType {
   static const TokenType SIN = const TokenType._internal("SIN",4,function:true);
   static const TokenType TAN = const TokenType._internal("TAN",4,function:true);
   static const TokenType ABS = const TokenType._internal("ABS",4,function:true);
+  static const TokenType CEIL = const TokenType._internal("CEIL",4,function:true);
+  static const TokenType FLOOR = const TokenType._internal("FLOOR",4,function:true);
   static const TokenType SGN = const TokenType._internal("SGN",4,function:true);
   static const TokenType EFUNC = const TokenType._internal("EFUNC",4,function:true);
 
@@ -493,4 +510,3 @@ class TokenType {
 
   String toString() => value;
 }
-

@@ -614,7 +614,7 @@ class Sin extends DefaultFunction {
   /// The argument of this sine function.
   Expression get arg => getParam(0);
 
-  Expression derive(String toVar) => new Cos(arg);
+  Expression derive(String toVar) => new Cos(arg) * arg.derive(toVar);
 
   /**
    * Possible simplifications:
@@ -664,7 +664,7 @@ class Cos extends DefaultFunction {
   /// The argument of this cosine function.
   Expression get arg => getParam(0);
 
-  Expression derive(String toVar) => -new Sin(arg);
+  Expression derive(String toVar) => -new Sin(arg) * arg.derive(toVar);
 
   /**
    * Possible simplifications:
@@ -768,7 +768,7 @@ class Abs extends DefaultFunction {
 
   /// The differentiation of Abs is Sgn
   //TODO No differentiation possible for x = 0
-  Expression derive(String toVar) => new Sgn(arg);
+  Expression derive(String toVar) => new Sgn(arg) * arg.derive(toVar);
 
   /**
    * Possible simplifications:
@@ -793,6 +793,92 @@ class Abs extends DefaultFunction {
 }
 
 /**
+ * The ceil function.
+ */
+class Ceil extends DefaultFunction {
+
+  /**
+   * Creates a new ceil function with given argument expression.
+   */
+  Ceil(arg): super._unary('ceil', arg);
+
+  /// The argument of this ceil function.
+  Expression get arg => getParam(0);
+
+  /// Ceil never has a slope.
+  //TODO No differentiation possible for integer x
+  Expression derive(String toVar) => new Number(0);
+
+  /**
+   * Possible simplifications:
+   *
+   * 1. ceil(floor(a)) = floor(a)
+   * 2. ceil(ceil(a)) = ceil(a)
+   */
+  Expression simplify() {
+    final Expression sarg = arg.simplify();
+    return sarg is Floor || sarg is Ceil? sarg : new Ceil(sarg);
+  }
+
+  evaluate(EvaluationType type, ContextModel context) {
+    var argEval = arg.evaluate(type, context);
+
+    if (type == EvaluationType.REAL) {
+      return argEval.ceil();
+    }
+
+    if (type == EvaluationType.VECTOR) {
+      //TODO apply function to all vector elements
+    }
+
+    throw new UnimplementedError('Can not evaluate ceil on ${type} yet.');
+  }
+}
+
+/**
+ * The floor function.
+ */
+class Floor extends DefaultFunction {
+
+  /**
+   * Creates a new floor function with given argument expression.
+   */
+  Floor(arg): super._unary('floor', arg);
+
+  /// The argument of this floor function.
+  Expression get arg => getParam(0);
+
+  /// Floor never has a slope.
+  //TODO No differentiation possible for integer x
+  Expression derive(String toVar) => new Number(0);
+
+  /**
+   * Possible simplifications:
+   *
+   * 1. floor(floor(a)) = floor(a)
+   * 2. floor(ceil(a)) = ceil(a)
+   */
+  Expression simplify() {
+    final Expression sarg = arg.simplify();
+    return sarg is Floor || sarg is Ceil? sarg : new Floor(sarg);
+  }
+
+  evaluate(EvaluationType type, ContextModel context) {
+    var argEval = arg.evaluate(type, context);
+
+    if (type == EvaluationType.REAL) {
+      return argEval.floor();
+    }
+
+    if (type == EvaluationType.VECTOR) {
+      //TODO apply function to all vector elements
+    }
+
+    throw new UnimplementedError('Can not evaluate floor on ${type} yet.');
+  }
+}
+
+/**
  * The sign function.
  */
 class Sgn extends DefaultFunction {
@@ -805,7 +891,8 @@ class Sgn extends DefaultFunction {
   /// The argument of this sign function.
   Expression get arg => getParam(0);
 
-  Expression derive(String toVar) => throw new UnimplementedError('Can not differentiate sgn.');
+  //TODO not differentiable at 0.
+  Expression derive(String toVar) => new Number(0);
 
   Expression simplify() {
     return new Sgn(arg.simplify());

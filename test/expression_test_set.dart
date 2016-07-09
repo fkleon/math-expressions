@@ -361,6 +361,9 @@ class ExpressionTests extends TestSet {
                  [new Times('x', 1),    'x',      'x*0.0+1.0*1.0',  '1.0'],
                  [new Divide('x',2),    'x',      '((1.0*2.0)-(x*0.0))/(2.0*2.0)',
                   '2.0/(2.0*2.0)'],
+                 [new Modulo('x', 'x'), 'x',
+                  '1.0 - floor(x / abs(x)) * (sgn(x) * 1.0)',
+                  '1.0 - floor(x / abs(x)) * sgn(x)'],
                  [new Power('x',2),     'x',      'exp(2.0 * ln(x)) * ((2.0 * (1.0 / x)) + (0.0 * ln(x)))',
                   'x^2.0 * (2.0 * (1.0 / x))'],
                 ];
@@ -619,6 +622,18 @@ class ExpressionTests extends TestSet {
     expect((exp.simplify() as Abs).arg, new isInstanceOf<BoundVariable>());
 
     /*
+     * Ceil
+     */
+    exp = new Ceil(new Floor(new Variable("x")));
+    expect((exp.simplify() as Floor).arg, new isInstanceOf<Variable>());
+
+    /*
+     * Floor
+     */
+    exp = new Floor(new Ceil(new Variable("x")));
+    expect((exp.simplify() as Ceil).arg, new isInstanceOf<Variable>());
+
+    /*
      * Sgn
      */
     exp = new Sgn(new Number(0));
@@ -629,7 +644,7 @@ class ExpressionTests extends TestSet {
   /// Tests differentiation of default functions.
   void defFuncDifferentiation() {
     Variable x = new Variable('x');
-    Number base = new Number(2);
+    Number two = new Number(2);
     var diff = [
                  // Expression,  deriveTo, output, outputSimplified
                  [new Exponential(x), 'x',
@@ -640,7 +655,7 @@ class ExpressionTests extends TestSet {
                                       '1.0 / x'],
                  // TODO Simplify can't cancel out terms yet, so the
                  //      simplified version is still a but ugly:
-                 [new Log(base, x),   'x',
+                 [new Log(two, x),    'x',
                                       '((((1.0 / x) * ln(2.0)) - (ln(x) * (0.0 / 2.0))) / (ln(2.0) * ln(2.0)))',
                                       '(((1.0 / x) * ln(2.0)) / (ln(2.0) * ln(2.0)))'],
                                       //'1.0 / (x * ln(2.0))'],
@@ -649,13 +664,16 @@ class ExpressionTests extends TestSet {
                  //[new Sqrt(x),        'x', '0.0', '0.0'],
                  //[new Root(2, x),     'x', '0.0', '0.0'],
 
-                 [new Sin(x),         'x', 'cos(x)',  'cos(x)'],
-                 [new Cos(x),         'x', '-sin(x)', '-sin(x)'],
+                 [new Sin(x),         'x', 'cos(x) * 1.0',  'cos(x)'],
+                 [new Cos(x),         'x', '-sin(x) * 1.0', '-sin(x)'],
 
                  // TODO Tan is internally handled as sin/cos:
                  //[new Tan(x),          'x', '0.0',    '0.0']
 
-                 [new Abs(x),          'x', 'sgn(x)', 'sgn(x)']
+                 [new Abs(x),         'x', 'sgn(x) * 1.0', 'sgn(x)'],
+                 [new Abs(two * x),   'x',
+                                      'sgn(2.0 * x) * (2.0 * 1.0 + 0.0 * x)',
+                                      'sgn(2.0 * x) * 2.0']
                 ];
 
     for (List exprCase in diff) {

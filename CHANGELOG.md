@@ -2,6 +2,8 @@
 
 - Rename `Point3D` to `Point3`
 - `Point3` now is a subtype of `Vector3`
+- Add mod (%) operator and ceil, floor functions
+- Fixing a few missed chain rules in `derive`
 
 ### 0.2.0+1 - 2015-12-30
 
