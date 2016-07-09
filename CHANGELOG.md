@@ -1,4 +1,4 @@
-### 0.3.0
+### 0.3.0 - 2016-07-09
 
 - Rename `Point3D` to `Point3`
 - `Point3` now is a subtype of `Vector3`
