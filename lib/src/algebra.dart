@@ -32,7 +32,7 @@ class Point3 extends Vector3 {
   /**
    * Returns the [Vector3] pointing from the given point to this point.
    */
-  Vector3 operator-(Point3 p2) => new Vector3(this.x - p2.x, this.y - p2.y, this.z - p2.z);
+  Vector3 operator-(Vector3 p2) => new Vector3(this.x - p2.x, this.y - p2.y, this.z - p2.z);
 
   /**
    * Negates the point's components.
