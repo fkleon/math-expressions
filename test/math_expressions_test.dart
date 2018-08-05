@@ -22,10 +22,7 @@ const num EPS = 0.000001;
  * Registers all math test sets and executes the test suite afterwards.
  */
 void main() {
-  var testSets = [new AlgebraTests(),
-                  new ParserTests(),
-                  new ExpressionTests()
-                 ];
+  var testSets = [new AlgebraTests(), new ParserTests(), new ExpressionTests()];
 
   new TestExecutor.initWith(testSets).runTests();
 }

@@ -43,12 +43,12 @@ void _example2() {
   Parser p = new Parser();
   Expression exp = p.parse("x*1 - (_5)");
 
-  print(exp);            // = ((x * 1.0) - -(5.0))
+  print(exp); // = ((x * 1.0) - -(5.0))
   print(exp.simplify()); // = (x + 5.0)
 
   Expression expDerived = exp.derive('x');
 
-  print(expDerived);            // = (((x * 0.0) + (1.0 * 1.0)) - -(0.0))
+  print(expDerived); // = (((x * 0.0) + (1.0 * 1.0)) - -(0.0))
   print(expDerived.simplify()); // = 1.0
 }
 
@@ -67,7 +67,10 @@ void _example3() {
 }
 
 void _expressionTest() {
-  Expression x = new Variable('x'), a = new Variable('a'), b = new Variable('b'), c = new Variable('c');
+  Expression x = new Variable('x'),
+      a = new Variable('a'),
+      b = new Variable('b'),
+      c = new Variable('c');
   //Expression pow = new Power(x, new Number(2));
   //Expression e = a+b;
   //Expression e = a*pow+b*x+c;
@@ -78,11 +81,11 @@ void _expressionTest() {
   Expression exp = new Power('x', 2);
   Expression mul = new Times('x', 'x');
 
-
   print('exp: ${exp.toString()}');
   print('expD: ${exp.derive('x').toString()}');
   print('expDSimp: ${exp.derive('x').simplify().toString()}');
-  print('expDSimpDSimp: ${exp.derive('x').simplify().derive('x').simplify().toString()}');
+  print(
+      'expDSimpDSimp: ${exp.derive('x').simplify().derive('x').simplify().toString()}');
   print('expDD: ${exp.derive('x').derive('x').toString()}');
   print('expDDSimp: ${exp.derive('x').derive('x').simplify().toString()}');
 
@@ -95,14 +98,12 @@ void _expressionTest() {
   print('divD: ${div.derive('x').toString()}');
   print('divDSimp: ${div.derive('x').simplify().toString()}');
 
-
   Expression log = new Log(new Number(10), exp);
   print('log: ${log.toString()}');
   print('logD: ${log.derive('x').toString()}');
   print('logDSimp: ${log.derive('x').simplify().toString()}');
 
-
-  Expression expXY = x^a;
+  Expression expXY = x ^ a;
   print('expXY: ${expXY.toString()}');
   print('expXYD: ${expXY.derive('x').toString()}');
   print('expXYDsimp: ${expXY.derive('x').simplify().toString()}');
@@ -120,7 +121,7 @@ void _expressionTest() {
   Expression negate = -exp;
   print(negate);
 
-  Expression vector = new Vector([x*new Number(1), div, exp]);
+  Expression vector = new Vector([x * new Number(1), div, exp]);
   print('vector: ${vector}');
   print('vectorS: ${vector.simplify()}');
   print('vectorSD: ${vector.simplify().derive('x')}');
@@ -134,10 +135,14 @@ void _expressionTest() {
   print('compositeD: ${composite.derive('x').toString()}');
   print('compositeDS: ${composite.derive('x').simplify().toString()}');
 
-  Expression fExpr = new Vector([x, new Plus(x,1), new Minus(x,1)]); // Transforms x to 3-dimensional vector
-  MathFunction f = new CustomFunction('f', [x], fExpr);     // R -> R^3
+  Expression fExpr = new Vector([
+    x,
+    new Plus(x, 1),
+    new Minus(x, 1)
+  ]); // Transforms x to 3-dimensional vector
+  MathFunction f = new CustomFunction('f', [x], fExpr); // R -> R^3
   Expression gExpr = x + a + b;
-  MathFunction g = new CustomFunction('g', [x, a, b], gExpr);      // R^3 -> R
+  MathFunction g = new CustomFunction('g', [x, a, b], gExpr); // R^3 -> R
   composite = new CompositeFunction(f, g); // R -> R
 
   print('composite2: ${composite.toString()}');
@@ -151,25 +156,27 @@ void _evaluateTest() {
   Expression exp = new Power('x', 2);
 
   Expression mul = new Number(10) * new Number(5);
-  _print('mul',mul);
-  _print('mul =',mul.evaluate(type, context));
+  _print('mul', mul);
+  _print('mul =', mul.evaluate(type, context));
 
   context.bindVariable(x, new Number(2));
   Expression sqrt = new Sqrt(exp);
   print('sqrt: ${sqrt.toString()}');
   print('sqrtD: ${sqrt.derive('x').toString()}');
   print('sqrtDsimpl: ${sqrt.derive('x').simplify().toString()}');
-  print('sqrtDEval: ${sqrt.derive('x').simplify().evaluate(type, context).toString()}');
+  print(
+      'sqrtDEval: ${sqrt.derive('x').simplify().evaluate(type, context).toString()}');
   print('sqrtEval: ${sqrt.evaluate(type, context).toString()}');
 
   Expression negate = -exp;
   print(negate.evaluate(type, context));
 
-  Expression vector = new Vector([x*new Number(1), x, exp]);
+  Expression vector = new Vector([x * new Number(1), x, exp]);
   print('vector: ${vector}');
   print('vectorS: ${vector.simplify()}');
   print('vectorSD: ${vector.simplify().derive('x')}');
-  print('vectorS: ${vector.simplify().evaluate(EvaluationType.VECTOR, context)}');
+  print(
+      'vectorS: ${vector.simplify().evaluate(EvaluationType.VECTOR, context)}');
 
   Expression interval1 = new IntervalLiteral(new Number(-1), new Number(4));
   Expression interval2 = new IntervalLiteral(new Number(5), new Number(10));
@@ -178,13 +185,16 @@ void _evaluateTest() {
   Expression intMul = (interval1 * interval2);
   Expression intDiv = (interval2 / interval1);
   print('intAdd: ${intAdd}');
-  print('intAdd: ${intAdd.simplify().evaluate(EvaluationType.INTERVAL, context)}');
+  print(
+      'intAdd: ${intAdd.simplify().evaluate(EvaluationType.INTERVAL, context)}');
   print('intMul: ${intMul}');
-  print('intMul: ${intMul.simplify().evaluate(EvaluationType.INTERVAL, context)}');
+  print(
+      'intMul: ${intMul.simplify().evaluate(EvaluationType.INTERVAL, context)}');
   print('intDiv: ${intDiv}');
   try {
     // This should throw an exception (divide by 0)
-    print('intDiv: ${intDiv.simplify().evaluate(EvaluationType.INTERVAL, context)}');
+    print(
+        'intDiv: ${intDiv.simplify().evaluate(EvaluationType.INTERVAL, context)}');
   } catch (e) {
     // expected
   }

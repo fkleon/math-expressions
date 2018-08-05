@@ -15,7 +15,6 @@ part of math_expressions;
  * by Dart yet.
  */
 class EvaluationType {
-
   /// Our type map.
   static Map<int, EvaluationType> _cache;
   final int type;
@@ -47,13 +46,16 @@ class EvaluationType {
   EvaluationType._internal(int this.type, String this._text);
 
   /// Public constructor for REAL types. Always returns the same instance of a REAL type.
-  static EvaluationType get REAL => new EvaluationType._private(REAL_INT, 'REAL');
+  static EvaluationType get REAL =>
+      new EvaluationType._private(REAL_INT, 'REAL');
 
   /// Public constructor for VECTOR types. Always returns the same instance of a VECTOR type.
-  static EvaluationType get VECTOR => new EvaluationType._private(VECTOR_INT, 'VECTOR');
+  static EvaluationType get VECTOR =>
+      new EvaluationType._private(VECTOR_INT, 'VECTOR');
 
   /// Public constructor for INTERVAL types. Always returns the same instance of a INTERVAL type.
-  static EvaluationType get INTERVAL => new EvaluationType._private(INTERVAL_INT, 'INTERVAL');
+  static EvaluationType get INTERVAL =>
+      new EvaluationType._private(INTERVAL_INT, 'INTERVAL');
 
   /// Internal integer value for REAL type.
   static final int REAL_INT = 1;
@@ -67,7 +69,7 @@ class EvaluationType {
   /**
    * Two types are equal, if their internal int matches.
    */
-  operator==(dynamic et) => (et is EvaluationType) && (this.type == et.type);
+  operator ==(dynamic et) => (et is EvaluationType) && (this.type == et.type);
 
   int get hashCode => type.hashCode;
 
@@ -80,10 +82,9 @@ class EvaluationType {
  * It is structured hierarchically to offer nested scopes.
  */
 class ContextModel {
-
   /// The parent scope.
   ContextModel parentScope;
-  
+
   /// Variable map of this scope (name -> expression).
   Map<String, Expression> variables = new Map();
 
@@ -95,12 +96,12 @@ class ContextModel {
    * Creates a new, empty root context model.
    */
   ContextModel();
-  
+
   /**
    * Internal constructor for creating a child scope.
    */
   ContextModel._child(ContextModel this.parentScope);
-  
+
   /**
    * Returns a new child scope of this scope.
    */
@@ -129,7 +130,8 @@ class ContextModel {
    * Throws a [StateError], if function is still unbound at the root scope.
    */
   MathFunction getFunction(String name) {
-    var candidates = functions.where((mathFunction) => mathFunction.name == name);
+    var candidates =
+        functions.where((mathFunction) => mathFunction.name == name);
     if (candidates.isNotEmpty) {
       // just grab first - should not contain doubles.
       return candidates.first;
@@ -161,12 +163,11 @@ class ContextModel {
     //TODO force non-duplicates.
     functions.add(f);
   }
-  
-  String toString() => "ContextModel["
-                       "PARENT: ${parentScope}, "
-                       "VARS: ${variables.toString()}, "
-                       "FUNCS: ${functions.toString()}]";
 
+  String toString() => "ContextModel["
+      "PARENT: ${parentScope}, "
+      "VARS: ${variables.toString()}, "
+      "FUNCS: ${functions.toString()}]";
 }
 
 /*

@@ -4,19 +4,18 @@ part of math_expressions_test;
  * Contains methods to test the math algebra implementation.
  */
 class AlgebraTests extends TestSet {
-
   get name => 'Algebra Tests';
 
   get testFunctions => {
-    'Point Creation': pointCreation,
-    'Point Equality': pointEquality,
-    'Point Subtraction': pointSubtraction,
-    'Point Addition': pointAddition,
-    'Point LERP': pointLerp,
-    'Interval Creation': intervalCreation,
-    'Interval Arithmetic': intervalArithmetic,
-    'Interval Comparison': intervalComparison,
-  };
+        'Point Creation': pointCreation,
+        'Point Equality': pointEquality,
+        'Point Subtraction': pointSubtraction,
+        'Point Addition': pointAddition,
+        'Point LERP': pointLerp,
+        'Interval Creation': intervalCreation,
+        'Interval Arithmetic': intervalArithmetic,
+        'Interval Comparison': intervalComparison,
+      };
 
   // Initialises the test points and vectors
   void initTests() {
@@ -40,8 +39,8 @@ class AlgebraTests extends TestSet {
   /*
    *  Tests and variables.
    */
-  Point3 p0,p1,p2;
-  Vector3 v1,v2;
+  Point3 p0, p1, p2;
+  Vector3 v1, v2;
   Interval i, iNull1, iNull2, iPos, iNeg, iZero, iEmpty;
 
   // Tests the expected state after point creation.
@@ -82,30 +81,30 @@ class AlgebraTests extends TestSet {
     expect(pMinus.z, equals(-p2.z));
 
     // subtraction
-    var diff = p1-p0;
+    var diff = p1 - p0;
     expect(diff.x, equals(p1.x));
     expect(diff.y, equals(p1.y));
     expect(diff.z, equals(p1.z));
 
-    diff = p0-p1;
+    diff = p0 - p1;
     expect(diff.x, equals(-p1.x));
     expect(diff.y, equals(-p1.y));
     expect(diff.z, equals(-p1.z));
 
-    diff = p1-p2;
-    expect(diff.x, equals(p1.x-p2.x));
-    expect(diff.y, equals(p1.y-p2.y));
-    expect(diff.z, equals(p1.z-p2.z));
+    diff = p1 - p2;
+    expect(diff.x, equals(p1.x - p2.x));
+    expect(diff.y, equals(p1.y - p2.y));
+    expect(diff.z, equals(p1.z - p2.z));
   }
 
   // Tests the point addition operator.
   pointAddition() {
-    var add = p1+v1;
-    expect(add.x, equals(p1.x+v1.x));
-    expect(add.y, equals(p1.y+v1.y));
-    expect(add.z, equals(p1.z+v1.z));
+    var add = p1 + v1;
+    expect(add.x, equals(p1.x + v1.x));
+    expect(add.y, equals(p1.y + v1.y));
+    expect(add.z, equals(p1.z + v1.z));
 
-    add = p0+v2;
+    add = p0 + v2;
     expect(add.x, equals(v2.x));
     expect(add.y, equals(v2.y));
     expect(add.z, equals(v2.z));
@@ -115,9 +114,9 @@ class AlgebraTests extends TestSet {
   pointLerp() {
     var coeff = 0.6;
     var lerped = p1.lerp(p0, coeff);
-    expect(lerped.x, closeTo(p1.x*coeff, EPS));
-    expect(lerped.y, closeTo(p1.y*coeff, EPS));
-    expect(lerped.z, closeTo(p1.z*coeff, EPS));
+    expect(lerped.x, closeTo(p1.x * coeff, EPS));
+    expect(lerped.y, closeTo(p1.y * coeff, EPS));
+    expect(lerped.z, closeTo(p1.z * coeff, EPS));
 
     coeff = 0.41;
     lerped = p1.lerp(p2, coeff);
@@ -131,8 +130,8 @@ class AlgebraTests extends TestSet {
     expectInterval(iZero, -1, 1, false, true);
     expectInterval(iPos, 2, 7, true, false);
     expectInterval(iNeg, -5, -1, false, false);
-    expectInterval(iNull1, 0, 30 , true, true);
-    expectInterval(iNull2, -20, 0 , false, true);
+    expectInterval(iNull1, 0, 30, true, true);
+    expectInterval(iNull2, -20, 0, false, true);
     expectEmptyInterval(iEmpty);
   }
 
@@ -162,7 +161,6 @@ class AlgebraTests extends TestSet {
     expectInterval(result, -4, 4, false, true);
 
     //TODO interval tests * and /
-
   }
 
   void intervalComparison() {

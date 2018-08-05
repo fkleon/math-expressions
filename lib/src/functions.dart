@@ -6,9 +6,8 @@ part of math_expressions;
  * __Note:__ Functions do not offer auto-wrapping of arguments into [Literal]s.
  */
 abstract class MathFunction extends Expression {
-
   /// Compose operator. Creates a [CompositeFunction].
-  MathFunction operator&(MathFunction g) => new CompositeFunction(this, g);
+  MathFunction operator &(MathFunction g) => new CompositeFunction(this, g);
 
   /// Name of this function.
   String name;
@@ -41,7 +40,8 @@ abstract class MathFunction extends Expression {
   /**
    * Returns the parameter with the given name.
    */
-  Variable getParamByName(String name) => args.singleWhere((e) => e.name == name);
+  Variable getParamByName(String name) =>
+      args.singleWhere((e) => e.name == name);
 
   /// The dimension of the domain of definition of this function.
   int get domainDimension => args.length;
@@ -93,8 +93,8 @@ class CompositeFunction extends MathFunction {
    *     composite = new CompositeFunction(f, g); // R -> R
    *                                              // composite(2) = 6
    */
-  CompositeFunction(MathFunction f, MathFunction g):
-    super('comp(${f.name},${g.name})', f.args) {
+  CompositeFunction(MathFunction f, MathFunction g)
+      : super('comp(${f.name},${g.name})', f.args) {
     this.f = f;
     this.g = g;
   }
@@ -111,7 +111,7 @@ class CompositeFunction extends MathFunction {
     Expression gD = g.derive(toVar);
 
     if (!(gD is MathFunction)) {
-    // Build function again..
+      // Build function again..
       gDF = new CustomFunction('d${g.name}', g.args, gD);
     } else {
       gDF = (gD as MathFunction);
@@ -208,11 +208,14 @@ class CustomFunction extends MathFunction {
    * Create a custom function with the given name, argument variables,
    * and expression.
    */
-  CustomFunction(String name, List<Variable> args, Expression this.expression): super(name, args);
+  CustomFunction(String name, List<Variable> args, Expression this.expression)
+      : super(name, args);
 
-  Expression derive(String toVar) => new CustomFunction(name, args, expression.derive(toVar));
+  Expression derive(String toVar) =>
+      new CustomFunction(name, args, expression.derive(toVar));
 
-  Expression simplify() => new CustomFunction(name, args, expression.simplify());
+  Expression simplify() =>
+      new CustomFunction(name, args, expression.simplify());
 
   // TODO: Substitute external variables?
   //       => Shouldn't be necessary as context model is handed over.
@@ -238,7 +241,6 @@ class CustomFunction extends MathFunction {
  * supports arbitrary expressions.
  */
 abstract class DefaultFunction extends MathFunction {
-
   /**
    * Creates a new unary function with given name and argument.
    * If the argument is not a variable, it will be wrapped into an anonymous
@@ -262,7 +264,8 @@ abstract class DefaultFunction extends MathFunction {
    * Must only be used internally for pre-defined functions, as it does not
    * contain any expression. The Evaluator needs to know how to handle this.
    */
-  DefaultFunction._binary(String name, Expression arg1, Expression arg2): super._empty(name) {
+  DefaultFunction._binary(String name, Expression arg1, Expression arg2)
+      : super._empty(name) {
     Variable bindingVariable1 = _wrapIntoVariable(arg1);
     Variable bindingVariable2 = _wrapIntoVariable(arg2);
     this.args = [bindingVariable1, bindingVariable2];
@@ -278,19 +281,18 @@ abstract class DefaultFunction extends MathFunction {
       return e;
     } else {
       // Need to wrap..
-     return new BoundVariable(e);
+      return new BoundVariable(e);
     }
   }
 
-  String toString() => args.length == 1 ? "$name(${args[0]})" :
-                                          "$name(${args[0]},${args[1]})";
+  String toString() =>
+      args.length == 1 ? "$name(${args[0]})" : "$name(${args[0]},${args[1]})";
 }
 
 /**
  * The exponential function.
  */
 class Exponential extends DefaultFunction {
-
   /**
    * Creates a exponential operation on the given expressions.
    *
@@ -303,7 +305,7 @@ class Exponential extends DefaultFunction {
    *     exp = new Exponential(x);
    *     exp = new Exponential(x + four);
    */
-  Exponential(exp): super._unary("exp", exp);
+  Exponential(exp) : super._unary("exp", exp);
 
   /// The exponent of this exponential function.
   Expression get exp => getParam(0);
@@ -320,17 +322,17 @@ class Exponential extends DefaultFunction {
   Expression simplify() {
     Expression expSimpl = exp.simplify();
 
-    if (_isNumber(expSimpl,0)) {
+    if (_isNumber(expSimpl, 0)) {
       return new Number(1); // e^0 = 1
     }
 
-    if (_isNumber(expSimpl,1)) {
+    if (_isNumber(expSimpl, 1)) {
       return new Number(Math.E); // e^1 = e
     }
 
     if (expSimpl is Times && expSimpl.second is Ln) {
-     Ln ln = expSimpl.second;
-     return new Power(ln.arg, expSimpl.first); // e^(x*ln(y)) = y^x
+      Ln ln = expSimpl.second;
+      return new Power(ln.arg, expSimpl.first); // e^(x*ln(y)) = y^x
     }
 
     return new Exponential(expSimpl);
@@ -358,7 +360,6 @@ class Exponential extends DefaultFunction {
  * The logarithm function.
  */
 class Log extends DefaultFunction {
-
   /**
    * Creates a logarithm function with given base and argument.
    *
@@ -369,13 +370,13 @@ class Log extends DefaultFunction {
    *
    * To create a naturally based logarithm, see [Ln].
    */
-  Log(Expression base, Expression arg): super._binary("log", base, arg);
+  Log(Expression base, Expression arg) : super._binary("log", base, arg);
 
   /**
    * Creates a natural logarithm.
    * Must only be used internally by the Ln class.
    */
-  Log._ln(arg): super._binary("ln", new Number(Math.E), arg);
+  Log._ln(arg) : super._binary("ln", new Number(Math.E), arg);
 
   /// The base of this logarithm.
   Expression get base => getParam(0);
@@ -422,7 +423,6 @@ class Log extends DefaultFunction {
  * The natural logarithm (log based e).
  */
 class Ln extends Log {
-
   /**
    * Creates a natural logarithm function with given argument.
    *
@@ -432,7 +432,7 @@ class Ln extends Log {
    *
    * To create a logarithm with arbitrary base, see [Log].
    */
-  Ln(Expression arg): super._ln(arg);
+  Ln(Expression arg) : super._ln(arg);
 
   Expression derive(String toVar) => arg.derive(toVar) / arg;
 
@@ -475,7 +475,6 @@ class Ln extends Log {
  * TODO: Allow n to be an expression?
  */
 class Root extends DefaultFunction {
-
   /// N-th root.
   int n;
 
@@ -485,12 +484,12 @@ class Root extends DefaultFunction {
    * For example, to create the 5th root of x:
    *     root = new Root(5, new Variable('x'));
    */
-  Root(int this.n, arg): super._unary('root', arg);
+  Root(int this.n, arg) : super._unary('root', arg);
 
   /**
    * Creates the n-th root of arg where n is a [Number] literal.
    */
-  Root.fromExpr(Number n, arg): super._unary('root', arg) {
+  Root.fromExpr(Number n, arg) : super._unary('root', arg) {
     this.n = n.getConstantValue().toInt();
   }
 
@@ -503,7 +502,9 @@ class Root extends DefaultFunction {
    * __Note__:
    * For better simplification and display, use the [Sqrt] class.
    */
-  Root.sqrt(arg): n = 2, super._unary('sqrt', arg);
+  Root.sqrt(arg)
+      : n = 2,
+        super._unary('sqrt', arg);
 
   Expression get arg => getParam(0);
 
@@ -529,21 +530,20 @@ class Root extends DefaultFunction {
    * This method is used to determine the derivation of a root
    * expression.
    */
-  Expression asPower() => new Power(arg, new Divide(1,n));
+  Expression asPower() => new Power(arg, new Divide(1, n));
 }
 
 /**
  * The square root function.
  */
 class Sqrt extends Root {
-
   /**
    * Creates the square root of arg.
    *
    * For example, to create the square root of x:
    *     sqrt = new Sqrt(new Variable('x'));
    */
-  Sqrt(arg): super.sqrt(arg);
+  Sqrt(arg) : super.sqrt(arg);
 
   /**
    * Possible simplifications:
@@ -605,11 +605,10 @@ class Sqrt extends Root {
  * The sine function.
  */
 class Sin extends DefaultFunction {
-
   /**
    * Creates a new sine function with given argument expression.
    */
-  Sin(arg): super._unary('sin', arg);
+  Sin(arg) : super._unary('sin', arg);
 
   /// The argument of this sine function.
   Expression get arg => getParam(0);
@@ -655,11 +654,10 @@ class Sin extends DefaultFunction {
  * The cosine function.
  */
 class Cos extends DefaultFunction {
-
   /**
    * Creates a new cosine function with given argument expression.
    */
-  Cos(arg): super._unary('cos', arg);
+  Cos(arg) : super._unary('cos', arg);
 
   /// The argument of this cosine function.
   Expression get arg => getParam(0);
@@ -705,11 +703,10 @@ class Cos extends DefaultFunction {
  * The tangens function.
  */
 class Tan extends DefaultFunction {
-
   /**
    * Creates a new tangens function with given argument expression.
    */
-  Tan(arg): super._unary('tan', arg);
+  Tan(arg) : super._unary('tan', arg);
 
   /// The argument of this tangens function.
   Expression get arg => getParam(0);
@@ -757,11 +754,10 @@ class Tan extends DefaultFunction {
  * The absolute value function.
  */
 class Abs extends DefaultFunction {
-
   /**
    * Creates a new absolute value function with given argument expression.
    */
-  Abs(arg): super._unary('abs', arg);
+  Abs(arg) : super._unary('abs', arg);
 
   /// The argument of this absolute value function.
   Expression get arg => getParam(0);
@@ -796,11 +792,10 @@ class Abs extends DefaultFunction {
  * The ceil function.
  */
 class Ceil extends DefaultFunction {
-
   /**
    * Creates a new ceil function with given argument expression.
    */
-  Ceil(arg): super._unary('ceil', arg);
+  Ceil(arg) : super._unary('ceil', arg);
 
   /// The argument of this ceil function.
   Expression get arg => getParam(0);
@@ -817,7 +812,7 @@ class Ceil extends DefaultFunction {
    */
   Expression simplify() {
     final Expression sarg = arg.simplify();
-    return sarg is Floor || sarg is Ceil? sarg : new Ceil(sarg);
+    return sarg is Floor || sarg is Ceil ? sarg : new Ceil(sarg);
   }
 
   evaluate(EvaluationType type, ContextModel context) {
@@ -839,11 +834,10 @@ class Ceil extends DefaultFunction {
  * The floor function.
  */
 class Floor extends DefaultFunction {
-
   /**
    * Creates a new floor function with given argument expression.
    */
-  Floor(arg): super._unary('floor', arg);
+  Floor(arg) : super._unary('floor', arg);
 
   /// The argument of this floor function.
   Expression get arg => getParam(0);
@@ -860,7 +854,7 @@ class Floor extends DefaultFunction {
    */
   Expression simplify() {
     final Expression sarg = arg.simplify();
-    return sarg is Floor || sarg is Ceil? sarg : new Floor(sarg);
+    return sarg is Floor || sarg is Ceil ? sarg : new Floor(sarg);
   }
 
   evaluate(EvaluationType type, ContextModel context) {
@@ -882,11 +876,10 @@ class Floor extends DefaultFunction {
  * The sign function.
  */
 class Sgn extends DefaultFunction {
-
   /**
    * Creates a new sign function with given argument expression.
    */
-  Sgn(arg): super._unary('sgn', arg);
+  Sgn(arg) : super._unary('sgn', arg);
 
   /// The argument of this sign function.
   Expression get arg => getParam(0);
@@ -899,14 +892,14 @@ class Sgn extends DefaultFunction {
   }
 
   evaluate(EvaluationType type, ContextModel context) {
-      var argEval = arg.evaluate(type, context);
+    var argEval = arg.evaluate(type, context);
 
-      if (type == EvaluationType.REAL) {
-        if(argEval < 0) return -1.0;
-        if(argEval == 0) return 0.0;
-        if(argEval > 0) return 1.0;
-      }
-
-      throw new UnimplementedError('Can not evaluate sgn on ${type} yet.');
+    if (type == EvaluationType.REAL) {
+      if (argEval < 0) return -1.0;
+      if (argEval == 0) return 0.0;
+      if (argEval > 0) return 1.0;
     }
+
+    throw new UnimplementedError('Can not evaluate sgn on ${type} yet.');
+  }
 }
