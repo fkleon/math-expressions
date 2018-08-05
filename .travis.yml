@@ -1,6 +1,11 @@
 language: dart
+
 dart:
 - stable
+
+dart_task:
+- dartanalyzer: --fatal-warnings .
+- test
 
 cache:
   directories:
