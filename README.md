@@ -10,8 +10,6 @@ perfect, the performance is not optimized and some features are still
 unimplemented. Most REAL and basic INTERVAL and VECTOR evaluations should work
 though. Suggestions and pull requests are always welcome!
 
-[![Build Status](https://drone.io/github.com/fkleon/math-expressions/status.png)][droneBadge]
-
 ## Features ##
 
 * Parsing, simplification and differentiation of mathematical expressions.
@@ -95,7 +93,12 @@ This example shows how to simplify and differentiate
 ```
 
 ### 3. More Examples
-For a simple CLI evaluator, see [cli_evaluator.dart](example/cli_evaluator.dart).  
+
+For a simple CLI evaluator, see [cli_evaluator.dart](example/cli_evaluator.dart).
+To run the sample CLI evaluator:
+
+    dart example/cli_evaluator.dart
+
 For more example code, see [example.dart](example/example.dart).
 
 

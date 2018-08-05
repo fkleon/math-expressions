@@ -503,7 +503,7 @@ class Root extends DefaultFunction {
    * __Note__:
    * For better simplification and display, use the [Sqrt] class.
    */
-  Root.sqrt(arg): super._unary('sqrt', arg), n = 2;
+  Root.sqrt(arg): n = 2, super._unary('sqrt', arg);
 
   Expression get arg => getParam(0);
 

@@ -67,8 +67,8 @@ class EvaluationType {
   /**
    * Two types are equal, if their internal int matches.
    */
-  operator==(EvaluationType et) => this.type == et.type;
-  
+  operator==(dynamic et) => (et is EvaluationType) && (this.type == et.type);
+
   int get hashCode => type.hashCode;
 
   String toString() => 'Type[$_text]';

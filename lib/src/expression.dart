@@ -707,7 +707,7 @@ abstract class Literal extends Expression {
    * Throws StateError if literal is not constant, check before usage with
    * `isConstant()`.
    */
-  num getConstantValue() {
+  dynamic getConstantValue() {
     throw new StateError('Literal ${this} is not constant.');
   }
 
@@ -850,8 +850,10 @@ class Vector extends Literal {
 
   getConstantValue() {
     // TODO unit test
-    List<Expression> constVals = [];
-    elements.forEach((e) => constVals.add(e.getConstantValue()));
+    List<Expression> constVals = elements.map(
+      (e) => (e is Literal) ? e.getConstantValue() :
+      throw new UnsupportedError('Vector $this is not constant.'));
+
     return new Vector(constVals);
   }
 }
@@ -958,5 +960,5 @@ class IntervalLiteral extends Literal {
   bool isConstant() => min is Literal && (min as Literal).isConstant()
                     && max is Literal && (max as Literal).isConstant();
 
-  getConstantValue() => new Interval(min.getConstantValue(), max.getConstantValue());
+  getConstantValue() => new Interval((min as Literal).getConstantValue(), (max as Literal).getConstantValue());
 }

@@ -1018,7 +1018,7 @@ class ExpressionTests extends TestSet {
     vars = [x];
     Expression two = new Number(2);
     // TODO This doesn't work yet.
-    cf = new CustomFunction("length", vars, new Sqrt(x[1]^two+x[2]^two));
+    //cf = new CustomFunction("length", vars, new Sqrt(x[1]^two+x[2]^two));
     cm.bindVariable(x, new Vector([new Number(2), new Number(2)]));
 
     expect(cf.evaluate(vector, cm), closeTo(2.82842, 0.00001));
@@ -1028,7 +1028,7 @@ class ExpressionTests extends TestSet {
   void compFunCreation() {
     Variable x, y, z;
     CustomFunction f, g;
-    List<Variable> vars;
+
     x = new Variable("x");
     y = new Variable("y");
     z = new Variable("z");
@@ -1114,7 +1114,7 @@ class ExpressionTests extends TestSet {
       if (name == null) {
         return true;
       } else {
-        return (expr as Variable).name == name;
+        return expr.name == name;
       }
     }
     return false;
@@ -1146,7 +1146,7 @@ class ExpressionMatcher extends Matcher {
   bool matches(item, Map matchState) {
     if (item is Expression) {
       // Simplify and tokenize.
-      Expression expr = _simplify ? _simplifyExp((item as Expression)) : (item as Expression);
+      Expression expr = _simplify ? _simplifyExp(item) : item;
       String itemStr = expr.toString();
       List<Token> itemRPN = _lexer.tokenizeToRPN(itemStr);
 

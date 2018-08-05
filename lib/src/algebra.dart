@@ -32,7 +32,7 @@ class Point3 extends Vector3 {
   /**
    * Returns the [Vector3] pointing from the given point to this point.
    */
-  Vector3 operator-(Point3 p2) => new Vector3(this.x - p2.x, this.y - p2.y, this.z - p2.z);
+  Vector3 operator-(Vector3 p2) => new Vector3(this.x - p2.x, this.y - p2.y, this.z - p2.z);
 
   /**
    * Negates the point's components.
@@ -103,7 +103,7 @@ class Point3 extends Vector3 {
  * * No handling of unbounded intervals in operators.
  * * No proper rounding.
  */
-class Interval implements Comparable {
+class Interval implements Comparable<Interval> {
 
   /// Interval borders.
   num min, max;
@@ -240,7 +240,7 @@ class Interval implements Comparable {
    *
    *     [a, b] == [c, d], if a == c && b == d
    */
-  operator==(Interval i) => this.min == i.min && this.max == i.max;
+  operator==(dynamic i) => (i is Interval) && this.min == i.min && this.max == i.max;
 
   /**
    * Less than operator on intervals.
@@ -344,15 +344,11 @@ class Interval implements Comparable {
     return result;
   }
 
-  int compareTo(Comparable other) {
+  int compareTo(Interval other) {
     // For now, only allow compares to other intervals.
-    if (other is Interval) {
-      // Equality, less and greater tests.
-      if (this == other) return 0;
-      if (this < other) return -1;
-      if (this > other) return 1;
-    } else {
-      throw new ArgumentError('$other is not comparable to Interval.');
-    }
+    // Equality, less and greater tests.
+    if (this < other) return -1;
+    if (this > other) return 1;
+    return 0;
   }
 }

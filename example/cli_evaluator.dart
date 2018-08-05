@@ -18,8 +18,8 @@ void main() {
   print('?<var> (get variable binding) \n');
 
   Stream cmdLine = stdin.transform(new Utf8Decoder());
-  
-  StreamSubscription cmdSubscription = cmdLine.listen(
+
+  cmdLine.listen(
       (line) => wrapParseInput(line.trim()),
       onError: (err) => print("error: $err"));
 }

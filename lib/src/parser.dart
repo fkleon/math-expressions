@@ -186,7 +186,6 @@ class Lexer {
     String clearedString = inputString.replaceAll(" ", "").trim();
 
     RuneIterator iter = clearedString.runes.iterator;
-    int siInt;
 
     while (iter.moveNext()) {
       String si = iter.currentAsString;
@@ -216,7 +215,7 @@ class Lexer {
         // Check if the current string is a Number. If it's the case add the string to the intBuffer.
         StringBuffer sb = new StringBuffer(intBuffer);
         try {
-          siInt = int.parse(si);
+          int.parse(si);
           // The current string is a number and it is added to the intBuffer.
           sb.write(si);
           intBuffer = sb.toString();
@@ -423,7 +422,8 @@ class Token {
   final TokenType type;
 
   /// Tokens equal, if they have equal text and types.
-  bool operator==(Token token) => (token.text == this.text)
+  bool operator==(dynamic token) => (token is Token)
+      && (token.text == this.text)
       && (token.type == this.type);
 
   int get hashCode {
