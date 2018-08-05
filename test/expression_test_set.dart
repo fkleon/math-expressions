@@ -1018,7 +1018,7 @@ class ExpressionTests extends TestSet {
     vars = [x];
     Expression two = new Number(2);
     // TODO This doesn't work yet.
-    cf = new CustomFunction("length", vars, new Sqrt(x[1]^two+x[2]^two));
+    //cf = new CustomFunction("length", vars, new Sqrt(x[1]^two+x[2]^two));
     cm.bindVariable(x, new Vector([new Number(2), new Number(2)]));
 
     expect(cf.evaluate(vector, cm), closeTo(2.82842, 0.00001));
