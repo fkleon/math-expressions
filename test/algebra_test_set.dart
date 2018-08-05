@@ -15,6 +15,7 @@ class AlgebraTests extends TestSet {
     'Point LERP': pointLerp,
     'Interval Creation': intervalCreation,
     'Interval Arithmetic': intervalArithmetic,
+    'Interval Comparison': intervalComparison,
   };
 
   // Initialises the test points and vectors
@@ -162,5 +163,19 @@ class AlgebraTests extends TestSet {
 
     //TODO interval tests * and /
 
+  }
+
+  void intervalComparison() {
+    // equality
+    expect(iPos, equals(iPos));
+    expect(iPos, isNot(equals(iNeg)));
+
+    // equality with non-Interval
+    expect(iPos, isNot(equals(1)));
+    expect(iPos, isNot(equals("1")));
+
+    // comparison
+    expect(iPos < iNeg, isFalse);
+    expect(iNeg < iPos, isTrue);
   }
 }
