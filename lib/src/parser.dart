@@ -423,7 +423,8 @@ class Token {
   final TokenType type;
 
   /// Tokens equal, if they have equal text and types.
-  bool operator==(Token token) => (token.text == this.text)
+  bool operator==(dynamic token) => (token is Token)
+      && (token.text == this.text)
       && (token.type == this.type);
 
   int get hashCode {
