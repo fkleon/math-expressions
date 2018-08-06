@@ -1,3 +1,9 @@
+### 0.4.0 - 2018-08
+
+- Enable strong mode
+- Analyzer and linter fixes
+- Drop support for Dart SDK versions below 1.21.0
+
 ### 0.3.0 - 2016-07-09
 
 - Rename `Point3D` to `Point3`
