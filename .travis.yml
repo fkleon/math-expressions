@@ -4,8 +4,9 @@ dart:
 - stable
 
 dart_task:
-- dartanalyzer: --fatal-warnings .
-- test
+  - dartanalyzer: --fatal-warnings lib/
+  - dartfmt
+  - test
 
 cache:
   directories:
