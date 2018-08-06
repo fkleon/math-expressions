@@ -70,13 +70,14 @@ abstract class Expression {
   /**
    * Evaluates this expression according to given type and context.
    */
-  evaluate(EvaluationType type, ContextModel context);
+  dynamic evaluate(EvaluationType type, ContextModel context);
 
   /**
    * Returns a string version of this expression.
    * Subclasses should override this method. The output should be kept
    * compatible with the [Parser].
    */
+  @override
   String toString();
 
   /**
@@ -90,7 +91,7 @@ abstract class Expression {
    * __Note__:
    * Does not handle negative numbers, will treat them as positives!
    */
-  Expression _toExpression(var arg) {
+  Expression _toExpression(dynamic arg) {
     if (arg is Expression) {
       return arg;
     }
@@ -104,7 +105,7 @@ abstract class Expression {
       return new Variable(arg);
     }
 
-    throw new ArgumentError('${arg} is not a valid expression!');
+    throw new ArgumentError('$arg is not a valid expression!');
   }
 
   /**
@@ -128,7 +129,7 @@ abstract class BinaryOperator extends Expression {
   Expression first, second;
 
   /**
-   * Creates a [BinaryOperation] from two given arguments.
+   * Creates a [BinaryOperator] from two given arguments.
    *
    * If an argument is not an expression, it will be wrapped in an appropriate
    * literal.
@@ -136,13 +137,13 @@ abstract class BinaryOperator extends Expression {
    *  * A (positive) number will be encapsulated in a [Number] Literal,
    *  * A string will be encapsulated in a [Variable] Literal.
    */
-  BinaryOperator(first, second) {
+  BinaryOperator(dynamic first, dynamic second) {
     this.first = _toExpression(first);
     this.second = _toExpression(second);
   }
 
   /**
-   * Creates a new [BinaryOperation] from two given expressions.
+   * Creates a new [BinaryOperator] from two given expressions.
    */
   BinaryOperator.raw(this.first, this.second);
 }
@@ -154,7 +155,7 @@ abstract class UnaryOperator extends Expression {
   Expression exp;
 
   /**
-   * Creates a [UnaryOperation] from the given argument.
+   * Creates a [UnaryOperator] from the given argument.
    *
    * If the argument is not an expression, it will be wrapped in an appropriate
    * literal.
@@ -162,12 +163,12 @@ abstract class UnaryOperator extends Expression {
    * * A (positive) number will be encapsulated in a [Number] Literal,
    * * A string will be encapsulated in a [Variable] Literal.
    */
-  UnaryOperator(exp) {
+  UnaryOperator(dynamic exp) {
     this.exp = _toExpression(exp);
   }
 
   /**
-   * Creates a [UnaryOperation] from the given expression.
+   * Creates a [UnaryOperator] from the given expression.
    */
   UnaryOperator.raw(this.exp);
 }
@@ -186,8 +187,9 @@ class UnaryMinus extends UnaryOperator {
    * or just:
    *     minus_one = new UnaryMinus(1);
    */
-  UnaryMinus(exp) : super(exp);
+  UnaryMinus(dynamic exp) : super(exp);
 
+  @override
   Expression derive(String toVar) => new UnaryMinus(exp.derive(toVar));
 
   /**
@@ -196,8 +198,9 @@ class UnaryMinus extends UnaryOperator {
    * 1. -(-a) = a
    * 2. -0 = 0
    */
+  @override
   Expression simplify() {
-    Expression simplifiedOp = exp.simplify();
+    final Expression simplifiedOp = exp.simplify();
 
     // double minus
     if (simplifiedOp is UnaryMinus) {
@@ -213,10 +216,11 @@ class UnaryMinus extends UnaryOperator {
     return new UnaryMinus(simplifiedOp);
   }
 
-  evaluate(EvaluationType type, ContextModel context) {
-    return -(exp.evaluate(type, context));
-  }
+  @override
+  dynamic evaluate(EvaluationType type, ContextModel context) =>
+      -(exp.evaluate(type, context));
 
+  @override
   String toString() => '(-$exp)';
 }
 
@@ -233,8 +237,9 @@ class Plus extends BinaryOperator {
    * or:
    *     addition = new Variable('x') + new Number(4);
    */
-  Plus(first, second) : super(first, second);
+  Plus(dynamic first, dynamic second) : super(first, second);
 
+  @override
   Expression derive(String toVar) =>
       new Plus(first.derive(toVar), second.derive(toVar));
 
@@ -245,9 +250,10 @@ class Plus extends BinaryOperator {
    * 2. 0 + a = a
    * 3. a + -(b) = a - b
    */
+  @override
   Expression simplify() {
-    Expression firstOp = first.simplify();
-    Expression secondOp = second.simplify();
+    final Expression firstOp = first.simplify();
+    final Expression secondOp = second.simplify();
 
     if (_isNumber(firstOp, 0)) {
       return secondOp;
@@ -266,10 +272,11 @@ class Plus extends BinaryOperator {
     //TODO -a - b = - (a+b)
   }
 
-  evaluate(EvaluationType type, ContextModel context) {
-    return first.evaluate(type, context) + second.evaluate(type, context);
-  }
+  @override
+  dynamic evaluate(EvaluationType type, ContextModel context) =>
+      first.evaluate(type, context) + second.evaluate(type, context);
 
+  @override
   String toString() => '($first + $second)';
 }
 
@@ -286,8 +293,9 @@ class Minus extends BinaryOperator {
    * or:
    *     subtraction = new Number(5) - new Variable('x');
    */
-  Minus(first, second) : super(first, second);
+  Minus(dynamic first, dynamic second) : super(first, second);
 
+  @override
   Expression derive(String toVar) =>
       new Minus(first.derive(toVar), second.derive(toVar));
 
@@ -298,9 +306,10 @@ class Minus extends BinaryOperator {
    * 2. 0 - a = - a
    * 3. a - -(b) = a + b
    */
+  @override
   Expression simplify() {
-    Expression firstOp = first.simplify();
-    Expression secondOp = second.simplify();
+    final Expression firstOp = first.simplify();
+    final Expression secondOp = second.simplify();
 
     if (_isNumber(secondOp, 0)) {
       return firstOp;
@@ -319,10 +328,11 @@ class Minus extends BinaryOperator {
     //TODO -a - b = - (a + b)
   }
 
-  evaluate(EvaluationType type, ContextModel context) {
-    return first.evaluate(type, context) - second.evaluate(type, context);
-  }
+  @override
+  dynamic evaluate(EvaluationType type, ContextModel context) =>
+      first.evaluate(type, context) - second.evaluate(type, context);
 
+  @override
   String toString() => '($first - $second)';
 }
 
@@ -339,8 +349,9 @@ class Times extends BinaryOperator {
    * or:
    *     product = new Number(7) * new Variable('x');
    */
-  Times(first, second) : super(first, second);
+  Times(dynamic first, dynamic second) : super(first, second);
 
+  @override
   Expression derive(String toVar) => new Plus(
       new Times(first, second.derive(toVar)),
       new Times(first.derive(toVar), second));
@@ -356,6 +367,7 @@ class Times extends BinaryOperator {
    * 6. a * 1 = a
    * 7. 1 * a = a
    */
+  @override
   Expression simplify() {
     Expression firstOp = first.simplify();
     Expression secondOp = second.simplify();
@@ -398,9 +410,10 @@ class Times extends BinaryOperator {
     return negative ? new UnaryMinus(tempResult) : tempResult;
   }
 
-  evaluate(EvaluationType type, ContextModel context) {
-    var firstEval = first.evaluate(type, context);
-    var secondEval = second.evaluate(type, context);
+  @override
+  dynamic evaluate(EvaluationType type, ContextModel context) {
+    final dynamic firstEval = first.evaluate(type, context);
+    final dynamic secondEval = second.evaluate(type, context);
 
     if (type == EvaluationType.VECTOR) {
       if (secondEval is double) {
@@ -414,6 +427,7 @@ class Times extends BinaryOperator {
     return firstEval * secondEval;
   }
 
+  @override
   String toString() => '($first * $second)';
 }
 
@@ -430,8 +444,9 @@ class Divide extends BinaryOperator {
    * or:
    *     div = new Variable('x') / (new Variable('y') + new Number(2));
    */
-  Divide(dividend, divisor) : super(dividend, divisor);
+  Divide(dynamic dividend, dynamic divisor) : super(dividend, divisor);
 
+  @override
   Expression derive(String toVar) =>
       ((first.derive(toVar) * second) - (first * second.derive(toVar))) /
       (second * second);
@@ -445,6 +460,7 @@ class Divide extends BinaryOperator {
    * 5. 0 / a = 0
    * 6. a / 1 = a
    */
+  @override
   Expression simplify() {
     Expression firstOp = first.simplify();
     Expression secondOp = second.simplify();
@@ -480,9 +496,10 @@ class Divide extends BinaryOperator {
    * This method throws an [IntegerDivisionByZeroException],
    * if a divide by zero is encountered.
    */
-  evaluate(EvaluationType type, ContextModel context) {
-    var firstEval = first.evaluate(type, context);
-    var secondEval = second.evaluate(type, context);
+  @override
+  dynamic evaluate(EvaluationType type, ContextModel context) {
+    final dynamic firstEval = first.evaluate(type, context);
+    final dynamic secondEval = second.evaluate(type, context);
 
     if (type == EvaluationType.VECTOR) {
       if (secondEval is double) {
@@ -496,6 +513,7 @@ class Divide extends BinaryOperator {
     return firstEval / secondEval;
   }
 
+  @override
   String toString() => '($first / $second)';
 }
 
@@ -514,8 +532,9 @@ class Modulo extends BinaryOperator {
    * or:
    *     r = new Variable('x') % (new Variable('y') + new Number(2));
    */
-  Modulo(dividend, divisor) : super(dividend, divisor);
+  Modulo(dynamic dividend, dynamic divisor) : super(dividend, divisor);
 
+  @override
   Expression derive(String toVar) {
     final Abs a2 = new Abs(second);
     return first.derive(toVar) - new Floor(first / a2) * a2.derive(toVar);
@@ -527,8 +546,9 @@ class Modulo extends BinaryOperator {
    * 1. a % -b = a % b
    * 2. 0 % a = 0
    */
+  @override
   Expression simplify() {
-    Expression firstOp = first.simplify();
+    final Expression firstOp = first.simplify();
     Expression secondOp = second.simplify();
 
     if (_isNumber(firstOp, 0)) {
@@ -542,18 +562,20 @@ class Modulo extends BinaryOperator {
     return new Modulo(firstOp, secondOp);
   }
 
-  evaluate(EvaluationType type, ContextModel context) {
-    var firstEval = first.evaluate(type, context);
-    var secondEval = second.evaluate(type, context);
+  @override
+  dynamic evaluate(EvaluationType type, ContextModel context) {
+    final dynamic firstEval = first.evaluate(type, context);
+    final dynamic secondEval = second.evaluate(type, context);
 
     if (type == EvaluationType.REAL) {
       return firstEval % secondEval;
     }
 
     throw new UnimplementedError(
-        'Evaluate Modulo with type ${type} not supported yet.');
+        'Evaluate Modulo with type $type not supported yet.');
   }
 
+  @override
   String toString() => '($first % $second)';
 }
 
@@ -570,8 +592,9 @@ class Power extends BinaryOperator {
    * or:
    *     pow = new Variable('x') ^ new Number(3.0);
    */
-  Power(x, exp) : super(x, exp);
+  Power(dynamic x, dynamic exp) : super(x, exp);
 
+  @override
   Expression derive(String toVar) => this.asE().derive(toVar);
 
   /**
@@ -582,9 +605,10 @@ class Power extends BinaryOperator {
    * 3. x^0 = 1
    * 4. x^1 = x
    */
+  @override
   Expression simplify() {
-    Expression baseOp = first.simplify();
-    Expression exponentOp = second.simplify();
+    final Expression baseOp = first.simplify();
+    final Expression exponentOp = second.simplify();
 
     //TODO unboxing
     /*
@@ -620,7 +644,8 @@ class Power extends BinaryOperator {
     return new Power(baseOp, exponentOp);
   }
 
-  evaluate(EvaluationType type, ContextModel context) {
+  @override
+  dynamic evaluate(EvaluationType type, ContextModel context) {
     if (type == EvaluationType.REAL) {
       return Math.pow(
           first.evaluate(type, context), second.evaluate(type, context));
@@ -628,10 +653,10 @@ class Power extends BinaryOperator {
 
     if (type == EvaluationType.INTERVAL) {
       // Expect base to be interval.
-      Interval interval = first.evaluate(type, context);
+      final Interval interval = first.evaluate(type, context);
 
       // Expect exponent to be a natural number.
-      var exponent = second.evaluate(EvaluationType.REAL, context);
+      dynamic exponent = second.evaluate(EvaluationType.REAL, context);
 
       if (exponent is double) {
         //print('Warning, expected natural exponent but is real. Interpreting as int: ${this}');
@@ -671,9 +696,10 @@ class Power extends BinaryOperator {
     }
 
     throw new UnimplementedError(
-        'Evaluate Power with type ${type} not supported yet.');
+        'Evaluate Power with type $type not supported yet.');
   }
 
+  @override
   String toString() => '($first^$second)';
 
   /**
@@ -689,13 +715,13 @@ class Power extends BinaryOperator {
  * A literal can be a number, a constant or a variable.
  */
 abstract class Literal extends Expression {
-  var value;
+  dynamic value;
 
   /**
    * Creates a literal. The optional paramter `value` can be used to specify
    * its value.
    */
-  Literal([var this.value]);
+  Literal([this.value]);
 
   /**
    * Returns true, if this literal is a constant.
@@ -711,6 +737,7 @@ abstract class Literal extends Expression {
     throw new StateError('Literal ${this} is not constant.');
   }
 
+  @override
   String toString() => value.toString();
 }
 
@@ -724,18 +751,21 @@ class Number extends Literal {
    */
   Number(num value) : super(value.toDouble());
 
+  @override
   bool isConstant() => true;
 
+  @override
   double getConstantValue() => value;
 
-  evaluate(EvaluationType type, ContextModel context) {
+  @override
+  dynamic evaluate(EvaluationType type, ContextModel context) {
     if (type == EvaluationType.REAL) {
       return value;
     }
 
     if (type == EvaluationType.INTERVAL) {
       // interpret number as interval
-      IntervalLiteral intLit = new IntervalLiteral.fromSingle(this);
+      final IntervalLiteral intLit = new IntervalLiteral.fromSingle(this);
       return intLit.evaluate(type, context);
     }
 
@@ -744,10 +774,10 @@ class Number extends Literal {
       return value;
     }
 
-    throw new UnsupportedError(
-        'Number $this can not be interpreted as: ${type}');
+    throw new UnsupportedError('Number $this can not be interpreted as: $type');
   }
 
+  @override
   Expression derive(String toVar) => new Number(0.0);
 }
 
@@ -755,9 +785,6 @@ class Number extends Literal {
  * A vector of arbitrary size.
  */
 class Vector extends Literal {
-  /// Convenience operator to access vector elements.
-  Expression operator [](int i) => elements[i];
-
   /**
    * Creates a vector with the given element expressions.
    *
@@ -767,14 +794,18 @@ class Vector extends Literal {
    */
   Vector(List<Expression> elements) : super(elements);
 
+  /// Convenience operator to access vector elements.
+  Expression operator [](int i) => elements[i];
+
   /// The elements of this vector.
   List<Expression> get elements => value;
 
   /// The length of this vector.
   int get length => elements.length;
 
+  @override
   Expression derive(String toVar) {
-    List<Expression> elementDerivatives = new List<Expression>(length);
+    final List<Expression> elementDerivatives = new List<Expression>(length);
 
     // Derive each element.
     for (int i = 0; i < length; i++) {
@@ -787,8 +818,9 @@ class Vector extends Literal {
   /**
    * Simplifies all elements of this vector.
    */
+  @override
   Expression simplify() {
-    List<Expression> simplifiedElements = new List<Expression>(length);
+    final List<Expression> simplifiedElements = new List<Expression>(length);
 
     // Simplify each element.
     for (int i = 0; i < length; i++) {
@@ -798,9 +830,10 @@ class Vector extends Literal {
     return new Vector(simplifiedElements);
   }
 
-  evaluate(EvaluationType type, ContextModel context) {
+  @override
+  dynamic evaluate(EvaluationType type, ContextModel context) {
     if (type == EvaluationType.VECTOR) {
-      EvaluationType elementType = EvaluationType.REAL;
+      final EvaluationType elementType = EvaluationType.REAL;
 
       if (length == 1) {
         // Does not seem to be a vector, try to return REAL.
@@ -834,7 +867,7 @@ class Vector extends Literal {
 
       if (length > 4) {
         throw new UnimplementedError(
-            "Vector of arbitrary length (> 4) are not supported yet.");
+            'Vector of arbitrary length (> 4) are not supported yet.');
       }
     }
 
@@ -847,12 +880,14 @@ class Vector extends Literal {
         'Vector $this with length $length can not be interpreted as: $type');
   }
 
+  @override
   bool isConstant() => elements.fold(
       true, (prev, elem) => prev && (elem is Literal && elem.isConstant()));
 
-  getConstantValue() {
+  @override
+  Vector getConstantValue() {
     // TODO unit test
-    List<Expression> constVals = elements.map((e) => (e is Literal)
+    final List<Expression> constVals = elements.map((e) => (e is Literal)
         ? e.getConstantValue()
         : throw new UnsupportedError('Vector $this is not constant.'));
 
@@ -869,14 +904,17 @@ class Variable extends Literal {
   /**
    * Creates a variable literal with given name.
    */
-  Variable(String this.name);
+  Variable(this.name);
 
+  @override
   Expression derive(String toVar) =>
       name == toVar ? new Number(1.0) : new Number(0.0);
 
+  @override
   String toString() => '$name';
 
-  evaluate(type, context) =>
+  @override
+  dynamic evaluate(EvaluationType type, ContextModel context) =>
       context.getExpression(name).evaluate(type, context);
 }
 
@@ -896,21 +934,27 @@ class BoundVariable extends Variable {
   }
 
   // TODO Make this work on arbitrary expressions, not just literals?
+  @override
   bool isConstant() => value is Literal ? value.isConstant() : false;
 
-  getConstantValue() => value.value;
+  @override
+  dynamic getConstantValue() => value.value;
 
   // Anonymous, bound variable, derive content and unbox.
+  @override
   Expression derive(String toVar) => value.derive(toVar); //TODO Needs boxing?
 
   // TODO Might need boxing in another variable?
   //      How to reassign anonymous variables to functions?
+  @override
   Expression simplify() => value.simplify();
 
-  evaluate(EvaluationType type, ContextModel context) =>
+  @override
+  dynamic evaluate(EvaluationType type, ContextModel context) =>
       value.evaluate(type, context);
 
   /// Put bound variable in curly brackets to make them distinguishable.
+  @override
   String toString() => '{$value}';
 }
 
@@ -923,7 +967,7 @@ class IntervalLiteral extends Literal {
   /**
    * Creates a new interval with given borders.
    */
-  IntervalLiteral(Expression this.min, Expression this.max);
+  IntervalLiteral(this.min, this.max);
 
   /**
    * Creates a new interval with identical borders.
@@ -932,20 +976,21 @@ class IntervalLiteral extends Literal {
       : this.min = exp,
         this.max = exp;
 
+  @override
   Expression derive(String toVar) {
     // Can not derive this yet..
     // TODO Implement interval differentiation.
     throw new UnimplementedError('Interval differentiation not supported yet.');
   }
 
-  Expression simplify() {
-    return new IntervalLiteral(min.simplify(), max.simplify());
-  }
+  @override
+  Expression simplify() => new IntervalLiteral(min.simplify(), max.simplify());
 
-  evaluate(EvaluationType type, ContextModel context) {
+  @override
+  dynamic evaluate(EvaluationType type, ContextModel context) {
     // Interval borders should evaluate to real numbers..
-    num minEval = min.evaluate(EvaluationType.REAL, context);
-    num maxEval = max.evaluate(EvaluationType.REAL, context);
+    final num minEval = min.evaluate(EvaluationType.REAL, context);
+    final num maxEval = max.evaluate(EvaluationType.REAL, context);
 
     if (type == EvaluationType.INTERVAL) {
       return new Interval(minEval, maxEval);
@@ -960,17 +1005,20 @@ class IntervalLiteral extends Literal {
     }
 
     throw new UnsupportedError(
-        'Interval $this can not be interpreted as: ${type}');
+        'Interval $this can not be interpreted as: $type');
   }
 
+  @override
   String toString() => 'I[$min, $max]';
 
+  @override
   bool isConstant() =>
       min is Literal &&
       (min as Literal).isConstant() &&
       max is Literal &&
       (max as Literal).isConstant();
 
-  getConstantValue() => new Interval(
+  @override
+  Interval getConstantValue() => new Interval(
       (min as Literal).getConstantValue(), (max as Literal).getConstantValue());
 }

@@ -4,8 +4,10 @@ part of math_expressions_test;
  * Contains methods to test the math algebra implementation.
  */
 class AlgebraTests extends TestSet {
-  get name => 'Algebra Tests';
+  @override
+  String get name => 'Algebra Tests';
 
+  @override
   get testFunctions => {
         'Point Creation': pointCreation,
         'Point Equality': pointEquality,
@@ -18,6 +20,7 @@ class AlgebraTests extends TestSet {
       };
 
   // Initialises the test points and vectors
+  @override
   void initTests() {
     // do some funky stuff
     p0 = new Point3.zero();

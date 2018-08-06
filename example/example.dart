@@ -1,5 +1,5 @@
-import 'package:math_expressions/math_expressions.dart';
 import 'dart:math' as Math;
+import 'package:math_expressions/math_expressions.dart';
 
 //TODO Documentation
 void main() {
@@ -26,9 +26,9 @@ void _example1() {
   exp = (xSquare + yCos) / three;
 
   // (2) Bind variables:
-  ContextModel cm = new ContextModel();
-  cm.bindVariable(x, new Number(2.0));
-  cm.bindVariable(y, new Number(Math.PI));
+  ContextModel cm = new ContextModel()
+    ..bindVariable(x, new Number(2.0))
+    ..bindVariable(y, new Number(Math.PI));
 
   // (3) Evaluate expression:
   double eval = exp.evaluate(EvaluationType.REAL, cm);

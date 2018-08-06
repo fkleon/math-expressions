@@ -4,8 +4,10 @@ part of math_expressions_test;
  * Contains a test set for testing the parser and lexer
  */
 class ParserTests extends TestSet {
-  get name => 'Parser Tests';
+  @override
+  String get name => 'Parser Tests';
 
+  @override
   get testFunctions => {
         'Lexer Tokenize (Infix + Postfix)': lexerTokenTest,
         'Lexer Tokenize Invalid': lexerTokenTestInvalid,
@@ -13,6 +15,7 @@ class ParserTests extends TestSet {
         'Parser Expression Creation Invalid': parserExpressionTestInvalid
       };
 
+  @override
   void initTests() {
     pars = new Parser();
     lex = new Lexer();

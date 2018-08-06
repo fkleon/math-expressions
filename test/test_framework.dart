@@ -18,7 +18,7 @@ class TestExecutor {
   /**
    * Creates an empty test executor.
    */
-  TestExecutor() : this.testSets = new List();
+  TestExecutor() : this.testSets = [];
 
   /**
    * Creates a test executor with given test sets.

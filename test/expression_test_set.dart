@@ -4,8 +4,10 @@ part of math_expressions_test;
  * Contains methods to test the math expression implementation.
  */
 class ExpressionTests extends TestSet {
-  get name => 'Expression Tests';
+  @override
+  String get name => 'Expression Tests';
 
+  @override
   get testFunctions => {
         'Expression creation [REAL]': simpleRealCreation,
         'Expression creation [INTERVAL]': simpleIntervalCreation,
@@ -41,6 +43,7 @@ class ExpressionTests extends TestSet {
         */
       };
 
+  @override
   void initTests() {
     num1 = 2.25;
     num2 = 5.0;
