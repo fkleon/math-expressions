@@ -1,3 +1,9 @@
+### 1.0.0 - 2018-08-11
+
+- Add support for Dart 2.0
+- Drop support for Dart SDK versions below 1.24.0
+- Depend on `vector_math` 2.0.0 or newer
+
 ### 0.4.0 - 2018-08-10
 
 - Last release to only support Dart 1.x
