@@ -420,7 +420,9 @@ class Times extends BinaryOperator {
         // scale - nothing special to do
       } else {
         // multiply
-        return firstEval.multiply(secondEval);
+        final dynamic eval = firstEval.clone()
+          ..multiply(secondEval);
+        return eval;
       }
     }
 
@@ -506,7 +508,9 @@ class Divide extends BinaryOperator {
         // scale - nothing special to do
       } else {
         // divide
-        return firstEval.divide(secondEval);
+        final dynamic eval = firstEval.clone()
+          ..divide(secondEval);
+        return eval;
       }
     }
 
