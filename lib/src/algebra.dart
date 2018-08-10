@@ -215,13 +215,15 @@ class Interval implements Comparable<Interval> {
 
         if (i.min < i.max && i.min == 0) {
           // round up new max
-          return new Interval(core_polyfill.double.negativeInfinity, this.max / i.max);
+          return new Interval(
+              core_polyfill.double.negativeInfinity, this.max / i.max);
         }
       }
 
       // Case 2: This interval contains zero.
       if (this.containsZero()) {
-        return new Interval(core_polyfill.double.negativeInfinity, core_polyfill.double.infinity);
+        return new Interval(core_polyfill.double.negativeInfinity,
+            core_polyfill.double.infinity);
       }
 
       // Case 3: This interval is strictly positive.
@@ -233,7 +235,8 @@ class Interval implements Comparable<Interval> {
 
         if (i.min < i.max && i.max == 0) {
           // round up new max
-          return new Interval(core_polyfill.double.negativeInfinity, this.min / i.min);
+          return new Interval(
+              core_polyfill.double.negativeInfinity, this.min / i.min);
         }
 
         if (i.min < i.max && i.min == 0) {

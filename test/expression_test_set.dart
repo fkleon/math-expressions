@@ -551,21 +551,19 @@ class ExpressionTests extends TestSet {
   }
 
   /// Helper function to create a list of all default functions.
-  List<MathFunction> _createDefaultFunctions(Expression exp) {
-    return [
-      new Cos(exp),
-      new Exponential(exp),
-      new Log(exp, exp),
-      new Ln(exp),
-      new Root(5, exp),
-      new Root.sqrt(exp),
-      new Sqrt(exp),
-      new Sin(exp),
-      new Tan(exp),
-      new Abs(exp),
-      new Sgn(exp)
-    ];
-  }
+  List<MathFunction> _createDefaultFunctions(Expression exp) => [
+        new Cos(exp),
+        new Exponential(exp),
+        new Log(exp, exp),
+        new Ln(exp),
+        new Root(5, exp),
+        new Root.sqrt(exp),
+        new Sqrt(exp),
+        new Sin(exp),
+        new Tan(exp),
+        new Abs(exp),
+        new Sgn(exp)
+      ];
 
   /// Tests simplification of default functions.
   void defFuncSimplification() {
@@ -659,13 +657,13 @@ class ExpressionTests extends TestSet {
     /*
      * Ceil
      */
-    exp = new Ceil(new Floor(new Variable("x")));
+    exp = new Ceil(new Floor(new Variable('x')));
     expect((exp.simplify() as Floor).arg, new isInstanceOf<Variable>());
 
     /*
      * Floor
      */
-    exp = new Floor(new Ceil(new Variable("x")));
+    exp = new Floor(new Ceil(new Variable('x')));
     expect((exp.simplify() as Ceil).arg, new isInstanceOf<Variable>());
 
     /*
@@ -983,9 +981,9 @@ class ExpressionTests extends TestSet {
   /// Tests creation of custom functions.
   void cusFuncCreation() {
     // Create some custom functions.
-    Variable x = new Variable("x");
+    Variable x = new Variable('x');
     List<Variable> vars = [x];
-    CustomFunction cf = new CustomFunction("sqrt", vars, new Sqrt(x));
+    CustomFunction cf = new CustomFunction('sqrt', vars, new Sqrt(x));
 
     expect(cf.domainDimension, equals(vars.length));
     expect(cf.expression, new isInstanceOf<Sqrt>());
@@ -1008,21 +1006,21 @@ class ExpressionTests extends TestSet {
     Variable x, y, z;
     CustomFunction cf;
     List<Variable> vars;
-    x = new Variable("x");
-    y = new Variable("y");
-    z = new Variable("z");
+    x = new Variable('x');
+    y = new Variable('y');
+    z = new Variable('z');
     ContextModel cm = new ContextModel();
 
     // Custom SQRT (R -> R)
     vars = [x];
-    cf = new CustomFunction("sqrt", vars, new Sqrt(x));
+    cf = new CustomFunction('sqrt', vars, new Sqrt(x));
     cm.bindVariable(x, new Number(4));
 
     expect(cf.evaluate(real, cm), equals(2));
 
     // Custom ADD (R^2 -> R)
     vars = [x, y];
-    cf = new CustomFunction("add", vars, x + y);
+    cf = new CustomFunction('add', vars, x + y);
     cm.bindVariable(y, new Number(1));
 
     expect(cf.evaluate(real, cm), equals(5));
@@ -1031,10 +1029,11 @@ class ExpressionTests extends TestSet {
     vars = [x, y, z];
     Expression two = new Number(2);
     cf = new CustomFunction(
-        "length", vars, new Sqrt((x ^ two) + (y ^ two) + (z ^ two)));
-    cm.bindVariable(x, two);
-    cm.bindVariable(y, two);
-    cm.bindVariable(z, new Number(3));
+        'length', vars, new Sqrt((x ^ two) + (y ^ two) + (z ^ two)));
+    cm
+      ..bindVariable(x, two)
+      ..bindVariable(y, two)
+      ..bindVariable(z, new Number(3));
 
     expect(cf.evaluate(real, cm), closeTo(4.1231, 0.0001));
   }
@@ -1049,14 +1048,14 @@ class ExpressionTests extends TestSet {
     Variable x, y;
     CustomFunction cf;
     List<Variable> vars;
-    x = new Variable("x");
+    x = new Variable('x');
     ContextModel cm = new ContextModel();
 
     // Custom Vector Length
     vars = [x];
     Expression two = new Number(2);
     // TODO This doesn't work yet.
-    //cf = new CustomFunction("length", vars, new Sqrt(x[1]^two+x[2]^two));
+    //cf = new CustomFunction('length', vars, new Sqrt(x[1]^two+x[2]^two));
     cm.bindVariable(x, new Vector([new Number(2), new Number(2)]));
 
     expect(cf.evaluate(vector, cm), closeTo(2.82842, 0.00001));
@@ -1067,15 +1066,15 @@ class ExpressionTests extends TestSet {
     Variable x, y, z;
     CustomFunction f, g;
 
-    x = new Variable("x");
-    y = new Variable("y");
-    z = new Variable("z");
+    x = new Variable('x');
+    y = new Variable('y');
+    z = new Variable('z');
     ContextModel cm = new ContextModel();
 
     // Custom FUNKYSPLAT (R -> R^3)
     Expression three = new Number(3);
     f = new CustomFunction(
-        "funkysplat", [x], new Vector([x - three, x, x + three]));
+        'funkysplat', [x], new Vector([x - three, x, x + three]));
     cm.bindVariable(x, three);
 
     // Should evaluate to a Vector3[0.0,3.0,6.0]
@@ -1087,7 +1086,7 @@ class ExpressionTests extends TestSet {
     // Custom Vector LENGTH (R^3 -> R)
     Expression two = new Number(2);
     g = new CustomFunction(
-        "length", [x, y, z], new Sqrt((x ^ two) + (y ^ two) + (z ^ two)));
+        'length', [x, y, z], new Sqrt((x ^ two) + (y ^ two) + (z ^ two)));
 
     /*
      * Simple Composite of two functions: R -> R^3 -> R
@@ -1192,17 +1191,17 @@ class ExpressionMatcher extends Matcher {
       List<Token> itemRPN = _lexer.tokenizeToRPN(itemStr);
 
       /*
-      print("exprStr: $_expression");
-      print("exprTKN: ${_lexer.tokenize(_expression)}");
-      print("exprRPN: $_exprRPN");
-      print("itemStr: $itemStr");
-      print("itemTKN: ${_lexer.tokenize(itemStr)}");
-      print("itemRPN: $itemRPN");
+      print('exprStr: $_expression');
+      print('exprTKN: ${_lexer.tokenize(_expression)}');
+      print('exprRPN: $_exprRPN');
+      print('itemStr: $itemStr');
+      print('itemTKN: ${_lexer.tokenize(itemStr)}');
+      print('itemRPN: $itemRPN');
       */
 
       // Save state
-      matchState["item"] = itemStr;
-      matchState["itemRPN"] = itemRPN;
+      matchState['item'] = itemStr;
+      matchState['itemRPN'] = itemRPN;
 
       // Match with orderedEquals
       return orderedEquals(_exprRPN).matches(itemRPN, matchState);
@@ -1223,7 +1222,7 @@ class ExpressionMatcher extends Matcher {
   }
 
   Description describe(Description description) => description
-      .add("expression to match ")
+      .add('expression to match ')
       .addDescriptionOf(_expression)
       .add(' with RPN: ')
       .addDescriptionOf(_exprRPN);
@@ -1233,8 +1232,8 @@ class ExpressionMatcher extends Matcher {
       !_simplify
           ? mismatchDescription
           : mismatchDescription
-              .add("was simplified to ")
-              .addDescriptionOf(matchState["state"]["item"].toString())
+              .add('was simplified to ')
+              .addDescriptionOf(matchState['state']['item'].toString())
               .add(' with RPN: ')
-              .addDescriptionOf(matchState["state"]["itemRPN"]);
+              .addDescriptionOf(matchState['state']['itemRPN']);
 }

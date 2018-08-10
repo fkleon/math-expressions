@@ -420,8 +420,7 @@ class Times extends BinaryOperator {
         // scale - nothing special to do
       } else {
         // multiply
-        final dynamic eval = firstEval.clone()
-          ..multiply(secondEval);
+        final dynamic eval = firstEval.clone()..multiply(secondEval);
         return eval;
       }
     }
@@ -508,8 +507,7 @@ class Divide extends BinaryOperator {
         // scale - nothing special to do
       } else {
         // divide
-        final dynamic eval = firstEval.clone()
-          ..divide(secondEval);
+        final dynamic eval = firstEval.clone()..divide(secondEval);
         return eval;
       }
     }
@@ -891,7 +889,7 @@ class Vector extends Literal {
   @override
   Vector getConstantValue() {
     // TODO unit test
-    final List<Expression> constVals = elements.map((e) => (e is Literal)
+    final Iterable<Expression> constVals = elements.map((e) => (e is Literal)
         ? e.getConstantValue()
         : throw new UnsupportedError('Vector $this is not constant.'));
 

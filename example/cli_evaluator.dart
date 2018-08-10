@@ -18,7 +18,7 @@ void main() {
 
   stdin.transform(new Utf8Decoder()).listen(
       (line) => wrapParseInput(line.trim()),
-      onError: (err) => print("error: $err"));
+      onError: (err) => print('error: $err'));
 }
 
 /// Error handling.

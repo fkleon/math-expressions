@@ -130,7 +130,7 @@ class ContextModel {
    * Throws a [StateError], if function is still unbound at the root scope.
    */
   MathFunction getFunction(String name) {
-    final List<MathFunction> candidates =
+    final Iterable<MathFunction> candidates =
         functions.where((mathFunction) => mathFunction.name == name);
     if (candidates.isNotEmpty) {
       // just grab first - should not contain doubles.
