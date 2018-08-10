@@ -75,14 +75,14 @@ linter:
     - throw_in_finally
     - type_annotate_public_apis
     - type_init_formals
-    - unnecessary_brace_in_string_interps
+    - unnecessary_brace_in_string_interp
     - unnecessary_getters_setters
     - unnecessary_lambdas
     # - unnecessary_new # XXX reconsider once Dart 2 lands
     - unnecessary_null_aware_assignments
     - unnecessary_null_in_if_null_operators
     - unnecessary_overrides
-    - unnecessary_parenthesis
+    # - unnecessary_parenthesis
     - unnecessary_statements
     - unrelated_type_equality_checks
     - use_rethrow_when_possible

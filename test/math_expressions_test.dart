@@ -3,7 +3,11 @@
  */
 library math_expressions_test;
 
-import 'dart:math' as Math;
+import 'dart:math' as math;
+
+// Dart 1.x interop
+import 'package:dart2_constant/core.dart' as core_polyfill;
+import 'package:dart2_constant/math.dart' as math_polyfill;
 
 import 'package:test/test.dart';
 import 'package:vector_math/vector_math.dart' show Vector3;

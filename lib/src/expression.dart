@@ -647,7 +647,7 @@ class Power extends BinaryOperator {
   @override
   dynamic evaluate(EvaluationType type, ContextModel context) {
     if (type == EvaluationType.REAL) {
-      return Math.pow(
+      return math.pow(
           first.evaluate(type, context), second.evaluate(type, context));
     }
 
@@ -667,27 +667,27 @@ class Power extends BinaryOperator {
       // Distinction of cases depending on oddity of exponent.
       if (exponent.isOdd) {
         // [x, y]^n = [x^n, y^n] for n = odd
-        evalMin = Math.pow(interval.min, exponent);
-        evalMax = Math.pow(interval.max, exponent);
+        evalMin = math.pow(interval.min, exponent);
+        evalMax = math.pow(interval.max, exponent);
       } else {
         // [x, y]^n = [x^n, y^n] for x >= 0
         if (interval.min >= 0) {
           // Positive interval.
-          evalMin = Math.pow(interval.min, exponent);
-          evalMax = Math.pow(interval.max, exponent);
+          evalMin = math.pow(interval.min, exponent);
+          evalMax = math.pow(interval.max, exponent);
         }
 
         // [x, y]^n = [y^n, x^n] for y < 0
         if (interval.min >= 0) {
           // Positive interval.
-          evalMin = Math.pow(interval.max, exponent);
-          evalMax = Math.pow(interval.min, exponent);
+          evalMin = math.pow(interval.max, exponent);
+          evalMax = math.pow(interval.min, exponent);
         }
 
         // [x, y]^n = [0, max(x^n, y^n)] otherwise
         evalMin = 0;
-        evalMax = Math.max(
-            Math.pow(interval.min, exponent), Math.pow(interval.min, exponent));
+        evalMax = math.max(
+            math.pow(interval.min, exponent), math.pow(interval.min, exponent));
       }
 
       assert(evalMin <= evalMax);

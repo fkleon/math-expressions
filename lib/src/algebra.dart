@@ -133,8 +133,8 @@ class Interval implements Comparable<Interval> {
    * Internal constructor for an empty set.
    */
   Interval._empty()
-      : this.min = double.NAN,
-        this.max = double.NAN,
+      : this.min = core_polyfill.double.nan,
+        this.max = core_polyfill.double.nan,
         this._emptySet = true;
 
   /**
@@ -210,18 +210,18 @@ class Interval implements Comparable<Interval> {
 
         if (i.min < i.max && i.max == 0) {
           // round down new min
-          return new Interval(this.max / i.min, double.INFINITY);
+          return new Interval(this.max / i.min, core_polyfill.double.infinity);
         }
 
         if (i.min < i.max && i.min == 0) {
           // round up new max
-          return new Interval(double.NEGATIVE_INFINITY, this.max / i.max);
+          return new Interval(core_polyfill.double.negativeInfinity, this.max / i.max);
         }
       }
 
       // Case 2: This interval contains zero.
       if (this.containsZero()) {
-        return new Interval(double.NEGATIVE_INFINITY, double.INFINITY);
+        return new Interval(core_polyfill.double.negativeInfinity, core_polyfill.double.infinity);
       }
 
       // Case 3: This interval is strictly positive.
@@ -233,12 +233,12 @@ class Interval implements Comparable<Interval> {
 
         if (i.min < i.max && i.max == 0) {
           // round up new max
-          return new Interval(double.NEGATIVE_INFINITY, this.min / i.min);
+          return new Interval(core_polyfill.double.negativeInfinity, this.min / i.min);
         }
 
         if (i.min < i.max && i.min == 0) {
           // round down new min
-          return new Interval(this.min / i.max, double.INFINITY);
+          return new Interval(this.min / i.max, core_polyfill.double.infinity);
         }
       }
       throw new ArgumentError('Can not divide by 0');
@@ -288,13 +288,13 @@ class Interval implements Comparable<Interval> {
    * Returns the greatest lower bound.
    */
   Interval glb(Interval i) =>
-      new Interval(Math.min(min, i.min), Math.min(max, i.max));
+      new Interval(math.min(min, i.min), math.min(max, i.max));
 
   /**
    * Returns the least upper bound.
    */
   Interval lub(Interval i) =>
-      new Interval(Math.max(min, i.min), Math.max(max, i.max));
+      new Interval(math.max(min, i.min), math.max(max, i.max));
 
   /**
    * Inclusion relation. Returns true, if the given interval is included
@@ -337,13 +337,13 @@ class Interval implements Comparable<Interval> {
    * Returns the minimal value of four given values.
    */
   num _min(num a, num b, num c, num d) =>
-      Math.min(Math.min(a, b), Math.min(c, d));
+      math.min(math.min(a, b), math.min(c, d));
 
   /**
    * Returns the maximum value of four given values.
    */
   num _max(num a, num b, num c, num d) =>
-      Math.max(Math.max(a, b), Math.max(c, d));
+      math.max(math.max(a, b), math.max(c, d));
 
   /**
    * Returns the length of this interval.
