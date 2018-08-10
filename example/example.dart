@@ -1,4 +1,5 @@
-import 'dart:math' as Math;
+import 'dart:math' as math;
+import 'package:dart2_constant/math.dart' as math_polyfill;
 import 'package:math_expressions/math_expressions.dart';
 
 //TODO Documentation
@@ -16,7 +17,7 @@ void main() {
 void _example1() {
   // (1a) Parse expression:
   Parser p = new Parser();
-  Expression exp = p.parse("(x^2 + cos(y)) / 3");
+  Expression exp = p.parse('(x^2 + cos(y)) / 3');
 
   // (1b) Build expression: (x^2 + cos(y)) / 3
   Variable x = new Variable('x'), y = new Variable('y');
@@ -28,7 +29,7 @@ void _example1() {
   // (2) Bind variables:
   ContextModel cm = new ContextModel()
     ..bindVariable(x, new Number(2.0))
-    ..bindVariable(y, new Number(Math.PI));
+    ..bindVariable(y, new Number(math_polyfill.pi));
 
   // (3) Evaluate expression:
   double eval = exp.evaluate(EvaluationType.REAL, cm);
@@ -41,7 +42,7 @@ void _example1() {
  */
 void _example2() {
   Parser p = new Parser();
-  Expression exp = p.parse("x*1 - (_5)");
+  Expression exp = p.parse('x*1 - (_5)');
 
   print(exp); // = ((x * 1.0) - -(5.0))
   print(exp.simplify()); // = (x + 5.0)
@@ -55,12 +56,11 @@ void _example2() {
 void _example3() {
   //TODO move to functional tests.
   Parser p = new Parser();
-  Expression exp = p.parse("x * 2^2.5 * log(10,100)");
+  Expression exp = p.parse('x * 2^2.5 * log(10,100)');
 
   print(exp);
 
-  ContextModel cm = new ContextModel();
-  cm.bindVariableName('x', new Number(1.0));
+  ContextModel cm = new ContextModel()..bindVariableName('x', new Number(1.0));
 
   double eval = exp.evaluate(EvaluationType.REAL, cm);
   print(eval);

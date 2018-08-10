@@ -421,7 +421,7 @@ class ExpressionTests extends TestSet {
     expect(eval, equals(num1 / num2));
 
     eval = e3.evaluate(real, cm);
-    expect(eval, equals(Math.pow(num1, num2)));
+    expect(eval, equals(math.pow(num1, num2)));
 
     eval = e4.evaluate(real, cm);
     expect(eval, equals(num1 + num2));
@@ -492,15 +492,17 @@ class ExpressionTests extends TestSet {
     Vector3 vec2 = new Vector3.all(num2);
 
     var eval = e1.evaluate(vector, cm);
-    expect(eval, equals(vec1.multiply(vec2))); // modifies vec1
+    vec1.multiply(vec2); // modifies vec1 inplace
+    expect(eval, equals(vec1));
 
     vec1 = new Vector3.all(num1);
     eval = e2.evaluate(vector, cm);
-    expect(eval, equals(vec1.divide(vec2))); // modifies vec1
+    vec1.divide(vec2); // modifies vec1 inplace
+    expect(eval, equals(vec1));
 
     //TODO power op on vectors not supported yet
     //eval = e3.evaluate(vector, cm);
-    //expect(eval, equals(Math.pow(num1, num2)));
+    //expect(eval, equals(math.pow(num1, num2)));
 
     vec1 = new Vector3.all(num1);
     eval = e4.evaluate(vector, cm);
@@ -549,21 +551,19 @@ class ExpressionTests extends TestSet {
   }
 
   /// Helper function to create a list of all default functions.
-  List<MathFunction> _createDefaultFunctions(Expression exp) {
-    return [
-      new Cos(exp),
-      new Exponential(exp),
-      new Log(exp, exp),
-      new Ln(exp),
-      new Root(5, exp),
-      new Root.sqrt(exp),
-      new Sqrt(exp),
-      new Sin(exp),
-      new Tan(exp),
-      new Abs(exp),
-      new Sgn(exp)
-    ];
-  }
+  List<MathFunction> _createDefaultFunctions(Expression exp) => [
+        new Cos(exp),
+        new Exponential(exp),
+        new Log(exp, exp),
+        new Ln(exp),
+        new Root(5, exp),
+        new Root.sqrt(exp),
+        new Sqrt(exp),
+        new Sin(exp),
+        new Tan(exp),
+        new Abs(exp),
+        new Sgn(exp)
+      ];
 
   /// Tests simplification of default functions.
   void defFuncSimplification() {
@@ -578,7 +578,7 @@ class ExpressionTests extends TestSet {
     // e^1 = e
     exp = new Exponential(new Number(1));
     expect(exp.simplify(), new isInstanceOf<Number>());
-    expect((exp.simplify() as Number).value == Math.E, isTrue);
+    expect((exp.simplify() as Number).value == math_polyfill.e, isTrue);
 
     // e^(x*ln(y)) = y^x
     exp = new Exponential(new Variable('x') * new Ln(new Variable('y')));
@@ -657,13 +657,13 @@ class ExpressionTests extends TestSet {
     /*
      * Ceil
      */
-    exp = new Ceil(new Floor(new Variable("x")));
+    exp = new Ceil(new Floor(new Variable('x')));
     expect((exp.simplify() as Floor).arg, new isInstanceOf<Variable>());
 
     /*
      * Floor
      */
-    exp = new Floor(new Ceil(new Variable("x")));
+    exp = new Floor(new Ceil(new Variable('x')));
     expect((exp.simplify() as Ceil).arg, new isInstanceOf<Variable>());
 
     /*
@@ -727,10 +727,10 @@ class ExpressionTests extends TestSet {
     Number zero, one, infinity, negInfty, e, pi;
     zero = new Number(0);
     one = new Number(1);
-    infinity = new Number(double.INFINITY);
-    negInfty = new Number(double.NEGATIVE_INFINITY);
-    pi = new Number(Math.PI);
-    e = new Number(Math.E);
+    infinity = new Number(core_polyfill.double.infinity);
+    negInfty = new Number(core_polyfill.double.negativeInfinity);
+    pi = new Number(math_polyfill.pi);
+    e = new Number(math_polyfill.e);
 
     /*
      * Exponential
@@ -740,13 +740,13 @@ class ExpressionTests extends TestSet {
     expect(eval, equals(1.0));
     // -1 -> 1/e
     eval = new Exponential(-one).evaluate(real, cm);
-    expect(eval, equals(1.0 / Math.E));
+    expect(eval, equals(1.0 / math_polyfill.e));
     // 1 -> e
     eval = new Exponential(one).evaluate(real, cm);
-    expect(eval, equals(Math.E));
+    expect(eval, equals(math_polyfill.e));
     // INFTY -> INFTY
     eval = new Exponential(infinity).evaluate(real, cm);
-    expect(eval, equals(double.INFINITY));
+    expect(eval, equals(core_polyfill.double.infinity));
     // -INFTY -> 0.0
     eval = new Exponential(-infinity).evaluate(real, cm);
     expect(eval, equals(0.0));
@@ -758,7 +758,7 @@ class ExpressionTests extends TestSet {
 
     // Log_2(0) -> -INFTY
     eval = new Log(base, zero).evaluate(real, cm);
-    expect(eval, equals(double.NEGATIVE_INFINITY));
+    expect(eval, equals(core_polyfill.double.negativeInfinity));
     // Log_2(-1) -> NaN
     eval = new Log(base, -one).evaluate(real, cm);
     expect(eval, isNot(equals(eval))); // (Nan != NaN) = true
@@ -767,7 +767,7 @@ class ExpressionTests extends TestSet {
     expect(eval, equals(0.0));
     // Log_2(INFTY) -> INFTY
     eval = new Log(base, infinity).evaluate(real, cm);
-    expect(eval, equals(double.INFINITY));
+    expect(eval, equals(core_polyfill.double.infinity));
     // Log_2(-INFTY) -> INFTY
     eval = new Log(base, negInfty).evaluate(real, cm);
     //expect(eval, equals(double.INFINITY)); //TODO check this
@@ -778,7 +778,7 @@ class ExpressionTests extends TestSet {
      */
     // Ln(0) -> -INFTY
     eval = new Ln(zero).evaluate(real, cm);
-    expect(eval, equals(double.NEGATIVE_INFINITY));
+    expect(eval, equals(core_polyfill.double.negativeInfinity));
     // Ln(-1) -> NaN
     eval = new Ln(-one).evaluate(real, cm);
     expect(eval, isNot(equals(eval)));
@@ -790,7 +790,7 @@ class ExpressionTests extends TestSet {
     expect(eval, equals(1.0));
     // Ln(INFTY) -> 0.0
     eval = new Ln(infinity).evaluate(real, cm);
-    expect(eval, equals(double.INFINITY));
+    expect(eval, equals(core_polyfill.double.infinity));
     // Ln(-INFTY) -> 0.0
     eval = new Ln(negInfty).evaluate(real, cm);
     //expect(eval, equals(double.INFINITY)); //TODO check this
@@ -890,7 +890,7 @@ class ExpressionTests extends TestSet {
     expect(eval, closeTo(1.14869, 0.00001));
     // root_5(INFTY) -> INFTY
     eval = new Root(grade, infinity).evaluate(real, cm);
-    expect(eval, equals(double.INFINITY));
+    expect(eval, equals(core_polyfill.double.infinity));
     /*
      *  root_5(-INFTY) -> INFTY
      *  as of IEEE Standard 754-2008 for power function.
@@ -899,7 +899,7 @@ class ExpressionTests extends TestSet {
      *        which is Root(2, -INFTY).
      */
     eval = new Root(grade, -infinity).evaluate(real, cm);
-    expect(eval, equals(double.INFINITY));
+    expect(eval, equals(core_polyfill.double.infinity));
 
     /*
      * Sqrt
@@ -915,10 +915,10 @@ class ExpressionTests extends TestSet {
     expect(eval, equals(1));
     // sqrt(2) = SQRT2
     eval = new Sqrt(new Number(2)).evaluate(real, cm);
-    expect(eval, equals(Math.SQRT2));
+    expect(eval, equals(math_polyfill.sqrt2));
     // sqrt(INFTY) -> INFTY
     eval = new Sqrt(infinity).evaluate(real, cm);
-    expect(eval, equals(double.INFINITY));
+    expect(eval, equals(core_polyfill.double.infinity));
     // sqrt(-INFTY) ->  NaN
     eval = new Sqrt(-infinity).evaluate(real, cm);
     expect(eval, isNot(equals(eval)));
@@ -940,10 +940,10 @@ class ExpressionTests extends TestSet {
     expect(eval, equals(2.0));
     // abs(INFTY) -> INFTY
     eval = new Abs(infinity).evaluate(real, cm);
-    expect(eval, equals(double.INFINITY));
+    expect(eval, equals(core_polyfill.double.infinity));
     // abs(-INFTY) -> INFTY
     eval = new Abs(-infinity).evaluate(real, cm);
-    expect(eval, equals(double.INFINITY));
+    expect(eval, equals(core_polyfill.double.infinity));
 
     /*
      * Sgn
@@ -981,9 +981,9 @@ class ExpressionTests extends TestSet {
   /// Tests creation of custom functions.
   void cusFuncCreation() {
     // Create some custom functions.
-    Variable x = new Variable("x");
+    Variable x = new Variable('x');
     List<Variable> vars = [x];
-    CustomFunction cf = new CustomFunction("sqrt", vars, new Sqrt(x));
+    CustomFunction cf = new CustomFunction('sqrt', vars, new Sqrt(x));
 
     expect(cf.domainDimension, equals(vars.length));
     expect(cf.expression, new isInstanceOf<Sqrt>());
@@ -1006,21 +1006,21 @@ class ExpressionTests extends TestSet {
     Variable x, y, z;
     CustomFunction cf;
     List<Variable> vars;
-    x = new Variable("x");
-    y = new Variable("y");
-    z = new Variable("z");
+    x = new Variable('x');
+    y = new Variable('y');
+    z = new Variable('z');
     ContextModel cm = new ContextModel();
 
     // Custom SQRT (R -> R)
     vars = [x];
-    cf = new CustomFunction("sqrt", vars, new Sqrt(x));
+    cf = new CustomFunction('sqrt', vars, new Sqrt(x));
     cm.bindVariable(x, new Number(4));
 
     expect(cf.evaluate(real, cm), equals(2));
 
     // Custom ADD (R^2 -> R)
     vars = [x, y];
-    cf = new CustomFunction("add", vars, x + y);
+    cf = new CustomFunction('add', vars, x + y);
     cm.bindVariable(y, new Number(1));
 
     expect(cf.evaluate(real, cm), equals(5));
@@ -1029,10 +1029,11 @@ class ExpressionTests extends TestSet {
     vars = [x, y, z];
     Expression two = new Number(2);
     cf = new CustomFunction(
-        "length", vars, new Sqrt((x ^ two) + (y ^ two) + (z ^ two)));
-    cm.bindVariable(x, two);
-    cm.bindVariable(y, two);
-    cm.bindVariable(z, new Number(3));
+        'length', vars, new Sqrt((x ^ two) + (y ^ two) + (z ^ two)));
+    cm
+      ..bindVariable(x, two)
+      ..bindVariable(y, two)
+      ..bindVariable(z, new Number(3));
 
     expect(cf.evaluate(real, cm), closeTo(4.1231, 0.0001));
   }
@@ -1047,14 +1048,14 @@ class ExpressionTests extends TestSet {
     Variable x, y;
     CustomFunction cf;
     List<Variable> vars;
-    x = new Variable("x");
+    x = new Variable('x');
     ContextModel cm = new ContextModel();
 
     // Custom Vector Length
     vars = [x];
     Expression two = new Number(2);
     // TODO This doesn't work yet.
-    //cf = new CustomFunction("length", vars, new Sqrt(x[1]^two+x[2]^two));
+    //cf = new CustomFunction('length', vars, new Sqrt(x[1]^two+x[2]^two));
     cm.bindVariable(x, new Vector([new Number(2), new Number(2)]));
 
     expect(cf.evaluate(vector, cm), closeTo(2.82842, 0.00001));
@@ -1065,15 +1066,15 @@ class ExpressionTests extends TestSet {
     Variable x, y, z;
     CustomFunction f, g;
 
-    x = new Variable("x");
-    y = new Variable("y");
-    z = new Variable("z");
+    x = new Variable('x');
+    y = new Variable('y');
+    z = new Variable('z');
     ContextModel cm = new ContextModel();
 
     // Custom FUNKYSPLAT (R -> R^3)
     Expression three = new Number(3);
     f = new CustomFunction(
-        "funkysplat", [x], new Vector([x - three, x, x + three]));
+        'funkysplat', [x], new Vector([x - three, x, x + three]));
     cm.bindVariable(x, three);
 
     // Should evaluate to a Vector3[0.0,3.0,6.0]
@@ -1085,7 +1086,7 @@ class ExpressionTests extends TestSet {
     // Custom Vector LENGTH (R^3 -> R)
     Expression two = new Number(2);
     g = new CustomFunction(
-        "length", [x, y, z], new Sqrt((x ^ two) + (y ^ two) + (z ^ two)));
+        'length', [x, y, z], new Sqrt((x ^ two) + (y ^ two) + (z ^ two)));
 
     /*
      * Simple Composite of two functions: R -> R^3 -> R
@@ -1190,17 +1191,17 @@ class ExpressionMatcher extends Matcher {
       List<Token> itemRPN = _lexer.tokenizeToRPN(itemStr);
 
       /*
-      print("exprStr: $_expression");
-      print("exprTKN: ${_lexer.tokenize(_expression)}");
-      print("exprRPN: $_exprRPN");
-      print("itemStr: $itemStr");
-      print("itemTKN: ${_lexer.tokenize(itemStr)}");
-      print("itemRPN: $itemRPN");
+      print('exprStr: $_expression');
+      print('exprTKN: ${_lexer.tokenize(_expression)}');
+      print('exprRPN: $_exprRPN');
+      print('itemStr: $itemStr');
+      print('itemTKN: ${_lexer.tokenize(itemStr)}');
+      print('itemRPN: $itemRPN');
       */
 
       // Save state
-      matchState["item"] = itemStr;
-      matchState["itemRPN"] = itemRPN;
+      matchState['item'] = itemStr;
+      matchState['itemRPN'] = itemRPN;
 
       // Match with orderedEquals
       return orderedEquals(_exprRPN).matches(itemRPN, matchState);
@@ -1221,7 +1222,7 @@ class ExpressionMatcher extends Matcher {
   }
 
   Description describe(Description description) => description
-      .add("expression to match ")
+      .add('expression to match ')
       .addDescriptionOf(_expression)
       .add(' with RPN: ')
       .addDescriptionOf(_exprRPN);
@@ -1231,8 +1232,8 @@ class ExpressionMatcher extends Matcher {
       !_simplify
           ? mismatchDescription
           : mismatchDescription
-              .add("was simplified to ")
-              .addDescriptionOf(matchState["state"]["item"].toString())
+              .add('was simplified to ')
+              .addDescriptionOf(matchState['state']['item'].toString())
               .add(' with RPN: ')
-              .addDescriptionOf(matchState["state"]["itemRPN"]);
+              .addDescriptionOf(matchState['state']['itemRPN']);
 }

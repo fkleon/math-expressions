@@ -173,7 +173,7 @@ class AlgebraTests extends TestSet {
 
     // equality with non-Interval
     expect(iPos, isNot(equals(1)));
-    expect(iPos, isNot(equals("1")));
+    expect(iPos, isNot(equals('1')));
 
     // comparison
     expect(iPos < iNeg, isFalse);

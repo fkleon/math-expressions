@@ -333,7 +333,7 @@ class Exponential extends DefaultFunction {
     }
 
     if (_isNumber(expSimpl, 1)) {
-      return new Number(Math.E); // e^1 = e
+      return new Number(math_polyfill.e); // e^1 = e
     }
 
     if (expSimpl is Times && expSimpl.second is Ln) {
@@ -350,13 +350,13 @@ class Exponential extends DefaultFunction {
 
     if (type == EvaluationType.REAL) {
       // Expect exponent to be real number.
-      return Math.exp(expEval);
+      return math.exp(expEval);
     }
 
     if (type == EvaluationType.INTERVAL) {
       // Special case of a^[x, y] = [a^x, a^y] for a > 1 (with a = e)
       // Expect exponent to be interval.
-      return new Interval(Math.exp(expEval.min), Math.exp(expEval.max));
+      return new Interval(math.exp(expEval.min), math.exp(expEval.max));
     }
 
     throw new UnimplementedError('Can not evaluate exp on $type yet.');
@@ -383,7 +383,8 @@ class Log extends DefaultFunction {
    * Creates a natural logarithm.
    * Must only be used internally by the Ln class.
    */
-  Log._ln(Expression arg) : super._binary('ln', new Number(Math.E), arg);
+  Log._ln(Expression arg)
+      : super._binary('ln', new Number(math_polyfill.e), arg);
 
   /// The base of this logarithm.
   Expression get base => getParam(0);
@@ -467,12 +468,12 @@ class Ln extends Log {
     final dynamic argEval = arg.evaluate(type, context);
 
     if (type == EvaluationType.REAL) {
-      return Math.log(argEval);
+      return math.log(argEval);
     }
 
     if (type == EvaluationType.INTERVAL) {
       // Expect argument of type interval
-      return new Interval(Math.log(argEval.min), Math.log(argEval.max));
+      return new Interval(math.log(argEval.min), math.log(argEval.max));
     }
 
     throw new UnimplementedError('Can not evaluate ln on $type yet.');
@@ -600,7 +601,7 @@ class Sqrt extends Root {
     final dynamic argEval = arg.evaluate(type, context);
 
     if (type == EvaluationType.REAL) {
-      return Math.sqrt(argEval);
+      return math.sqrt(argEval);
     }
 
     if (type == EvaluationType.VECTOR) {
@@ -609,7 +610,7 @@ class Sqrt extends Root {
 
     if (type == EvaluationType.INTERVAL) {
       // Piecewiese sqrting.
-      return new Interval(Math.sqrt(argEval.min), Math.sqrt(argEval.max));
+      return new Interval(math.sqrt(argEval.min), math.sqrt(argEval.max));
     }
 
     throw new UnimplementedError('Can not evaluate sqrt on $type yet.');
@@ -655,7 +656,7 @@ class Sin extends DefaultFunction {
     final dynamic argEval = arg.evaluate(type, context);
 
     if (type == EvaluationType.REAL) {
-      return Math.sin(argEval);
+      return math.sin(argEval);
     }
 
     if (type == EvaluationType.VECTOR) {
@@ -707,7 +708,7 @@ class Cos extends DefaultFunction {
     final dynamic argEval = arg.evaluate(type, context);
 
     if (type == EvaluationType.REAL) {
-      return Math.cos(argEval);
+      return math.cos(argEval);
     }
 
     if (type == EvaluationType.VECTOR) {
@@ -759,7 +760,7 @@ class Tan extends DefaultFunction {
     final dynamic argEval = arg.evaluate(type, context);
 
     if (type == EvaluationType.REAL) {
-      return Math.tan(argEval);
+      return math.tan(argEval);
     }
 
     if (type == EvaluationType.VECTOR) {
