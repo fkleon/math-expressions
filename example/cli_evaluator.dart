@@ -1,6 +1,5 @@
-import 'dart:io';
-import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:math_expressions/math_expressions.dart';
 
@@ -17,9 +16,7 @@ void main() {
   print('<var>=<expr> (bind variable <var> to expression)');
   print('?<var> (get variable binding) \n');
 
-  Stream cmdLine = stdin.transform(new Utf8Decoder());
-
-  cmdLine.listen(
+  stdin.transform(new Utf8Decoder()).listen(
       (line) => wrapParseInput(line.trim()),
       onError: (err) => print("error: $err"));
 }
@@ -28,7 +25,7 @@ void main() {
 void wrapParseInput(String input) {
   try {
     parseInput(input);
-  } catch(e) {
+  } catch (e) {
     print('ERROR: $e');
   }
 }
@@ -39,17 +36,17 @@ void parseInput(String input) {
   if (input == '?') {
     return _evaluate();
   }
-  
+
   /// Set variable with x=1
   if (input.contains('=')) {
     return _setVar(input);
   }
-  
+
   /// Get variable with ?x
   if (input.startsWith('?')) {
     return _getVar(input);
   }
-  
+
   /// Set current expression.
   _setExpr(input);
 }

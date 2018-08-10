@@ -16,7 +16,7 @@ class Parser {
   /**
    * Creates a new parser.
    */
-  Parser(): lex = new Lexer();
+  Parser() : lex = new Lexer();
 
   /**
    * Parses the given input string into an [Expression]. Throws a
@@ -26,16 +26,16 @@ class Parser {
    */
   Expression parse(String inputString) {
     if (inputString == null || inputString.trim().isEmpty) {
-      throw new ArgumentError("The given input string was empty.");
+      throw new ArgumentError('The given input string was empty.');
     }
 
-    List<Expression> exprStack = new List<Expression>();
-    List<Token> inputStream = lex.tokenizeToRPN(inputString);
+    final List<Expression> exprStack = <Expression>[];
+    final List<Token> inputStream = lex.tokenizeToRPN(inputString);
 
-    for (Token currToken in inputStream){
+    for (Token currToken in inputStream) {
       Expression currExpr, left, right;
 
-      switch(currToken.type) {
+      switch (currToken.type) {
         case TokenType.VAL:
           currExpr = new Number(double.parse(currToken.text));
           break;
@@ -92,7 +92,7 @@ class Parser {
         case TokenType.ROOT:
           right = exprStack.removeLast();
           left = exprStack.removeLast();
-          currExpr = new Root.fromExpr((left as Number), right);
+          currExpr = new Root.fromExpr(left as Number, right);
           break;
         case TokenType.SIN:
           currExpr = new Sin(exprStack.removeLast());
@@ -115,14 +115,15 @@ class Parser {
         case TokenType.SGN:
           currExpr = new Sgn(exprStack.removeLast());
           break;
-        default: throw new ArgumentError('Unsupported token: $currToken');
+        default:
+          throw new ArgumentError('Unsupported token: $currToken');
       }
 
       exprStack.add(currExpr);
     }
 
-    if(exprStack.length > 1) {
-      throw new StateError("The input String is not a correct expression");
+    if (exprStack.length > 1) {
+      throw new StateError('The input String is not a correct expression');
     }
 
     return exprStack.last;
@@ -138,42 +139,42 @@ class Parser {
  * (Reverse Polish Notation) for further processing by a [Parser].
  */
 class Lexer {
-  final Map keywords = new Map<String, TokenType>();
+  final Map<String, TokenType> keywords = <String, TokenType>{};
 
   /// Buffer for numbers
-  String intBuffer = "";
+  String intBuffer = '';
 
   /// Buffer for variable and function names
-  String varBuffer = "";
+  String varBuffer = '';
 
   /**
    * Creates a new lexer.
    */
   Lexer() {
-    keywords["+"] = TokenType.PLUS;
-    keywords["-"] = TokenType.MINUS;
-    keywords["_"] = TokenType.UNMINUS;
-    keywords["*"] = TokenType.TIMES;
-    keywords["/"] = TokenType.DIV;
-    keywords["%"] = TokenType.MOD;
-    keywords["^"] = TokenType.POW;
-    keywords["nrt"] = TokenType.ROOT;
-    keywords["sqrt"] = TokenType.SQRT;
-    keywords["log"] = TokenType.LOG;
-    keywords["cos"] = TokenType.COS;
-    keywords["sin"] = TokenType.SIN;
-    keywords["tan"] = TokenType.TAN;
-    keywords["abs"] = TokenType.ABS;
-    keywords["ceil"] = TokenType.CEIL;
-    keywords["floor"] = TokenType.FLOOR;
-    keywords["sgn"] = TokenType.SGN;
-    keywords["ln"] = TokenType.LN;
-    keywords["e"] = TokenType.EFUNC;
-    keywords["("] = TokenType.LBRACE;
-    keywords[")"] = TokenType.RBRACE;
-    keywords["{"] = TokenType.LBRACE;
-    keywords["}"] = TokenType.RBRACE;
-    keywords[","] = TokenType.SEPAR;
+    keywords['+'] = TokenType.PLUS;
+    keywords['-'] = TokenType.MINUS;
+    keywords['_'] = TokenType.UNMINUS;
+    keywords['*'] = TokenType.TIMES;
+    keywords['/'] = TokenType.DIV;
+    keywords['%'] = TokenType.MOD;
+    keywords['^'] = TokenType.POW;
+    keywords['nrt'] = TokenType.ROOT;
+    keywords['sqrt'] = TokenType.SQRT;
+    keywords['log'] = TokenType.LOG;
+    keywords['cos'] = TokenType.COS;
+    keywords['sin'] = TokenType.SIN;
+    keywords['tan'] = TokenType.TAN;
+    keywords['abs'] = TokenType.ABS;
+    keywords['ceil'] = TokenType.CEIL;
+    keywords['floor'] = TokenType.FLOOR;
+    keywords['sgn'] = TokenType.SGN;
+    keywords['ln'] = TokenType.LN;
+    keywords['e'] = TokenType.EFUNC;
+    keywords['('] = TokenType.LBRACE;
+    keywords[')'] = TokenType.RBRACE;
+    keywords['{'] = TokenType.LBRACE;
+    keywords['}'] = TokenType.RBRACE;
+    keywords[','] = TokenType.SEPAR;
   }
 
   /**
@@ -181,32 +182,31 @@ class Lexer {
    * Returns a list of [Token] in infix notation.
    */
   List<Token> tokenize(String inputString) {
-    List<Token> tempTokenStream = new List<Token>();
-
-    String clearedString = inputString.replaceAll(" ", "").trim();
-
-    RuneIterator iter = clearedString.runes.iterator;
+    final List<Token> tempTokenStream = <Token>[];
+    final String clearedString = inputString.replaceAll(' ', '').trim();
+    final RuneIterator iter = clearedString.runes.iterator;
 
     while (iter.moveNext()) {
-      String si = iter.currentAsString;
+      final String si = iter.currentAsString;
 
       /*
        * Check if the current Character is a keyword. If it is a keyword, check if the intBuffer is not empty and add
        * a Value Token for the intBuffer and the corresponding Token for the keyword.
        */
-      if(keywords.containsKey(si)) {
+      if (keywords.containsKey(si)) {
         // check and or do intBuffer and varBuffer
-        if(intBuffer.length > 0) {
+        if (intBuffer.length > 0) {
           _doIntBuffer(tempTokenStream);
         }
-        if(varBuffer.length > 0) {
+        if (varBuffer.length > 0) {
           _doVarBuffer(tempTokenStream);
         }
         // MH - Bit of a hack here to handle exponentials of the form e^x rather than e(x)
-        if (keywords[si] == TokenType.POW && tempTokenStream.last.type == TokenType.EFUNC) {
+        if (keywords[si] == TokenType.POW &&
+            tempTokenStream.last.type == TokenType.EFUNC) {
           // Clear varBuffer since we have nothing to add to the stream as EFUNC is already in it
           //_doVarBuffer(tempTokenStream);
-          varBuffer = "";
+          varBuffer = '';
         } else {
           // Normal behaviour
           tempTokenStream.add(new Token(si, keywords[si]));
@@ -219,12 +219,12 @@ class Lexer {
           // The current string is a number and it is added to the intBuffer.
           sb.write(si);
           intBuffer = sb.toString();
-          if(varBuffer.length > 0) {
+          if (varBuffer.length > 0) {
             _doVarBuffer(tempTokenStream);
           }
         } on FormatException {
           // Check if the current string is part of a floating point input
-          if(si=="."){
+          if (si == '.') {
             sb.write(si);
             intBuffer = sb.toString();
             continue;
@@ -232,7 +232,7 @@ class Lexer {
 
           // The current string is not a number and not a simple keyword, so it has to be a variable or function.
           sb = new StringBuffer(varBuffer);
-          if(intBuffer.length > 0) {
+          if (intBuffer.length > 0) {
             /*
              * The intBuffer contains a string and the current string is a
              * variable or part of a complex keyword, so the value is added
@@ -251,11 +251,11 @@ class Lexer {
       }
     }
 
-    if(intBuffer.length > 0) {
+    if (intBuffer.length > 0) {
       // There are no more symbols in the input string but there is still an int in the intBuffer
       _doIntBuffer(tempTokenStream);
     }
-    if(varBuffer.length > 0) {
+    if (varBuffer.length > 0) {
       // There are no more symbols in the input string but there is still a variable or keyword in the varBuffer
       _doVarBuffer(tempTokenStream);
     }
@@ -266,9 +266,9 @@ class Lexer {
    * Checks if the intBuffer contains a number and adds it to the tokenStream.
    * Then clears the intBuffer.
    */
-  void _doIntBuffer(List<Token> stream){
-    stream.add(new Token(intBuffer,TokenType.VAL));
-    intBuffer = "";
+  void _doIntBuffer(List<Token> stream) {
+    stream.add(new Token(intBuffer, TokenType.VAL));
+    intBuffer = '';
   }
 
   /**
@@ -276,12 +276,12 @@ class Lexer {
    * Then clears the varBuffer.
    */
   void _doVarBuffer(List<Token> stream) {
-    if(keywords.containsKey(varBuffer)) {
+    if (keywords.containsKey(varBuffer)) {
       stream.add(new Token(varBuffer, keywords[varBuffer]));
     } else {
       stream.add(new Token(varBuffer, TokenType.VAR));
     }
-    varBuffer = "";
+    varBuffer = '';
   }
 
   /**
@@ -290,25 +290,25 @@ class Lexer {
    * [ArgumentError] if the list is empty.
    */
   List<Token> shuntingYard(List<Token> stream) {
-    if(stream.isEmpty) {
-      throw new ArgumentError("The given tokenStream was empty.");
+    if (stream.isEmpty) {
+      throw new ArgumentError('The given tokenStream was empty.');
     }
 
-    List<Token> outputStream = new List<Token>();
-    List<Token> operatorBuffer = new List<Token>();
+    final List<Token> outputStream = <Token>[];
+    final List<Token> operatorBuffer = <Token>[];
 
     Token prevToken;
 
-    for(Token curToken in stream) {
+    for (Token curToken in stream) {
       // If the current Token is a value or a variable, put them into the output stream.
-      if(curToken.type == TokenType.VAL || curToken.type == TokenType.VAR) {
+      if (curToken.type == TokenType.VAL || curToken.type == TokenType.VAR) {
         outputStream.add(curToken);
         prevToken = curToken;
         continue;
       }
 
       // If the current Token is a function, put it onto the operator stack.
-      if(curToken.type.function) {
+      if (curToken.type.function) {
         operatorBuffer.add(curToken);
         prevToken = curToken;
         continue;
@@ -318,14 +318,17 @@ class Lexer {
        *  If the current Token is a function argument separator, pop operators
        *  to output stream until a left brace is encountered.
        */
-      if(curToken.type == TokenType.SEPAR) {
-        while(!operatorBuffer.isEmpty && operatorBuffer.last.type != TokenType.LBRACE) {
+      if (curToken.type == TokenType.SEPAR) {
+        while (operatorBuffer.isNotEmpty &&
+            operatorBuffer.last.type != TokenType.LBRACE) {
           outputStream.add(operatorBuffer.removeLast());
         }
         // If no left brace is encountered, separator was misplaced or parenthesis mismatch
-        if(!operatorBuffer.isEmpty && operatorBuffer.last.type != TokenType.LBRACE) {
+        if (operatorBuffer.isNotEmpty &&
+            operatorBuffer.last.type != TokenType.LBRACE) {
           //TODO never reached, check this.
-          throw new StateError('Misplaced separator or mismatched parenthesis.');
+          throw new StateError(
+              'Misplaced separator or mismatched parenthesis.');
         }
         prevToken = curToken;
         continue;
@@ -335,8 +338,11 @@ class Lexer {
        * or we're at the beginning of the expression (prevToken == null) the current Token is
        * an unary minus, so the tokentype has to be changed.
        */
-      if(curToken.type == TokenType.MINUS && (prevToken == null || prevToken.type.operator || prevToken.type == TokenType.LBRACE)) {
-        Token newToken = new Token(curToken.text, TokenType.UNMINUS);
+      if (curToken.type == TokenType.MINUS &&
+          (prevToken == null ||
+              prevToken.type.operator ||
+              prevToken.type == TokenType.LBRACE)) {
+        final Token newToken = new Token(curToken.text, TokenType.UNMINUS);
         operatorBuffer.add(newToken);
         prevToken = newToken;
         continue;
@@ -348,9 +354,14 @@ class Lexer {
        * stream until you find an operator with a priority lower or equal as the current tokens.
        * Then add the current Token to the operator buffer.
        */
-      if(curToken.type.operator) {
-        while(!operatorBuffer.isEmpty && ((curToken.type.leftAssociative && curToken.type.priority <= operatorBuffer.last.type.priority)
-            || (!curToken.type.leftAssociative && curToken.type.priority < operatorBuffer.last.type.priority))) {
+      if (curToken.type.operator) {
+        while (operatorBuffer.isNotEmpty &&
+            ((curToken.type.leftAssociative &&
+                    curToken.type.priority <=
+                        operatorBuffer.last.type.priority) ||
+                (!curToken.type.leftAssociative &&
+                    curToken.type.priority <
+                        operatorBuffer.last.type.priority))) {
           outputStream.add(operatorBuffer.removeLast());
         }
         operatorBuffer.add(curToken);
@@ -359,25 +370,27 @@ class Lexer {
       }
 
       // If the current Token is a left brace, put it on the operator buffer.
-      if(curToken.type == TokenType.LBRACE) {
+      if (curToken.type == TokenType.LBRACE) {
         operatorBuffer.add(curToken);
         prevToken = curToken;
         continue;
       }
 
       // If the current Token is a right brace, empty the operator buffer until you find a left brace.
-      if(curToken.type == TokenType.RBRACE) {
-        while(!operatorBuffer.isEmpty && operatorBuffer.last.type != TokenType.LBRACE) {
+      if (curToken.type == TokenType.RBRACE) {
+        while (operatorBuffer.isNotEmpty &&
+            operatorBuffer.last.type != TokenType.LBRACE) {
           outputStream.add(operatorBuffer.removeLast());
         }
 
         // Expect next token on stack to be left parenthesis and pop it
-        if(operatorBuffer.isEmpty || operatorBuffer.removeLast().type != TokenType.LBRACE) {
+        if (operatorBuffer.isEmpty ||
+            operatorBuffer.removeLast().type != TokenType.LBRACE) {
           throw new StateError('Mismatched parenthesis.');
         }
 
         // If the token at the top of the stack is a function token, pop it onto the output queue.
-        if (!operatorBuffer.isEmpty && operatorBuffer.last.type.function) {
+        if (operatorBuffer.isNotEmpty && operatorBuffer.last.type.function) {
           outputStream.add(operatorBuffer.removeLast());
         }
       }
@@ -389,7 +402,7 @@ class Lexer {
      * tokens in the operatorBuffer to the outputStream. If the operator
      * on top of the stack is a parenthesis, there are mismatched parenthesis.
      */
-    while(!operatorBuffer.isEmpty) {
+    while (operatorBuffer.isNotEmpty) {
       if (operatorBuffer.last.type == TokenType.LBRACE ||
           operatorBuffer.last.type == TokenType.RBRACE) {
         throw new StateError('Mismatched parenthesis.');
@@ -406,7 +419,7 @@ class Lexer {
    * into a RPN (reverse polish notation) token stream.
    */
   List<Token> tokenizeToRPN(String inputString) {
-    List<Token> infixStream = tokenize(inputString);
+    final List<Token> infixStream = tokenize(inputString);
     return shuntingYard(infixStream);
   }
 }
@@ -421,11 +434,17 @@ class Token {
   /// The type of this token.
   final TokenType type;
 
-  /// Tokens equal, if they have equal text and types.
-  bool operator==(dynamic token) => (token is Token)
-      && (token.text == this.text)
-      && (token.type == this.type);
+  /// Creates a new Token with the given text and type.
+  Token(this.text, this.type);
 
+  /// Tokens equal, if they have equal text and types.
+  @override
+  bool operator ==(Object token) =>
+      (token is Token) &&
+      (token.text == this.text) &&
+      (token.type == this.type);
+
+  @override
   int get hashCode {
     int result = 17;
     result = 37 * result + text.hashCode;
@@ -433,10 +452,8 @@ class Token {
     return result;
   }
 
-  /// Creates a new Token with the given text and type.
-  Token(String this.text, TokenType this.type);
-
-  String toString() => "($type: $text)";
+  @override
+  String toString() => '($type: $text)';
 }
 
 /**
@@ -453,36 +470,55 @@ class Token {
  */
 class TokenType {
   // Variables and values
-  static const TokenType VAR = const TokenType._internal("VAR",10);
-  static const TokenType VAL = const TokenType._internal("VAL",10);
+  static const TokenType VAR = const TokenType._internal('VAR', 10);
+  static const TokenType VAL = const TokenType._internal('VAL', 10);
 
   // Braces and Separators
-  static const TokenType LBRACE = const TokenType._internal("LBRACE",-1);
-  static const TokenType RBRACE = const TokenType._internal("RBRACE",-1);
-  static const TokenType SEPAR = const TokenType._internal("SEPAR",-1);
+  static const TokenType LBRACE = const TokenType._internal('LBRACE', -1);
+  static const TokenType RBRACE = const TokenType._internal('RBRACE', -1);
+  static const TokenType SEPAR = const TokenType._internal('SEPAR', -1);
 
   // Operators
-  static const TokenType PLUS = const TokenType._internal("PLUS",1,operator:true);
-  static const TokenType MINUS = const TokenType._internal("MINUS",1,operator:true);
-  static const TokenType TIMES = const TokenType._internal("TIMES",2,operator:true);
-  static const TokenType DIV = const TokenType._internal("DIV",2,operator:true);
-  static const TokenType MOD = const TokenType._internal("MOD",2,operator:true);
-  static const TokenType POW = const TokenType._internal("POW",3,leftAssociative:false,operator:true);
-  static const TokenType UNMINUS = const TokenType._internal("UNMINUS",5,leftAssociative:false,operator:true);
+  static const TokenType PLUS =
+      const TokenType._internal('PLUS', 1, operator: true);
+  static const TokenType MINUS =
+      const TokenType._internal('MINUS', 1, operator: true);
+  static const TokenType TIMES =
+      const TokenType._internal('TIMES', 2, operator: true);
+  static const TokenType DIV =
+      const TokenType._internal('DIV', 2, operator: true);
+  static const TokenType MOD =
+      const TokenType._internal('MOD', 2, operator: true);
+  static const TokenType POW = const TokenType._internal('POW', 3,
+      leftAssociative: false, operator: true);
+  static const TokenType UNMINUS = const TokenType._internal('UNMINUS', 5,
+      leftAssociative: false, operator: true);
 
   // Functions
-  static const TokenType SQRT = const TokenType._internal("SQRT",4,function:true);
-  static const TokenType ROOT = const TokenType._internal("ROOT",4,function:true);
-  static const TokenType LOG = const TokenType._internal("LOG",4,function:true);
-  static const TokenType LN = const TokenType._internal("LN",4,function:true);
-  static const TokenType COS = const TokenType._internal("COS",4,function:true);
-  static const TokenType SIN = const TokenType._internal("SIN",4,function:true);
-  static const TokenType TAN = const TokenType._internal("TAN",4,function:true);
-  static const TokenType ABS = const TokenType._internal("ABS",4,function:true);
-  static const TokenType CEIL = const TokenType._internal("CEIL",4,function:true);
-  static const TokenType FLOOR = const TokenType._internal("FLOOR",4,function:true);
-  static const TokenType SGN = const TokenType._internal("SGN",4,function:true);
-  static const TokenType EFUNC = const TokenType._internal("EFUNC",4,function:true);
+  static const TokenType SQRT =
+      const TokenType._internal('SQRT', 4, function: true);
+  static const TokenType ROOT =
+      const TokenType._internal('ROOT', 4, function: true);
+  static const TokenType LOG =
+      const TokenType._internal('LOG', 4, function: true);
+  static const TokenType LN =
+      const TokenType._internal('LN', 4, function: true);
+  static const TokenType COS =
+      const TokenType._internal('COS', 4, function: true);
+  static const TokenType SIN =
+      const TokenType._internal('SIN', 4, function: true);
+  static const TokenType TAN =
+      const TokenType._internal('TAN', 4, function: true);
+  static const TokenType ABS =
+      const TokenType._internal('ABS', 4, function: true);
+  static const TokenType CEIL =
+      const TokenType._internal('CEIL', 4, function: true);
+  static const TokenType FLOOR =
+      const TokenType._internal('FLOOR', 4, function: true);
+  static const TokenType SGN =
+      const TokenType._internal('SGN', 4, function: true);
+  static const TokenType EFUNC =
+      const TokenType._internal('EFUNC', 4, function: true);
 
   /// The string value of this token type.
   final String value;
@@ -504,9 +540,9 @@ class TokenType {
    * To retrieve a token type, directly access the static final fields
    * provided by this class.
    */
-  const TokenType._internal(String this.value, int this.priority,
-      {bool this.leftAssociative: true, bool this.operator: false,
-       bool this.function: false});
+  const TokenType._internal(this.value, this.priority,
+      {this.leftAssociative: true, this.operator: false, this.function: false});
 
+  @override
   String toString() => value;
 }

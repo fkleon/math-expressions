@@ -4,44 +4,46 @@ part of math_expressions_test;
  * Contains methods to test the math expression implementation.
  */
 class ExpressionTests extends TestSet {
+  @override
+  String get name => 'Expression Tests';
 
-  get name => 'Expression Tests';
-
+  @override
   get testFunctions => {
-    'Expression creation [REAL]': simpleRealCreation,
-    'Expression creation [INTERVAL]': simpleIntervalCreation,
-    'Expression Creation [VECTOR]': simpleVectorCreation,
-    'Binary Op Convenience creation': convenienceBinaryCreation,
-    'Unary Op Convenience creation': convenienceUnaryCreation,
-    'Operator simplification': baseOperatorSimplification,
-    'Operator differentiation': baseOperatorDifferentiation,
-    'Simple evaluation [REAL]': simpleRealEval,
-    'Simple evaluation [INTERVAL]': simpleIntervalEval,
-    'Simple evaluation [VECTOR]': simpleVectorEval,
-    'Default Function creation': defFuncCreation,
-    'Default Function simplification': defFuncSimplification,
-    'Default Function differentiation': defFuncDifferentiation,
-    'Default Function evaluation [REAL]': defFuncRealEval,
-    //'Default Function evaluation [INTERVAL]': defFuncIntervalEval,
-    //'Default Function evaluation [VECTOR]': defFuncVectorEval,
-    'Custom Function creation': cusFuncCreation,
-    /*
-    'Custom Function simplification': cusFuncSimplification,
-    'Custom Function differentiation': cusFuncDifferentiation,
-    */
-    'Custom Function evaluation [REAL]': cusFuncRealEval,
-    /*
-    'Custom Function evaluation [INTERVAL]': cusFuncIntervalEval,
-    'Custom Function evaluation [VECTOR]': cusFuncVectorEval,
-    */
-    'Composite Function creation': compFunCreation,
-    /*
-    'Composite Function simplification': compFuncSimplification,
-    'Composite Function differentiation': compFuncDifferentiation,
-    'Composite Function evaluation': compFunEval
-    */
-  };
+        'Expression creation [REAL]': simpleRealCreation,
+        'Expression creation [INTERVAL]': simpleIntervalCreation,
+        'Expression Creation [VECTOR]': simpleVectorCreation,
+        'Binary Op Convenience creation': convenienceBinaryCreation,
+        'Unary Op Convenience creation': convenienceUnaryCreation,
+        'Operator simplification': baseOperatorSimplification,
+        'Operator differentiation': baseOperatorDifferentiation,
+        'Simple evaluation [REAL]': simpleRealEval,
+        'Simple evaluation [INTERVAL]': simpleIntervalEval,
+        'Simple evaluation [VECTOR]': simpleVectorEval,
+        'Default Function creation': defFuncCreation,
+        'Default Function simplification': defFuncSimplification,
+        'Default Function differentiation': defFuncDifferentiation,
+        'Default Function evaluation [REAL]': defFuncRealEval,
+        //'Default Function evaluation [INTERVAL]': defFuncIntervalEval,
+        //'Default Function evaluation [VECTOR]': defFuncVectorEval,
+        'Custom Function creation': cusFuncCreation,
+        /*
+        'Custom Function simplification': cusFuncSimplification,
+        'Custom Function differentiation': cusFuncDifferentiation,
+        */
+        'Custom Function evaluation [REAL]': cusFuncRealEval,
+        /*
+        'Custom Function evaluation [INTERVAL]': cusFuncIntervalEval,
+        'Custom Function evaluation [VECTOR]': cusFuncVectorEval,
+        */
+        'Composite Function creation': compFunCreation,
+        /*
+        'Composite Function simplification': compFuncSimplification,
+        'Composite Function differentiation': compFuncDifferentiation,
+        'Composite Function evaluation': compFunEval
+        */
+      };
 
+  @override
   void initTests() {
     num1 = 2.25;
     num2 = 5.0;
@@ -139,11 +141,13 @@ class ExpressionTests extends TestSet {
   /// Tests the convenience constructors (binary, auto-wrapping).
   void convenienceBinaryCreation() {
     // Test Expression creation with convenience constructors.
-    List<BinaryOperator> binOps = [new Times('x', 2),
-                                   new Divide('x', 2),
-                                   new Plus('x', 2),
-                                   new Minus('x', 2),
-                                   new Power('x', 2)];
+    List<BinaryOperator> binOps = [
+      new Times('x', 2),
+      new Divide('x', 2),
+      new Plus('x', 2),
+      new Minus('x', 2),
+      new Power('x', 2)
+    ];
 
     for (BinaryOperator binOp in binOps) {
       expect(binOp.first, new isInstanceOf<Variable>());
@@ -250,15 +254,23 @@ class ExpressionTests extends TestSet {
     exp = new Times(new UnaryMinus('a'), 'b');
     expect(exp.simplify(), new isInstanceOf<UnaryMinus>());
     expect((exp.simplify() as UnaryMinus).exp, new isInstanceOf<Times>());
-    expect(_isVariable(((exp.simplify() as UnaryMinus).exp as Times).first, 'a'), isTrue);
-    expect(_isVariable(((exp.simplify() as UnaryMinus).exp as Times).second, 'b'), isTrue);
+    expect(
+        _isVariable(((exp.simplify() as UnaryMinus).exp as Times).first, 'a'),
+        isTrue);
+    expect(
+        _isVariable(((exp.simplify() as UnaryMinus).exp as Times).second, 'b'),
+        isTrue);
 
     // a * -b = - (a * b)
     exp = new Times('a', new UnaryMinus('b'));
     expect(exp.simplify(), new isInstanceOf<UnaryMinus>());
     expect((exp.simplify() as UnaryMinus).exp, new isInstanceOf<Times>());
-    expect(_isVariable(((exp.simplify() as UnaryMinus).exp as Times).first, 'a'), isTrue);
-    expect(_isVariable(((exp.simplify() as UnaryMinus).exp as Times).second, 'b'), isTrue);
+    expect(
+        _isVariable(((exp.simplify() as UnaryMinus).exp as Times).first, 'a'),
+        isTrue);
+    expect(
+        _isVariable(((exp.simplify() as UnaryMinus).exp as Times).second, 'b'),
+        isTrue);
 
     // -a * -b = a * b
     exp = new Times(new UnaryMinus('a'), new UnaryMinus('b'));
@@ -291,15 +303,23 @@ class ExpressionTests extends TestSet {
     exp = new Divide(new UnaryMinus('a'), 'b');
     expect(exp.simplify(), new isInstanceOf<UnaryMinus>());
     expect((exp.simplify() as UnaryMinus).exp, new isInstanceOf<Divide>());
-    expect(_isVariable(((exp.simplify() as UnaryMinus).exp as Divide).first, 'a'), isTrue);
-    expect(_isVariable(((exp.simplify() as UnaryMinus).exp as Divide).second, 'b'), isTrue);
+    expect(
+        _isVariable(((exp.simplify() as UnaryMinus).exp as Divide).first, 'a'),
+        isTrue);
+    expect(
+        _isVariable(((exp.simplify() as UnaryMinus).exp as Divide).second, 'b'),
+        isTrue);
 
     // a * -b = - (a / b)
     exp = new Divide('a', new UnaryMinus('b'));
     expect(exp.simplify(), new isInstanceOf<UnaryMinus>());
     expect((exp.simplify() as UnaryMinus).exp, new isInstanceOf<Divide>());
-    expect(_isVariable(((exp.simplify() as UnaryMinus).exp as Divide).first, 'a'), isTrue);
-    expect(_isVariable(((exp.simplify() as UnaryMinus).exp as Divide).second, 'b'), isTrue);
+    expect(
+        _isVariable(((exp.simplify() as UnaryMinus).exp as Divide).first, 'a'),
+        isTrue);
+    expect(
+        _isVariable(((exp.simplify() as UnaryMinus).exp as Divide).second, 'b'),
+        isTrue);
 
     // -a / -b = a / b
     exp = new Divide(new UnaryMinus('a'), new UnaryMinus('b'));
@@ -353,28 +373,39 @@ class ExpressionTests extends TestSet {
   /// Tests differentiation of bsaic operators.
   void baseOperatorDifferentiation() {
     var diff = [
-                 // Expression,         deriveTo, output,     outputSimplified
-                 [new Plus (1, 'x'),    'x',      '0.0+1.0',  '1.0'],
-                 [new Plus (1, 1),      'x',      '0.0+0.0',  '0.0'],
-                 [new Minus (1, 'x') ,  'x',      '0.0-1.0',  '-1.0'],
-                 [new Minus ('x', 1) ,  'x',      '1.0-0.0',  '1.0'],
-                 [new Times('x', 1),    'x',      'x*0.0+1.0*1.0',  '1.0'],
-                 [new Divide('x',2),    'x',      '((1.0*2.0)-(x*0.0))/(2.0*2.0)',
-                  '2.0/(2.0*2.0)'],
-                 [new Modulo('x', 'x'), 'x',
-                  '1.0 - floor(x / abs(x)) * (sgn(x) * 1.0)',
-                  '1.0 - floor(x / abs(x)) * sgn(x)'],
-                 [new Power('x',2),     'x',      'exp(2.0 * ln(x)) * ((2.0 * (1.0 / x)) + (0.0 * ln(x)))',
-                  'x^2.0 * (2.0 * (1.0 / x))'],
-                ];
-
+      // Expression,         deriveTo, output,     outputSimplified
+      [new Plus(1, 'x'), 'x', '0.0+1.0', '1.0'],
+      [new Plus(1, 1), 'x', '0.0+0.0', '0.0'],
+      [new Minus(1, 'x'), 'x', '0.0-1.0', '-1.0'],
+      [new Minus('x', 1), 'x', '1.0-0.0', '1.0'],
+      [new Times('x', 1), 'x', 'x*0.0+1.0*1.0', '1.0'],
+      [
+        new Divide('x', 2),
+        'x',
+        '((1.0*2.0)-(x*0.0))/(2.0*2.0)',
+        '2.0/(2.0*2.0)'
+      ],
+      [
+        new Modulo('x', 'x'),
+        'x',
+        '1.0 - floor(x / abs(x)) * (sgn(x) * 1.0)',
+        '1.0 - floor(x / abs(x)) * sgn(x)'
+      ],
+      [
+        new Power('x', 2),
+        'x',
+        'exp(2.0 * ln(x)) * ((2.0 * (1.0 / x)) + (0.0 * ln(x)))',
+        'x^2.0 * (2.0 * (1.0 / x))'
+      ],
+    ];
 
     for (List exprCase in diff) {
       Expression exp = exprCase[0];
       String deriveTo = exprCase[1];
       String expected = exprCase[2];
       String expectedSimpl = exprCase[3];
-      expect(exp.derive(deriveTo), _equalsExpression(expected, simplify:false));
+      expect(
+          exp.derive(deriveTo), _equalsExpression(expected, simplify: false));
       expect(exp.derive(deriveTo), _equalsExpression(expectedSimpl));
     }
   }
@@ -399,7 +430,7 @@ class ExpressionTests extends TestSet {
     expect(eval, equals(num1 - num2));
 
     eval = e6.evaluate(real, cm);
-    expect(eval, equals(- num1));
+    expect(eval, equals(-num1));
   }
 
   /// Tests INTERVAL evaluation of basic operators.
@@ -408,8 +439,8 @@ class ExpressionTests extends TestSet {
     _createBasicExpressions(real);
 
     Interval ri1 = new Interval(num1, num1),
-             ri2 = new Interval(num2, num2),
-             ri3 = new Interval(num3, num3);
+        ri2 = new Interval(num2, num2),
+        ri3 = new Interval(num3, num3);
 
     var eval = e1.evaluate(interval, cm);
     expect(eval, equals(ri1 * ri2));
@@ -428,7 +459,7 @@ class ExpressionTests extends TestSet {
     expect(eval, equals(ri1 - ri2));
 
     eval = e6.evaluate(interval, cm);
-    expect(eval, equals(- ri1));
+    expect(eval, equals(-ri1));
 
     // Interpret INTERVAL as INTERVAL
     _createBasicExpressions(interval);
@@ -450,7 +481,7 @@ class ExpressionTests extends TestSet {
     expect(eval, equals(int1 - int2));
 
     eval = e6.evaluate(interval, cm);
-    expect(eval, equals(- int1));
+    expect(eval, equals(-int1));
   }
 
   /// Tests VECTOR evaluation of basic operators.
@@ -479,7 +510,7 @@ class ExpressionTests extends TestSet {
     expect(eval, equals(vec1 - vec2));
 
     eval = e6.evaluate(vector, cm);
-    expect(eval, equals(- vec1));
+    expect(eval, equals(-vec1));
 
     // scalars (vector first, then scalar!)
     vec1 = new Vector3.all(num1);
@@ -519,17 +550,19 @@ class ExpressionTests extends TestSet {
 
   /// Helper function to create a list of all default functions.
   List<MathFunction> _createDefaultFunctions(Expression exp) {
-    return [new Cos(exp),
-            new Exponential(exp),
-            new Log(exp, exp),
-            new Ln(exp),
-            new Root(5, exp),
-            new Root.sqrt(exp),
-            new Sqrt(exp),
-            new Sin(exp),
-            new Tan(exp),
-            new Abs(exp),
-            new Sgn(exp)];
+    return [
+      new Cos(exp),
+      new Exponential(exp),
+      new Log(exp, exp),
+      new Ln(exp),
+      new Root(5, exp),
+      new Root.sqrt(exp),
+      new Sqrt(exp),
+      new Sin(exp),
+      new Tan(exp),
+      new Abs(exp),
+      new Sgn(exp)
+    ];
   }
 
   /// Tests simplification of default functions.
@@ -646,50 +679,52 @@ class ExpressionTests extends TestSet {
     Variable x = new Variable('x');
     Number two = new Number(2);
     var diff = [
-                 // Expression,  deriveTo, output, outputSimplified
-                 [new Exponential(x), 'x',
-                                      'exp(x) * 1.0',
-                                      'exp(x)'],
-                 [new Ln(x),          'x',
-                                      '1.0 / x',
-                                      '1.0 / x'],
-                 // TODO Simplify can't cancel out terms yet, so the
-                 //      simplified version is still a but ugly:
-                 [new Log(two, x),    'x',
-                                      '((((1.0 / x) * ln(2.0)) - (ln(x) * (0.0 / 2.0))) / (ln(2.0) * ln(2.0)))',
-                                      '(((1.0 / x) * ln(2.0)) / (ln(2.0) * ln(2.0)))'],
-                                      //'1.0 / (x * ln(2.0))'],
+      // Expression,  deriveTo, output, outputSimplified
+      [new Exponential(x), 'x', 'exp(x) * 1.0', 'exp(x)'],
+      [new Ln(x), 'x', '1.0 / x', '1.0 / x'],
+      // TODO Simplify can't cancel out terms yet, so the
+      //      simplified version is still a but ugly:
+      [
+        new Log(two, x),
+        'x',
+        '((((1.0 / x) * ln(2.0)) - (ln(x) * (0.0 / 2.0))) / (ln(2.0) * ln(2.0)))',
+        '(((1.0 / x) * ln(2.0)) / (ln(2.0) * ln(2.0)))'
+      ],
+      //'1.0 / (x * ln(2.0))'],
 
-                 // TODO Roots are internally handled as Powers:
-                 //[new Sqrt(x),        'x', '0.0', '0.0'],
-                 //[new Root(2, x),     'x', '0.0', '0.0'],
+      // TODO Roots are internally handled as Powers:
+      //[new Sqrt(x),        'x', '0.0', '0.0'],
+      //[new Root(2, x),     'x', '0.0', '0.0'],
 
-                 [new Sin(x),         'x', 'cos(x) * 1.0',  'cos(x)'],
-                 [new Cos(x),         'x', '-sin(x) * 1.0', '-sin(x)'],
+      [new Sin(x), 'x', 'cos(x) * 1.0', 'cos(x)'],
+      [new Cos(x), 'x', '-sin(x) * 1.0', '-sin(x)'],
 
-                 // TODO Tan is internally handled as sin/cos:
-                 //[new Tan(x),          'x', '0.0',    '0.0']
+      // TODO Tan is internally handled as sin/cos:
+      //[new Tan(x),          'x', '0.0',    '0.0']
 
-                 [new Abs(x),         'x', 'sgn(x) * 1.0', 'sgn(x)'],
-                 [new Abs(two * x),   'x',
-                                      'sgn(2.0 * x) * (2.0 * 1.0 + 0.0 * x)',
-                                      'sgn(2.0 * x) * 2.0']
-                ];
+      [new Abs(x), 'x', 'sgn(x) * 1.0', 'sgn(x)'],
+      [
+        new Abs(two * x),
+        'x',
+        'sgn(2.0 * x) * (2.0 * 1.0 + 0.0 * x)',
+        'sgn(2.0 * x) * 2.0'
+      ]
+    ];
 
     for (List exprCase in diff) {
       Expression exp = exprCase[0];
       String deriveTo = exprCase[1];
       String expected = exprCase[2];
       String expectedSimpl = exprCase[3];
-      expect(exp.derive(deriveTo), _equalsExpression(expected, simplify:false));
+      expect(
+          exp.derive(deriveTo), _equalsExpression(expected, simplify: false));
       expect(exp.derive(deriveTo), _equalsExpression(expectedSimpl));
     }
   }
 
   /// Tests REAL evaluation of default functions.
   void defFuncRealEval() {
-
-    Number zero, one, infinity, negInfty, e, pi ;
+    Number zero, one, infinity, negInfty, e, pi;
     zero = new Number(0);
     one = new Number(1);
     infinity = new Number(double.INFINITY);
@@ -705,7 +740,7 @@ class ExpressionTests extends TestSet {
     expect(eval, equals(1.0));
     // -1 -> 1/e
     eval = new Exponential(-one).evaluate(real, cm);
-    expect(eval, equals(1.0/Math.E));
+    expect(eval, equals(1.0 / Math.E));
     // 1 -> e
     eval = new Exponential(one).evaluate(real, cm);
     expect(eval, equals(Math.E));
@@ -734,7 +769,7 @@ class ExpressionTests extends TestSet {
     eval = new Log(base, infinity).evaluate(real, cm);
     expect(eval, equals(double.INFINITY));
     // Log_2(-INFTY) -> INFTY
-    eval = new Log(base,negInfty).evaluate(real, cm);
+    eval = new Log(base, negInfty).evaluate(real, cm);
     //expect(eval, equals(double.INFINITY)); //TODO check this
     expect(eval, isNot(equals(eval)));
 
@@ -968,7 +1003,7 @@ class ExpressionTests extends TestSet {
 
   /// Testss REAL evaluation of custom functions: `R^n -> R`
   void cusFuncRealEval() {
-    Variable x,y,z;
+    Variable x, y, z;
     CustomFunction cf;
     List<Variable> vars;
     x = new Variable("x");
@@ -985,7 +1020,7 @@ class ExpressionTests extends TestSet {
 
     // Custom ADD (R^2 -> R)
     vars = [x, y];
-    cf = new CustomFunction("add", vars, x+y);
+    cf = new CustomFunction("add", vars, x + y);
     cm.bindVariable(y, new Number(1));
 
     expect(cf.evaluate(real, cm), equals(5));
@@ -993,7 +1028,8 @@ class ExpressionTests extends TestSet {
     // Custom Vector LENGTH (R^3 -> R)
     vars = [x, y, z];
     Expression two = new Number(2);
-    cf = new CustomFunction("length", vars, new Sqrt((x^two)+(y^two)+(z^two)));
+    cf = new CustomFunction(
+        "length", vars, new Sqrt((x ^ two) + (y ^ two) + (z ^ two)));
     cm.bindVariable(x, two);
     cm.bindVariable(y, two);
     cm.bindVariable(z, new Number(3));
@@ -1008,7 +1044,7 @@ class ExpressionTests extends TestSet {
 
   /// Testss VECTOR evaluation of custom functions
   void cusFuncVectorEval() {
-    Variable x,y;
+    Variable x, y;
     CustomFunction cf;
     List<Variable> vars;
     x = new Variable("x");
@@ -1036,7 +1072,8 @@ class ExpressionTests extends TestSet {
 
     // Custom FUNKYSPLAT (R -> R^3)
     Expression three = new Number(3);
-    f = new CustomFunction("funkysplat", [x], new Vector([x-three,x,x+three]));
+    f = new CustomFunction(
+        "funkysplat", [x], new Vector([x - three, x, x + three]));
     cm.bindVariable(x, three);
 
     // Should evaluate to a Vector3[0.0,3.0,6.0]
@@ -1047,7 +1084,8 @@ class ExpressionTests extends TestSet {
 
     // Custom Vector LENGTH (R^3 -> R)
     Expression two = new Number(2);
-    g = new CustomFunction("length", [x, y, z], new Sqrt((x^two)+(y^two)+(z^two)));
+    g = new CustomFunction(
+        "length", [x, y, z], new Sqrt((x ^ two) + (y ^ two) + (z ^ two)));
 
     /*
      * Simple Composite of two functions: R -> R^3 -> R
@@ -1076,9 +1114,9 @@ class ExpressionTests extends TestSet {
     // Should evaluate to a Vector3[v3.len-3,v3.len,v3.len+3]
     // Note: Need to use EvaluationType.VECTOR here.
     Vector3 v3_2 = comp2.evaluate(vector, cm);
-    expect(v3_2.x, closeTo(v3.length-3.0, 0.0001));
+    expect(v3_2.x, closeTo(v3.length - 3.0, 0.0001));
     expect(v3_2.y, closeTo(v3.length, 0.0001));
-    expect(v3_2.z, closeTo(v3.length+3.0, 0.0001));
+    expect(v3_2.z, closeTo(v3.length + 3.0, 0.0001));
   }
 
   /// Tests simplification of composite functions.
@@ -1120,7 +1158,8 @@ class ExpressionTests extends TestSet {
     return false;
   }
 
-  Matcher _equalsExpression(String expr, {simplify: true}) => new ExpressionMatcher(expr, simplify:simplify);
+  Matcher _equalsExpression(String expr, {simplify: true}) =>
+      new ExpressionMatcher(expr, simplify: simplify);
 }
 
 /**
@@ -1138,10 +1177,10 @@ class ExpressionMatcher extends Matcher {
    * Creates a new Expression matcher. If [simplify] is true, the expression to
    * match will be simplified as much as possible before testing.
    */
-  ExpressionMatcher(String expression, {simplify: true}):
-      this._expression = expression,
-      this._exprRPN = _lexer.tokenizeToRPN(expression),
-      this._simplify = simplify;
+  ExpressionMatcher(String expression, {simplify: true})
+      : this._expression = expression,
+        this._exprRPN = _lexer.tokenizeToRPN(expression),
+        this._simplify = simplify;
 
   bool matches(item, Map matchState) {
     if (item is Expression) {
@@ -1181,16 +1220,19 @@ class ExpressionMatcher extends Matcher {
     return expSimplified;
   }
 
-  Description describe(Description description) =>
-      description.add("expression to match ")
-        .addDescriptionOf(_expression)
-        .add(' with RPN: ')
-        .addDescriptionOf(_exprRPN);
+  Description describe(Description description) => description
+      .add("expression to match ")
+      .addDescriptionOf(_expression)
+      .add(' with RPN: ')
+      .addDescriptionOf(_exprRPN);
 
-  Description describeMismatch(item, Description mismatchDescription, Map matchState, bool verbose) =>
-      !_simplify ? mismatchDescription :
-        mismatchDescription.add("was simplified to ")
-        .addDescriptionOf(matchState["state"]["item"].toString())
-        .add(' with RPN: ')
-        .addDescriptionOf(matchState["state"]["itemRPN"]);
+  Description describeMismatch(item, Description mismatchDescription,
+          Map matchState, bool verbose) =>
+      !_simplify
+          ? mismatchDescription
+          : mismatchDescription
+              .add("was simplified to ")
+              .addDescriptionOf(matchState["state"]["item"].toString())
+              .add(' with RPN: ')
+              .addDescriptionOf(matchState["state"]["itemRPN"]);
 }

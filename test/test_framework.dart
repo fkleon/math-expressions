@@ -15,11 +15,10 @@ import 'package:test/test.dart';
  * Allows the automatic execution of several [TestSet]s.
  */
 class TestExecutor {
-
   /**
    * Creates an empty test executor.
    */
-  TestExecutor(): this.testSets = new List();
+  TestExecutor() : this.testSets = [];
 
   /**
    * Creates a test executor with given test sets.
@@ -44,7 +43,7 @@ class TestExecutor {
     for (TestSet set in testSets) {
       group(set.name, () {
         setUp(set.initTests);
-        set.testFunctions.forEach((k,v) {
+        set.testFunctions.forEach((k, v) {
           test(k, v);
         });
       });

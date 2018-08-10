@@ -15,7 +15,6 @@ part of math_expressions;
  * by Dart yet.
  */
 class EvaluationType {
-
   /// Our type map.
   static Map<int, EvaluationType> _cache;
   final int type;
@@ -25,10 +24,8 @@ class EvaluationType {
    * Private singleton constructor, no need to instantiate new objects
    * all the time.
    */
-  factory EvaluationType._private(int type, String text) {
-    if (_cache == null) {
-      _cache = new Map<int, EvaluationType>();
-    }
+  factory EvaluationType(int type, String text) {
+    _cache ??= <int, EvaluationType>{};
 
     if (_cache.containsKey(type)) {
       // We already have cached this type.
@@ -44,16 +41,17 @@ class EvaluationType {
   /**
    * Internal constructor for EvaluationTypes.
    */
-  EvaluationType._internal(int this.type, String this._text);
+  EvaluationType._internal(this.type, this._text);
 
   /// Public constructor for REAL types. Always returns the same instance of a REAL type.
-  static EvaluationType get REAL => new EvaluationType._private(REAL_INT, 'REAL');
+  static EvaluationType get REAL => new EvaluationType(REAL_INT, 'REAL');
 
   /// Public constructor for VECTOR types. Always returns the same instance of a VECTOR type.
-  static EvaluationType get VECTOR => new EvaluationType._private(VECTOR_INT, 'VECTOR');
+  static EvaluationType get VECTOR => new EvaluationType(VECTOR_INT, 'VECTOR');
 
   /// Public constructor for INTERVAL types. Always returns the same instance of a INTERVAL type.
-  static EvaluationType get INTERVAL => new EvaluationType._private(INTERVAL_INT, 'INTERVAL');
+  static EvaluationType get INTERVAL =>
+      new EvaluationType(INTERVAL_INT, 'INTERVAL');
 
   /// Internal integer value for REAL type.
   static final int REAL_INT = 1;
@@ -67,40 +65,43 @@ class EvaluationType {
   /**
    * Two types are equal, if their internal int matches.
    */
-  operator==(dynamic et) => (et is EvaluationType) && (this.type == et.type);
+  @override
+  bool operator ==(Object et) =>
+      (et is EvaluationType) && (this.type == et.type);
 
+  @override
   int get hashCode => type.hashCode;
 
+  @override
   String toString() => 'Type[$_text]';
 }
 
 /**
  * The context model keeps track of all known variables and functions.
- * 
+ *
  * It is structured hierarchically to offer nested scopes.
  */
 class ContextModel {
-
   /// The parent scope.
   ContextModel parentScope;
-  
+
   /// Variable map of this scope (name -> expression).
-  Map<String, Expression> variables = new Map();
+  Map<String, Expression> variables = <String, Expression>{};
 
   /// Function set of this scope.
   // TODO: Do we even need to track function names?
-  Set<MathFunction> functions = new Set();
+  Set<MathFunction> functions = new Set<MathFunction>();
 
   /**
    * Creates a new, empty root context model.
    */
   ContextModel();
-  
+
   /**
    * Internal constructor for creating a child scope.
    */
-  ContextModel._child(ContextModel this.parentScope);
-  
+  ContextModel._child(this.parentScope);
+
   /**
    * Returns a new child scope of this scope.
    */
@@ -109,7 +110,7 @@ class ContextModel {
   /**
    * Returns the bound expression for the given variable.
    * Performs recursive lookup through `parentScope`.
-   * 
+   *
    * Throws a [StateError], if variable is still unbound at the root scope.
    */
   Expression getExpression(String varName) {
@@ -125,11 +126,12 @@ class ContextModel {
   /**
    * Returns the function for the given function name.
    * Performs recursive lookup through `parentScope`.
-   * 
+   *
    * Throws a [StateError], if function is still unbound at the root scope.
    */
   MathFunction getFunction(String name) {
-    var candidates = functions.where((mathFunction) => mathFunction.name == name);
+    final List<MathFunction> candidates =
+        functions.where((mathFunction) => mathFunction.name == name);
     if (candidates.isNotEmpty) {
       // just grab first - should not contain doubles.
       return candidates.first;
@@ -161,12 +163,12 @@ class ContextModel {
     //TODO force non-duplicates.
     functions.add(f);
   }
-  
-  String toString() => "ContextModel["
-                       "PARENT: ${parentScope}, "
-                       "VARS: ${variables.toString()}, "
-                       "FUNCS: ${functions.toString()}]";
 
+  @override
+  String toString() => 'ContextModel['
+      'PARENT: $parentScope, '
+      'VARS: ${variables.toString()}, '
+      'FUNCS: ${functions.toString()}]';
 }
 
 /*
