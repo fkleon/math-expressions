@@ -1,25 +1,13 @@
 language: dart
 
 dart:
-  - "1.21.1"
-  - "1.22.1"
-  - "1.23.0"
   - "1.24.3"
   - stable
 
 dart_task:
   - test
-
-matrix:
-  include:
-    - dart: "1.24.3"
-      dart_task: dartfmt
-    - dart: "1.24.3"
-      dart_task: dartanalyzer
-    - dart: stable
-      dart_task: dartfmt
-    - dart: stable
-      dart_task: dartanalyzer
+  - dartfmt
+  - dartanalyzer: --fatal-warnings .
 
 cache:
   directories:
