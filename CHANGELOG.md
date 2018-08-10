@@ -1,5 +1,7 @@
-### 0.4.0 - 2018-08
+### 0.4.0 - 2018-08-10
 
+- Last release to only support Dart 1.x
+- Prepare for Dart 2.0
 - Enable strong mode
 - Analyzer and linter fixes
 - Drop support for Dart SDK versions below 1.21.0
