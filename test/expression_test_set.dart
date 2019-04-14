@@ -552,7 +552,6 @@ class ExpressionTests extends TestSet {
 
   /// Helper function to create a list of all default functions.
   List<MathFunction> _createDefaultFunctions(Expression exp) => [
-        new Cos(exp),
         new Exponential(exp),
         new Log(exp, exp),
         new Ln(exp),
@@ -560,7 +559,11 @@ class ExpressionTests extends TestSet {
         new Root.sqrt(exp),
         new Sqrt(exp),
         new Sin(exp),
+        new Cos(exp),
         new Tan(exp),
+        new Asin(exp),
+        new Acos(exp),
+        new Atan(exp),
         new Abs(exp),
         new Sgn(exp)
       ];
@@ -648,6 +651,24 @@ class ExpressionTests extends TestSet {
     expect((exp.simplify() as Number).value == 0, isTrue);
 
     /*
+     * Asin
+     */
+    exp = new Asin(new Number(0));
+    expect((exp.simplify() as Asin).arg, new TypeMatcher<Variable>());
+
+    /*
+     * Acos
+     */
+    exp = new Acos(new Number(0));
+    expect((exp.simplify() as Acos).arg, new TypeMatcher<Variable>());
+
+    /*
+     * Atan
+     */
+    exp = new Atan(new Number(0));
+    expect((exp.simplify() as Atan).arg, new TypeMatcher<Variable>());
+
+    /*
      * Abs
      */
     exp = new Abs(new Number(0));
@@ -701,6 +722,20 @@ class ExpressionTests extends TestSet {
 
       // TODO Tan is internally handled as sin/cos:
       //[new Tan(x),          'x', '0.0',    '0.0']
+
+      [
+        new Asin(x),
+        'x',
+        '1.0 / sqrt(1.0 - x ^ 2.0)',
+        '1.0 / sqrt(1.0 - x ^ 2.0)'
+      ],
+      [
+        new Acos(x),
+        'x',
+        '- 1.0 / sqrt(1.0 - x ^ 2.0)',
+        '-(1.0 / sqrt(1.0 - x ^ 2.0))'
+      ],
+      [new Atan(x), 'x', '1.0 / (1.0 + x^2.0)', '1.0 / (1.0 + x^2.0)'],
 
       [new Abs(x), 'x', 'sgn(x) * 1.0', 'sgn(x)'],
       [
@@ -870,6 +905,63 @@ class ExpressionTests extends TestSet {
     // tan(-INFTY) -> <INFTY / NaN
     eval = new Tan(-infinity).evaluate(real, cm);
     expect(eval, isNot(equals(eval))); // NaN
+
+    /*
+     * Asin
+     */
+    // arcsin(0) = 0
+    eval = new Asin(zero).evaluate(real, cm);
+    expect(eval, equals(0.0));
+    // arcsin(-1) = -π/2
+    eval = new Asin(-one).evaluate(real, cm);
+    expect(eval, closeTo(-math.pi / 2, 0.00001));
+    // arcsin(1) = π/2
+    eval = new Asin(one).evaluate(real, cm);
+    expect(eval, closeTo(math.pi / 2, 0.00001));
+    // arcsin(∞) = -∞
+    eval = new Asin(infinity).evaluate(real, cm);
+    expect(eval, isNot(equals(eval))); // NaN
+    // arcsin(-∞) = ∞
+    eval = new Asin(-infinity).evaluate(real, cm);
+    expect(eval, isNot(equals(eval))); // NaN
+
+    /*
+     * Acos
+     */
+    // arccos(0) = π/2
+    eval = new Acos(zero).evaluate(real, cm);
+    expect(eval, closeTo(math.pi / 2, 0.00001));
+    // arccos(-1) = π
+    eval = new Acos(-one).evaluate(real, cm);
+    expect(eval, equals(math.pi));
+    // arccos(1) = 0
+    eval = new Acos(one).evaluate(real, cm);
+    expect(eval, equals(0.0));
+    // arccos(∞) = -∞
+    eval = new Acos(infinity).evaluate(real, cm);
+    expect(eval, isNot(equals(eval))); // NaN
+    // arccos(-∞) = ∞
+    eval = new Acos(-infinity).evaluate(real, cm);
+    expect(eval, isNot(equals(eval))); // NaN
+
+    /*
+     * Atan
+     */
+    // arctan(0) = 0
+    eval = new Atan(zero).evaluate(real, cm);
+    expect(eval, equals(0.0));
+    // arctan(-1) = -π/4
+    eval = new Atan(-one).evaluate(real, cm);
+    expect(eval, closeTo(-math.pi / 4, 0.00001));
+    // arctan(1) = π/4
+    eval = new Atan(one).evaluate(real, cm);
+    expect(eval, closeTo(math.pi / 4, 0.00001));
+    // arctan(∞) = π/2
+    eval = new Atan(infinity).evaluate(real, cm);
+    expect(eval, closeTo(math.pi / 2, 0.00001));
+    // arctan(-∞) = -π/2
+    eval = new Atan(-infinity).evaluate(real, cm);
+    expect(eval, closeTo(-math.pi / 2, 0.00001));
 
     /*
      * Root

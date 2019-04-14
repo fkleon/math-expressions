@@ -1,7 +1,7 @@
 /*
  * math_expressions
  *
- * Copyright (c) 2013-2016  Frederik Leonhardt <frederik.leonhardt@gmail.com>,
+ * Copyright (c) 2013-2019  Frederik Leonhardt <frederik.leonhardt@gmail.com>,
  *                          Michael Frey <asakash117@gmail.com>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy

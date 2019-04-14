@@ -359,7 +359,7 @@ class Exponential extends DefaultFunction {
       return new Interval(math.exp(expEval.min), math.exp(expEval.max));
     }
 
-    throw new UnimplementedError('Can not evaluate exp on $type yet.');
+    throw new UnimplementedError('Can not evaluate $name on $type yet.');
   }
 }
 
@@ -412,7 +412,7 @@ class Log extends DefaultFunction {
       return asNaturalLogarithm().evaluate(type, context);
     }
 
-    throw new UnimplementedError('Can not evaluate log on $type yet.');
+    throw new UnimplementedError('Can not evaluate $name on $type yet.');
   }
 
   @override
@@ -475,7 +475,7 @@ class Ln extends Log {
       return new Interval(math.log(argEval.min), math.log(argEval.max));
     }
 
-    throw new UnimplementedError('Can not evaluate ln on $type yet.');
+    throw new UnimplementedError('Can not evaluate $name on $type yet.');
   }
 
   @override
@@ -612,7 +612,7 @@ class Sqrt extends Root {
       return new Interval(math.sqrt(argEval.min), math.sqrt(argEval.max));
     }
 
-    throw new UnimplementedError('Can not evaluate sqrt on $type yet.');
+    throw new UnimplementedError('Can not evaluate $name on $type yet.');
   }
 
   @override
@@ -667,7 +667,7 @@ class Sin extends DefaultFunction {
       // or just return [-1, 1] if half a period is in the given interval
     }
 
-    throw new UnimplementedError('Can not evaluate sin on $type yet.');
+    throw new UnimplementedError('Can not evaluate $name on $type yet.');
   }
 }
 
@@ -719,7 +719,7 @@ class Cos extends DefaultFunction {
       // or just return [-1, 1] if half a period is in the given interval
     }
 
-    throw new UnimplementedError('Can not evaluate cos on $type yet.');
+    throw new UnimplementedError('Can not evaluate $name on $type yet.');
   }
 }
 
@@ -766,7 +766,7 @@ class Tan extends DefaultFunction {
       //TODO apply function to all vector elements
     }
 
-    throw new UnimplementedError('Can not evaluate tan on $type yet.');
+    throw new UnimplementedError('Can not evaluate $name on $type yet.');
   }
 
   /**
@@ -775,6 +775,117 @@ class Tan extends DefaultFunction {
    * `tan(x) = sin(x) / cos(x)`
    */
   Expression asSinCos() => new Sin(arg) / new Cos(arg);
+}
+
+/**
+ * The arcus sine function.
+ */
+class Asin extends DefaultFunction {
+  /**
+   * Creates a new arcus sine function with given argument expression.
+   */
+  Asin(Expression arg) : super._unary('arcsin', arg);
+
+  /// The argument of this arcus sine function.
+  Expression get arg => getParam(0);
+
+  @override
+  Expression derive(String toVar) =>
+      new Number(1) / new Sqrt(new Number(1) - (arg ^ new Number(2)));
+
+  /**
+   * Possible simplifications:
+   */
+  @override
+  Expression simplify() {
+    return new Asin(arg.simplify());
+  }
+
+  @override
+  dynamic evaluate(EvaluationType type, ContextModel context) {
+    final dynamic argEval = arg.evaluate(type, context);
+
+    if (type == EvaluationType.REAL) {
+      return math.asin(argEval);
+    }
+
+    // TODO VECTOR and INTERVAL evaluation
+    throw new UnimplementedError('Can not evaluate $name on $type yet.');
+  }
+}
+
+/**
+ * The arcus cosine function.
+ */
+class Acos extends DefaultFunction {
+  /**
+   * Creates a new arcus cosine function with given argument expression.
+   */
+  Acos(Expression arg) : super._unary('arccos', arg);
+
+  /// The argument of this arcus cosine function.
+  Expression get arg => getParam(0);
+
+  @override
+  Expression derive(String toVar) =>
+      -new Number(1) / new Sqrt(new Number(1) - (arg ^ new Number(2)));
+
+  /**
+   * Possible simplifications:
+   */
+  @override
+  Expression simplify() {
+    return new Acos(arg.simplify());
+  }
+
+  @override
+  dynamic evaluate(EvaluationType type, ContextModel context) {
+    final dynamic argEval = arg.evaluate(type, context);
+
+    if (type == EvaluationType.REAL) {
+      return math.acos(argEval);
+    }
+
+    // TODO VECTOR and INTERVAL evaluation
+    throw new UnimplementedError('Can not evaluate $name on $type yet.');
+  }
+}
+
+/**
+ * The arcus tangens function.
+ */
+class Atan extends DefaultFunction {
+  /**
+   * Creates a new arcus tangens function with given argument expression.
+   */
+  Atan(Expression arg) : super._unary('arctan', arg);
+
+  /// The argument of this arcus tangens function.
+  Expression get arg => getParam(0);
+
+  @override
+  Expression derive(String toVar) =>
+      new Number(1) / (new Number(1) + (arg ^ new Number(2)));
+
+  /**
+   * Possible simplifications:
+   */
+  @override
+  Expression simplify() {
+    return new Atan(arg.simplify());
+  }
+
+  @override
+  dynamic evaluate(EvaluationType type, ContextModel context) {
+    final dynamic argEval = arg.evaluate(type, context);
+
+    if (type == EvaluationType.REAL) {
+      return math.atan(argEval);
+    }
+
+    // TODO VECTOR and INTERVAL evaluation
+    throw new UnimplementedError('Can not evaluate $name on $type yet.');
+  }
 }
 
 /**
@@ -812,7 +923,7 @@ class Abs extends DefaultFunction {
       //TODO apply function to all vector elements
     }
 
-    throw new UnimplementedError('Can not evaluate abs on $type yet.');
+    throw new UnimplementedError('Can not evaluate $name on $type yet.');
   }
 }
 
@@ -857,7 +968,7 @@ class Ceil extends DefaultFunction {
       //TODO apply function to all vector elements
     }
 
-    throw new UnimplementedError('Can not evaluate ceil on $type yet.');
+    throw new UnimplementedError('Can not evaluate $name on $type yet.');
   }
 }
 
@@ -902,7 +1013,7 @@ class Floor extends DefaultFunction {
       //TODO apply function to all vector elements
     }
 
-    throw new UnimplementedError('Can not evaluate floor on $type yet.');
+    throw new UnimplementedError('Can not evaluate $name on $type yet.');
   }
 }
 
@@ -935,6 +1046,6 @@ class Sgn extends DefaultFunction {
       if (argEval > 0) return 1.0;
     }
 
-    throw new UnimplementedError('Can not evaluate sgn on $type yet.');
+    throw new UnimplementedError('Can not evaluate $name on $type yet.');
   }
 }
