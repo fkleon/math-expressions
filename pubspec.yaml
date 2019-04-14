@@ -1,7 +1,7 @@
 name: math_expressions
 version: 1.0.0
 author: Frederik Leonhardt <frederik.leonhardt@gmail.com>
-description: A math library for parsing and evaluating expressions in real, interval and vector contexts. Also supports simplification and differentiation.
+description: A library for evaluating mathematical expressions.
 homepage: https://github.com/fkleon/math-expressions
 documentation: http://www.dartdocs.org/documentation/math_expressions/latest
 dependencies:

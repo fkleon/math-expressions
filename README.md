@@ -1,26 +1,32 @@
 # math_expressions #
 
-A math library for parsing and evaluating expressions in real, interval and
-vector contexts. Also supports simplification and differentiation.
+A library for parsing and evaluating mathematical expressions.
+
+* Performs evaluations in real, vector, and interval contexts.
+* Supports expression simplification and differentiation.
 
 It is partly inspired by [mathExpr][] for Java.
 
-**Note:** This library is still in an early state, the test coverage is not
-perfect, the performance is not optimized and some features are still
-unimplemented. Most REAL and basic INTERVAL and VECTOR evaluations should work
-though. Suggestions and pull requests are always welcome!
+**Note:** This library is still in an early state, the performance is not
+optimized and some features are still unimplemented. Most REAL and basic
+INTERVAL and VECTOR evaluations should work fine though. Suggestions and pull
+requests are always welcome!
+
+<sub>[1] Bohlender, Gerd, and Ulrich Kulisch. 2010. ["Deﬁnition of the Arithmetic Operations and Comparison Relations for an Interval Arithmetic Standard."][bohlender2010] Reliable Computing 15 (1): 36–42.</sub>  
 
 ## Features ##
 
+* Evaluation of expressions in various modes: Real, Vector and Interval.
 * Parsing, simplification and differentiation of mathematical expressions.
-* Evaluation of expressions in various modes (Real, Vector, Interval).
 * Supporting most basic functions out of the box.
-* Well documented.
+* Extensible through custom function definitions in code.
+* Well documented and tested.
 
 ### What's not working yet? ###
 
 * Some evaluations in vector and interval space (especially functions).
-* Parser only works for real numbers.
+* N-dimensional vectors. Curently no more than four dimensions are supported.
+* The parser only works for real numbers.
 * Complex numbers.
 
 ## Documentation ##
@@ -104,9 +110,8 @@ For more example code, see [example.dart](example/example.dart).
 
 *math_expressions is distributed under the MIT license as described in the [LICENSE][] file.*
 
-[mathExpr]: http://www-sfb288.math.tu-berlin.de/~jtem/mathExpr/
-[droneBadge]: https://drone.io/github.com/fkleon/math-expressions/latest
-[dartdoc]: http://www.dartdocs.org/documentation/math_expressions/latest
+[mathExpr]: https://www3.math.tu-berlin.de/geometrie/jtem/mathExpr/
+[dartdoc]: https://pub.dartlang.org/documentation/math_expressions/latest/
 [license]: LICENSE
 [exampleEq1]: http://latex.codecogs.com/gif.latex?%28x%5E2%2Bcos%28y%29%29%2F3
 [exampleEq1xy]: http://latex.codecogs.com/gif.latex?x%3D2%2Cy%3D%5Cpi
