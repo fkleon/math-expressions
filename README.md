@@ -93,17 +93,17 @@ This example shows how to simplify and differentiate
   print(exp.simplify()); // = (x + 5.0)
 
   Expression expDerived = exp.derive('x');
-  
+
   print(expDerived);            // = (((x * 0.0) + (1.0 * 1.0)) - -(0.0))
   print(expDerived.simplify()); // = 1.0
 ```
 
 ### 3. More Examples
 
-For a simple CLI evaluator, see [cli_evaluator.dart](example/cli_evaluator.dart).
+For a simple CLI evaluator, see [interpreter.dart](bin/interpreter.dart).
 To run the sample CLI evaluator:
 
-    dart example/cli_evaluator.dart
+    pun run math_expressions:interpreter
 
 For more example code, see [example.dart](example/example.dart).
 
