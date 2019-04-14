@@ -133,8 +133,8 @@ class Interval implements Comparable<Interval> {
    * Internal constructor for an empty set.
    */
   Interval._empty()
-      : this.min = core_polyfill.double.nan,
-        this.max = core_polyfill.double.nan,
+      : this.min = double.nan,
+        this.max = double.nan,
         this._emptySet = true;
 
   /**
@@ -210,20 +210,18 @@ class Interval implements Comparable<Interval> {
 
         if (i.min < i.max && i.max == 0) {
           // round down new min
-          return new Interval(this.max / i.min, core_polyfill.double.infinity);
+          return new Interval(this.max / i.min, double.infinity);
         }
 
         if (i.min < i.max && i.min == 0) {
           // round up new max
-          return new Interval(
-              core_polyfill.double.negativeInfinity, this.max / i.max);
+          return new Interval(double.negativeInfinity, this.max / i.max);
         }
       }
 
       // Case 2: This interval contains zero.
       if (this.containsZero()) {
-        return new Interval(core_polyfill.double.negativeInfinity,
-            core_polyfill.double.infinity);
+        return new Interval(double.negativeInfinity, double.infinity);
       }
 
       // Case 3: This interval is strictly positive.
@@ -235,13 +233,12 @@ class Interval implements Comparable<Interval> {
 
         if (i.min < i.max && i.max == 0) {
           // round up new max
-          return new Interval(
-              core_polyfill.double.negativeInfinity, this.min / i.min);
+          return new Interval(double.negativeInfinity, this.min / i.min);
         }
 
         if (i.min < i.max && i.min == 0) {
           // round down new min
-          return new Interval(this.min / i.max, core_polyfill.double.infinity);
+          return new Interval(this.min / i.max, double.infinity);
         }
       }
       throw new ArgumentError('Can not divide by 0');

@@ -578,7 +578,7 @@ class ExpressionTests extends TestSet {
     // e^1 = e
     exp = new Exponential(new Number(1));
     expect(exp.simplify(), new isInstanceOf<Number>());
-    expect((exp.simplify() as Number).value == math_polyfill.e, isTrue);
+    expect((exp.simplify() as Number).value == math.e, isTrue);
 
     // e^(x*ln(y)) = y^x
     exp = new Exponential(new Variable('x') * new Ln(new Variable('y')));
@@ -727,10 +727,10 @@ class ExpressionTests extends TestSet {
     Number zero, one, infinity, negInfty, e, pi;
     zero = new Number(0);
     one = new Number(1);
-    infinity = new Number(core_polyfill.double.infinity);
-    negInfty = new Number(core_polyfill.double.negativeInfinity);
-    pi = new Number(math_polyfill.pi);
-    e = new Number(math_polyfill.e);
+    infinity = new Number(double.infinity);
+    negInfty = new Number(double.negativeInfinity);
+    pi = new Number(math.pi);
+    e = new Number(math.e);
 
     /*
      * Exponential
@@ -740,13 +740,13 @@ class ExpressionTests extends TestSet {
     expect(eval, equals(1.0));
     // -1 -> 1/e
     eval = new Exponential(-one).evaluate(real, cm);
-    expect(eval, equals(1.0 / math_polyfill.e));
+    expect(eval, equals(1.0 / math.e));
     // 1 -> e
     eval = new Exponential(one).evaluate(real, cm);
-    expect(eval, equals(math_polyfill.e));
+    expect(eval, equals(math.e));
     // INFTY -> INFTY
     eval = new Exponential(infinity).evaluate(real, cm);
-    expect(eval, equals(core_polyfill.double.infinity));
+    expect(eval, equals(double.infinity));
     // -INFTY -> 0.0
     eval = new Exponential(-infinity).evaluate(real, cm);
     expect(eval, equals(0.0));
@@ -758,7 +758,7 @@ class ExpressionTests extends TestSet {
 
     // Log_2(0) -> -INFTY
     eval = new Log(base, zero).evaluate(real, cm);
-    expect(eval, equals(core_polyfill.double.negativeInfinity));
+    expect(eval, equals(double.negativeInfinity));
     // Log_2(-1) -> NaN
     eval = new Log(base, -one).evaluate(real, cm);
     expect(eval, isNot(equals(eval))); // (Nan != NaN) = true
@@ -767,7 +767,7 @@ class ExpressionTests extends TestSet {
     expect(eval, equals(0.0));
     // Log_2(INFTY) -> INFTY
     eval = new Log(base, infinity).evaluate(real, cm);
-    expect(eval, equals(core_polyfill.double.infinity));
+    expect(eval, equals(double.infinity));
     // Log_2(-INFTY) -> INFTY
     eval = new Log(base, negInfty).evaluate(real, cm);
     //expect(eval, equals(double.INFINITY)); //TODO check this
@@ -778,7 +778,7 @@ class ExpressionTests extends TestSet {
      */
     // Ln(0) -> -INFTY
     eval = new Ln(zero).evaluate(real, cm);
-    expect(eval, equals(core_polyfill.double.negativeInfinity));
+    expect(eval, equals(double.negativeInfinity));
     // Ln(-1) -> NaN
     eval = new Ln(-one).evaluate(real, cm);
     expect(eval, isNot(equals(eval)));
@@ -790,7 +790,7 @@ class ExpressionTests extends TestSet {
     expect(eval, equals(1.0));
     // Ln(INFTY) -> 0.0
     eval = new Ln(infinity).evaluate(real, cm);
-    expect(eval, equals(core_polyfill.double.infinity));
+    expect(eval, equals(double.infinity));
     // Ln(-INFTY) -> 0.0
     eval = new Ln(negInfty).evaluate(real, cm);
     //expect(eval, equals(double.INFINITY)); //TODO check this
@@ -890,7 +890,7 @@ class ExpressionTests extends TestSet {
     expect(eval, closeTo(1.14869, 0.00001));
     // root_5(INFTY) -> INFTY
     eval = new Root(grade, infinity).evaluate(real, cm);
-    expect(eval, equals(core_polyfill.double.infinity));
+    expect(eval, equals(double.infinity));
     /*
      *  root_5(-INFTY) -> INFTY
      *  as of IEEE Standard 754-2008 for power function.
@@ -899,7 +899,7 @@ class ExpressionTests extends TestSet {
      *        which is Root(2, -INFTY).
      */
     eval = new Root(grade, -infinity).evaluate(real, cm);
-    expect(eval, equals(core_polyfill.double.infinity));
+    expect(eval, equals(double.infinity));
 
     /*
      * Sqrt
@@ -915,10 +915,10 @@ class ExpressionTests extends TestSet {
     expect(eval, equals(1));
     // sqrt(2) = SQRT2
     eval = new Sqrt(new Number(2)).evaluate(real, cm);
-    expect(eval, equals(math_polyfill.sqrt2));
+    expect(eval, equals(math.sqrt2));
     // sqrt(INFTY) -> INFTY
     eval = new Sqrt(infinity).evaluate(real, cm);
-    expect(eval, equals(core_polyfill.double.infinity));
+    expect(eval, equals(double.infinity));
     // sqrt(-INFTY) ->  NaN
     eval = new Sqrt(-infinity).evaluate(real, cm);
     expect(eval, isNot(equals(eval)));
@@ -940,10 +940,10 @@ class ExpressionTests extends TestSet {
     expect(eval, equals(2.0));
     // abs(INFTY) -> INFTY
     eval = new Abs(infinity).evaluate(real, cm);
-    expect(eval, equals(core_polyfill.double.infinity));
+    expect(eval, equals(double.infinity));
     // abs(-INFTY) -> INFTY
     eval = new Abs(-infinity).evaluate(real, cm);
-    expect(eval, equals(core_polyfill.double.infinity));
+    expect(eval, equals(double.infinity));
 
     /*
      * Sgn

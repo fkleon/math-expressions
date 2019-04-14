@@ -1,5 +1,4 @@
 import 'dart:math' as math;
-import 'package:dart2_constant/math.dart' as math_polyfill;
 import 'package:math_expressions/math_expressions.dart';
 
 //TODO Documentation
@@ -29,7 +28,7 @@ void _example1() {
   // (2) Bind variables:
   ContextModel cm = new ContextModel()
     ..bindVariable(x, new Number(2.0))
-    ..bindVariable(y, new Number(math_polyfill.pi));
+    ..bindVariable(y, new Number(math.pi));
 
   // (3) Evaluate expression:
   double eval = exp.evaluate(EvaluationType.REAL, cm);

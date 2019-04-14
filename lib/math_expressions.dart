@@ -34,10 +34,6 @@ library math_expressions;
 
 import 'dart:math' as math;
 
-// Dart 1.x interop
-import 'package:dart2_constant/core.dart' as core_polyfill;
-import 'package:dart2_constant/math.dart' as math_polyfill;
-
 import 'package:vector_math/vector_math.dart' show Vector2, Vector3, Vector4;
 
 part 'src/algebra.dart';
