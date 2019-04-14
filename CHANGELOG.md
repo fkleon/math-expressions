@@ -1,3 +1,10 @@
+### 1.1.0
+
+- Drop support for Dart SDK versions below 2.0.0
+- Update examples and documentation
+- Switch to [pendantic](https://pub.dartlang.org/packages/pedantic) analysis
+  options
+
 ### 1.0.0 - 2018-08-11
 
 - Add support for Dart 2.0

@@ -333,7 +333,7 @@ class Exponential extends DefaultFunction {
     }
 
     if (_isNumber(expSimpl, 1)) {
-      return new Number(math_polyfill.e); // e^1 = e
+      return new Number(math.e); // e^1 = e
     }
 
     if (expSimpl is Times && expSimpl.second is Ln) {
@@ -383,8 +383,7 @@ class Log extends DefaultFunction {
    * Creates a natural logarithm.
    * Must only be used internally by the Ln class.
    */
-  Log._ln(Expression arg)
-      : super._binary('ln', new Number(math_polyfill.e), arg);
+  Log._ln(Expression arg) : super._binary('ln', new Number(math.e), arg);
 
   /// The base of this logarithm.
   Expression get base => getParam(0);
