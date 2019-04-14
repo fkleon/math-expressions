@@ -1,42 +1,38 @@
-# math_expressions #
+# math_expressions
 
 A library for parsing and evaluating mathematical expressions.
 
-* Performs evaluations in real, vector, and interval contexts.
+* Performs evaluations in real, vector, and [interval](bohlender2010) contexts.
 * Supports expression simplification and differentiation.
 
-It is partly inspired by [mathExpr][] for Java.
+math_expressions is inspired by [mathExpr][] for Java and distributed under the MIT license as described in the [LICENSE][] file.
 
-**Note:** This library is still in an early state, the performance is not
-optimized and some features are still unimplemented. Most REAL and basic
-INTERVAL and VECTOR evaluations should work fine though. Suggestions and pull
-requests are always welcome!
+## Features
 
-<sub>[1] Bohlender, Gerd, and Ulrich Kulisch. 2010. ["Deﬁnition of the Arithmetic Operations and Comparison Relations for an Interval Arithmetic Standard."][bohlender2010] Reliable Computing 15 (1): 36–42.</sub>  
-
-## Features ##
-
-* Evaluation of expressions in various modes: Real, Vector and Interval.
+* Evaluation of expressions in various modes: Real, Vector and [Interval](bohlender2010).
 * Parsing, simplification and differentiation of mathematical expressions.
-* Supporting most basic functions out of the box.
+* Supporting most [basic math functions](defaultFunctions) out of the box.
 * Extensible through custom function definitions in code.
-* Well documented and tested.
+* Well [documented](dartdoc) and tested.
 
-### What's not working yet? ###
+This package contains a very simple [command-line interpreter]((bin/interpreter.dart) for real numbers. You can run it as follows:
+
+    pub run math_expressions:interpreter
+
+### What's not working yet?
 
 * Some evaluations in vector and interval space (especially functions).
 * N-dimensional vectors. Curently no more than four dimensions are supported.
 * The parser only works for real numbers.
 * Complex numbers.
 
-## Documentation ##
+Suggestions and pull requests are always welcome!
 
-See the [DartDocs][dartdoc] and the example code. For even more details,
-have a look into the unit tests.
+## Examples
 
-## Examples ##
+Below are two basic examples of how to use this library. There also is some [additional example code](example/main.dart).
 
-### 1. Expression creation and evaluation ###
+### 1. Expression creation and evaluation
 
 This example shows how to evaluate
 
@@ -45,7 +41,7 @@ This example shows how to evaluate
 for
 ![xy][exampleEq1xy]
 
-#### Build the expression ####
+#### Build the expression
 
 You can either create an mathematical expression programmatically or parse a string.
 
@@ -64,7 +60,7 @@ You can either create an mathematical expression programmatically or parse a str
   Expression exp = p.parse("(x^2 + cos(y)) / 3");
 ```
 
-#### Evaluate the expression ####
+#### Evaluate the expression
 
 * Bind variables and evaluate the expression as real number:
 ```dart
@@ -72,14 +68,14 @@ You can either create an mathematical expression programmatically or parse a str
   ContextModel cm = new ContextModel();
   cm.bindVariable(x, new Number(2.0));
   cm.bindVariable(y, new Number(Math.PI));
-  
+
   // Evaluate expression:
   double eval = exp.evaluate(EvaluationType.REAL, cm);
 
   print(eval) // = 1.0
 ```
 
-### 2. Expression simplification and differentiation ###
+### 2. Expression simplification and differentiation
 
 This example shows how to simplify and differentiate
 
@@ -98,21 +94,11 @@ This example shows how to simplify and differentiate
   print(expDerived.simplify()); // = 1.0
 ```
 
-### 3. More Examples
-
-For a simple CLI evaluator, see [interpreter.dart](bin/interpreter.dart).
-To run the sample CLI evaluator:
-
-    pun run math_expressions:interpreter
-
-For more example code, see [example.dart](example/example.dart).
-
-
-*math_expressions is distributed under the MIT license as described in the [LICENSE][] file.*
-
 [mathExpr]: https://www3.math.tu-berlin.de/geometrie/jtem/mathExpr/
-[dartdoc]: https://pub.dartlang.org/documentation/math_expressions/latest/
+[bohlender2010]: http://interval.louisiana.edu/reliable-computing-journal/volume-15/no-1/reliable-computing-15-pp-36-42.pdf "Deﬁnition of the Arithmetic Operations and Comparison Relations for an Interval Arithmetic Standard, PDF"
 [license]: LICENSE
+[dartdoc]: https://pub.dartlang.org/documentation/math_expressions/latest/
+[defaultFunctions]: https://pub.dartlang.org/documentation/math_expressions/latest/math_expressions/DefaultFunction-class.html
 [exampleEq1]: http://latex.codecogs.com/gif.latex?%28x%5E2%2Bcos%28y%29%29%2F3
 [exampleEq1xy]: http://latex.codecogs.com/gif.latex?x%3D2%2Cy%3D%5Cpi
 [exampleEq2]: http://latex.codecogs.com/gif.latex?x*1-%28-5%29
