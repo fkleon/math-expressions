@@ -396,7 +396,7 @@ class ParserTests extends TestSet {
   }
 
   void lexerTokenTestInvalid() {
-    Map invalidCases = {
+    Map<String, Matcher> invalidCases = {
       '(': throwsStateError,
       ')': throwsStateError,
       '1+1)': throwsStateError,
@@ -418,7 +418,7 @@ class ParserTests extends TestSet {
   }
 
   void parserExpressionTestInvalid() {
-    Map invalidCases = {
+    Map<String, Matcher> invalidCases = {
       '': throwsArgumentError,
       '(': throwsStateError,
       ')': throwsStateError,

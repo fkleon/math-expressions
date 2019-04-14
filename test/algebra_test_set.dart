@@ -47,7 +47,7 @@ class AlgebraTests extends TestSet {
   Interval i, iNull1, iNull2, iPos, iNeg, iZero, iEmpty;
 
   // Tests the expected state after point creation.
-  pointCreation() {
+  void pointCreation() {
     expect(p0.x, equals(0));
     expect(p0.y, equals(0));
     expect(p0.z, equals(0));
@@ -62,7 +62,7 @@ class AlgebraTests extends TestSet {
   }
 
   // Tests the point equality operator.
-  pointEquality() {
+  void pointEquality() {
     expect(p0 == p0, isTrue);
     expect(p0 == p1, isFalse);
     expect(p1 == p0, isFalse);
@@ -71,7 +71,7 @@ class AlgebraTests extends TestSet {
   }
 
   // Tests the unary minus and point subtraction operators.
-  pointSubtraction() {
+  void pointSubtraction() {
     // unary minus
     Point3 pMinus = -p0;
     expect(pMinus.x, equals(0));
@@ -101,7 +101,7 @@ class AlgebraTests extends TestSet {
   }
 
   // Tests the point addition operator.
-  pointAddition() {
+  void pointAddition() {
     var add = p1 + v1;
     expect(add.x, equals(p1.x + v1.x));
     expect(add.y, equals(p1.y + v1.y));
@@ -114,7 +114,7 @@ class AlgebraTests extends TestSet {
   }
 
   // Tests the linear interpolation of points.
-  pointLerp() {
+  void pointLerp() {
     var coeff = 0.6;
     var lerped = p1.lerp(p0, coeff);
     expect(lerped.x, closeTo(p1.x * coeff, EPS));
@@ -128,7 +128,7 @@ class AlgebraTests extends TestSet {
     expect(lerped.z, closeTo(5.36, EPS));
   }
 
-  intervalCreation() {
+  void intervalCreation() {
     expectInterval(i, 0.00002, 300, true, false);
     expectInterval(iZero, -1, 1, false, true);
     expectInterval(iPos, 2, 7, true, false);
@@ -138,7 +138,7 @@ class AlgebraTests extends TestSet {
     expectEmptyInterval(iEmpty);
   }
 
-  void expectInterval(i, iMin, iMax, iPos, iZero) {
+  void expectInterval(Interval i, num iMin, num iMax, bool iPos, bool iZero) {
     expect(i.min, equals(iMin));
     expect(i.max, equals(iMax));
     expect(i.isPositive() == iPos, isTrue);
@@ -146,7 +146,7 @@ class AlgebraTests extends TestSet {
     expect(i.length(), equals(i.max - i.min));
   }
 
-  void expectEmptyInterval(i) {
+  void expectEmptyInterval(Interval i) {
     expect(i.isEmpty(), isTrue);
     expect(i.min.isNaN, i.max.isNaN);
   }

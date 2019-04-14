@@ -835,6 +835,7 @@ class Vector extends Literal {
   @override
   dynamic evaluate(EvaluationType type, ContextModel context) {
     if (type == EvaluationType.VECTOR) {
+      // XXX Support for vectors in vectors
       final EvaluationType elementType = EvaluationType.REAL;
 
       if (length == 1) {

@@ -370,7 +370,7 @@ class ExpressionTests extends TestSet {
     expect((exp.simplify() as Number).value == 0, isTrue);
   }
 
-  /// Tests differentiation of bsaic operators.
+  /// Tests differentiation of basic operators.
   void baseOperatorDifferentiation() {
     var diff = [
       // Expression,         deriveTo, output,     outputSimplified
@@ -395,7 +395,7 @@ class ExpressionTests extends TestSet {
         new Power('x', 2),
         'x',
         'exp(2.0 * ln(x)) * ((2.0 * (1.0 / x)) + (0.0 * ln(x)))',
-        'x^2.0 * (2.0 * (1.0 / x))'
+        'x^2.0 * (2.0 * (1.0 / x))' // = (2x^2)/x = 2x
       ],
     ];
 
@@ -414,7 +414,7 @@ class ExpressionTests extends TestSet {
   void simpleRealEval() {
     _createBasicExpressions(real);
 
-    var eval = e1.evaluate(real, cm);
+    double eval = e1.evaluate(real, cm);
     expect(eval, equals(num1 * num2));
 
     eval = e2.evaluate(real, cm);
@@ -442,7 +442,7 @@ class ExpressionTests extends TestSet {
         ri2 = new Interval(num2, num2),
         ri3 = new Interval(num3, num3);
 
-    var eval = e1.evaluate(interval, cm);
+    Interval eval = e1.evaluate(interval, cm);
     expect(eval, equals(ri1 * ri2));
 
     eval = e2.evaluate(interval, cm);
@@ -491,7 +491,7 @@ class ExpressionTests extends TestSet {
     Vector3 vec1 = new Vector3.all(num1);
     Vector3 vec2 = new Vector3.all(num2);
 
-    var eval = e1.evaluate(vector, cm);
+    Vector3 eval = e1.evaluate(vector, cm);
     vec1.multiply(vec2); // modifies vec1 inplace
     expect(eval, equals(vec1));
 
@@ -1137,7 +1137,7 @@ class ExpressionTests extends TestSet {
   }
 
   /// Checks if the given operator contains the given members.
-  bool _hasMember(expr, m, [m2]) {
+  bool _hasMember(dynamic expr, Expression m, [Expression m2]) {
     if (m2 != null) {
       // Binary op.
       return expr.first == m && expr.second == m2;
@@ -1148,7 +1148,7 @@ class ExpressionTests extends TestSet {
   }
 
   /// Checks if given [expr] is a [Variable] and has the given [name].
-  bool _isVariable(expr, [name]) {
+  bool _isVariable(Expression expr, [String name]) {
     if (expr is Variable) {
       if (name == null) {
         return true;
@@ -1159,7 +1159,7 @@ class ExpressionTests extends TestSet {
     return false;
   }
 
-  Matcher _equalsExpression(String expr, {simplify: true}) =>
+  Matcher _equalsExpression(String expr, {bool simplify: true}) =>
       new ExpressionMatcher(expr, simplify: simplify);
 }
 
@@ -1178,12 +1178,12 @@ class ExpressionMatcher extends Matcher {
    * Creates a new Expression matcher. If [simplify] is true, the expression to
    * match will be simplified as much as possible before testing.
    */
-  ExpressionMatcher(String expression, {simplify: true})
+  ExpressionMatcher(String expression, {bool simplify: true})
       : this._expression = expression,
         this._exprRPN = _lexer.tokenizeToRPN(expression),
         this._simplify = simplify;
 
-  bool matches(item, Map matchState) {
+  bool matches(dynamic item, Map matchState) {
     if (item is Expression) {
       // Simplify and tokenize.
       Expression expr = _simplify ? _simplifyExp(item) : item;
@@ -1221,13 +1221,15 @@ class ExpressionMatcher extends Matcher {
     return expSimplified;
   }
 
+  @override
   Description describe(Description description) => description
       .add('expression to match ')
       .addDescriptionOf(_expression)
       .add(' with RPN: ')
       .addDescriptionOf(_exprRPN);
 
-  Description describeMismatch(item, Description mismatchDescription,
+  @override
+  Description describeMismatch(dynamic item, Description mismatchDescription,
           Map matchState, bool verbose) =>
       !_simplify
           ? mismatchDescription
