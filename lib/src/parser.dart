@@ -103,6 +103,15 @@ class Parser {
         case TokenType.TAN:
           currExpr = new Tan(exprStack.removeLast());
           break;
+        case TokenType.ASIN:
+          currExpr = new Asin(exprStack.removeLast());
+          break;
+        case TokenType.ACOS:
+          currExpr = new Acos(exprStack.removeLast());
+          break;
+        case TokenType.ATAN:
+          currExpr = new Atan(exprStack.removeLast());
+          break;
         case TokenType.ABS:
           currExpr = new Abs(exprStack.removeLast());
           break;
@@ -164,6 +173,9 @@ class Lexer {
     keywords['cos'] = TokenType.COS;
     keywords['sin'] = TokenType.SIN;
     keywords['tan'] = TokenType.TAN;
+    keywords['arccos'] = TokenType.ACOS;
+    keywords['arcsin'] = TokenType.ASIN;
+    keywords['arctan'] = TokenType.ATAN;
     keywords['abs'] = TokenType.ABS;
     keywords['ceil'] = TokenType.CEIL;
     keywords['floor'] = TokenType.FLOOR;
@@ -509,6 +521,12 @@ class TokenType {
       const TokenType._internal('SIN', 4, function: true);
   static const TokenType TAN =
       const TokenType._internal('TAN', 4, function: true);
+  static const TokenType ACOS =
+      const TokenType._internal('ACOS', 4, function: true);
+  static const TokenType ASIN =
+      const TokenType._internal('ASIN', 4, function: true);
+  static const TokenType ATAN =
+      const TokenType._internal('ATAN', 4, function: true);
   static const TokenType ABS =
       const TokenType._internal('ABS', 4, function: true);
   static const TokenType CEIL =

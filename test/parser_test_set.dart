@@ -251,6 +251,39 @@ class ParserTests extends TestSet {
     rpnTokenStreams
         .add([new Token('10', TokenType.VAL), new Token('tan', TokenType.TAN)]);
 
+    // Arccos
+    inputStrings.add('arccos(10)');
+    tokenStreams.add([
+      new Token('arccos', TokenType.ACOS),
+      new Token('(', TokenType.LBRACE),
+      new Token('10', TokenType.VAL),
+      new Token(')', TokenType.RBRACE)
+    ]);
+    rpnTokenStreams.add(
+        [new Token('10', TokenType.VAL), new Token('arccos', TokenType.ACOS)]);
+
+    // Arcsin
+    inputStrings.add('arcsin(10)');
+    tokenStreams.add([
+      new Token('arcsin', TokenType.ASIN),
+      new Token('(', TokenType.LBRACE),
+      new Token('10', TokenType.VAL),
+      new Token(')', TokenType.RBRACE)
+    ]);
+    rpnTokenStreams.add(
+        [new Token('10', TokenType.VAL), new Token('arcsin', TokenType.ASIN)]);
+
+    // Arctan
+    inputStrings.add('arctan(10)');
+    tokenStreams.add([
+      new Token('arctan', TokenType.ATAN),
+      new Token('(', TokenType.LBRACE),
+      new Token('10', TokenType.VAL),
+      new Token(')', TokenType.RBRACE)
+    ]);
+    rpnTokenStreams.add(
+        [new Token('10', TokenType.VAL), new Token('arctan', TokenType.ATAN)]);
+
     // Abs
     inputStrings.add('abs(10)');
     tokenStreams.add([
