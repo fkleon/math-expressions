@@ -234,6 +234,23 @@ class CustomFunction extends MathFunction {
   String toFullString() => '$name($args) = $expression';
 }
 
+class FunctionCall extends Literal {
+  /**
+   * Create a custom function with the given name, argument variables,
+   * and expression.
+   */
+  FunctionCall(String name) : super(name);
+
+  @override
+  Expression derive(String toVar) =>
+      throw new UnsupportedError('Can not differentiate FunctionCall');
+
+  @override
+  dynamic evaluate(EvaluationType type, ContextModel context) =>
+      context.getFunction(this.value).evaluate(type, context.createChildScope());
+
+}
+
 /**
  * A default function is predefined in this library.
  * It contains no expression because the appropriate evaluation method usually

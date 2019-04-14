@@ -39,8 +39,8 @@ class ExpressionTests extends TestSet {
         /*
         'Composite Function simplification': compFuncSimplification,
         'Composite Function differentiation': compFuncDifferentiation,
-        'Composite Function evaluation': compFunEval
         */
+        'Composite Function evaluation': compFunEval
       };
 
   @override
@@ -1093,7 +1093,7 @@ class ExpressionTests extends TestSet {
     throw new UnimplementedError();
   }
 
-  /// Testss REAL evaluation of custom functions: `R^n -> R`
+  /// Tests REAL evaluation of custom functions: `R^n -> R`
   void cusFuncRealEval() {
     Variable x, y, z;
     CustomFunction cf;
@@ -1130,12 +1130,12 @@ class ExpressionTests extends TestSet {
     expect(cf.evaluate(real, cm), closeTo(4.1231, 0.0001));
   }
 
-  /// Testss INTERVAL evaluation of custom functions
+  /// Tests INTERVAL evaluation of custom functions
   void cusFuncIntervalEval() {
     throw new UnimplementedError();
   }
 
-  /// Testss VECTOR evaluation of custom functions
+  /// Tests VECTOR evaluation of custom functions
   void cusFuncVectorEval() {
     Variable x, y;
     CustomFunction cf;
@@ -1225,7 +1225,108 @@ class ExpressionTests extends TestSet {
   /// Tests evaluation of composite functions.
   void compFunEval() {
     // Evaluate composite functions.
-    throw new UnimplementedError();
+    //throw new UnimplementedError();
+
+    // Custom RGB colour encoding into an Integer
+    Variable red = new Variable('r'),
+      green = new Variable('g'),
+      blue = new Variable('b');
+    List<Variable> rgb = [red, green, blue];
+
+    Variable x = new Variable('x'),
+      shiftIndex = new Variable('i');
+
+    // The identity function returns the input. (R^? -> R^?)
+    CustomFunction identity = new CustomFunction('identity', [x], x);
+
+    // Shifting to the left makes the number larger, effectively multiplying the
+    // number by pow(2, shiftIndex).
+    // (R^2 -> R)
+    CustomFunction leftShift = new CustomFunction('leftshift', [x, shiftIndex],
+      x * new Power(2, shiftIndex));
+
+    // Shifting to the right makes the number smaller and drops the least
+    // significant bits, effectively doing an integer division by pow(2,
+    // shiftIndex).
+    // (R^2 -> R)
+    CustomFunction rightShift = new CustomFunction('rightshift', [x, shiftIndex],
+      x / new Power(2, shiftIndex));
+
+    // Applies the identity function and a left shift.
+    // This allows to encode the variable x and shiftIndex in a 2-dimensional
+    // input vector.
+    // (R^2 -> R^2 -> R)
+//    CustomFunction parameterizedLeftShift = new CustomFunction(
+//      'leftshift', [x, shiftIndex], identity & leftShift);
+    CompositeFunction parameterizedLeftShift = identity & leftShift;
+    //     (parameterize)    (shift)    (encode)
+    // R^3      ->       R^3   ->   R^3   ->    R
+    // Applies the identity function and a right shift.
+    // This allows to encode the variable x and shiftIndex in a 2-dimensional
+    // input vector.
+    // (R^2 -> R^2 -> R)
+    CustomFunction parameterizedRightShift = new CustomFunction(
+      'leftshift', [x, shiftIndex], identity & rightShift);
+/*
+      CustomFunction vectorize1 = new CustomFunction('vectorize', rgb,
+        new Vector([
+          new BoundVariable(new Vector([red, new Number(16)])),
+          new BoundVariable(new Vector([red, new Number(8)])),
+          new BoundVariable(new Vector([red, new Number(0)])),
+        ]));
+
+CustomFunction vectorLeftShift = new CustomFunction('ll', [red,green,blue],
+new Vector[ContextModel]
+
+);
+
+    ContextModel cm = new ContextModel()
+      ..bindVariable(x, new Number(150))
+      ..bindVariable(shiftIndex, new Number(16));
+
+      double shifted24 = ls.evaluate(real, cm);
+*/
+
+    parameterizedLeftShift.name = 'leftshift';
+    ContextModel cm = new ContextModel()
+      ..bindVariable(red, new Number(250))
+      ..bindVariable(green, new Number(250))
+      ..bindVariable(blue, new Number(250))
+      ..bindFunction(parameterizedLeftShift);
+      //..bindVariable(x, new Vector([red, new Number(16)]))
+      //..bindVariable(x, new Vector([green, new Number(8)]))
+      //..bindVariable(x, new Vector([blue, new Number(0)]))
+
+
+    double redShifted = parameterizedLeftShift.evaluate(real, cm);
+    print('leftShift24: $redShifted vs. x << 24: ${250 << 24}}');
+
+    double shifted16 = parameterizedLeftShift.evaluate(real,
+      new ContextModel()..bindVariable(x, new Vector([new Number(250), new Number(16)])));
+    print('leftShift16: $shifted16 vs. x << 16: ${250 << 16}}');
+
+
+/*
+    shifted24 = leftShift.evaluate(vector,
+      new ContextModel()..bindVariable(x, new Vector([new Number(250), new Number(24)])));
+    print('leftShift24: $shifted24 vs. x << 24: ${250 << 24}}');
+*/
+    CustomFunction vectorize = new CustomFunction('vectorize', rgb,
+      new Vector([
+        new Vector([red, new Number(16)]),
+        new Vector([green, new Number(8)]),
+        new Vector([blue, new Number(0)]),
+      ]));
+    CustomFunction encode = new CustomFunction('encode', rgb, red + green + blue);
+
+    CompositeFunction rgba = vectorize & leftShift & encode;
+    //new CustomFunction('rgba', vars, (alpha << 24) + (red << 16) << (green << 8) + blue);
+    Vector encoded = rgba.evaluate(vector, new ContextModel()
+      ..bindVariable(red, new Number(255))
+      ..bindVariable(green, new Number(100))
+      ..bindVariable(blue, new Number(200)));
+
+    print(encoded);
   }
 
   /// Checks if the given operator contains the given members.
