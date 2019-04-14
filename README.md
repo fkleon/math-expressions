@@ -2,20 +2,20 @@
 
 A library for parsing and evaluating mathematical expressions.
 
-* Performs evaluations in real, vector, and [interval](bohlender2010) contexts.
+* Performs evaluations in real, vector, and [interval][bohlender2010] contexts.
 * Supports expression simplification and differentiation.
 
 math_expressions is inspired by [mathExpr][] for Java and distributed under the MIT license as described in the [LICENSE][] file.
 
 ## Features
 
-* Evaluation of expressions in various modes: Real, Vector and [Interval](bohlender2010).
+* Evaluation of expressions in various modes: Real, Vector and [Interval][bohlender2010].
 * Parsing, simplification and differentiation of mathematical expressions.
-* Supporting most [basic math functions](defaultFunctions) out of the box.
+* Supporting most [basic math functions][defaultFunctions] out of the box.
 * Extensible through custom function definitions in code.
-* Well [documented](dartdoc) and tested.
+* Well [documented][dartdoc] and tested.
 
-This package contains a very simple [command-line interpreter]((bin/interpreter.dart) for real numbers. You can run it as follows:
+This package contains a very simple [command-line interpreter](bin/interpreter.dart) for real numbers:
 
     pub run math_expressions:interpreter
 
