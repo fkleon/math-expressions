@@ -95,10 +95,10 @@ This example shows how to simplify and differentiate
 ```
 
 [mathExpr]: https://www3.math.tu-berlin.de/geometrie/jtem/mathExpr/
-[bohlender2010]: http://interval.louisiana.edu/reliable-computing-journal/volume-15/no-1/reliable-computing-15-pp-36-42.pdf "Deﬁnition of the Arithmetic Operations and Comparison Relations for an Interval Arithmetic Standard, PDF"
+[bohlender2010]: https://interval.louisiana.edu/reliable-computing-journal/volume-15/no-1/reliable-computing-15-pp-36-42.pdf "Deﬁnition of the Arithmetic Operations and Comparison Relations for an Interval Arithmetic Standard, PDF"
 [license]: LICENSE
 [dartdoc]: https://pub.dartlang.org/documentation/math_expressions/latest/
 [defaultFunctions]: https://pub.dartlang.org/documentation/math_expressions/latest/math_expressions/DefaultFunction-class.html
-[exampleEq1]: http://latex.codecogs.com/gif.latex?%28x%5E2%2Bcos%28y%29%29%2F3
-[exampleEq1xy]: http://latex.codecogs.com/gif.latex?x%3D2%2Cy%3D%5Cpi
-[exampleEq2]: http://latex.codecogs.com/gif.latex?x*1-%28-5%29
+[exampleEq1]: https://latex.codecogs.com/gif.latex?%28x%5E2%2Bcos%28y%29%29%2F3
+[exampleEq1xy]: https://latex.codecogs.com/gif.latex?x%3D2%2Cy%3D%5Cpi
+[exampleEq2]: https://latex.codecogs.com/gif.latex?x*1-%28-5%29
