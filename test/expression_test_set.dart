@@ -564,6 +564,8 @@ class ExpressionTests extends TestSet {
         new Asin(exp),
         new Acos(exp),
         new Atan(exp),
+        new Ceil(exp),
+        new Floor(exp),
         new Abs(exp),
         new Sgn(exp)
       ];
@@ -783,7 +785,7 @@ class ExpressionTests extends TestSet {
     eval = new Exponential(infinity).evaluate(real, cm);
     expect(eval, equals(double.infinity));
     // -INFTY -> 0.0
-    eval = new Exponential(-infinity).evaluate(real, cm);
+    eval = new Exponential(negInfty).evaluate(real, cm);
     expect(eval, equals(0.0));
 
     /*
@@ -853,7 +855,7 @@ class ExpressionTests extends TestSet {
     eval = new Cos(infinity).evaluate(real, cm);
     expect(eval, isNot(equals(eval))); // NaN
     // cos(-INFTY) -> [-1,1] / NaN
-    eval = new Cos(-infinity).evaluate(real, cm);
+    eval = new Cos(negInfty).evaluate(real, cm);
     expect(eval, isNot(equals(eval))); // NaN
 
     /*
@@ -878,7 +880,7 @@ class ExpressionTests extends TestSet {
     eval = new Sin(infinity).evaluate(real, cm);
     expect(eval, isNot(equals(eval))); // NaN
     // sin(-INFTY) -> [-1,1] / NaN
-    eval = new Sin(-infinity).evaluate(real, cm);
+    eval = new Sin(negInfty).evaluate(real, cm);
     expect(eval, isNot(equals(eval))); // NaN
 
     /*
@@ -903,7 +905,7 @@ class ExpressionTests extends TestSet {
     eval = new Tan(infinity).evaluate(real, cm);
     expect(eval, isNot(equals(eval))); // NaN
     // tan(-INFTY) -> <INFTY / NaN
-    eval = new Tan(-infinity).evaluate(real, cm);
+    eval = new Tan(negInfty).evaluate(real, cm);
     expect(eval, isNot(equals(eval))); // NaN
 
     /*
@@ -918,11 +920,17 @@ class ExpressionTests extends TestSet {
     // arcsin(1) = π/2
     eval = new Asin(one).evaluate(real, cm);
     expect(eval, closeTo(math.pi / 2, 0.00001));
+    // arcsin(2) = NaN
+    eval = new Asin(Number(2)).evaluate(real, cm);
+    expect(eval, isNot(equals(eval))); // NaN
+    // arcsin(-2) = NaN
+    eval = new Asin(-Number(2)).evaluate(real, cm);
+    expect(eval, isNot(equals(eval))); // NaN
     // arcsin(∞) = -∞
     eval = new Asin(infinity).evaluate(real, cm);
     expect(eval, isNot(equals(eval))); // NaN
     // arcsin(-∞) = ∞
-    eval = new Asin(-infinity).evaluate(real, cm);
+    eval = new Asin(negInfty).evaluate(real, cm);
     expect(eval, isNot(equals(eval))); // NaN
 
     /*
@@ -937,11 +945,17 @@ class ExpressionTests extends TestSet {
     // arccos(1) = 0
     eval = new Acos(one).evaluate(real, cm);
     expect(eval, equals(0.0));
+    // arccos(2) = NaN
+    eval = new Acos(Number(2)).evaluate(real, cm);
+    expect(eval, isNot(equals(eval))); // NaN
+    // arccos(-2) = NaN
+    eval = new Acos(-Number(2)).evaluate(real, cm);
+    expect(eval, isNot(equals(eval))); // NaN
     // arccos(∞) = -∞
     eval = new Acos(infinity).evaluate(real, cm);
     expect(eval, isNot(equals(eval))); // NaN
     // arccos(-∞) = ∞
-    eval = new Acos(-infinity).evaluate(real, cm);
+    eval = new Acos(negInfty).evaluate(real, cm);
     expect(eval, isNot(equals(eval))); // NaN
 
     /*
@@ -960,7 +974,7 @@ class ExpressionTests extends TestSet {
     eval = new Atan(infinity).evaluate(real, cm);
     expect(eval, closeTo(math.pi / 2, 0.00001));
     // arctan(-∞) = -π/2
-    eval = new Atan(-infinity).evaluate(real, cm);
+    eval = new Atan(negInfty).evaluate(real, cm);
     expect(eval, closeTo(-math.pi / 2, 0.00001));
 
     /*
@@ -990,7 +1004,7 @@ class ExpressionTests extends TestSet {
      *  TODO  This is inconsistent with Sqrt(-INFTY),
      *        which is Root(2, -INFTY).
      */
-    eval = new Root(grade, -infinity).evaluate(real, cm);
+    eval = new Root(grade, negInfty).evaluate(real, cm);
     expect(eval, equals(double.infinity));
 
     /*
@@ -1012,7 +1026,7 @@ class ExpressionTests extends TestSet {
     eval = new Sqrt(infinity).evaluate(real, cm);
     expect(eval, equals(double.infinity));
     // sqrt(-INFTY) ->  NaN
-    eval = new Sqrt(-infinity).evaluate(real, cm);
+    eval = new Sqrt(negInfty).evaluate(real, cm);
     expect(eval, isNot(equals(eval)));
 
     /*
@@ -1034,7 +1048,7 @@ class ExpressionTests extends TestSet {
     eval = new Abs(infinity).evaluate(real, cm);
     expect(eval, equals(double.infinity));
     // abs(-INFTY) -> INFTY
-    eval = new Abs(-infinity).evaluate(real, cm);
+    eval = new Abs(negInfty).evaluate(real, cm);
     expect(eval, equals(double.infinity));
 
     /*
@@ -1056,8 +1070,52 @@ class ExpressionTests extends TestSet {
     eval = new Sgn(infinity).evaluate(real, cm);
     expect(eval, equals(1.0));
     // sgn(-INFTY) -> -1
-    eval = new Sgn(-infinity).evaluate(real, cm);
+    eval = new Sgn(negInfty).evaluate(real, cm);
     expect(eval, equals(-1.0));
+
+    /*
+     * Ceil
+     */
+    // ceil(0) = 0
+    eval = new Ceil(zero).evaluate(real, cm);
+    expect(eval, equals(0.0));
+    // ceil(-1) = -1
+    eval = new Ceil(-one).evaluate(real, cm);
+    expect(eval, equals(-1.0));
+    // ceil(1) = 1
+    eval = new Ceil(one).evaluate(real, cm);
+    expect(eval, equals(1.0));
+    // ceil(1.5) = 2.0
+    eval = new Ceil(Number(1.5)).evaluate(real, cm);
+    expect(eval, equals(2.0));
+    // ceil(∞) = unsupported
+    expect(() => new Ceil(infinity).evaluate(real, cm),
+        throwsA(TypeMatcher<UnsupportedError>()));
+    // ceil(-∞) = unsupported
+    expect(() => new Ceil(negInfty).evaluate(real, cm),
+        throwsA(TypeMatcher<UnsupportedError>()));
+
+    /*
+     * Floor
+     */
+    // floor(0) = 0
+    eval = new Floor(zero).evaluate(real, cm);
+    expect(eval, equals(0.0));
+    // floor(-1) = -1
+    eval = new Floor(-one).evaluate(real, cm);
+    expect(eval, equals(-1.0));
+    // floor(1) = 1
+    eval = new Floor(one).evaluate(real, cm);
+    expect(eval, equals(1.0));
+    // floor(1.5) = 1.0
+    eval = new Floor(Number(1.5)).evaluate(real, cm);
+    expect(eval, equals(1.0));
+    // floor(∞) = unsupported
+    expect(() => new Ceil(infinity).evaluate(real, cm),
+        throwsA(TypeMatcher<UnsupportedError>()));
+    // floor(-∞) = unsupported
+    expect(() => new Ceil(negInfty).evaluate(real, cm),
+        throwsA(TypeMatcher<UnsupportedError>()));
   }
 
   /// Tests INTERVAL evaluation of default functions.

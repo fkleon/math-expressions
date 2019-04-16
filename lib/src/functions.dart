@@ -961,7 +961,7 @@ class Ceil extends DefaultFunction {
     final dynamic argEval = arg.evaluate(type, context);
 
     if (type == EvaluationType.REAL) {
-      return argEval.ceil();
+      return argEval.ceil().toDouble();
     }
 
     if (type == EvaluationType.VECTOR) {
@@ -1006,7 +1006,7 @@ class Floor extends DefaultFunction {
     final dynamic argEval = arg.evaluate(type, context);
 
     if (type == EvaluationType.REAL) {
-      return argEval.floor();
+      return argEval.floor().toDouble();
     }
 
     if (type == EvaluationType.VECTOR) {
