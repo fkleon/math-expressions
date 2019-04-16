@@ -196,10 +196,10 @@ class Lexer {
        */
       if (keywords.containsKey(si)) {
         // check and or do intBuffer and varBuffer
-        if (intBuffer.length > 0) {
+        if (intBuffer.isNotEmpty) {
           _doIntBuffer(tempTokenStream);
         }
-        if (varBuffer.length > 0) {
+        if (varBuffer.isNotEmpty) {
           _doVarBuffer(tempTokenStream);
         }
         // MH - Bit of a hack here to handle exponentials of the form e^x rather than e(x)
@@ -220,7 +220,7 @@ class Lexer {
           // The current string is a number and it is added to the intBuffer.
           sb.write(si);
           intBuffer = sb.toString();
-          if (varBuffer.length > 0) {
+          if (varBuffer.isNotEmpty) {
             _doVarBuffer(tempTokenStream);
           }
         } on FormatException {
@@ -233,7 +233,7 @@ class Lexer {
 
           // The current string is not a number and not a simple keyword, so it has to be a variable or function.
           sb = new StringBuffer(varBuffer);
-          if (intBuffer.length > 0) {
+          if (intBuffer.isNotEmpty) {
             /*
              * The intBuffer contains a string and the current string is a
              * variable or part of a complex keyword, so the value is added
@@ -252,11 +252,11 @@ class Lexer {
       }
     }
 
-    if (intBuffer.length > 0) {
+    if (intBuffer.isNotEmpty) {
       // There are no more symbols in the input string but there is still an int in the intBuffer
       _doIntBuffer(tempTokenStream);
     }
-    if (varBuffer.length > 0) {
+    if (varBuffer.isNotEmpty) {
       // There are no more symbols in the input string but there is still a variable or keyword in the varBuffer
       _doVarBuffer(tempTokenStream);
     }

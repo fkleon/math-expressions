@@ -1,3 +1,7 @@
+### 1.1.1 - 2019-04-16
+
+- Package health and maintenance cleanups
+
 ### 1.1.0 - 2019-04-16
 
 - Drop support for Dart SDK versions below 2.0.0
