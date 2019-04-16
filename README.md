@@ -15,7 +15,8 @@ math_expressions is inspired by [mathExpr][] for Java and distributed under the 
 * Extensible through custom function definitions in code.
 * Well [documented][dartdoc] and tested.
 
-This package contains a very simple [command-line interpreter](bin/interpreter.dart) for real numbers:
+This package contains a very simple [command-line interpreter](bin/interpreter.dart)
+for real numbers:
 
     pub run math_expressions:interpreter
 
@@ -28,9 +29,9 @@ This package contains a very simple [command-line interpreter](bin/interpreter.d
 
 Suggestions and pull requests are always welcome!
 
-## Examples
+## Usage
 
-Below are two basic examples of how to use this library. There also is some [additional example code](example/main.dart).
+Below are two basic examples of how to use this library. There also is some [additional example code](example/main.dart) available.
 
 ### 1. Expression creation and evaluation
 
@@ -94,9 +95,24 @@ This example shows how to simplify and differentiate
   print(expDerived.simplify()); // = 1.0
 ```
 
-[mathExpr]: https://www3.math.tu-berlin.de/geometrie/jtem/mathExpr/
+## Alternatives
+
+Here are some other Dart libraries that implement similar functionality to
+math_expression: parsing and evaluating mathematical expressions.
+
+* [expressions][]: an elegant and small library to parse and evaluate simple
+  expressions.
+* [function_tree][]: a library for parsing, evaluating and plotting single- and
+  multi-variables numerical functions.
+
+To the author's knowledge math_expressions is currently the only library
+supporting interval arithmetics.
+
+[mathExpr]: https://www3.math.tu-berlin.de/geometrie/jtem/mathExpr/ "The mathExpr library provides classes to parse and evaluate mathematical expressions."
 [bohlender2010]: https://interval.louisiana.edu/reliable-computing-journal/volume-15/no-1/reliable-computing-15-pp-36-42.pdf "Deﬁnition of the Arithmetic Operations and Comparison Relations for an Interval Arithmetic Standard, PDF"
-[license]: LICENSE
+[license]: LICENSE "MIT LICENSE"
+[expressions]: https://pub.dartlang.org/packages/expressions "A library to parse and evaluate simple expressions."
+[function_tree]: https://pub.dartlang.org/packages/function_tree "A library for parsing and evaluating numerical functions built from strings."
 [dartdoc]: https://pub.dartlang.org/documentation/math_expressions/latest/
 [defaultFunctions]: https://pub.dartlang.org/documentation/math_expressions/latest/math_expressions/DefaultFunction-class.html
 [exampleEq1]: https://latex.codecogs.com/gif.latex?%28x%5E2%2Bcos%28y%29%29%2F3
