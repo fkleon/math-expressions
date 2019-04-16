@@ -1,4 +1,4 @@
-### 1.1.0
+### 1.1.0 - 2019-04-16
 
 - Drop support for Dart SDK versions below 2.0.0
 - Add arcsin, arccos, arctan functions
