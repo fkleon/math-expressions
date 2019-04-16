@@ -5,7 +5,8 @@ A library for parsing and evaluating mathematical expressions.
 * Performs evaluations in real, vector, and [interval][bohlender2010] contexts.
 * Supports expression simplification and differentiation.
 
-math_expressions is inspired by [mathExpr][] for Java and distributed under the MIT license as described in the [LICENSE][] file.
+math_expressions is inspired by [mathExpr][] for Java and distributed under the
+[MIT license][LICENSE].
 
 ## Features
 
