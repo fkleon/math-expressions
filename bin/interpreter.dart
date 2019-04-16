@@ -9,9 +9,7 @@ Lexer lexer = new Lexer();
 Parser parser = new Parser();
 Expression currentExpression;
 
-/**
- * Starts a CLI interpreter for simple mathematical expressions.
- */
+/// Starts a CLI interpreter for simple mathematical expressions.
 void main(List<String> arguments) {
   print('math-expressions interpreter\n');
   print('The following commands are supported:');
