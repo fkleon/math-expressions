@@ -1,29 +1,25 @@
 part of math_expressions;
 
-/**
- * Mathematical expressions must be evaluated under a certain [EvaluationType].
- *
- * Currently there are three types, but not all expressions support each type.
- * If you try to evaluate an expression with an unsupported type, it will raise an
- * [UnimplementedError] or [UnsupportedError].
- *
- * - REAL
- * - VECTOR
- * - INTERVAL
- *
- * __Note__: This class emulates an enumeration, since they are not supported
- * by Dart yet.
- */
+/// Mathematical expressions must be evaluated under a certain [EvaluationType].
+///
+/// Currently there are three types, but not all expressions support each type.
+/// If you try to evaluate an expression with an unsupported type, it will raise an
+/// [UnimplementedError] or [UnsupportedError].
+///
+/// - REAL
+/// - VECTOR
+/// - INTERVAL
+///
+/// __Note__: This class emulates an enumeration, since they are not supported
+/// by Dart yet.
 class EvaluationType {
   /// Our type map.
   static Map<int, EvaluationType> _cache;
   final int type;
   final String _text;
 
-  /**
-   * Private singleton constructor, no need to instantiate new objects
-   * all the time.
-   */
+  /// Private singleton constructor, no need to instantiate new objects
+  /// all the time.
   factory EvaluationType(int type, String text) {
     _cache ??= <int, EvaluationType>{};
 
@@ -38,9 +34,7 @@ class EvaluationType {
     }
   }
 
-  /**
-   * Internal constructor for EvaluationTypes.
-   */
+  /// Internal constructor for EvaluationTypes.
   EvaluationType._internal(this.type, this._text);
 
   /// Public constructor for REAL types. Always returns the same instance of a REAL type.
@@ -62,9 +56,7 @@ class EvaluationType {
   /// Internal integer value for INTERVAL type.
   static final int INTERVAL_INT = 3;
 
-  /**
-   * Two types are equal, if their internal int matches.
-   */
+  /// Two types are equal, if their internal int matches.
   @override
   bool operator ==(Object et) =>
       (et is EvaluationType) && (this.type == et.type);
@@ -76,11 +68,9 @@ class EvaluationType {
   String toString() => 'Type[$_text]';
 }
 
-/**
- * The context model keeps track of all known variables and functions.
- *
- * It is structured hierarchically to offer nested scopes.
- */
+/// The context model keeps track of all known variables and functions.
+///
+/// It is structured hierarchically to offer nested scopes.
 class ContextModel {
   /// The parent scope.
   ContextModel parentScope;
@@ -92,27 +82,19 @@ class ContextModel {
   // TODO: Do we even need to track function names?
   Set<MathFunction> functions = new Set<MathFunction>();
 
-  /**
-   * Creates a new, empty root context model.
-   */
+  /// Creates a new, empty root context model.
   ContextModel();
 
-  /**
-   * Internal constructor for creating a child scope.
-   */
+  /// Internal constructor for creating a child scope.
   ContextModel._child(this.parentScope);
 
-  /**
-   * Returns a new child scope of this scope.
-   */
+  /// Returns a new child scope of this scope.
   ContextModel createChildScope() => new ContextModel._child(this);
 
-  /**
-   * Returns the bound expression for the given variable.
-   * Performs recursive lookup through `parentScope`.
-   *
-   * Throws a [StateError], if variable is still unbound at the root scope.
-   */
+  /// Returns the bound expression for the given variable.
+  /// Performs recursive lookup through `parentScope`.
+  ///
+  /// Throws a [StateError], if variable is still unbound at the root scope.
   Expression getExpression(String varName) {
     if (variables.containsKey(varName)) {
       return variables[varName];
@@ -123,12 +105,10 @@ class ContextModel {
     }
   }
 
-  /**
-   * Returns the function for the given function name.
-   * Performs recursive lookup through `parentScope`.
-   *
-   * Throws a [StateError], if function is still unbound at the root scope.
-   */
+  /// Returns the function for the given function name.
+  /// Performs recursive lookup through `parentScope`.
+  ///
+  /// Throws a [StateError], if function is still unbound at the root scope.
   MathFunction getFunction(String name) {
     final Iterable<MathFunction> candidates =
         functions.where((mathFunction) => mathFunction.name == name);
@@ -142,23 +122,17 @@ class ContextModel {
     }
   }
 
-  /**
-   * Binds a variable to an expression in this context.
-   */
+  /// Binds a variable to an expression in this context.
   void bindVariable(Variable v, Expression e) {
     variables[v.name] = e;
   }
 
-  /**
-   * Binds a variable name to an expression in this context.
-   */
+  /// Binds a variable name to an expression in this context.
   void bindVariableName(String vName, Expression e) {
     variables[vName] = e;
   }
 
-  /**
-   * Binds a function to this context.
-   */
+  /// Binds a function to this context.
   void bindFunction(MathFunction f) {
     //TODO force non-duplicates.
     functions.add(f);
@@ -170,78 +144,3 @@ class ContextModel {
       'VARS: ${variables.toString()}, '
       'FUNCS: ${functions.toString()}]';
 }
-
-/*
-class EvaluatorFactory {
-
-  getEvaluator(BinaryOperator binOp, EvaluationType type) {
-    if (binOp is Plus) {
-      return new PlusEvaluator(binOp.first, binOp.second, type);
-    }
-
-    if (binOp is Times) {
-
-    }
-
-    if (binOp is Minus) {
-
-    }
-
-    if (binOp is Divide) {
-
-    }
-
-    if (binOp is Power) {
-
-    }
-
-    throw new UnsupportedError('Unsupported BinaryOperator: ${binOp}.');
-  }
-}
-
-abstract class Evaluator {
-  EvaluationType returnType;
-
-  Evaluator(EvaluationType this.returnType);
-
-  evaluate();
-}
-
-abstract class BinaryOpEvaluator extends Evaluator {
-  Evaluator op1, op2;
-
-  BinaryOpEvaluator(this.op1, this.op2, type): super(type);
-}
-
-class PlusEvaluator extends BinaryOpEvaluator {
-
-  PlusEvaluator(op1, op2, type): super(op1, op2, type);
-
-  evaluate() => op1.evaluate() + op2.evaluate();
-}
-
-class MinusRealEvaluator extends BinaryOpEvaluator {
-  MinusRealEvaluator(op1, op2): super(op1, op2, EvaluationType.REAL);
-
-  evaluate() => op1.evaluate() - op2.evaluate();
-}
-
-class TimesRealEvaluator extends BinaryOpEvaluator {
-  TimesRealEvaluator(op1, op2): super(op1, op2, EvaluationType.REAL);
-
-  evaluate() => op1.evaluate() * op2.evaluate();
-}
-
-class DivideRealEvaluator extends BinaryOpEvaluator {
-  DivideRealEvaluator(op1, op2): super(op1, op2, EvaluationType.REAL);
-
-  evaluate() => op1.evaluate() / op2.evaluate();
-}
-
-class ConstantEvaluator extends Evaluator {
-
-  ConstantEvaluator(Literal l, type): super(type);
-
-  evaluate();
-}
-*/

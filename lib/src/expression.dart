@@ -1,33 +1,31 @@
 part of math_expressions;
 
-/**
- * Any Expression supports basic mathematical operations like
- * addition, subtraction, multiplication, division, power and negate.
- *
- * Furthermore, any expression can be differentiated with respect to
- * a given variable. Also expressions know how to simplify themselves.
- *
- * There are different classes of expressions:
- *
- * * Literals (see [Literal])
- *
- *     * Number Literals (see [Number])
- *     * Variable Literals (see [Variable])
- *     * Vector Literals (see [Vector])
- *     * Interval Literals (see [IntervalLiteral])
- * * Operators (support auto-wrapping of parameters into Literals)
- *
- *     * Unary Operators (see [UnaryOperator])
- *     * Binary Operators (see [BinaryOperator])
- * * Functions (see [MathFunction])
- *
- *     * Pre-defined Functions (see [DefaultFunction])
- *     * Composite Functions (see [CompositeFunction])
- *     * Custom Functions (see [CustomFunction])
- *
- * Pre-defined functions are [Exponential], [Log], [Ln], nth-[Root], [Sqrt],
- * [Abs], [Ceil], [Floor], [Sgn], [Sin], [Cos] and [Tan].
- */
+/// Any Expression supports basic mathematical operations like
+/// addition, subtraction, multiplication, division, power and negate.
+///
+/// Furthermore, any expression can be differentiated with respect to
+/// a given variable. Also expressions know how to simplify themselves.
+///
+/// There are different classes of expressions:
+///
+/// * Literals (see [Literal])
+///
+///     * Number Literals (see [Number])
+///     * Variable Literals (see [Variable])
+///     * Vector Literals (see [Vector])
+///     * Interval Literals (see [IntervalLiteral])
+/// * Operators (support auto-wrapping of parameters into Literals)
+///
+///     * Unary Operators (see [UnaryOperator])
+///     * Binary Operators (see [BinaryOperator])
+/// * Functions (see [MathFunction])
+///
+///     * Pre-defined Functions (see [DefaultFunction])
+///     * Composite Functions (see [CompositeFunction])
+///     * Custom Functions (see [CustomFunction])
+///
+/// Pre-defined functions are [Exponential], [Log], [Ln], nth-[Root], [Sqrt],
+/// [Abs], [Ceil], [Floor], [Sgn], [Sin], [Cos], [Tan], [Asin], [Acos] and [Atan].
 abstract class Expression {
   // Basic operations.
   /// Add operator. Creates a [Plus] expression.
@@ -51,46 +49,36 @@ abstract class Expression {
   /// Unary minus operator. Creates a [UnaryMinus] expression.
   Expression operator -() => new UnaryMinus(this);
 
-  /**
-   * Derives this expression with respect to the given variable.
-   */
+  /// Derives this expression with respect to the given variable.
   Expression derive(String toVar);
   // TODO: Return simplified version of derivation. This might not be possible
   //       with the current model. Probably needs some kind of evaluator
   //       construct.
 
-  /**
-   * Returns a simplified version of this expression.
-   * Subclasses should overwrite this method, if applicable.
-   */
+  /// Returns a simplified version of this expression.
+  /// Subclasses should overwrite this method, if applicable.
   Expression simplify() => this;
   // TODO: Return maximally simplified version of expression. This might not be
   //       possible with the current model, see above.
 
-  /**
-   * Evaluates this expression according to given type and context.
-   */
+  /// Evaluates this expression according to given type and context.
   dynamic evaluate(EvaluationType type, ContextModel context);
 
-  /**
-   * Returns a string version of this expression.
-   * Subclasses should override this method. The output should be kept
-   * compatible with the [Parser].
-   */
+  /// Returns a string version of this expression.
+  /// Subclasses should override this method. The output should be kept
+  /// compatible with the [Parser].
   @override
   String toString();
 
-  /**
-   * Converts the given argument to a valid expression.
-   *
-   * Returns the argument, if it is already an expression.
-   * Else wraps the argument in a [Number] or [Variable] Literal.
-   *
-   * Throws ArgumentError, if given arg is not an Expression, num oder String.
-   *
-   * __Note__:
-   * Does not handle negative numbers, will treat them as positives!
-   */
+  /// Converts the given argument to a valid expression.
+  ///
+  /// Returns the argument, if it is already an expression.
+  /// Else wraps the argument in a [Number] or [Variable] Literal.
+  ///
+  /// Throws ArgumentError, if given arg is not an Expression, num oder String.
+  ///
+  /// __Note__:
+  /// Does not handle negative numbers, will treat them as positives!
   Expression _toExpression(dynamic arg) {
     if (arg is Expression) {
       return arg;
@@ -108,10 +96,8 @@ abstract class Expression {
     throw new ArgumentError('$arg is not a valid expression!');
   }
 
-  /**
-   * Returns true, if the given expression is a constant literal and its value
-   * matches the given value.
-   */
+  /// Returns true, if the given expression is a constant literal and its value
+  /// matches the given value.
   bool _isNumber(Expression exp, [num value = 0]) {
     // Check for literal.
     if (exp is Literal && exp.isConstant()) {
@@ -122,82 +108,66 @@ abstract class Expression {
   }
 }
 
-/**
- * A binary operator takes two expressions and performs an operation on them.
- */
+/// A binary operator takes two expressions and performs an operation on them.
 abstract class BinaryOperator extends Expression {
   Expression first, second;
 
-  /**
-   * Creates a [BinaryOperator] from two given arguments.
-   *
-   * If an argument is not an expression, it will be wrapped in an appropriate
-   * literal.
-   *
-   *  * A (positive) number will be encapsulated in a [Number] Literal,
-   *  * A string will be encapsulated in a [Variable] Literal.
-   */
+  /// Creates a [BinaryOperator] from two given arguments.
+  ///
+  /// If an argument is not an expression, it will be wrapped in an appropriate
+  /// literal.
+  ///
+  /// * A (positive) number will be encapsulated in a [Number] Literal,
+  /// * A string will be encapsulated in a [Variable] Literal.
   BinaryOperator(dynamic first, dynamic second) {
     this.first = _toExpression(first);
     this.second = _toExpression(second);
   }
 
-  /**
-   * Creates a new [BinaryOperator] from two given expressions.
-   */
+  /// Creates a new [BinaryOperator] from two given expressions.
   BinaryOperator.raw(this.first, this.second);
 }
 
-/**
- * A unary operator takes one argument and performs an operation on it.
- */
+/// A unary operator takes one argument and performs an operation on it.
 abstract class UnaryOperator extends Expression {
   Expression exp;
 
-  /**
-   * Creates a [UnaryOperator] from the given argument.
-   *
-   * If the argument is not an expression, it will be wrapped in an appropriate
-   * literal.
-   *
-   * * A (positive) number will be encapsulated in a [Number] Literal,
-   * * A string will be encapsulated in a [Variable] Literal.
-   */
+  /// Creates a [UnaryOperator] from the given argument.
+  ///
+  /// If the argument is not an expression, it will be wrapped in an appropriate
+  /// literal.
+  ///
+  /// * A (positive) number will be encapsulated in a [Number] Literal,
+  /// * A string will be encapsulated in a [Variable] Literal.
   UnaryOperator(dynamic exp) {
     this.exp = _toExpression(exp);
   }
 
-  /**
-   * Creates a [UnaryOperator] from the given expression.
-   */
+  /// Creates a [UnaryOperator] from the given expression.
   UnaryOperator.raw(this.exp);
 }
 
-/**
- * The unary minus negates its argument.
- */
+/// The unary minus negates its argument.
 class UnaryMinus extends UnaryOperator {
-  /**
-   * Creates a new unary minus operation on the given expression.
-   *
-   * For example, to create -1:
-   *     one = new Number(1);
-   *     minus_one = new UnaryMinus(one);
-   *
-   * or just:
-   *     minus_one = new UnaryMinus(1);
-   */
+  /// Creates a new unary minus operation on the given expression.
+  ///
+  /// For example, to create -1:
+  ///
+  ///     one = new Number(1);
+  ///     minus_one = new UnaryMinus(one);
+  ///
+  /// or just:
+  ///
+  ///     minus_one = new UnaryMinus(1);
   UnaryMinus(dynamic exp) : super(exp);
 
   @override
   Expression derive(String toVar) => new UnaryMinus(exp.derive(toVar));
 
-  /**
-   * Possible simplifications:
-   *
-   * 1. -(-a) = a
-   * 2. -0 = 0
-   */
+  /// Possible simplifications:
+  ///
+  /// 1. -(-a) = a
+  /// 2. -0 = 0
   @override
   Expression simplify() {
     final Expression simplifiedOp = exp.simplify();
@@ -224,32 +194,28 @@ class UnaryMinus extends UnaryOperator {
   String toString() => '(-$exp)';
 }
 
-/**
- * The plus operator performs an addition.
- */
+/// The plus operator performs an addition.
 class Plus extends BinaryOperator {
-  /**
-   * Creates an addition operation on the given expressions.
-   *
-   * For example, to create x + 4:
-   *     addition = new Plus('x', 4);
-   *
-   * or:
-   *     addition = new Variable('x') + new Number(4);
-   */
+  /// Creates an addition operation on the given expressions.
+  //
+  /// For example, to create x + 4:
+  ///
+  ///     addition = new Plus('x', 4);
+  ///
+  /// or:
+  ///
+  ///     addition = new Variable('x') + new Number(4);
   Plus(dynamic first, dynamic second) : super(first, second);
 
   @override
   Expression derive(String toVar) =>
       new Plus(first.derive(toVar), second.derive(toVar));
 
-  /**
-   * Possible simplifications:
-   *
-   * 1. a + 0 = a
-   * 2. 0 + a = a
-   * 3. a + -(b) = a - b
-   */
+  /// Possible simplifications:
+  ///
+  /// 1. a + 0 = a
+  /// 2. 0 + a = a
+  /// 3. a + -(b) = a - b
   @override
   Expression simplify() {
     final Expression firstOp = first.simplify();
@@ -280,32 +246,28 @@ class Plus extends BinaryOperator {
   String toString() => '($first + $second)';
 }
 
-/**
- * The minus operator performs a subtraction.
- */
+/// The minus operator performs a subtraction.
 class Minus extends BinaryOperator {
-  /**
-   * Creates a subtaction operation on the given expressions.
-   *
-   * For example, to create 5 - x:
-   *     subtraction = new Minus(5, 'x');
-   *
-   * or:
-   *     subtraction = new Number(5) - new Variable('x');
-   */
+  /// Creates a subtaction operation on the given expressions.
+  ///
+  /// For example, to create 5 - x:
+  ///
+  ///     subtraction = new Minus(5, 'x');
+  ///
+  /// or:
+  ///
+  ///     subtraction = new Number(5) - new Variable('x');
   Minus(dynamic first, dynamic second) : super(first, second);
 
   @override
   Expression derive(String toVar) =>
       new Minus(first.derive(toVar), second.derive(toVar));
 
-  /**
-   * Possible simplifications:
-   *
-   * 1. a - 0 = a
-   * 2. 0 - a = - a
-   * 3. a - -(b) = a + b
-   */
+  /// Possible simplifications:
+  ///
+  /// 1. a - 0 = a
+  /// 2. 0 - a = - a
+  /// 3. a - -(b) = a + b
   @override
   Expression simplify() {
     final Expression firstOp = first.simplify();
@@ -336,19 +298,17 @@ class Minus extends BinaryOperator {
   String toString() => '($first - $second)';
 }
 
-/**
- * The times operator performs a multiplication.
- */
+/// The times operator performs a multiplication.
 class Times extends BinaryOperator {
-  /**
-   * Creates a product operation on the given expressions.
-   *
-   * For example, to create 7 * x:
-   *     product = new Times(7, 'x');
-   *
-   * or:
-   *     product = new Number(7) * new Variable('x');
-   */
+  /// Creates a product operation on the given expressions.
+  ///
+  /// For example, to create 7 * x:
+  ///
+  ///     product = new Times(7, 'x');
+  ///
+  /// or:
+  ///
+  ///     product = new Number(7) * new Variable('x');
   Times(dynamic first, dynamic second) : super(first, second);
 
   @override
@@ -356,17 +316,15 @@ class Times extends BinaryOperator {
       new Times(first, second.derive(toVar)),
       new Times(first.derive(toVar), second));
 
-  /**
-   * Possible simplifications:
-   *
-   * 1. -a * b = - (a * b)
-   * 2. a * -b = - (a * b)
-   * 3. -a * -b = a * b
-   * 4. a * 0 = 0
-   * 5. 0 * a = 0
-   * 6. a * 1 = a
-   * 7. 1 * a = a
-   */
+  /// Possible simplifications:
+  ///
+  /// 1. -a * b = - (a * b)
+  /// 2. a * -b = - (a * b)
+  /// 3. -a * -b = a * b
+  /// 4. a * 0 = 0
+  /// 5. 0 * a = 0
+  /// 6. a * 1 = a
+  /// 7. 1 * a = a
   @override
   Expression simplify() {
     Expression firstOp = first.simplify();
@@ -432,19 +390,17 @@ class Times extends BinaryOperator {
   String toString() => '($first * $second)';
 }
 
-/**
- * The divide operator performs a division.
- */
+/// The divide operator performs a division.
 class Divide extends BinaryOperator {
-  /**
-   * Creates a division operation on the given expressions.
-   *
-   * For example, to create x/(y+2):
-   *     div = new Divide('x', new Plus('y', 2));
-   *
-   * or:
-   *     div = new Variable('x') / (new Variable('y') + new Number(2));
-   */
+  /// Creates a division operation on the given expressions.
+  ///
+  /// For example, to create x/(y+2):
+  ///
+  ///     div = new Divide('x', new Plus('y', 2));
+  ///
+  /// or:
+  ///
+  ///     div = new Variable('x') / (new Variable('y') + new Number(2));
   Divide(dynamic dividend, dynamic divisor) : super(dividend, divisor);
 
   @override
@@ -452,15 +408,13 @@ class Divide extends BinaryOperator {
       ((first.derive(toVar) * second) - (first * second.derive(toVar))) /
       (second * second);
 
-  /**
-   * Possible simplifications:
-   *
-   * 1. -a / b = - (a / b)
-   * 2. a / -b = - (a / b)
-   * 3. -a / -b = a / b
-   * 5. 0 / a = 0
-   * 6. a / 1 = a
-   */
+  /// Possible simplifications:
+  ///
+  /// 1. -a / b = - (a / b)
+  /// 2. a / -b = - (a / b)
+  /// 3. -a / -b = a / b
+  /// 5. 0 / a = 0
+  /// 6. a / 1 = a
   @override
   Expression simplify() {
     Expression firstOp = first.simplify();
@@ -493,10 +447,8 @@ class Divide extends BinaryOperator {
     // TODO cancel down/out? - needs equals on literals (and expressions?)!
   }
 
-  /**
-   * This method throws an [IntegerDivisionByZeroException],
-   * if a divide by zero is encountered.
-   */
+  /// This method throws an [IntegerDivisionByZeroException],
+  /// if a divide by zero is encountered.
   @override
   dynamic evaluate(EvaluationType type, ContextModel context) {
     final dynamic firstEval = first.evaluate(type, context);
@@ -519,21 +471,18 @@ class Divide extends BinaryOperator {
   String toString() => '($first / $second)';
 }
 
-/**
- * The modulo operator performs a Euclidean modulo operation, as Dart performs
- * it. That is, a % b = a - floor(a / |b|) |b|. For positive integers, this is a
- * remainder.
- */
+/// The modulo operator performs a Euclidean modulo operation, as Dart performs
+/// it. That is, a % b = a - floor(a / |b|) |b|. For positive integers, this is a
+/// remainder.
 class Modulo extends BinaryOperator {
-  /**
-   * Creates a modulo operation on the given expressions.
-   *
-   * For example, to create x % (y+2):
-   *     r = new Modulo('x', new Plus('y', 2));
-   *
-   * or:
-   *     r = new Variable('x') % (new Variable('y') + new Number(2));
-   */
+  /// Creates a modulo operation on the given expressions.
+  ///
+  /// For example, to create x % (y+2):
+  ///
+  ///     r = new Modulo('x', new Plus('y', 2));
+  /// or:
+  ///
+  ///     r = new Variable('x') % (new Variable('y') + new Number(2));
   Modulo(dynamic dividend, dynamic divisor) : super(dividend, divisor);
 
   @override
@@ -542,12 +491,10 @@ class Modulo extends BinaryOperator {
     return first.derive(toVar) - new Floor(first / a2) * a2.derive(toVar);
   }
 
-  /**
-   * Possible simplifications:
-   *
-   * 1. a % -b = a % b
-   * 2. 0 % a = 0
-   */
+  /// Possible simplifications:
+  ///
+  /// 1. a % -b = a % b
+  /// 2. 0 % a = 0
   @override
   Expression simplify() {
     final Expression firstOp = first.simplify();
@@ -581,32 +528,27 @@ class Modulo extends BinaryOperator {
   String toString() => '($first % $second)';
 }
 
-/**
- * The power operator.
- */
+/// The power operator.
 class Power extends BinaryOperator {
-  /**
-   * Creates a power operation on the given expressions.
-   *
-   * For example, to create x^3:
-   *     pow = new Power('x', 3);
-   *
-   * or:
-   *     pow = new Variable('x') ^ new Number(3.0);
-   */
+  /// Creates a power operation on the given expressions.
+  ///
+  /// For example, to create x^3:
+  ///
+  ///     pow = new Power('x', 3);
+  /// or:
+  ///
+  ///     pow = new Variable('x') ^ new Number(3.0);
   Power(dynamic x, dynamic exp) : super(x, exp);
 
   @override
   Expression derive(String toVar) => this.asE().derive(toVar);
 
-  /**
-   * Possible simplifications:
-   *
-   * 1. 0^x = 0
-   * 2. 1^x = 1
-   * 3. x^0 = 1
-   * 4. x^1 = x
-   */
+  /// Possible simplifications:
+  ///
+  /// 1. 0^x = 0
+  /// 2. 1^x = 1
+  /// 3. x^0 = 1
+  /// 4. x^1 = x
   @override
   Expression simplify() {
     final Expression baseOp = first.simplify();
@@ -704,37 +646,27 @@ class Power extends BinaryOperator {
   @override
   String toString() => '($first^$second)';
 
-  /**
-   * Returns the exponential form of this operation.
-   * E.g. x^4 = e^(4*ln(x))
-   *
-   * This method is used to determine the derivation of a power expression.
-   */
+  /// Returns the exponential form of this operation.
+  /// E.g. x^4 = e^(4*ln(x))
+  ///
+  /// This method is used to determine the derivation of a power expression.
   Expression asE() => new Exponential(second * new Ln(first));
 }
 
-/**
- * A literal can be a number, a constant or a variable.
- */
+/// A literal can be a number, a constant or a variable.
 abstract class Literal extends Expression {
   dynamic value;
 
-  /**
-   * Creates a literal. The optional paramter `value` can be used to specify
-   * its value.
-   */
+  /// Creates a literal. The optional paramter `value` can be used to specify
+  /// its value.
   Literal([this.value]);
 
-  /**
-   * Returns true, if this literal is a constant.
-   */
+  /// Returns true, if this literal is a constant.
   bool isConstant() => false;
 
-  /**
-   * Returns the constant value of this literal.
-   * Throws StateError if literal is not constant, check before usage with
-   * `isConstant()`.
-   */
+  /// Returns the constant value of this literal.
+  /// Throws StateError if literal is not constant, check before usage with
+  /// `isConstant()`.
   dynamic getConstantValue() {
     throw new StateError('Literal ${this} is not constant.');
   }
@@ -743,14 +675,10 @@ abstract class Literal extends Expression {
   String toString() => value.toString();
 }
 
-/**
- * A number is a constant number literal.
- */
+/// A number is a constant number literal.
 class Number extends Literal {
-  /**
-   * Creates a number literal with given value.
-   * Always holds a double internally.
-   */
+  /// Creates a number literal with given value.
+  /// Always holds a double internally.
   Number(num value) : super(value.toDouble());
 
   @override
@@ -783,17 +711,14 @@ class Number extends Literal {
   Expression derive(String toVar) => new Number(0.0);
 }
 
-/**
- * A vector of arbitrary size.
- */
+/// A vector of arbitrary size.
 class Vector extends Literal {
-  /**
-   * Creates a vector with the given element expressions.
-   *
-   * For example, to create a 3-dimensional vector:
-   *     x = y = z = new Number(1);
-   *     vec3 = new Vector([x, y, z]);
-   */
+  /// Creates a vector with the given element expressions.
+  ///
+  /// For example, to create a 3-dimensional vector:
+  ///
+  ///     x = y = z = new Number(1);
+  ///     vec3 = new Vector([x, y, z]);
   Vector(List<Expression> elements) : super(elements);
 
   /// Convenience operator to access vector elements.
@@ -817,9 +742,7 @@ class Vector extends Literal {
     return new Vector(elementDerivatives);
   }
 
-  /**
-   * Simplifies all elements of this vector.
-   */
+  /// Simplifies all elements of this vector.
   @override
   Expression simplify() {
     final List<Expression> simplifiedElements = new List<Expression>(length);
@@ -898,15 +821,12 @@ class Vector extends Literal {
   }
 }
 
-/**
- * A variable is a named literal.
- */
+/// A variable is a named literal.
 class Variable extends Literal {
+  /// The name of this variable.
   String name;
 
-  /**
-   * Creates a variable literal with given name.
-   */
+  /// Creates a variable literal with given name.
   Variable(this.name);
 
   @override
@@ -921,17 +841,13 @@ class Variable extends Literal {
       context.getExpression(name).evaluate(type, context);
 }
 
-/**
- * A bound variable is an anonymous variable, e.g. a variable without name,
- * which is bound to an expression.
- */
+/// A bound variable is an anonymous variable, e.g. a variable without name,
+/// which is bound to an expression.
 //TODO This is only used for DefaultFunctions, might as well use an expression
 //      directly then and remove some complexity.. leaving this in use right now,
 //      since it might be useful some time - maybe for composite functions? (FL)
 class BoundVariable extends Variable {
-  /**
-   * Creates an anonymous variable which is bound to the given expression.
-   */
+  /// Creates an anonymous variable which is bound to the given expression.
   BoundVariable(Expression expr) : super('anon') {
     this.value = expr;
   }
@@ -961,20 +877,15 @@ class BoundVariable extends Variable {
   String toString() => '{$value}';
 }
 
-/**
- * An interval literal.
- */
+/// An interval literal.
 class IntervalLiteral extends Literal {
+  /// The interval bounds.
   Expression min, max;
 
-  /**
-   * Creates a new interval with given borders.
-   */
+  /// Creates a new interval with given bounds.
   IntervalLiteral(this.min, this.max);
 
-  /**
-   * Creates a new interval with identical borders.
-   */
+  /// Creates a new interval with identical bounds.
   IntervalLiteral.fromSingle(Expression exp)
       : this.min = exp,
         this.max = exp;
