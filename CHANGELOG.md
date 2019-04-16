@@ -2,6 +2,7 @@
 
 - Drop support for Dart SDK versions below 2.0.0
 - Add arcsin, arccos, arctan functions
+- Fix floor and ceil functions
 - Update examples and documentation
 - Switch to [pendantic](https://pub.dartlang.org/packages/pedantic) analysis
   options
