@@ -1,29 +1,24 @@
 part of math_expressions;
 
-/**
- * The Parser creates a mathematical [Expression] from a given input string.
- *
- * It uses a [Lexer] to create a RPN token stream and then builds the
- * expression.
- *
- * Usage example:
- *     Parser p = new Parser();
- *     Expression exp = p.parse("(x^2 + cos(y)) / 3");
- */
+/// The Parser creates a mathematical [Expression] from a given input string.
+///
+/// It uses a [Lexer] to create a RPN token stream and then builds the
+/// expression.
+///
+/// Usage example:
+///
+///     Parser p = new Parser();
+///     Expression exp = p.parse("(x^2 + cos(y)) / 3");
 class Parser {
   final Lexer lex;
 
-  /**
-   * Creates a new parser.
-   */
+  /// Creates a new parser.
   Parser() : lex = new Lexer();
 
-  /**
-   * Parses the given input string into an [Expression]. Throws a
-   * [ArgumentError] if the given [inputString] is empty. Throws a
-   * [StateError] if the token stream is invalid. Returns a valid
-   * [Expression].
-   */
+  /// Parses the given input string into an [Expression]. Throws a
+  /// [ArgumentError] if the given [inputString] is empty. Throws a
+  /// [StateError] if the token stream is invalid. Returns a valid
+  /// [Expression].
   Expression parse(String inputString) {
     if (inputString == null || inputString.trim().isEmpty) {
       throw new ArgumentError('The given input string was empty.');
@@ -139,14 +134,12 @@ class Parser {
   }
 }
 
-/**
- * The lexer creates tokens (see [TokenType] and [Token]) from an input string.
- * The input string is expected to be in
- * [infix notation form](https://en.wikipedia.org/wiki/Infix_notation).
- * The lexer can convert an infix stream into a
- * [postfix stream](https://en.wikipedia.org/wiki/Reverse_Polish_notation)
- * (Reverse Polish Notation) for further processing by a [Parser].
- */
+/// The lexer creates tokens (see [TokenType] and [Token]) from an input string.
+/// The input string is expected to be in
+/// [infix notation form](https://en.wikipedia.org/wiki/Infix_notation).
+/// The lexer can convert an infix stream into a
+/// [postfix stream](https://en.wikipedia.org/wiki/Reverse_Polish_notation)
+/// (Reverse Polish Notation) for further processing by a [Parser].
 class Lexer {
   final Map<String, TokenType> keywords = <String, TokenType>{};
 
@@ -156,9 +149,7 @@ class Lexer {
   /// Buffer for variable and function names
   String varBuffer = '';
 
-  /**
-   * Creates a new lexer.
-   */
+  /// Creates a new lexer.
   Lexer() {
     keywords['+'] = TokenType.PLUS;
     keywords['-'] = TokenType.MINUS;
@@ -189,10 +180,8 @@ class Lexer {
     keywords[','] = TokenType.SEPAR;
   }
 
-  /**
-   * Tokenizes a given input string.
-   * Returns a list of [Token] in infix notation.
-   */
+  /// Tokenizes a given input string.
+  /// Returns a list of [Token] in infix notation.
   List<Token> tokenize(String inputString) {
     final List<Token> tempTokenStream = <Token>[];
     final String clearedString = inputString.replaceAll(' ', '').trim();
@@ -274,19 +263,15 @@ class Lexer {
     return tempTokenStream;
   }
 
-  /**
-   * Checks if the intBuffer contains a number and adds it to the tokenStream.
-   * Then clears the intBuffer.
-   */
+  /// Checks if the intBuffer contains a number and adds it to the tokenStream.
+  /// Then clears the intBuffer.
   void _doIntBuffer(List<Token> stream) {
     stream.add(new Token(intBuffer, TokenType.VAL));
     intBuffer = '';
   }
 
-  /**
-   * Checks if the varBuffer contains a keyword or a variable and adds them to the tokenStream.
-   * Then clears the varBuffer.
-   */
+  /// Checks if the varBuffer contains a keyword or a variable and adds them to the tokenStream.
+  /// Then clears the varBuffer.
   void _doVarBuffer(List<Token> stream) {
     if (keywords.containsKey(varBuffer)) {
       stream.add(new Token(varBuffer, keywords[varBuffer]));
@@ -296,11 +281,9 @@ class Lexer {
     varBuffer = '';
   }
 
-  /**
-   * Transforms the lexer's token stream into RPN using the Shunting-yard
-   * algorithm. Returns a list of [Token] in RPN form. Throws an
-   * [ArgumentError] if the list is empty.
-   */
+  /// Transforms the lexer's token stream into RPN using the Shunting-yard
+  /// algorithm. Returns a list of [Token] in RPN form. Throws an
+  /// [ArgumentError] if the list is empty.
   List<Token> shuntingYard(List<Token> stream) {
     if (stream.isEmpty) {
       throw new ArgumentError('The given tokenStream was empty.');
@@ -425,20 +408,16 @@ class Lexer {
     return outputStream;
   }
 
-  /**
-   * This method invokes the createTokenStream methode to create an infix token
-   * stream and then invokes the shunting yard method to transform this stream
-   * into a RPN (reverse polish notation) token stream.
-   */
+  /// This method invokes the createTokenStream methode to create an infix token
+  /// stream and then invokes the shunting yard method to transform this stream
+  /// into a RPN (reverse polish notation) token stream.
   List<Token> tokenizeToRPN(String inputString) {
     final List<Token> infixStream = tokenize(inputString);
     return shuntingYard(infixStream);
   }
 }
 
-/**
- * A Token consists of text and has a [TokenType].
- */
+/// A Token consists of text and has a [TokenType].
 class Token {
   /// The text of this token.
   final String text;
@@ -468,18 +447,18 @@ class Token {
   String toString() => '($type: $text)';
 }
 
-/**
- * A token type. Access token types via the static fields.
- *
- * For example, to access the token type PLUS:
- *     plusType = TokenType.PLUS;
- *
- * The type defines the `priority` (precedence) of the token.
- *     (+,-) < (*,/) < (^) < functions < (-u)
- *
- * It also defines the associativity of the token. True stands for
- * left-associative, false for right-associative.
- */
+/// A token type. Access token types via the static fields.
+///
+/// For example, to access the token type PLUS:
+///
+///     plusType = TokenType.PLUS;
+///
+/// The type defines the `priority` (precedence) of the token.
+///
+///     (+,-) < (*,/) < (^) < functions < (-u)
+///
+/// It also defines the associativity of the token. True stands for
+/// left-associative, false for right-associative.
 class TokenType {
   // Variables and values
   static const TokenType VAR = const TokenType._internal('VAR', 10);
@@ -553,11 +532,9 @@ class TokenType {
   /// True, if this token is a function.
   final bool function;
 
-  /**
-   * Internal constructor for a [TokenType].
-   * To retrieve a token type, directly access the static final fields
-   * provided by this class.
-   */
+  /// Internal constructor for a [TokenType].
+  /// To retrieve a token type, directly access the static final fields
+  /// provided by this class.
   const TokenType._internal(this.value, this.priority,
       {this.leftAssociative: true, this.operator: false, this.function: false});
 

@@ -1,51 +1,35 @@
 part of math_expressions;
 
-/**
- * A point in 3-dimensional space, which is a Vector3.
- * This implementation supplies common mathematical operations on points.
- */
+/// A point in 3-dimensional space, which is a Vector3.
+/// This implementation supplies common mathematical operations on points.
 class Point3 extends Vector3 {
-  /**
-   * Creates a new Point3 with the given coordinates.
-   */
+  /// Creates a new Point3 with the given coordinates.
   factory Point3(double x, double y, double z) =>
       new Point3.zero()..setValues(x, y, z);
 
-  /**
-     * Creates a new Point3 from the given Vector3.
-     */
+  /// Creates a new Point3 from the given Vector3.
   factory Point3.vec(Vector3 other) => new Point3.zero()..setFrom(other);
 
-  /**
-   * Creates a new Point3 at the coordinate origin.
-   */
+  /// Creates a new Point3 at the coordinate origin.
   Point3.zero() : super.zero();
 
-  /**
-   * Returns a new point which position is determined by moving the old point
-   * along the given vector.
-   */
+  /// Returns a new point which position is determined by moving the old point
+  /// along the given vector.
   @override
   Point3 operator +(Vector3 v) =>
       new Point3(this.x + v.x, this.y + v.y, this.z + v.z);
 
-  /**
-   * Returns the [Vector3] pointing from the given point to this point.
-   */
+  /// Returns the [Vector3] pointing from the given point to this point.
   @override
   Vector3 operator -(Vector3 p2) =>
       new Vector3(this.x - p2.x, this.y - p2.y, this.z - p2.z);
 
-  /**
-   * Negates the point's components.
-   */
+  /// Negates the point's components.
   @override
   Point3 operator -() => new Point3(-this.x, -this.y, -this.z);
 
-  /**
-   * Checks for equality. Two points are considered equal, if their coordinates
-   * match.
-   */
+  /// Checks for equality. Two points are considered equal, if their coordinates
+  /// match.
   @override
   bool operator ==(Object o) {
     if (o is Point3) {
@@ -55,19 +39,15 @@ class Point3 extends Vector3 {
     }
   }
 
-  /**
-   * Performs a linear interpolation between two points.
-   */
+  /// Performs a linear interpolation between two points.
   Point3 lerp(Point3 p2, num coeff) => new Point3(
       this.x * coeff + p2.x * (1 - coeff),
       this.y * coeff + p2.y * (1 - coeff),
       this.z * coeff + p2.z * (1 - coeff));
   // TODO 3d lerp?
 
-  /**
-   * Transforms the point to its homogeneous vector4 representation.
-   * The w component is set to 1.
-   */
+  /// Transforms the point to its homogeneous vector4 representation.
+  /// The w component is set to 1.
   Vector4 toVec4() => new Vector4(this.x, this.y, this.z, 1.0);
 
   @override
@@ -83,31 +63,29 @@ class Point3 extends Vector3 {
   String toString() => '$x,$y,$z';
 }
 
-/**
- * An [Interval] is defined by its minimum and maximum values, where
- * _min <= max_.
- *
- * This implementation offers basic interval arithmetic operations like
- * addition, subtraction, multiplication and division. Operations always
- * return a new interval and will not modify the existing ones. Additionally
- * this class implementions comparison relations for intervals.
- *
- * This implementation (partly) supports unbounded intervals with borders
- * at +/- infinity and empty sets.
- *
- * Operator and comparison definitions are based on:
- * _Bohlender, Gerd, and Ulrich Kulisch. 2010.
- * ["Deﬁnition of the Arithmetic Operations and Comparison Relations for an Interval Arithmetic Standard"]
- * (http://interval.louisiana.edu/reliable-computing-journal/volume-15/no-1/reliable-computing-15-pp-36-42.pdf).
- * Reliable Computing 15 (1): 36–42._
- *
- * __Note__: This implementation does not offer a complete set of operations yet:
- *
- * * No handling of unbounded intervals in operators.
- * * No proper rounding.
- */
+/// An [Interval] is defined by its minimum and maximum values, where
+/// _min <= max_.
+///
+/// This implementation offers basic interval arithmetic operations like
+/// addition, subtraction, multiplication and division. Operations always
+/// return a new interval and will not modify the existing ones. Additionally
+/// this class implementions comparison relations for intervals.
+///
+/// This implementation (partly) supports unbounded intervals with borders
+/// at +/- infinity and empty sets.
+///
+/// Operator and comparison definitions are based on:
+/// _Bohlender, Gerd, and Ulrich Kulisch. 2010.
+/// ["Deﬁnition of the Arithmetic Operations and Comparison Relations for an Interval Arithmetic Standard"]
+/// (https://interval.louisiana.edu/reliable-computing-journal/volume-15/no-1/reliable-computing-15-pp-36-42.pdf).
+/// Reliable Computing 15 (1): 36–42._
+///
+/// __Note__: This implementation does not offer a complete set of operations yet:
+///
+/// * No handling of unbounded intervals in operators.
+/// * No proper rounding.
 class Interval implements Comparable<Interval> {
-  /// Interval borders.
+  /// Interval bounds.
   num min, max;
 
   /// True, if this represents the empty set.
@@ -116,32 +94,24 @@ class Interval implements Comparable<Interval> {
   /// Immutable singleton instance of empty set.
   static final Interval _emptyInterval = new Interval._empty();
 
-  /**
-   * Creates a new interval with given borders.
-   *
-   * The parameter min must be smaller or equal than max for the interval
-   * to work properly.
-   */
+  /// Creates a new interval with given borders.
+  ///
+  /// The parameter `min` must be smaller or equal than `max` for the interval
+  /// to work properly.
   Interval(this.min, this.max) : this._emptySet = false;
 
-  /**
-   * Returns an immutable empty set.
-   */
+  /// Returns an immutable empty set.
   factory Interval.empty() => _emptyInterval;
 
-  /**
-   * Internal constructor for an empty set.
-   */
+  /// Internal constructor for an empty set.
   Interval._empty()
       : this.min = double.nan,
         this.max = double.nan,
         this._emptySet = true;
 
-  /**
-   * Performs an interval addition.
-   *
-   *     [a, b] + [c, d] = [a + c, b + d]
-   */
+  /// Performs an interval addition.
+  ///
+  ///     [a, b] + [c, d] = [a + c, b + d]
   Interval operator +(Interval i) {
     if (this.isEmpty() || i.isEmpty())
       return new Interval.empty();
@@ -149,11 +119,9 @@ class Interval implements Comparable<Interval> {
       return new Interval(this.min + i.min, this.max + i.max);
   }
 
-  /**
-   * Unary minus on intervals.
-   *
-   *     -[a, b] = [-b, -a]
-   */
+  /// Unary minus on intervals.
+  ///
+  ///     -[a, b] = [-b, -a]
   Interval operator -() {
     if (this.isEmpty())
       return new Interval.empty();
@@ -161,11 +129,9 @@ class Interval implements Comparable<Interval> {
       return new Interval(-max, -min);
   }
 
-  /**
-   * Performs an interval subtraction.
-   *
-   *     [a, b] + [c, d] = [a - d, b - c]
-   */
+  /// Performs an interval subtraction.
+  ///
+  ///     [a, b] + [c, d] = [a - d, b - c]
   Interval operator -(Interval i) {
     if (this.isEmpty() || i.isEmpty())
       return new Interval.empty();
@@ -173,11 +139,9 @@ class Interval implements Comparable<Interval> {
       return new Interval(this.min - i.max, this.max - i.min);
   }
 
-  /**
-   * Performs an interval multiplication.
-   *
-   *     [a, b] * [c, d] = [min(ac, ad, bc, bd), max(ac, ad, bc, bd)]
-   */
+  /// Performs an interval multiplication.
+  ///
+  ///     [a, b] * [c, d] = [min(ac, ad, bc, bd), max(ac, ad, bc, bd)]
   Interval operator *(Interval i) {
     if (this.isEmpty() || i.isEmpty()) return new Interval.empty();
     final num min = _min(
@@ -187,13 +151,11 @@ class Interval implements Comparable<Interval> {
     return new Interval(min, max);
   }
 
-  /**
-   * Performs an interval division.
-   *
-   *     [a, b] * [c, d] = [a, b] * (1/[c, d]) = [a, b] * [1/d, 1/c]
-   *
-   * __Note:__ Does not handle division by zero and throws an [ArgumentError] instead.
-   */
+  /// Performs an interval division.
+  ///
+  ///     [a, b] * [c, d] = [a, b] * (1/[c, d]) = [a, b] * [1/d, 1/c]
+  ///
+  /// __Note:__ Does not handle division by zero and throws an [ArgumentError] instead.
   Interval operator /(Interval i) {
     if (this.isEmpty() || i.isEmpty()) return new Interval.empty();
 
@@ -247,107 +209,75 @@ class Interval implements Comparable<Interval> {
     return this * new Interval(1.0 / i.max, 1.0 / i.min);
   }
 
-  /**
-   * Equals operator on intervals.
-   *
-   *     [a, b] == [c, d], if a == c && b == d
-   */
+  /// Equals operator on intervals.
+  ///
+  ///     [a, b] == [c, d], if a == c && b == d
   @override
   bool operator ==(Object i) =>
       (i is Interval) && this.min == i.min && this.max == i.max;
 
-  /**
-   * Less than operator on intervals.
-   *
-   *     [a, b] < [c, d], if a < c && b < d
-   */
+  /// Less than operator on intervals.
+  ///
+  ///     [a, b] < [c, d], if a < c && b < d
   bool operator <(Interval i) => this.min < i.min && this.max < i.max;
 
-  /**
-   * Less or equal than operator on intervals.
-   *
-   *     [a, b] <= [c, d], if a <= c && b <= d
-   */
+  /// Less or equal than operator on intervals.
+  ///
+  ///     [a, b] <= [c, d], if a <= c && b <= d
   bool operator <=(Interval i) => this.min <= i.min && this.max <= i.max;
 
-  /**
-   * Greater than operator on intervals.
-   *
-   *     [a, b] > [c, d], if a > c && b > d
-   */
+  /// Greater than operator on intervals.
+  ///
+  ///     [a, b] > [c, d], if a > c && b > d
   bool operator >(Interval i) => this.min > i.min && this.max > i.max;
 
-  /**
-   * Greater or equal than operator on intervals.
-   *
-   *     [a, b] >= [c, d], if a >= c && b >= d
-   */
+  /// Greater or equal than operator on intervals.
+  ///
+  ///     [a, b] >= [c, d], if a >= c && b >= d
   bool operator >=(Interval i) => this.min >= i.min && this.max >= i.max;
 
-  /**
-   * Returns the greatest lower bound.
-   */
+  /// Returns the greatest lower bound.
   Interval glb(Interval i) =>
       new Interval(math.min(min, i.min), math.min(max, i.max));
 
-  /**
-   * Returns the least upper bound.
-   */
+  /// Returns the least upper bound.
   Interval lub(Interval i) =>
       new Interval(math.max(min, i.min), math.max(max, i.max));
 
-  /**
-   * Inclusion relation. Returns true, if the given interval is included
-   * in this interval.
-   *
-   *     [a, b] subset of [c, d] <=> c <= a && b >= d
-   */
+  /// Inclusion relation. Returns true, if the given interval is included
+  /// in this interval.
+  ///
+  ///     [a, b] subset of [c, d] <=> c <= a && b >= d
   bool includes(Interval i) => this.min <= i.min && i.max <= this.max;
 
-  /**
-   * Element-of relation. Returns true, if given element is included
-   * in this interval.
-   * Defined on a real number i and an interval:
-   *
-   *     i element of [a, b] <=> a <= i && i <= b
-   */
+  /// Element-of relation. Returns true, if given element is included
+  /// in this interval.
+  /// Defined on a real number i and an interval:
+  ///
+  ///     i element of [a, b] <=> a <= i && i <= b
   bool contains(num element) => this.min <= element && element <= this.max;
 
-  /**
-   * Returns true, if this interval contains zero (min <= 0 <= max).
-   */
+  /// Returns true, if this interval contains zero (min <= 0 <= max).
   bool containsZero() => this.min <= 0 && 0 <= this.max;
 
-  /**
-   * Returns true, if this interval is positive (min >= 0)
-   */
+  /// Returns true, if this interval is positive (min >= 0)
   bool isPositive() => this.min >= 0;
 
-  /**
-   * Returns true, if neither min or max values are infinite.
-   */
+  /// Returns true, if neither min or max values are infinite.
   bool isBound() => !this.min.isInfinite && !this.max.isInfinite;
 
-  /**
-   * Returns true, if this is the empty set.
-   */
+  /// Returns true, if this is the empty set.
   bool isEmpty() => this._emptySet;
 
-  /**
-   * Returns the minimal value of four given values.
-   */
+  /// Returns the minimal value of four given values.
   num _min(num a, num b, num c, num d) =>
       math.min(math.min(a, b), math.min(c, d));
 
-  /**
-   * Returns the maximum value of four given values.
-   */
+  /// Returns the maximum value of four given values.
   num _max(num a, num b, num c, num d) =>
       math.max(math.max(a, b), math.max(c, d));
 
-  /**
-   * Returns the length of this interval.
-   */
+  /// Returns the length of this interval.
   num length() => max - min;
 
   @override

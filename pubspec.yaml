@@ -3,7 +3,7 @@ version: 1.1.0-dev
 author: Frederik Leonhardt <frederik.leonhardt@gmail.com>
 description: A library for evaluating mathematical expressions.
 homepage: https://github.com/fkleon/math-expressions
-documentation: http://www.dartdocs.org/documentation/math_expressions/latest
+documentation: https://pub.dartlang.org/documentation/math_expressions/latest
 dependencies:
   vector_math: ^2.0.0
 dev_dependencies:
