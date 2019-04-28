@@ -536,7 +536,9 @@ class TokenType {
   /// To retrieve a token type, directly access the static final fields
   /// provided by this class.
   const TokenType._internal(this.value, this.priority,
-      {this.leftAssociative: true, this.operator: false, this.function: false});
+      {this.leftAssociative = true,
+      this.operator = false,
+      this.function = false});
 
   @override
   String toString() => value;
