@@ -3,8 +3,8 @@ part of math_expressions;
 /// Mathematical expressions must be evaluated under a certain [EvaluationType].
 ///
 /// Currently there are three types, but not all expressions support each type.
-/// If you try to evaluate an expression with an unsupported type, it will raise an
-/// [UnimplementedError] or [UnsupportedError].
+/// If you try to evaluate an expression with an unsupported type, it will raise
+/// an [UnimplementedError] or [UnsupportedError].
 ///
 /// - REAL
 /// - VECTOR
@@ -12,61 +12,7 @@ part of math_expressions;
 ///
 /// __Note__: This class emulates an enumeration, since they are not supported
 /// by Dart yet.
-class EvaluationType {
-  /// Our type map.
-  static Map<int, EvaluationType> _cache;
-  final int type;
-  final String _text;
-
-  /// Private singleton constructor, no need to instantiate new objects
-  /// all the time.
-  factory EvaluationType(int type, String text) {
-    _cache ??= <int, EvaluationType>{};
-
-    if (_cache.containsKey(type)) {
-      // We already have cached this type.
-      return _cache[type];
-    } else {
-      // Create new Type Object.
-      final EvaluationType et = new EvaluationType._internal(type, text);
-      _cache[type] = et;
-      return et;
-    }
-  }
-
-  /// Internal constructor for EvaluationTypes.
-  EvaluationType._internal(this.type, this._text);
-
-  /// Public constructor for REAL types. Always returns the same instance of a REAL type.
-  static EvaluationType get REAL => new EvaluationType(REAL_INT, 'REAL');
-
-  /// Public constructor for VECTOR types. Always returns the same instance of a VECTOR type.
-  static EvaluationType get VECTOR => new EvaluationType(VECTOR_INT, 'VECTOR');
-
-  /// Public constructor for INTERVAL types. Always returns the same instance of a INTERVAL type.
-  static EvaluationType get INTERVAL =>
-      new EvaluationType(INTERVAL_INT, 'INTERVAL');
-
-  /// Internal integer value for REAL type.
-  static final int REAL_INT = 1;
-
-  /// Internal integer value for VECTOR type.
-  static final int VECTOR_INT = 2;
-
-  /// Internal integer value for INTERVAL type.
-  static final int INTERVAL_INT = 3;
-
-  /// Two types are equal, if their internal int matches.
-  @override
-  bool operator ==(Object et) =>
-      (et is EvaluationType) && (this.type == et.type);
-
-  @override
-  int get hashCode => type.hashCode;
-
-  @override
-  String toString() => 'Type[$_text]';
-}
+enum EvaluationType { REAL, VECTOR, INTERVAL }
 
 /// The context model keeps track of all known variables and functions.
 ///
