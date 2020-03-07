@@ -26,7 +26,7 @@ class ContextModel {
 
   /// Function set of this scope.
   // TODO: Do we even need to track function names?
-  Set<MathFunction> functions = new Set<MathFunction>();
+  Set<MathFunction> functions = Set<MathFunction>();
 
   /// Creates a new, empty root context model.
   ContextModel();
@@ -35,7 +35,7 @@ class ContextModel {
   ContextModel._child(this.parentScope);
 
   /// Returns a new child scope of this scope.
-  ContextModel createChildScope() => new ContextModel._child(this);
+  ContextModel createChildScope() => ContextModel._child(this);
 
   /// Returns the bound expression for the given variable.
   /// Performs recursive lookup through `parentScope`.
@@ -47,7 +47,7 @@ class ContextModel {
     } else if (parentScope != null) {
       return parentScope.getExpression(varName);
     } else {
-      throw new StateError('Variable not bound: $varName');
+      throw StateError('Variable not bound: $varName');
     }
   }
 
@@ -64,7 +64,7 @@ class ContextModel {
     } else if (parentScope != null) {
       return parentScope.getFunction(name);
     } else {
-      throw new StateError('Function not bound: $name');
+      throw StateError('Function not bound: $name');
     }
   }
 

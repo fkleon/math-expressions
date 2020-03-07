@@ -29,25 +29,25 @@ part of math_expressions;
 abstract class Expression {
   // Basic operations.
   /// Add operator. Creates a [Plus] expression.
-  Expression operator +(Expression exp) => new Plus(this, exp);
+  Expression operator +(Expression exp) => Plus(this, exp);
 
   /// Subtract operator. Creates a [Minus] expression.
-  Expression operator -(Expression exp) => new Minus(this, exp);
+  Expression operator -(Expression exp) => Minus(this, exp);
 
   /// Multiply operator. Creates a [Times] expression.
-  Expression operator *(Expression exp) => new Times(this, exp);
+  Expression operator *(Expression exp) => Times(this, exp);
 
   /// Divide operator. Creates a [Divide] expression.
-  Expression operator /(Expression exp) => new Divide(this, exp);
+  Expression operator /(Expression exp) => Divide(this, exp);
 
   /// Modulo operator. Creates a [Modulo] expression.
-  Expression operator %(Expression exp) => new Modulo(this, exp);
+  Expression operator %(Expression exp) => Modulo(this, exp);
 
   /// Power operator. Creates a [Power] expression.
-  Expression operator ^(Expression exp) => new Power(this, exp);
+  Expression operator ^(Expression exp) => Power(this, exp);
 
   /// Unary minus operator. Creates a [UnaryMinus] expression.
-  Expression operator -() => new UnaryMinus(this);
+  Expression operator -() => UnaryMinus(this);
 
   /// Derives this expression with respect to the given variable.
   Expression derive(String toVar);
@@ -86,14 +86,14 @@ abstract class Expression {
 
     if (arg is num) {
       // can not handle negative numbers - use parser for this case!
-      return new Number(arg);
+      return Number(arg);
     }
 
     if (arg is String) {
-      return new Variable(arg);
+      return Variable(arg);
     }
 
-    throw new ArgumentError('$arg is not a valid expression!');
+    throw ArgumentError('$arg is not a valid expression!');
   }
 
   /// Returns true, if the given expression is a constant literal and its value
@@ -153,16 +153,16 @@ class UnaryMinus extends UnaryOperator {
   ///
   /// For example, to create -1:
   ///
-  ///     one = new Number(1);
-  ///     minus_one = new UnaryMinus(one);
+  ///     one = Number(1);
+  ///     minus_one = UnaryMinus(one);
   ///
   /// or just:
   ///
-  ///     minus_one = new UnaryMinus(1);
+  ///     minus_one = UnaryMinus(1);
   UnaryMinus(dynamic exp) : super(exp);
 
   @override
-  Expression derive(String toVar) => new UnaryMinus(exp.derive(toVar));
+  Expression derive(String toVar) => UnaryMinus(exp.derive(toVar));
 
   /// Possible simplifications:
   ///
@@ -183,7 +183,7 @@ class UnaryMinus extends UnaryOperator {
     }
 
     // nothing to do..
-    return new UnaryMinus(simplifiedOp);
+    return UnaryMinus(simplifiedOp);
   }
 
   @override
@@ -200,16 +200,16 @@ class Plus extends BinaryOperator {
   //
   /// For example, to create x + 4:
   ///
-  ///     addition = new Plus('x', 4);
+  ///     addition = Plus('x', 4);
   ///
   /// or:
   ///
-  ///     addition = new Variable('x') + new Number(4);
+  ///     addition = Variable('x') + Number(4);
   Plus(dynamic first, dynamic second) : super(first, second);
 
   @override
   Expression derive(String toVar) =>
-      new Plus(first.derive(toVar), second.derive(toVar));
+      Plus(first.derive(toVar), second.derive(toVar));
 
   /// Possible simplifications:
   ///
@@ -233,7 +233,7 @@ class Plus extends BinaryOperator {
       return firstOp - secondOp.exp; // a + -(b) = a - b
     }
 
-    return new Plus(firstOp, secondOp);
+    return Plus(firstOp, secondOp);
     //TODO -a + b = b - a
     //TODO -a - b = - (a+b)
   }
@@ -252,16 +252,16 @@ class Minus extends BinaryOperator {
   ///
   /// For example, to create 5 - x:
   ///
-  ///     subtraction = new Minus(5, 'x');
+  ///     subtraction = Minus(5, 'x');
   ///
   /// or:
   ///
-  ///     subtraction = new Number(5) - new Variable('x');
+  ///     subtraction = Number(5) - Variable('x');
   Minus(dynamic first, dynamic second) : super(first, second);
 
   @override
   Expression derive(String toVar) =>
-      new Minus(first.derive(toVar), second.derive(toVar));
+      Minus(first.derive(toVar), second.derive(toVar));
 
   /// Possible simplifications:
   ///
@@ -285,7 +285,7 @@ class Minus extends BinaryOperator {
       return firstOp + secondOp.exp; // a - -(b) = a + b
     }
 
-    return new Minus(firstOp, secondOp);
+    return Minus(firstOp, secondOp);
     //TODO -a + b = b - a
     //TODO -a - b = - (a + b)
   }
@@ -304,17 +304,16 @@ class Times extends BinaryOperator {
   ///
   /// For example, to create 7 * x:
   ///
-  ///     product = new Times(7, 'x');
+  ///     product = Times(7, 'x');
   ///
   /// or:
   ///
-  ///     product = new Number(7) * new Variable('x');
+  ///     product = Number(7) * Variable('x');
   Times(dynamic first, dynamic second) : super(first, second);
 
   @override
-  Expression derive(String toVar) => new Plus(
-      new Times(first, second.derive(toVar)),
-      new Times(first.derive(toVar), second));
+  Expression derive(String toVar) => Plus(
+      Times(first, second.derive(toVar)), Times(first.derive(toVar), second));
 
   /// Possible simplifications:
   ///
@@ -360,12 +359,12 @@ class Times extends BinaryOperator {
 
     // If temp result is not set, we return a multiplication
     if (tempResult == null) {
-      tempResult = new Times(firstOp, secondOp);
+      tempResult = Times(firstOp, secondOp);
       return negative ? -tempResult : tempResult;
     }
 
     // Otherwise we return the only constant and just check for sign before
-    return negative ? new UnaryMinus(tempResult) : tempResult;
+    return negative ? UnaryMinus(tempResult) : tempResult;
   }
 
   @override
@@ -396,11 +395,11 @@ class Divide extends BinaryOperator {
   ///
   /// For example, to create x/(y+2):
   ///
-  ///     div = new Divide('x', new Plus('y', 2));
+  ///     div = Divide('x', Plus('y', 2));
   ///
   /// or:
   ///
-  ///     div = new Variable('x') / (new Variable('y') + new Number(2));
+  ///     div = Variable('x') / (Variable('y') + Number(2));
   Divide(dynamic dividend, dynamic divisor) : super(dividend, divisor);
 
   @override
@@ -440,10 +439,10 @@ class Divide extends BinaryOperator {
     if (_isNumber(secondOp, 1)) {
       tempResult = firstOp;
     } else {
-      tempResult = new Divide(firstOp, secondOp);
+      tempResult = Divide(firstOp, secondOp);
     }
 
-    return negative ? new UnaryMinus(tempResult) : tempResult;
+    return negative ? UnaryMinus(tempResult) : tempResult;
     // TODO cancel down/out? - needs equals on literals (and expressions?)!
   }
 
@@ -479,16 +478,16 @@ class Modulo extends BinaryOperator {
   ///
   /// For example, to create x % (y+2):
   ///
-  ///     r = new Modulo('x', new Plus('y', 2));
+  ///     r = Modulo('x', Plus('y', 2));
   /// or:
   ///
-  ///     r = new Variable('x') % (new Variable('y') + new Number(2));
+  ///     r = Variable('x') % (Variable('y') + Number(2));
   Modulo(dynamic dividend, dynamic divisor) : super(dividend, divisor);
 
   @override
   Expression derive(String toVar) {
-    final Abs a2 = new Abs(second);
-    return first.derive(toVar) - new Floor(first / a2) * a2.derive(toVar);
+    final Abs a2 = Abs(second);
+    return first.derive(toVar) - Floor(first / a2) * a2.derive(toVar);
   }
 
   /// Possible simplifications:
@@ -508,7 +507,7 @@ class Modulo extends BinaryOperator {
       secondOp = (secondOp as UnaryMinus).exp;
     }
 
-    return new Modulo(firstOp, secondOp);
+    return Modulo(firstOp, secondOp);
   }
 
   @override
@@ -520,7 +519,7 @@ class Modulo extends BinaryOperator {
       return firstEval % secondEval;
     }
 
-    throw new UnimplementedError(
+    throw UnimplementedError(
         'Evaluate Modulo with type $type not supported yet.');
   }
 
@@ -534,10 +533,10 @@ class Power extends BinaryOperator {
   ///
   /// For example, to create x^3:
   ///
-  ///     pow = new Power('x', 3);
+  ///     pow = Power('x', 3);
   /// or:
   ///
-  ///     pow = new Variable('x') ^ new Number(3.0);
+  ///     pow = Variable('x') ^ Number(3.0);
   Power(dynamic x, dynamic exp) : super(x, exp);
 
   @override
@@ -578,14 +577,14 @@ class Power extends BinaryOperator {
     }
 
     if (_isNumber(exponentOp, 0)) {
-      return new Number(1.0); // x^0 = 1
+      return Number(1.0); // x^0 = 1
     }
 
     if (_isNumber(exponentOp, 1)) {
       return baseOp; // x^1 = x
     }
 
-    return new Power(baseOp, exponentOp);
+    return Power(baseOp, exponentOp);
   }
 
   @override
@@ -636,10 +635,10 @@ class Power extends BinaryOperator {
 
       assert(evalMin <= evalMax);
 
-      return new Interval(evalMin, evalMax);
+      return Interval(evalMin, evalMax);
     }
 
-    throw new UnimplementedError(
+    throw UnimplementedError(
         'Evaluate Power with type $type not supported yet.');
   }
 
@@ -650,7 +649,7 @@ class Power extends BinaryOperator {
   /// E.g. x^4 = e^(4*ln(x))
   ///
   /// This method is used to determine the derivation of a power expression.
-  Expression asE() => new Exponential(second * new Ln(first));
+  Expression asE() => Exponential(second * Ln(first));
 }
 
 /// A literal can be a number, a constant or a variable.
@@ -668,7 +667,7 @@ abstract class Literal extends Expression {
   /// Throws StateError if literal is not constant, check before usage with
   /// `isConstant()`.
   dynamic getConstantValue() {
-    throw new StateError('Literal ${this} is not constant.');
+    throw StateError('Literal ${this} is not constant.');
   }
 
   @override
@@ -695,7 +694,7 @@ class Number extends Literal {
 
     if (type == EvaluationType.INTERVAL) {
       // interpret number as interval
-      final IntervalLiteral intLit = new IntervalLiteral.fromSingle(this);
+      final IntervalLiteral intLit = IntervalLiteral.fromSingle(this);
       return intLit.evaluate(type, context);
     }
 
@@ -704,11 +703,11 @@ class Number extends Literal {
       return value;
     }
 
-    throw new UnsupportedError('Number $this can not be interpreted as: $type');
+    throw UnsupportedError('Number $this can not be interpreted as: $type');
   }
 
   @override
-  Expression derive(String toVar) => new Number(0.0);
+  Expression derive(String toVar) => Number(0.0);
 }
 
 /// A vector of arbitrary size.
@@ -717,8 +716,8 @@ class Vector extends Literal {
   ///
   /// For example, to create a 3-dimensional vector:
   ///
-  ///     x = y = z = new Number(1);
-  ///     vec3 = new Vector([x, y, z]);
+  ///     x = y = z = Number(1);
+  ///     vec3 = Vector([x, y, z]);
   Vector(List<Expression> elements) : super(elements);
 
   /// Convenience operator to access vector elements.
@@ -732,27 +731,27 @@ class Vector extends Literal {
 
   @override
   Expression derive(String toVar) {
-    final List<Expression> elementDerivatives = new List<Expression>(length);
+    final List<Expression> elementDerivatives = List<Expression>(length);
 
     // Derive each element.
     for (int i = 0; i < length; i++) {
       elementDerivatives[i] = elements[i].derive(toVar);
     }
 
-    return new Vector(elementDerivatives);
+    return Vector(elementDerivatives);
   }
 
   /// Simplifies all elements of this vector.
   @override
   Expression simplify() {
-    final List<Expression> simplifiedElements = new List<Expression>(length);
+    final List<Expression> simplifiedElements = List<Expression>(length);
 
     // Simplify each element.
     for (int i = 0; i < length; i++) {
       simplifiedElements[i] = elements[i].simplify();
     }
 
-    return new Vector(simplifiedElements);
+    return Vector(simplifiedElements);
   }
 
   @override
@@ -771,7 +770,7 @@ class Vector extends Literal {
         double x, y;
         x = elements[0].evaluate(elementType, context);
         y = elements[1].evaluate(elementType, context);
-        return new Vector2(x, y);
+        return Vector2(x, y);
       }
 
       if (length == 3) {
@@ -779,7 +778,7 @@ class Vector extends Literal {
         x = elements[0].evaluate(elementType, context);
         y = elements[1].evaluate(elementType, context);
         z = elements[2].evaluate(elementType, context);
-        return new Vector3(x, y, z);
+        return Vector3(x, y, z);
       }
 
       if (length == 4) {
@@ -788,11 +787,11 @@ class Vector extends Literal {
         y = elements[1].evaluate(elementType, context);
         z = elements[2].evaluate(elementType, context);
         w = elements[3].evaluate(elementType, context);
-        return new Vector4(x, y, z, w);
+        return Vector4(x, y, z, w);
       }
 
       if (length > 4) {
-        throw new UnimplementedError(
+        throw UnimplementedError(
             'Vector of arbitrary length (> 4) are not supported yet.');
       }
     }
@@ -802,7 +801,7 @@ class Vector extends Literal {
       return elements[0].evaluate(type, context);
     }
 
-    throw new UnsupportedError(
+    throw UnsupportedError(
         'Vector $this with length $length can not be interpreted as: $type');
   }
 
@@ -815,9 +814,9 @@ class Vector extends Literal {
     // TODO unit test
     final Iterable<Expression> constVals = elements.map((e) => (e is Literal)
         ? e.getConstantValue()
-        : throw new UnsupportedError('Vector $this is not constant.'));
+        : throw UnsupportedError('Vector $this is not constant.'));
 
-    return new Vector(constVals);
+    return Vector(constVals);
   }
 }
 
@@ -830,8 +829,7 @@ class Variable extends Literal {
   Variable(this.name);
 
   @override
-  Expression derive(String toVar) =>
-      name == toVar ? new Number(1.0) : new Number(0.0);
+  Expression derive(String toVar) => name == toVar ? Number(1.0) : Number(0.0);
 
   @override
   String toString() => '$name';
@@ -894,11 +892,11 @@ class IntervalLiteral extends Literal {
   Expression derive(String toVar) {
     // Can not derive this yet..
     // TODO Implement interval differentiation.
-    throw new UnimplementedError('Interval differentiation not supported yet.');
+    throw UnimplementedError('Interval differentiation not supported yet.');
   }
 
   @override
-  Expression simplify() => new IntervalLiteral(min.simplify(), max.simplify());
+  Expression simplify() => IntervalLiteral(min.simplify(), max.simplify());
 
   @override
   dynamic evaluate(EvaluationType type, ContextModel context) {
@@ -907,7 +905,7 @@ class IntervalLiteral extends Literal {
     final num maxEval = max.evaluate(EvaluationType.REAL, context);
 
     if (type == EvaluationType.INTERVAL) {
-      return new Interval(minEval, maxEval);
+      return Interval(minEval, maxEval);
     }
 
     if (type == EvaluationType.REAL) {
@@ -918,8 +916,7 @@ class IntervalLiteral extends Literal {
       }
     }
 
-    throw new UnsupportedError(
-        'Interval $this can not be interpreted as: $type');
+    throw UnsupportedError('Interval $this can not be interpreted as: $type');
   }
 
   @override
@@ -933,6 +930,6 @@ class IntervalLiteral extends Literal {
       (max as Literal).isConstant();
 
   @override
-  Interval getConstantValue() => new Interval(
+  Interval getConstantValue() => Interval(
       (min as Literal).getConstantValue(), (max as Literal).getConstantValue());
 }

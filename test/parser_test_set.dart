@@ -17,8 +17,8 @@ class ParserTests extends TestSet {
 
   @override
   void initTests() {
-    pars = new Parser();
-    lex = new Lexer();
+    pars = Parser();
+    lex = Lexer();
 
     inputStrings = [];
     tokenStreams = [];
@@ -30,151 +30,150 @@ class ParserTests extends TestSet {
     // Plus
     inputStrings.add('x + 2');
     tokenStreams.add([
-      new Token('x', TokenType.VAR),
-      new Token('+', TokenType.PLUS),
-      new Token('2', TokenType.VAL)
+      Token('x', TokenType.VAR),
+      Token('+', TokenType.PLUS),
+      Token('2', TokenType.VAL)
     ]);
     rpnTokenStreams.add([
-      new Token('x', TokenType.VAR),
-      new Token('2', TokenType.VAL),
-      new Token('+', TokenType.PLUS)
+      Token('x', TokenType.VAR),
+      Token('2', TokenType.VAL),
+      Token('+', TokenType.PLUS)
     ]);
 
     // Minus
     inputStrings.add('x - 2');
     tokenStreams.add([
-      new Token('x', TokenType.VAR),
-      new Token('-', TokenType.MINUS),
-      new Token('2', TokenType.VAL)
+      Token('x', TokenType.VAR),
+      Token('-', TokenType.MINUS),
+      Token('2', TokenType.VAL)
     ]);
     rpnTokenStreams.add([
-      new Token('x', TokenType.VAR),
-      new Token('2', TokenType.VAL),
-      new Token('-', TokenType.MINUS)
+      Token('x', TokenType.VAR),
+      Token('2', TokenType.VAL),
+      Token('-', TokenType.MINUS)
     ]);
 
     inputStrings.add('0 - 1');
     tokenStreams.add([
-      new Token('0', TokenType.VAL),
-      new Token('-', TokenType.MINUS),
-      new Token('1', TokenType.VAL)
+      Token('0', TokenType.VAL),
+      Token('-', TokenType.MINUS),
+      Token('1', TokenType.VAL)
     ]);
     rpnTokenStreams.add([
-      new Token('0', TokenType.VAL),
-      new Token('1', TokenType.VAL),
-      new Token('-', TokenType.MINUS)
+      Token('0', TokenType.VAL),
+      Token('1', TokenType.VAL),
+      Token('-', TokenType.MINUS)
     ]);
 
     inputStrings.add('(0 - 1)');
     tokenStreams.add([
-      new Token('(', TokenType.LBRACE),
-      new Token('0', TokenType.VAL),
-      new Token('-', TokenType.MINUS),
-      new Token('1', TokenType.VAL),
-      new Token(')', TokenType.RBRACE)
+      Token('(', TokenType.LBRACE),
+      Token('0', TokenType.VAL),
+      Token('-', TokenType.MINUS),
+      Token('1', TokenType.VAL),
+      Token(')', TokenType.RBRACE)
     ]);
     rpnTokenStreams.add([
-      new Token('0', TokenType.VAL),
-      new Token('1', TokenType.VAL),
-      new Token('-', TokenType.MINUS)
+      Token('0', TokenType.VAL),
+      Token('1', TokenType.VAL),
+      Token('-', TokenType.MINUS)
     ]);
 
     // Multiplication
     inputStrings.add('0 * 1');
     tokenStreams.add([
-      new Token('0', TokenType.VAL),
-      new Token('*', TokenType.TIMES),
-      new Token('1', TokenType.VAL)
+      Token('0', TokenType.VAL),
+      Token('*', TokenType.TIMES),
+      Token('1', TokenType.VAL)
     ]);
     rpnTokenStreams.add([
-      new Token('0', TokenType.VAL),
-      new Token('1', TokenType.VAL),
-      new Token('*', TokenType.TIMES)
+      Token('0', TokenType.VAL),
+      Token('1', TokenType.VAL),
+      Token('*', TokenType.TIMES)
     ]);
 
     // Division
     inputStrings.add('0 / 1');
     tokenStreams.add([
-      new Token('0', TokenType.VAL),
-      new Token('/', TokenType.DIV),
-      new Token('1', TokenType.VAL)
+      Token('0', TokenType.VAL),
+      Token('/', TokenType.DIV),
+      Token('1', TokenType.VAL)
     ]);
     rpnTokenStreams.add([
-      new Token('0', TokenType.VAL),
-      new Token('1', TokenType.VAL),
-      new Token('/', TokenType.DIV)
+      Token('0', TokenType.VAL),
+      Token('1', TokenType.VAL),
+      Token('/', TokenType.DIV)
     ]);
 
     // Unary Minus
     // underscoe syntax
     inputStrings.add('_1');
-    tokenStreams.add(
-        [new Token('_', TokenType.UNMINUS), new Token('1', TokenType.VAL)]);
-    rpnTokenStreams.add(
-        [new Token('1', TokenType.VAL), new Token('_', TokenType.UNMINUS)]);
+    tokenStreams
+        .add([Token('_', TokenType.UNMINUS), Token('1', TokenType.VAL)]);
+    rpnTokenStreams
+        .add([Token('1', TokenType.VAL), Token('_', TokenType.UNMINUS)]);
 
     inputStrings.add('(_1)');
     tokenStreams.add([
-      new Token('(', TokenType.LBRACE),
-      new Token('_', TokenType.UNMINUS),
-      new Token('1', TokenType.VAL),
-      new Token(')', TokenType.RBRACE)
+      Token('(', TokenType.LBRACE),
+      Token('_', TokenType.UNMINUS),
+      Token('1', TokenType.VAL),
+      Token(')', TokenType.RBRACE)
     ]);
-    rpnTokenStreams.add(
-        [new Token('1', TokenType.VAL), new Token('_', TokenType.UNMINUS)]);
+    rpnTokenStreams
+        .add([Token('1', TokenType.VAL), Token('_', TokenType.UNMINUS)]);
 
     inputStrings.add('_(1)');
     tokenStreams.add([
-      new Token('_', TokenType.UNMINUS),
-      new Token('(', TokenType.LBRACE),
-      new Token('1', TokenType.VAL),
-      new Token(')', TokenType.RBRACE)
+      Token('_', TokenType.UNMINUS),
+      Token('(', TokenType.LBRACE),
+      Token('1', TokenType.VAL),
+      Token(')', TokenType.RBRACE)
     ]);
-    rpnTokenStreams.add(
-        [new Token('1', TokenType.VAL), new Token('_', TokenType.UNMINUS)]);
+    rpnTokenStreams
+        .add([Token('1', TokenType.VAL), Token('_', TokenType.UNMINUS)]);
 
     // standard syntax
     inputStrings.add('-1');
-    tokenStreams
-        .add([new Token('-', TokenType.MINUS), new Token('1', TokenType.VAL)]);
-    rpnTokenStreams.add(
-        [new Token('1', TokenType.VAL), new Token('-', TokenType.UNMINUS)]);
+    tokenStreams.add([Token('-', TokenType.MINUS), Token('1', TokenType.VAL)]);
+    rpnTokenStreams
+        .add([Token('1', TokenType.VAL), Token('-', TokenType.UNMINUS)]);
 
     inputStrings.add('(-1)');
     tokenStreams.add([
-      new Token('(', TokenType.LBRACE),
-      new Token('-', TokenType.MINUS),
-      new Token('1', TokenType.VAL),
-      new Token(')', TokenType.RBRACE)
+      Token('(', TokenType.LBRACE),
+      Token('-', TokenType.MINUS),
+      Token('1', TokenType.VAL),
+      Token(')', TokenType.RBRACE)
     ]);
-    rpnTokenStreams.add(
-        [new Token('1', TokenType.VAL), new Token('-', TokenType.UNMINUS)]);
+    rpnTokenStreams
+        .add([Token('1', TokenType.VAL), Token('-', TokenType.UNMINUS)]);
 
     inputStrings.add('-(1)');
     tokenStreams.add([
-      new Token('-', TokenType.MINUS),
-      new Token('(', TokenType.LBRACE),
-      new Token('1', TokenType.VAL),
-      new Token(')', TokenType.RBRACE)
+      Token('-', TokenType.MINUS),
+      Token('(', TokenType.LBRACE),
+      Token('1', TokenType.VAL),
+      Token(')', TokenType.RBRACE)
     ]);
-    rpnTokenStreams.add(
-        [new Token('1', TokenType.VAL), new Token('-', TokenType.UNMINUS)]);
+    rpnTokenStreams
+        .add([Token('1', TokenType.VAL), Token('-', TokenType.UNMINUS)]);
 
     // Power
     inputStrings.add('1^1^1');
     tokenStreams.add([
-      new Token('1', TokenType.VAL),
-      new Token('^', TokenType.POW),
-      new Token('1', TokenType.VAL),
-      new Token('^', TokenType.POW),
-      new Token('1', TokenType.VAL)
+      Token('1', TokenType.VAL),
+      Token('^', TokenType.POW),
+      Token('1', TokenType.VAL),
+      Token('^', TokenType.POW),
+      Token('1', TokenType.VAL)
     ]);
     rpnTokenStreams.add([
-      new Token('1', TokenType.VAL),
-      new Token('1', TokenType.VAL),
-      new Token('1', TokenType.VAL),
-      new Token('^', TokenType.POW),
-      new Token('^', TokenType.POW)
+      Token('1', TokenType.VAL),
+      Token('1', TokenType.VAL),
+      Token('1', TokenType.VAL),
+      Token('^', TokenType.POW),
+      Token('^', TokenType.POW)
     ]);
 
     /*
@@ -183,224 +182,223 @@ class ParserTests extends TestSet {
     // Log
     inputStrings.add('log(10,100)');
     tokenStreams.add([
-      new Token('log', TokenType.LOG),
-      new Token('(', TokenType.LBRACE),
-      new Token('10', TokenType.VAL),
-      new Token(',', TokenType.SEPAR),
-      new Token('100', TokenType.VAL),
-      new Token(')', TokenType.RBRACE)
+      Token('log', TokenType.LOG),
+      Token('(', TokenType.LBRACE),
+      Token('10', TokenType.VAL),
+      Token(',', TokenType.SEPAR),
+      Token('100', TokenType.VAL),
+      Token(')', TokenType.RBRACE)
     ]);
     rpnTokenStreams.add([
-      new Token('10', TokenType.VAL),
-      new Token('100', TokenType.VAL),
-      new Token('log', TokenType.LOG)
+      Token('10', TokenType.VAL),
+      Token('100', TokenType.VAL),
+      Token('log', TokenType.LOG)
     ]);
 
     // Ln
     inputStrings.add('ln(10)');
     tokenStreams.add([
-      new Token('ln', TokenType.LN),
-      new Token('(', TokenType.LBRACE),
-      new Token('10', TokenType.VAL),
-      new Token(')', TokenType.RBRACE)
+      Token('ln', TokenType.LN),
+      Token('(', TokenType.LBRACE),
+      Token('10', TokenType.VAL),
+      Token(')', TokenType.RBRACE)
     ]);
     rpnTokenStreams
-        .add([new Token('10', TokenType.VAL), new Token('ln', TokenType.LN)]);
+        .add([Token('10', TokenType.VAL), Token('ln', TokenType.LN)]);
 
     // Sqrt
     inputStrings.add('sqrt(10)');
     tokenStreams.add([
-      new Token('sqrt', TokenType.SQRT),
-      new Token('(', TokenType.LBRACE),
-      new Token('10', TokenType.VAL),
-      new Token(')', TokenType.RBRACE)
+      Token('sqrt', TokenType.SQRT),
+      Token('(', TokenType.LBRACE),
+      Token('10', TokenType.VAL),
+      Token(')', TokenType.RBRACE)
     ]);
-    rpnTokenStreams.add(
-        [new Token('10', TokenType.VAL), new Token('sqrt', TokenType.SQRT)]);
+    rpnTokenStreams
+        .add([Token('10', TokenType.VAL), Token('sqrt', TokenType.SQRT)]);
 
     // Cos
     inputStrings.add('cos(10)');
     tokenStreams.add([
-      new Token('cos', TokenType.COS),
-      new Token('(', TokenType.LBRACE),
-      new Token('10', TokenType.VAL),
-      new Token(')', TokenType.RBRACE)
+      Token('cos', TokenType.COS),
+      Token('(', TokenType.LBRACE),
+      Token('10', TokenType.VAL),
+      Token(')', TokenType.RBRACE)
     ]);
     rpnTokenStreams
-        .add([new Token('10', TokenType.VAL), new Token('cos', TokenType.COS)]);
+        .add([Token('10', TokenType.VAL), Token('cos', TokenType.COS)]);
 
     // Sin
     inputStrings.add('sin(10)');
     tokenStreams.add([
-      new Token('sin', TokenType.SIN),
-      new Token('(', TokenType.LBRACE),
-      new Token('10', TokenType.VAL),
-      new Token(')', TokenType.RBRACE)
+      Token('sin', TokenType.SIN),
+      Token('(', TokenType.LBRACE),
+      Token('10', TokenType.VAL),
+      Token(')', TokenType.RBRACE)
     ]);
     rpnTokenStreams
-        .add([new Token('10', TokenType.VAL), new Token('sin', TokenType.SIN)]);
+        .add([Token('10', TokenType.VAL), Token('sin', TokenType.SIN)]);
 
     // Tan
     inputStrings.add('tan(10)');
     tokenStreams.add([
-      new Token('tan', TokenType.TAN),
-      new Token('(', TokenType.LBRACE),
-      new Token('10', TokenType.VAL),
-      new Token(')', TokenType.RBRACE)
+      Token('tan', TokenType.TAN),
+      Token('(', TokenType.LBRACE),
+      Token('10', TokenType.VAL),
+      Token(')', TokenType.RBRACE)
     ]);
     rpnTokenStreams
-        .add([new Token('10', TokenType.VAL), new Token('tan', TokenType.TAN)]);
+        .add([Token('10', TokenType.VAL), Token('tan', TokenType.TAN)]);
 
     // Arccos
     inputStrings.add('arccos(10)');
     tokenStreams.add([
-      new Token('arccos', TokenType.ACOS),
-      new Token('(', TokenType.LBRACE),
-      new Token('10', TokenType.VAL),
-      new Token(')', TokenType.RBRACE)
+      Token('arccos', TokenType.ACOS),
+      Token('(', TokenType.LBRACE),
+      Token('10', TokenType.VAL),
+      Token(')', TokenType.RBRACE)
     ]);
-    rpnTokenStreams.add(
-        [new Token('10', TokenType.VAL), new Token('arccos', TokenType.ACOS)]);
+    rpnTokenStreams
+        .add([Token('10', TokenType.VAL), Token('arccos', TokenType.ACOS)]);
 
     // Arcsin
     inputStrings.add('arcsin(10)');
     tokenStreams.add([
-      new Token('arcsin', TokenType.ASIN),
-      new Token('(', TokenType.LBRACE),
-      new Token('10', TokenType.VAL),
-      new Token(')', TokenType.RBRACE)
+      Token('arcsin', TokenType.ASIN),
+      Token('(', TokenType.LBRACE),
+      Token('10', TokenType.VAL),
+      Token(')', TokenType.RBRACE)
     ]);
-    rpnTokenStreams.add(
-        [new Token('10', TokenType.VAL), new Token('arcsin', TokenType.ASIN)]);
+    rpnTokenStreams
+        .add([Token('10', TokenType.VAL), Token('arcsin', TokenType.ASIN)]);
 
     // Arctan
     inputStrings.add('arctan(10)');
     tokenStreams.add([
-      new Token('arctan', TokenType.ATAN),
-      new Token('(', TokenType.LBRACE),
-      new Token('10', TokenType.VAL),
-      new Token(')', TokenType.RBRACE)
+      Token('arctan', TokenType.ATAN),
+      Token('(', TokenType.LBRACE),
+      Token('10', TokenType.VAL),
+      Token(')', TokenType.RBRACE)
     ]);
-    rpnTokenStreams.add(
-        [new Token('10', TokenType.VAL), new Token('arctan', TokenType.ATAN)]);
+    rpnTokenStreams
+        .add([Token('10', TokenType.VAL), Token('arctan', TokenType.ATAN)]);
 
     // Abs
     inputStrings.add('abs(10)');
     tokenStreams.add([
-      new Token('abs', TokenType.ABS),
-      new Token('(', TokenType.LBRACE),
-      new Token('10', TokenType.VAL),
-      new Token(')', TokenType.RBRACE)
+      Token('abs', TokenType.ABS),
+      Token('(', TokenType.LBRACE),
+      Token('10', TokenType.VAL),
+      Token(')', TokenType.RBRACE)
     ]);
     rpnTokenStreams
-        .add([new Token('10', TokenType.VAL), new Token('abs', TokenType.ABS)]);
+        .add([Token('10', TokenType.VAL), Token('abs', TokenType.ABS)]);
     // Sgn
     inputStrings.add('sgn(10)');
     tokenStreams.add([
-      new Token('sgn', TokenType.SGN),
-      new Token('(', TokenType.LBRACE),
-      new Token('10', TokenType.VAL),
-      new Token(')', TokenType.RBRACE)
+      Token('sgn', TokenType.SGN),
+      Token('(', TokenType.LBRACE),
+      Token('10', TokenType.VAL),
+      Token(')', TokenType.RBRACE)
     ]);
     rpnTokenStreams
-        .add([new Token('10', TokenType.VAL), new Token('sgn', TokenType.SGN)]);
+        .add([Token('10', TokenType.VAL), Token('sgn', TokenType.SGN)]);
 
     // n-th root
     inputStrings.add('nrt(2,10)');
     tokenStreams.add([
-      new Token('nrt', TokenType.ROOT),
-      new Token('(', TokenType.LBRACE),
-      new Token('2', TokenType.VAL),
-      new Token(',', TokenType.SEPAR),
-      new Token('10', TokenType.VAL),
-      new Token(')', TokenType.RBRACE)
+      Token('nrt', TokenType.ROOT),
+      Token('(', TokenType.LBRACE),
+      Token('2', TokenType.VAL),
+      Token(',', TokenType.SEPAR),
+      Token('10', TokenType.VAL),
+      Token(')', TokenType.RBRACE)
     ]);
     rpnTokenStreams.add([
-      new Token('2', TokenType.VAL),
-      new Token('10', TokenType.VAL),
-      new Token('nrt', TokenType.ROOT)
+      Token('2', TokenType.VAL),
+      Token('10', TokenType.VAL),
+      Token('nrt', TokenType.ROOT)
     ]);
 
     inputStrings.add('nrt(5,10-1)');
     tokenStreams.add([
-      new Token('nrt', TokenType.ROOT),
-      new Token('(', TokenType.LBRACE),
-      new Token('5', TokenType.VAL),
-      new Token(',', TokenType.SEPAR),
-      new Token('10', TokenType.VAL),
-      new Token('-', TokenType.MINUS),
-      new Token('1', TokenType.VAL),
-      new Token(')', TokenType.RBRACE)
+      Token('nrt', TokenType.ROOT),
+      Token('(', TokenType.LBRACE),
+      Token('5', TokenType.VAL),
+      Token(',', TokenType.SEPAR),
+      Token('10', TokenType.VAL),
+      Token('-', TokenType.MINUS),
+      Token('1', TokenType.VAL),
+      Token(')', TokenType.RBRACE)
     ]);
     rpnTokenStreams.add([
-      new Token('5', TokenType.VAL),
-      new Token('10', TokenType.VAL),
-      new Token('1', TokenType.VAL),
-      new Token('-', TokenType.MINUS),
-      new Token('nrt', TokenType.ROOT)
+      Token('5', TokenType.VAL),
+      Token('10', TokenType.VAL),
+      Token('1', TokenType.VAL),
+      Token('-', TokenType.MINUS),
+      Token('nrt', TokenType.ROOT)
     ]);
 
     // Exp
     // function syntax
     inputStrings.add('e(x)');
     tokenStreams.add([
-      new Token('e', TokenType.EFUNC),
-      new Token('(', TokenType.LBRACE),
-      new Token('x', TokenType.VAR),
-      new Token(')', TokenType.RBRACE),
+      Token('e', TokenType.EFUNC),
+      Token('(', TokenType.LBRACE),
+      Token('x', TokenType.VAR),
+      Token(')', TokenType.RBRACE),
     ]);
     rpnTokenStreams
-        .add([new Token('x', TokenType.VAR), new Token('e', TokenType.EFUNC)]);
+        .add([Token('x', TokenType.VAR), Token('e', TokenType.EFUNC)]);
 
     // power syntax
     inputStrings.add('e^x');
-    tokenStreams
-        .add([new Token('e', TokenType.EFUNC), new Token('x', TokenType.VAR)]);
+    tokenStreams.add([Token('e', TokenType.EFUNC), Token('x', TokenType.VAR)]);
     rpnTokenStreams
-        .add([new Token('x', TokenType.VAR), new Token('e', TokenType.EFUNC)]);
+        .add([Token('x', TokenType.VAR), Token('e', TokenType.EFUNC)]);
 
     inputStrings.add('e^(x+2)');
     tokenStreams.add([
-      new Token('e', TokenType.EFUNC),
-      new Token('(', TokenType.LBRACE),
-      new Token('x', TokenType.VAR),
-      new Token('+', TokenType.PLUS),
-      new Token('2', TokenType.VAL),
-      new Token(')', TokenType.RBRACE)
+      Token('e', TokenType.EFUNC),
+      Token('(', TokenType.LBRACE),
+      Token('x', TokenType.VAR),
+      Token('+', TokenType.PLUS),
+      Token('2', TokenType.VAL),
+      Token(')', TokenType.RBRACE)
     ]);
     rpnTokenStreams.add([
-      new Token('x', TokenType.VAR),
-      new Token('2', TokenType.VAL),
-      new Token('+', TokenType.PLUS),
-      new Token('e', TokenType.EFUNC)
+      Token('x', TokenType.VAR),
+      Token('2', TokenType.VAL),
+      Token('+', TokenType.PLUS),
+      Token('e', TokenType.EFUNC)
     ]);
 
     // Complex expressions
     inputStrings.add('x * 2^2.5 * log(10,100)');
     tokenStreams.add([
-      new Token('x', TokenType.VAR),
-      new Token('*', TokenType.TIMES),
-      new Token('2', TokenType.VAL),
-      new Token('^', TokenType.POW),
-      new Token('2.5', TokenType.VAL),
-      new Token('*', TokenType.TIMES),
-      new Token('log', TokenType.LOG),
-      new Token('(', TokenType.LBRACE),
-      new Token('10', TokenType.VAL),
-      new Token(',', TokenType.SEPAR),
-      new Token('100', TokenType.VAL),
-      new Token(')', TokenType.RBRACE)
+      Token('x', TokenType.VAR),
+      Token('*', TokenType.TIMES),
+      Token('2', TokenType.VAL),
+      Token('^', TokenType.POW),
+      Token('2.5', TokenType.VAL),
+      Token('*', TokenType.TIMES),
+      Token('log', TokenType.LOG),
+      Token('(', TokenType.LBRACE),
+      Token('10', TokenType.VAL),
+      Token(',', TokenType.SEPAR),
+      Token('100', TokenType.VAL),
+      Token(')', TokenType.RBRACE)
     ]);
     rpnTokenStreams.add([
-      new Token('x', TokenType.VAR),
-      new Token('2', TokenType.VAL),
-      new Token('2.5', TokenType.VAL),
-      new Token('^', TokenType.POW),
-      new Token('*', TokenType.TIMES),
-      new Token('10', TokenType.VAL),
-      new Token('100', TokenType.VAL),
-      new Token('log', TokenType.LOG),
-      new Token('*', TokenType.TIMES)
+      Token('x', TokenType.VAR),
+      Token('2', TokenType.VAL),
+      Token('2.5', TokenType.VAL),
+      Token('^', TokenType.POW),
+      Token('*', TokenType.TIMES),
+      Token('10', TokenType.VAL),
+      Token('100', TokenType.VAL),
+      Token('log', TokenType.LOG),
+      Token('*', TokenType.TIMES)
     ]);
   }
 

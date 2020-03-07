@@ -21,7 +21,7 @@ abstract class MathFunction extends Expression {
   MathFunction._empty(this.name);
 
   /// Compose operator. Creates a [CompositeFunction].
-  MathFunction operator &(MathFunction g) => new CompositeFunction(this, g);
+  MathFunction operator &(MathFunction g) => CompositeFunction(this, g);
 
   /// Returns the i-th parameter of this function (0-based).
   Variable getParam(int i) => args[i];
@@ -60,23 +60,23 @@ class CompositeFunction extends MathFunction {
   ///
   /// Given some requirements
   ///
-  ///     x = new Variable('x');
-  ///     xPlus = new Plus(x, 1);
-  ///     xMinus = new Minus(x, 1);
+  ///     x = Variable('x');
+  ///     xPlus = Plus(x, 1);
+  ///     xMinus = Minus(x, 1);
   ///
-  ///     fExpr = new Vector([x, xPlus, xMinus]);        // Transforms x to 3-dimensional vector
-  ///     f = new CustomFunction('f', [x], fExpr);       // Creates a function R -> R^3 from fExpr
+  ///     fExpr = Vector([x, xPlus, xMinus]);        // Transforms x to 3-dimensional vector
+  ///     f = CustomFunction('f', [x], fExpr);       // Creates a function R -> R^3 from fExpr
   ///
-  ///     y = new Variable('z');
-  ///     z = new Variable('y');
+  ///     y = Variable('z');
+  ///     z = Variable('y');
   ///
-  ///     gExpr = x + y + z;                             // Transforms 3-dimensional input to real value
-  ///     g = new CustomFunction('g', [x, y, z], gExpr)  // Creates a function R^3 -> R from gExpr
+  ///     gExpr = x + y + z;                         // Transforms 3-dimensional input to real value
+  ///     g = CustomFunction('g', [x, y, z], gExpr)  // Creates a function R^3 -> R from gExpr
   ///
   /// a composition can be created as follows:
   ///
-  ///     composite = new CompositeFunction(f, g); // R -> R
-  ///                                              // composite(2) = 6
+  ///     composite = CompositeFunction(f, g); // R -> R
+  ///                                          // composite(2) = 6
   CompositeFunction(this.f, this.g)
       : super('comp(${f.name},${g.name})', f.args);
 
@@ -95,13 +95,13 @@ class CompositeFunction extends MathFunction {
 
     if (!(gD is MathFunction)) {
       // Build function again..
-      gDF = new CustomFunction('d${g.name}', g.args, gD);
+      gDF = CustomFunction('d${g.name}', g.args, gD);
     } else {
       gDF = gD;
     }
 
     // Chain rule.
-    return new CompositeFunction(f, gDF) * f.derive(toVar);
+    return CompositeFunction(f, gDF) * f.derive(toVar);
   }
 
   /// Simplifies both component functions.
@@ -110,7 +110,7 @@ class CompositeFunction extends MathFunction {
     final MathFunction fSimpl = f.simplify();
     final MathFunction gSimpl = g.simplify();
 
-    return new CompositeFunction(fSimpl, gSimpl);
+    return CompositeFunction(fSimpl, gSimpl);
   }
 
   /// The EvaluationType of `f` is detected automatically based on
@@ -170,7 +170,7 @@ class CompositeFunction extends MathFunction {
     }
 
     //TODO Handle arbitrary vectors.
-    throw new UnimplementedError('Vectors > 4 not supported yet.');
+    throw UnimplementedError('Vectors > 4 not supported yet.');
   }
 }
 
@@ -190,8 +190,8 @@ class CustomFunction extends MathFunction {
   /// power of `k`.
   ///
   ///     k = Variable('k');
-  ///     fExpr = x * Power(2, k);                            // The left shift operation
-  ///     f = new CustomFunction('leftshift', [x, k], fExpr); // Creates a function R^2 -> R from fExpr
+  ///     fExpr = x * Power(2, k);                        // The left shift operation
+  ///     f = CustomFunction('leftshift', [x, k], fExpr); // Creates a function R^2 -> R from fExpr
   ///
   /// The name of the function has no functional impact, ans is only used in the
   /// string representation.
@@ -200,11 +200,10 @@ class CustomFunction extends MathFunction {
 
   @override
   Expression derive(String toVar) =>
-      new CustomFunction(name, args, expression.derive(toVar));
+      CustomFunction(name, args, expression.derive(toVar));
 
   @override
-  Expression simplify() =>
-      new CustomFunction(name, args, expression.simplify());
+  Expression simplify() => CustomFunction(name, args, expression.simplify());
 
   // TODO: Substitute external variables?
   //       => Shouldn't be necessary as context model is handed over.
@@ -263,7 +262,7 @@ abstract class DefaultFunction extends MathFunction {
       return e;
     } else {
       // Need to wrap..
-      return new BoundVariable(e);
+      return BoundVariable(e);
     }
   }
 
@@ -278,21 +277,21 @@ class Exponential extends DefaultFunction {
   ///
   /// For example, to create e^4:
   ///
-  ///     four = new Number(4);
-  ///     exp = new Exponential(four);
+  ///     four = Number(4);
+  ///     exp = Exponential(four);
   ///
   /// You also can use variables or arbitrary expressions:
   ///
-  ///     x = new Variable('x');
-  ///     exp = new Exponential(x);
-  ///     exp = new Exponential(x + four);
+  ///     x = Variable('x');
+  ///     exp = Exponential(x);
+  ///     exp = Exponential(x + four);
   Exponential(Expression exp) : super._unary('exp', exp);
 
   /// The exponent of this exponential function.
   Expression get exp => getParam(0);
 
   @override
-  Expression derive(String toVar) => new Times(this, exp.derive(toVar));
+  Expression derive(String toVar) => Times(this, exp.derive(toVar));
 
   /// Possible simplifications:
   ///
@@ -304,19 +303,19 @@ class Exponential extends DefaultFunction {
     final Expression expSimpl = exp.simplify();
 
     if (_isNumber(expSimpl, 0)) {
-      return new Number(1); // e^0 = 1
+      return Number(1); // e^0 = 1
     }
 
     if (_isNumber(expSimpl, 1)) {
-      return new Number(math.e); // e^1 = e
+      return Number(math.e); // e^1 = e
     }
 
     if (expSimpl is Times && expSimpl.second is Ln) {
       final Ln ln = expSimpl.second;
-      return new Power(ln.arg, expSimpl.first); // e^(x*ln(y)) = y^x
+      return Power(ln.arg, expSimpl.first); // e^(x*ln(y)) = y^x
     }
 
-    return new Exponential(expSimpl);
+    return Exponential(expSimpl);
   }
 
   @override
@@ -331,10 +330,10 @@ class Exponential extends DefaultFunction {
     if (type == EvaluationType.INTERVAL) {
       // Special case of a^[x, y] = [a^x, a^y] for a > 1 (with a = e)
       // Expect exponent to be interval.
-      return new Interval(math.exp(expEval.min), math.exp(expEval.max));
+      return Interval(math.exp(expEval.min), math.exp(expEval.max));
     }
 
-    throw new UnimplementedError('Can not evaluate $name on $type yet.');
+    throw UnimplementedError('Can not evaluate $name on $type yet.');
   }
 }
 
@@ -344,16 +343,16 @@ class Log extends DefaultFunction {
   ///
   /// For example, to create log_10(2):
   ///
-  ///     base = new Number(10);
-  ///     arg = new Number(2);
-  ///     log = new Log(base, arg);
+  ///     base = Number(10);
+  ///     arg = Number(2);
+  ///     log = Log(base, arg);
   ///
   /// To create a naturally based logarithm, see [Ln].
   Log(Expression base, Expression arg) : super._binary('log', base, arg);
 
   /// Creates a natural logarithm.
   /// Must only be used internally by the [Ln] class.
-  Log._ln(Expression arg) : super._binary('ln', new Number(math.e), arg);
+  Log._ln(Expression arg) : super._binary('ln', Number(math.e), arg);
 
   /// The base of this logarithm.
   Expression get base => getParam(0);
@@ -366,7 +365,7 @@ class Log extends DefaultFunction {
 
   /// Simplifies base and argument.
   @override
-  Expression simplify() => new Log(base.simplify(), arg.simplify());
+  Expression simplify() => Log(base.simplify(), arg.simplify());
 
   @override
   dynamic evaluate(EvaluationType type, ContextModel context) {
@@ -380,7 +379,7 @@ class Log extends DefaultFunction {
       return asNaturalLogarithm().evaluate(type, context);
     }
 
-    throw new UnimplementedError('Can not evaluate $name on $type yet.');
+    throw UnimplementedError('Can not evaluate $name on $type yet.');
   }
 
   @override
@@ -391,7 +390,7 @@ class Log extends DefaultFunction {
   ///
   /// This method is used to determine the derivation of a logarithmic
   /// expression.
-  Expression asNaturalLogarithm() => new Ln(arg) / new Ln(base);
+  Expression asNaturalLogarithm() => Ln(arg) / Ln(base);
 }
 
 /// The natural logarithm (log based e).
@@ -400,8 +399,8 @@ class Ln extends Log {
   ///
   /// For example, to create ln(10):
   ///
-  ///     num10 = new Number(10);
-  ///     ln = new Ln(num10);
+  ///     num10 = Number(10);
+  ///     ln = Ln(num10);
   ///
   /// To create a logarithm with arbitrary base, see [Log].
   Ln(Expression arg) : super._ln(arg);
@@ -417,10 +416,10 @@ class Ln extends Log {
     final Expression argSimpl = arg.simplify();
 
     if (_isNumber(argSimpl, 1)) {
-      return new Number(0); // ln(1) = 0
+      return Number(0); // ln(1) = 0
     }
 
-    return new Ln(argSimpl);
+    return Ln(argSimpl);
   }
 
   @override
@@ -433,10 +432,10 @@ class Ln extends Log {
 
     if (type == EvaluationType.INTERVAL) {
       // Expect argument of type interval
-      return new Interval(math.log(argEval.min), math.log(argEval.max));
+      return Interval(math.log(argEval.min), math.log(argEval.max));
     }
 
-    throw new UnimplementedError('Can not evaluate $name on $type yet.');
+    throw UnimplementedError('Can not evaluate $name on $type yet.');
   }
 
   @override
@@ -453,7 +452,7 @@ class Root extends DefaultFunction {
   ///
   /// For example, to create the 5th root of x:
   ///
-  ///     root = new Root(5, new Variable('x'));
+  ///     root = Root(5, Variable('x'));
   Root(this.n, Expression arg) : super._unary('root', arg);
 
   /// Creates the n-th root of arg where n is a [Number] literal.
@@ -465,7 +464,7 @@ class Root extends DefaultFunction {
   ///
   /// For example, to create the square root of x:
   ///
-  ///     sqrt = new Root.sqrt(new Variable('x'));
+  ///     sqrt = Root.sqrt(new Variable('x'));
   ///
   /// __Note__:
   /// For better simplification and display, use the [Sqrt] class.
@@ -480,7 +479,7 @@ class Root extends DefaultFunction {
 
   /// Simplify argument.
   @override
-  Expression simplify() => new Root(n, arg.simplify());
+  Expression simplify() => Root(n, arg.simplify());
 
   @override
   dynamic evaluate(EvaluationType type, ContextModel context) =>
@@ -494,8 +493,7 @@ class Root extends DefaultFunction {
   ///
   /// This method is used to determine the derivation of a root
   /// expression.
-  Expression asPower() =>
-      new Power(arg, new Divide(new Number(1), new Number(n)));
+  Expression asPower() => Power(arg, Divide(Number(1), Number(n)));
 }
 
 /// The square root function. A specialisation of [Root].
@@ -504,7 +502,7 @@ class Sqrt extends Root {
   ///
   /// For example, to create the square root of x:
   ///
-  ///     sqrt = new Sqrt(new Variable('x'));
+  ///     sqrt = Sqrt(new Variable('x'));
   Sqrt(Expression arg) : super.sqrt(arg);
 
   /// Possible simplifications:
@@ -530,14 +528,14 @@ class Sqrt extends Root {
     }
 
     if (_isNumber(argSimpl, 0)) {
-      return new Number(0); // sqrt(0) = 0
+      return Number(0); // sqrt(0) = 0
     }
 
     if (_isNumber(argSimpl, 1)) {
-      return new Number(1); // sqrt(1) = 1
+      return Number(1); // sqrt(1) = 1
     }
 
-    return new Sqrt(argSimpl);
+    return Sqrt(argSimpl);
   }
 
   @override
@@ -554,10 +552,10 @@ class Sqrt extends Root {
 
     if (type == EvaluationType.INTERVAL) {
       // Piecewiese sqrting.
-      return new Interval(math.sqrt(argEval.min), math.sqrt(argEval.max));
+      return Interval(math.sqrt(argEval.min), math.sqrt(argEval.max));
     }
 
-    throw new UnimplementedError('Can not evaluate $name on $type yet.');
+    throw UnimplementedError('Can not evaluate $name on $type yet.');
   }
 
   @override
@@ -573,7 +571,7 @@ class Sin extends DefaultFunction {
   Expression get arg => getParam(0);
 
   @override
-  Expression derive(String toVar) => new Cos(arg) * arg.derive(toVar);
+  Expression derive(String toVar) => Cos(arg) * arg.derive(toVar);
 
   /// Possible simplifications:
   ///
@@ -583,10 +581,10 @@ class Sin extends DefaultFunction {
     final Expression argSimpl = arg.simplify();
 
     if (_isNumber(argSimpl, 0)) {
-      return new Number(0); // sin(0) = 0
+      return Number(0); // sin(0) = 0
     }
 
-    return new Sin(argSimpl);
+    return Sin(argSimpl);
   }
 
   @override
@@ -606,7 +604,7 @@ class Sin extends DefaultFunction {
       // or just return [-1, 1] if half a period is in the given interval
     }
 
-    throw new UnimplementedError('Can not evaluate $name on $type yet.');
+    throw UnimplementedError('Can not evaluate $name on $type yet.');
   }
 }
 
@@ -619,7 +617,7 @@ class Cos extends DefaultFunction {
   Expression get arg => getParam(0);
 
   @override
-  Expression derive(String toVar) => -new Sin(arg) * arg.derive(toVar);
+  Expression derive(String toVar) => -Sin(arg) * arg.derive(toVar);
 
   /// Possible simplifications:
   ///
@@ -629,10 +627,10 @@ class Cos extends DefaultFunction {
     final Expression argSimpl = arg.simplify();
 
     if (_isNumber(argSimpl, 0)) {
-      return new Number(1); // cos(0) = 1
+      return Number(1); // cos(0) = 1
     }
 
-    return new Cos(argSimpl);
+    return Cos(argSimpl);
   }
 
   @override
@@ -652,7 +650,7 @@ class Cos extends DefaultFunction {
       // or just return [-1, 1] if half a period is in the given interval
     }
 
-    throw new UnimplementedError('Can not evaluate $name on $type yet.');
+    throw UnimplementedError('Can not evaluate $name on $type yet.');
   }
 }
 
@@ -675,10 +673,10 @@ class Tan extends DefaultFunction {
     final Expression argSimpl = arg.simplify();
 
     if (_isNumber(argSimpl, 0)) {
-      return new Number(0); // tan(0) = 0
+      return Number(0); // tan(0) = 0
     }
 
-    return new Tan(argSimpl);
+    return Tan(argSimpl);
   }
 
   @override
@@ -693,12 +691,12 @@ class Tan extends DefaultFunction {
       //TODO apply function to all vector elements
     }
 
-    throw new UnimplementedError('Can not evaluate $name on $type yet.');
+    throw UnimplementedError('Can not evaluate $name on $type yet.');
   }
 
   /// Returns this tangens as sine and cosine representation:
   /// `tan(x) = sin(x) / cos(x)`
-  Expression asSinCos() => new Sin(arg) / new Cos(arg);
+  Expression asSinCos() => Sin(arg) / Cos(arg);
 }
 
 /// The arcus sine function.
@@ -711,12 +709,12 @@ class Asin extends DefaultFunction {
 
   @override
   Expression derive(String toVar) =>
-      new Number(1) / new Sqrt(new Number(1) - (arg ^ new Number(2)));
+      Number(1) / Sqrt(Number(1) - (arg ^ Number(2)));
 
   /// Possible simplifications:
   @override
   Expression simplify() {
-    return new Asin(arg.simplify());
+    return Asin(arg.simplify());
   }
 
   @override
@@ -728,7 +726,7 @@ class Asin extends DefaultFunction {
     }
 
     // TODO VECTOR and INTERVAL evaluation
-    throw new UnimplementedError('Can not evaluate $name on $type yet.');
+    throw UnimplementedError('Can not evaluate $name on $type yet.');
   }
 }
 
@@ -742,12 +740,12 @@ class Acos extends DefaultFunction {
 
   @override
   Expression derive(String toVar) =>
-      -new Number(1) / new Sqrt(new Number(1) - (arg ^ new Number(2)));
+      -Number(1) / Sqrt(Number(1) - (arg ^ Number(2)));
 
   /// Possible simplifications:
   @override
   Expression simplify() {
-    return new Acos(arg.simplify());
+    return Acos(arg.simplify());
   }
 
   @override
@@ -759,7 +757,7 @@ class Acos extends DefaultFunction {
     }
 
     // TODO VECTOR and INTERVAL evaluation
-    throw new UnimplementedError('Can not evaluate $name on $type yet.');
+    throw UnimplementedError('Can not evaluate $name on $type yet.');
   }
 }
 
@@ -773,12 +771,12 @@ class Atan extends DefaultFunction {
 
   @override
   Expression derive(String toVar) =>
-      new Number(1) / (new Number(1) + (arg ^ new Number(2)));
+      Number(1) / (Number(1) + (arg ^ Number(2)));
 
   /// Possible simplifications:
   @override
   Expression simplify() {
-    return new Atan(arg.simplify());
+    return Atan(arg.simplify());
   }
 
   @override
@@ -790,7 +788,7 @@ class Atan extends DefaultFunction {
     }
 
     // TODO VECTOR and INTERVAL evaluation
-    throw new UnimplementedError('Can not evaluate $name on $type yet.');
+    throw UnimplementedError('Can not evaluate $name on $type yet.');
   }
 }
 
@@ -805,11 +803,11 @@ class Abs extends DefaultFunction {
   /// The differentiation of Abs is Sgn
   //TODO No differentiation possible for x = 0
   @override
-  Expression derive(String toVar) => new Sgn(arg) * arg.derive(toVar);
+  Expression derive(String toVar) => Sgn(arg) * arg.derive(toVar);
 
   /// Possible simplifications:
   @override
-  Expression simplify() => new Abs(arg.simplify());
+  Expression simplify() => Abs(arg.simplify());
 
   @override
   dynamic evaluate(EvaluationType type, ContextModel context) {
@@ -823,7 +821,7 @@ class Abs extends DefaultFunction {
       //TODO apply function to all vector elements
     }
 
-    throw new UnimplementedError('Can not evaluate $name on $type yet.');
+    throw UnimplementedError('Can not evaluate $name on $type yet.');
   }
 }
 
@@ -838,7 +836,7 @@ class Ceil extends DefaultFunction {
   /// Ceil never has a slope.
   //TODO No differentiation possible for integer x
   @override
-  Expression derive(String toVar) => new Number(0);
+  Expression derive(String toVar) => Number(0);
 
   /// Possible simplifications:
   ///
@@ -847,7 +845,7 @@ class Ceil extends DefaultFunction {
   @override
   Expression simplify() {
     final Expression sarg = arg.simplify();
-    return sarg is Floor || sarg is Ceil ? sarg : new Ceil(sarg);
+    return sarg is Floor || sarg is Ceil ? sarg : Ceil(sarg);
   }
 
   @override
@@ -862,7 +860,7 @@ class Ceil extends DefaultFunction {
       //TODO apply function to all vector elements
     }
 
-    throw new UnimplementedError('Can not evaluate $name on $type yet.');
+    throw UnimplementedError('Can not evaluate $name on $type yet.');
   }
 }
 
@@ -877,7 +875,7 @@ class Floor extends DefaultFunction {
   /// Floor never has a slope.
   //TODO No differentiation possible for integer x
   @override
-  Expression derive(String toVar) => new Number(0);
+  Expression derive(String toVar) => Number(0);
 
   /// Possible simplifications:
   ///
@@ -886,7 +884,7 @@ class Floor extends DefaultFunction {
   @override
   Expression simplify() {
     final Expression sarg = arg.simplify();
-    return (sarg is Floor) || (sarg is Ceil) ? sarg : new Floor(sarg);
+    return (sarg is Floor) || (sarg is Ceil) ? sarg : Floor(sarg);
   }
 
   @override
@@ -901,7 +899,7 @@ class Floor extends DefaultFunction {
       //TODO apply function to all vector elements
     }
 
-    throw new UnimplementedError('Can not evaluate $name on $type yet.');
+    throw UnimplementedError('Can not evaluate $name on $type yet.');
   }
 }
 
@@ -915,10 +913,10 @@ class Sgn extends DefaultFunction {
 
   //TODO not differentiable at 0.
   @override
-  Expression derive(String toVar) => new Number(0);
+  Expression derive(String toVar) => Number(0);
 
   @override
-  Expression simplify() => new Sgn(arg.simplify());
+  Expression simplify() => Sgn(arg.simplify());
 
   @override
   dynamic evaluate(EvaluationType type, ContextModel context) {
@@ -930,6 +928,6 @@ class Sgn extends DefaultFunction {
       if (argEval > 0) return 1.0;
     }
 
-    throw new UnimplementedError('Can not evaluate $name on $type yet.');
+    throw UnimplementedError('Can not evaluate $name on $type yet.');
   }
 }

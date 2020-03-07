@@ -49,16 +49,16 @@ You can either create an mathematical expression programmatically or parse a str
 
 * Create the expression programmatically:
 ```dart
-  Variable x = new Variable('x'), y = new Variable('y');
-  Power xSquare = new Power(x, 2);
-  Cos yCos = new Cos(y);
-  Number three = new Number(3.0);
+  Variable x = Variable('x'), y = Variable('y');
+  Power xSquare = Power(x, 2);
+  Cos yCos = Cos(y);
+  Number three = Number(3.0);
   Expression exp = (xSquare + yCos) / three;
 ```
 
 * Create the expression via the parser:
 ```dart
-  Parser p = new Parser();
+  Parser p = Parser();
   Expression exp = p.parse("(x^2 + cos(y)) / 3");
 ```
 
@@ -67,9 +67,9 @@ You can either create an mathematical expression programmatically or parse a str
 * Bind variables and evaluate the expression as real number:
 ```dart
   // Bind variables:
-  ContextModel cm = new ContextModel();
-  cm.bindVariable(x, new Number(2.0));
-  cm.bindVariable(y, new Number(Math.PI));
+  ContextModel cm = ContextModel();
+  cm.bindVariable(x, Number(2.0));
+  cm.bindVariable(y, Number(Math.PI));
 
   // Evaluate expression:
   double eval = exp.evaluate(EvaluationType.REAL, cm);
