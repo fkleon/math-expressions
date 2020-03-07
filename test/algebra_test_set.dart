@@ -23,20 +23,20 @@ class AlgebraTests extends TestSet {
   @override
   void initTests() {
     // do some funky stuff
-    p0 = new Point3.zero();
-    p1 = new Point3(1.0, 2.0, 3.0);
-    p2 = new Point3(4.0, -5.0, 7.0);
-    v1 = new Vector3(1.0, -2.0, 5.0);
-    v2 = new Vector3(-1.0, 0.0, -7.0);
+    p0 = Point3.zero();
+    p1 = Point3(1.0, 2.0, 3.0);
+    p2 = Point3(4.0, -5.0, 7.0);
+    v1 = Vector3(1.0, -2.0, 5.0);
+    v2 = Vector3(-1.0, 0.0, -7.0);
 
-    iNull1 = new Interval(0, 30);
-    iNull2 = new Interval(-20, 0);
-    iPos = new Interval(2, 7);
-    iNeg = new Interval(-5, -1);
-    iZero = new Interval(-1, 1);
-    iEmpty = new Interval.empty();
+    iNull1 = Interval(0, 30);
+    iNull2 = Interval(-20, 0);
+    iPos = Interval(2, 7);
+    iNeg = Interval(-5, -1);
+    iZero = Interval(-1, 1);
+    iEmpty = Interval.empty();
 
-    i = new Interval(0.00002, 300);
+    i = Interval(0.00002, 300);
   }
 
   /*

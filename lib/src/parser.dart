@@ -7,13 +7,13 @@ part of math_expressions;
 ///
 /// Usage example:
 ///
-///     Parser p = new Parser();
+///     Parser p = Parser();
 ///     Expression exp = p.parse("(x^2 + cos(y)) / 3");
 class Parser {
   final Lexer lex;
 
   /// Creates a new parser.
-  Parser() : lex = new Lexer();
+  Parser() : lex = Lexer();
 
   /// Parses the given input string into an [Expression]. Throws a
   /// [ArgumentError] if the given [inputString] is empty. Throws a
@@ -21,7 +21,7 @@ class Parser {
   /// [Expression].
   Expression parse(String inputString) {
     if (inputString == null || inputString.trim().isEmpty) {
-      throw new ArgumentError('The given input string was empty.');
+      throw ArgumentError('The given input string was empty.');
     }
 
     final List<Expression> exprStack = <Expression>[];
@@ -32,10 +32,10 @@ class Parser {
 
       switch (currToken.type) {
         case TokenType.VAL:
-          currExpr = new Number(double.parse(currToken.text));
+          currExpr = Number(double.parse(currToken.text));
           break;
         case TokenType.VAR:
-          currExpr = new Variable(currToken.text);
+          currExpr = Variable(currToken.text);
           break;
         case TokenType.UNMINUS:
           currExpr = -exprStack.removeLast();
@@ -71,63 +71,63 @@ class Parser {
           currExpr = left ^ right;
           break;
         case TokenType.EFUNC:
-          currExpr = new Exponential(exprStack.removeLast());
+          currExpr = Exponential(exprStack.removeLast());
           break;
         case TokenType.LOG:
           right = exprStack.removeLast();
           left = exprStack.removeLast();
-          currExpr = new Log(left, right);
+          currExpr = Log(left, right);
           break;
         case TokenType.LN:
-          currExpr = new Ln(exprStack.removeLast());
+          currExpr = Ln(exprStack.removeLast());
           break;
         case TokenType.SQRT:
-          currExpr = new Sqrt(exprStack.removeLast());
+          currExpr = Sqrt(exprStack.removeLast());
           break;
         case TokenType.ROOT:
           right = exprStack.removeLast();
           left = exprStack.removeLast();
-          currExpr = new Root.fromExpr(left as Number, right);
+          currExpr = Root.fromExpr(left as Number, right);
           break;
         case TokenType.SIN:
-          currExpr = new Sin(exprStack.removeLast());
+          currExpr = Sin(exprStack.removeLast());
           break;
         case TokenType.COS:
-          currExpr = new Cos(exprStack.removeLast());
+          currExpr = Cos(exprStack.removeLast());
           break;
         case TokenType.TAN:
-          currExpr = new Tan(exprStack.removeLast());
+          currExpr = Tan(exprStack.removeLast());
           break;
         case TokenType.ASIN:
-          currExpr = new Asin(exprStack.removeLast());
+          currExpr = Asin(exprStack.removeLast());
           break;
         case TokenType.ACOS:
-          currExpr = new Acos(exprStack.removeLast());
+          currExpr = Acos(exprStack.removeLast());
           break;
         case TokenType.ATAN:
-          currExpr = new Atan(exprStack.removeLast());
+          currExpr = Atan(exprStack.removeLast());
           break;
         case TokenType.ABS:
-          currExpr = new Abs(exprStack.removeLast());
+          currExpr = Abs(exprStack.removeLast());
           break;
         case TokenType.CEIL:
-          currExpr = new Ceil(exprStack.removeLast());
+          currExpr = Ceil(exprStack.removeLast());
           break;
         case TokenType.FLOOR:
-          currExpr = new Floor(exprStack.removeLast());
+          currExpr = Floor(exprStack.removeLast());
           break;
         case TokenType.SGN:
-          currExpr = new Sgn(exprStack.removeLast());
+          currExpr = Sgn(exprStack.removeLast());
           break;
         default:
-          throw new ArgumentError('Unsupported token: $currToken');
+          throw ArgumentError('Unsupported token: $currToken');
       }
 
       exprStack.add(currExpr);
     }
 
     if (exprStack.length > 1) {
-      throw new StateError('The input String is not a correct expression');
+      throw StateError('The input String is not a correct expression');
     }
 
     return exprStack.last;
@@ -210,11 +210,11 @@ class Lexer {
           varBuffer = '';
         } else {
           // Normal behaviour
-          tempTokenStream.add(new Token(si, keywords[si]));
+          tempTokenStream.add(Token(si, keywords[si]));
         }
       } else {
         // Check if the current string is a Number. If it's the case add the string to the intBuffer.
-        StringBuffer sb = new StringBuffer(intBuffer);
+        StringBuffer sb = StringBuffer(intBuffer);
         try {
           int.parse(si);
           // The current string is a number and it is added to the intBuffer.
@@ -232,7 +232,7 @@ class Lexer {
           }
 
           // The current string is not a number and not a simple keyword, so it has to be a variable or function.
-          sb = new StringBuffer(varBuffer);
+          sb = StringBuffer(varBuffer);
           if (intBuffer.isNotEmpty) {
             /*
              * The intBuffer contains a string and the current string is a
@@ -266,7 +266,7 @@ class Lexer {
   /// Checks if the intBuffer contains a number and adds it to the tokenStream.
   /// Then clears the intBuffer.
   void _doIntBuffer(List<Token> stream) {
-    stream.add(new Token(intBuffer, TokenType.VAL));
+    stream.add(Token(intBuffer, TokenType.VAL));
     intBuffer = '';
   }
 
@@ -274,9 +274,9 @@ class Lexer {
   /// Then clears the varBuffer.
   void _doVarBuffer(List<Token> stream) {
     if (keywords.containsKey(varBuffer)) {
-      stream.add(new Token(varBuffer, keywords[varBuffer]));
+      stream.add(Token(varBuffer, keywords[varBuffer]));
     } else {
-      stream.add(new Token(varBuffer, TokenType.VAR));
+      stream.add(Token(varBuffer, TokenType.VAR));
     }
     varBuffer = '';
   }
@@ -286,7 +286,7 @@ class Lexer {
   /// [ArgumentError] if the list is empty.
   List<Token> shuntingYard(List<Token> stream) {
     if (stream.isEmpty) {
-      throw new ArgumentError('The given tokenStream was empty.');
+      throw ArgumentError('The given tokenStream was empty.');
     }
 
     final List<Token> outputStream = <Token>[];
@@ -322,7 +322,7 @@ class Lexer {
         if (operatorBuffer.isNotEmpty &&
             operatorBuffer.last.type != TokenType.LBRACE) {
           //TODO never reached, check this.
-          throw new StateError(
+          throw StateError(
               'Misplaced separator or mismatched parenthesis.');
         }
         prevToken = curToken;
@@ -337,7 +337,7 @@ class Lexer {
           (prevToken == null ||
               prevToken.type.operator ||
               prevToken.type == TokenType.LBRACE)) {
-        final Token newToken = new Token(curToken.text, TokenType.UNMINUS);
+        final Token newToken = Token(curToken.text, TokenType.UNMINUS);
         operatorBuffer.add(newToken);
         prevToken = newToken;
         continue;
@@ -381,7 +381,7 @@ class Lexer {
         // Expect next token on stack to be left parenthesis and pop it
         if (operatorBuffer.isEmpty ||
             operatorBuffer.removeLast().type != TokenType.LBRACE) {
-          throw new StateError('Mismatched parenthesis.');
+          throw StateError('Mismatched parenthesis.');
         }
 
         // If the token at the top of the stack is a function token, pop it onto the output queue.
@@ -400,7 +400,7 @@ class Lexer {
     while (operatorBuffer.isNotEmpty) {
       if (operatorBuffer.last.type == TokenType.LBRACE ||
           operatorBuffer.last.type == TokenType.RBRACE) {
-        throw new StateError('Mismatched parenthesis.');
+        throw StateError('Mismatched parenthesis.');
       }
       outputStream.add(operatorBuffer.removeLast());
     }

@@ -48,28 +48,28 @@ class ExpressionTests extends TestSet {
     num1 = 2.25;
     num2 = 5.0;
     num3 = 199.9999999;
-    n1 = new Number(num1);
-    n2 = new Number(num2);
-    n3 = new Number(num3);
+    n1 = Number(num1);
+    n2 = Number(num2);
+    n3 = Number(num3);
 
-    int1 = new Interval(num1, num2);
-    int2 = new Interval(num2, num3);
-    int3 = new Interval(-num3, num2);
+    int1 = Interval(num1, num2);
+    int2 = Interval(num2, num3);
+    int3 = Interval(-num3, num2);
 
-    i1 = new IntervalLiteral(n1, n2);
-    i2 = new IntervalLiteral(n2, n3);
-    i3 = new IntervalLiteral(-n3, n2);
+    i1 = IntervalLiteral(n1, n2);
+    i2 = IntervalLiteral(n2, n3);
+    i3 = IntervalLiteral(-n3, n2);
 
-    v1 = new Vector([n1, n1, n1]);
-    v2 = new Vector([n2, n2, n2]);
-    v3 = new Vector([n3, n3, n3]);
-    //v4 = new Vector([n4, n4, n4]);
+    v1 = Vector([n1, n1, n1]);
+    v2 = Vector([n2, n2, n2]);
+    v3 = Vector([n3, n3, n3]);
+    //v4 = Vector([n4, n4, n4]);
 
     real = EvaluationType.REAL;
     interval = EvaluationType.INTERVAL;
     vector = EvaluationType.VECTOR;
 
-    cm = new ContextModel();
+    cm = ContextModel();
   }
 
   num num1, num2, num3;
@@ -142,25 +142,25 @@ class ExpressionTests extends TestSet {
   void convenienceBinaryCreation() {
     // Test Expression creation with convenience constructors.
     List<BinaryOperator> binOps = [
-      new Times('x', 2),
-      new Divide('x', 2),
-      new Plus('x', 2),
-      new Minus('x', 2),
-      new Power('x', 2)
+      Times('x', 2),
+      Divide('x', 2),
+      Plus('x', 2),
+      Minus('x', 2),
+      Power('x', 2)
     ];
 
     for (BinaryOperator binOp in binOps) {
-      expect(binOp.first, new TypeMatcher<Variable>());
-      expect(binOp.second, new TypeMatcher<Number>());
+      expect(binOp.first, TypeMatcher<Variable>());
+      expect(binOp.second, TypeMatcher<Number>());
     }
   }
 
   /// Tests the convenience constructors (unary, auto-wrapping).
   void convenienceUnaryCreation() {
-    List<UnaryOperator> unOps = [new UnaryMinus('x')];
+    List<UnaryOperator> unOps = [UnaryMinus('x')];
 
     for (UnaryOperator unOp in unOps) {
-      expect(unOp.exp, new TypeMatcher<Variable>());
+      expect(unOp.exp, TypeMatcher<Variable>());
     }
   }
 
@@ -216,44 +216,44 @@ class ExpressionTests extends TestSet {
      *  Plus
      */
     // a + 0 = a
-    Expression exp = new Plus('a', 0);
+    Expression exp = Plus('a', 0);
     expect(_isVariable(exp.simplify(), 'a'), isTrue);
 
     // 0 + a = a
-    exp = new Plus(0, 'a');
+    exp = Plus(0, 'a');
     expect(_isVariable(exp.simplify(), 'a'), isTrue);
 
     // a + -(b) = a - b
-    exp = new Plus('a', new UnaryMinus('b'));
-    expect(exp.simplify(), new TypeMatcher<Minus>());
-    expect((exp.simplify() as Minus).first, new TypeMatcher<Variable>());
-    expect((exp.simplify() as Minus).second, new TypeMatcher<Variable>());
+    exp = Plus('a', UnaryMinus('b'));
+    expect(exp.simplify(), TypeMatcher<Minus>());
+    expect((exp.simplify() as Minus).first, TypeMatcher<Variable>());
+    expect((exp.simplify() as Minus).second, TypeMatcher<Variable>());
 
     /*
      *  Minus
      */
     // a - 0 = a
-    exp = new Minus('a', 0);
+    exp = Minus('a', 0);
     expect(_isVariable(exp.simplify(), 'a'), isTrue);
 
     // 0 - a = - a
-    exp = new Minus(0, 'a');
-    expect(exp.simplify(), new TypeMatcher<UnaryMinus>());
-    expect((exp.simplify() as UnaryMinus).exp, new TypeMatcher<Variable>());
+    exp = Minus(0, 'a');
+    expect(exp.simplify(), TypeMatcher<UnaryMinus>());
+    expect((exp.simplify() as UnaryMinus).exp, TypeMatcher<Variable>());
 
     // a - -(b) = a + b
-    exp = new Minus('a', new UnaryMinus('b'));
-    expect(exp.simplify(), new TypeMatcher<Plus>());
-    expect((exp.simplify() as Plus).first, new TypeMatcher<Variable>());
-    expect((exp.simplify() as Plus).second, new TypeMatcher<Variable>());
+    exp = Minus('a', UnaryMinus('b'));
+    expect(exp.simplify(), TypeMatcher<Plus>());
+    expect((exp.simplify() as Plus).first, TypeMatcher<Variable>());
+    expect((exp.simplify() as Plus).second, TypeMatcher<Variable>());
 
     /*
      *  Times
      */
     // -a * b = - (a * b)
-    exp = new Times(new UnaryMinus('a'), 'b');
-    expect(exp.simplify(), new TypeMatcher<UnaryMinus>());
-    expect((exp.simplify() as UnaryMinus).exp, new TypeMatcher<Times>());
+    exp = Times(UnaryMinus('a'), 'b');
+    expect(exp.simplify(), TypeMatcher<UnaryMinus>());
+    expect((exp.simplify() as UnaryMinus).exp, TypeMatcher<Times>());
     expect(
         _isVariable(((exp.simplify() as UnaryMinus).exp as Times).first, 'a'),
         isTrue);
@@ -262,9 +262,9 @@ class ExpressionTests extends TestSet {
         isTrue);
 
     // a * -b = - (a * b)
-    exp = new Times('a', new UnaryMinus('b'));
-    expect(exp.simplify(), new TypeMatcher<UnaryMinus>());
-    expect((exp.simplify() as UnaryMinus).exp, new TypeMatcher<Times>());
+    exp = Times('a', UnaryMinus('b'));
+    expect(exp.simplify(), TypeMatcher<UnaryMinus>());
+    expect((exp.simplify() as UnaryMinus).exp, TypeMatcher<Times>());
     expect(
         _isVariable(((exp.simplify() as UnaryMinus).exp as Times).first, 'a'),
         isTrue);
@@ -273,36 +273,36 @@ class ExpressionTests extends TestSet {
         isTrue);
 
     // -a * -b = a * b
-    exp = new Times(new UnaryMinus('a'), new UnaryMinus('b'));
-    expect(exp.simplify(), new TypeMatcher<Times>());
+    exp = Times(UnaryMinus('a'), UnaryMinus('b'));
+    expect(exp.simplify(), TypeMatcher<Times>());
     expect(_isVariable((exp.simplify() as Times).first, 'a'), isTrue);
     expect(_isVariable((exp.simplify() as Times).second, 'b'), isTrue);
 
     // a * 0 = 0
-    exp = new Times(new UnaryMinus('a'), 0);
-    expect(exp.simplify(), new TypeMatcher<Number>());
+    exp = Times(UnaryMinus('a'), 0);
+    expect(exp.simplify(), TypeMatcher<Number>());
     expect((exp.simplify() as Number).value == 0, isTrue);
 
     // 0 * a = 0
-    exp = new Times(0, new Variable('a'));
-    expect(exp.simplify(), new TypeMatcher<Number>());
+    exp = Times(0, Variable('a'));
+    expect(exp.simplify(), TypeMatcher<Number>());
     expect((exp.simplify() as Number).value == 0, isTrue);
 
     // a * 1 = a
-    exp = new Times(new Variable('a'), 1);
+    exp = Times(Variable('a'), 1);
     expect(_isVariable(exp.simplify(), 'a'), isTrue);
 
     // 1 * a = a
-    exp = new Times(1, new Variable('a'));
+    exp = Times(1, Variable('a'));
     expect(_isVariable(exp.simplify(), 'a'), isTrue);
 
     /*
      *  Divide
      */
     // -a / b = - (a / b)
-    exp = new Divide(new UnaryMinus('a'), 'b');
-    expect(exp.simplify(), new TypeMatcher<UnaryMinus>());
-    expect((exp.simplify() as UnaryMinus).exp, new TypeMatcher<Divide>());
+    exp = Divide(UnaryMinus('a'), 'b');
+    expect(exp.simplify(), TypeMatcher<UnaryMinus>());
+    expect((exp.simplify() as UnaryMinus).exp, TypeMatcher<Divide>());
     expect(
         _isVariable(((exp.simplify() as UnaryMinus).exp as Divide).first, 'a'),
         isTrue);
@@ -311,9 +311,9 @@ class ExpressionTests extends TestSet {
         isTrue);
 
     // a * -b = - (a / b)
-    exp = new Divide('a', new UnaryMinus('b'));
-    expect(exp.simplify(), new TypeMatcher<UnaryMinus>());
-    expect((exp.simplify() as UnaryMinus).exp, new TypeMatcher<Divide>());
+    exp = Divide('a', UnaryMinus('b'));
+    expect(exp.simplify(), TypeMatcher<UnaryMinus>());
+    expect((exp.simplify() as UnaryMinus).exp, TypeMatcher<Divide>());
     expect(
         _isVariable(((exp.simplify() as UnaryMinus).exp as Divide).first, 'a'),
         isTrue);
@@ -322,51 +322,51 @@ class ExpressionTests extends TestSet {
         isTrue);
 
     // -a / -b = a / b
-    exp = new Divide(new UnaryMinus('a'), new UnaryMinus('b'));
-    expect(exp.simplify(), new TypeMatcher<Divide>());
+    exp = Divide(UnaryMinus('a'), UnaryMinus('b'));
+    expect(exp.simplify(), TypeMatcher<Divide>());
     expect(_isVariable((exp.simplify() as Divide).first, 'a'), isTrue);
     expect(_isVariable((exp.simplify() as Divide).second, 'b'), isTrue);
 
     // 0 / a = 0
-    exp = new Divide(0, new Variable('a'));
-    expect(exp.simplify(), new TypeMatcher<Number>());
+    exp = Divide(0, Variable('a'));
+    expect(exp.simplify(), TypeMatcher<Number>());
     expect((exp.simplify() as Number).value == 0, isTrue);
 
     // a / 1 = a
-    exp = new Divide(new Variable('a'), 1);
+    exp = Divide(Variable('a'), 1);
     expect(_isVariable(exp.simplify(), 'a'), isTrue);
 
     /*
      *  Power
      */
     // 0^x = 0
-    exp = new Power(0, 'x');
-    expect(exp.simplify(), new TypeMatcher<Number>());
+    exp = Power(0, 'x');
+    expect(exp.simplify(), TypeMatcher<Number>());
     expect((exp.simplify() as Number).value == 0, isTrue);
 
     // 1^x = 1
-    exp = new Power(1, 'x');
-    expect(exp.simplify(), new TypeMatcher<Number>());
+    exp = Power(1, 'x');
+    expect(exp.simplify(), TypeMatcher<Number>());
     expect((exp.simplify() as Number).value == 1, isTrue);
 
     // x^0 = 1
-    exp = new Power('x', 0);
-    expect(exp.simplify(), new TypeMatcher<Number>());
+    exp = Power('x', 0);
+    expect(exp.simplify(), TypeMatcher<Number>());
     expect((exp.simplify() as Number).value == 1, isTrue);
 
     // x^1 = x
-    exp = new Power('x', 1);
+    exp = Power('x', 1);
     expect(_isVariable(exp.simplify(), 'x'), isTrue);
 
     /*
      *  Unary Minus
      */
     // -(-a) = a
-    exp = new UnaryMinus(new UnaryMinus('a'));
+    exp = UnaryMinus(UnaryMinus('a'));
     expect(_isVariable(exp.simplify(), 'a'), isTrue);
 
     // -0 = 0
-    exp = new UnaryMinus(0);
+    exp = UnaryMinus(0);
     expect((exp.simplify() as Number).value == 0, isTrue);
   }
 
@@ -374,25 +374,25 @@ class ExpressionTests extends TestSet {
   void baseOperatorDifferentiation() {
     var diff = [
       // Expression,         deriveTo, output,     outputSimplified
-      [new Plus(1, 'x'), 'x', '0.0+1.0', '1.0'],
-      [new Plus(1, 1), 'x', '0.0+0.0', '0.0'],
-      [new Minus(1, 'x'), 'x', '0.0-1.0', '-1.0'],
-      [new Minus('x', 1), 'x', '1.0-0.0', '1.0'],
-      [new Times('x', 1), 'x', 'x*0.0+1.0*1.0', '1.0'],
+      [Plus(1, 'x'), 'x', '0.0+1.0', '1.0'],
+      [Plus(1, 1), 'x', '0.0+0.0', '0.0'],
+      [Minus(1, 'x'), 'x', '0.0-1.0', '-1.0'],
+      [Minus('x', 1), 'x', '1.0-0.0', '1.0'],
+      [Times('x', 1), 'x', 'x*0.0+1.0*1.0', '1.0'],
       [
-        new Divide('x', 2),
+        Divide('x', 2),
         'x',
         '((1.0*2.0)-(x*0.0))/(2.0*2.0)',
         '2.0/(2.0*2.0)'
       ],
       [
-        new Modulo('x', 'x'),
+        Modulo('x', 'x'),
         'x',
         '1.0 - floor(x / abs(x)) * (sgn(x) * 1.0)',
         '1.0 - floor(x / abs(x)) * sgn(x)'
       ],
       [
-        new Power('x', 2),
+        Power('x', 2),
         'x',
         'exp(2.0 * ln(x)) * ((2.0 * (1.0 / x)) + (0.0 * ln(x)))',
         'x^2.0 * (2.0 * (1.0 / x))' // = (2x^2)/x = 2x
@@ -438,9 +438,9 @@ class ExpressionTests extends TestSet {
     // Interpret REAL as INTERVAL
     _createBasicExpressions(real);
 
-    Interval ri1 = new Interval(num1, num1),
-        ri2 = new Interval(num2, num2),
-        ri3 = new Interval(num3, num3);
+    Interval ri1 = Interval(num1, num1),
+        ri2 = Interval(num2, num2),
+        ri3 = Interval(num3, num3);
 
     Interval eval = e1.evaluate(interval, cm);
     expect(eval, equals(ri1 * ri2));
@@ -488,14 +488,14 @@ class ExpressionTests extends TestSet {
   void simpleVectorEval() {
     _createBasicExpressions(vector);
 
-    Vector3 vec1 = new Vector3.all(num1);
-    Vector3 vec2 = new Vector3.all(num2);
+    Vector3 vec1 = Vector3.all(num1);
+    Vector3 vec2 = Vector3.all(num2);
 
     Vector3 eval = e1.evaluate(vector, cm);
     vec1.multiply(vec2); // modifies vec1 inplace
     expect(eval, equals(vec1));
 
-    vec1 = new Vector3.all(num1);
+    vec1 = Vector3.all(num1);
     eval = e2.evaluate(vector, cm);
     vec1.divide(vec2); // modifies vec1 inplace
     expect(eval, equals(vec1));
@@ -504,7 +504,7 @@ class ExpressionTests extends TestSet {
     //eval = e3.evaluate(vector, cm);
     //expect(eval, equals(math.pow(num1, num2)));
 
-    vec1 = new Vector3.all(num1);
+    vec1 = Vector3.all(num1);
     eval = e4.evaluate(vector, cm);
     expect(eval, equals(vec1 + vec2));
 
@@ -515,13 +515,13 @@ class ExpressionTests extends TestSet {
     expect(eval, equals(-vec1));
 
     // scalars (vector first, then scalar!)
-    vec1 = new Vector3.all(num1);
-    Expression e1_1 = new Vector([n1, n1, n1]) * n2;
+    vec1 = Vector3.all(num1);
+    Expression e1_1 = Vector([n1, n1, n1]) * n2;
     eval = e1_1.evaluate(vector, cm);
     expect(eval, equals(vec1 * num2));
 
-    vec1 = new Vector3.all(num1);
-    Expression e1_2 = new Vector([n1, n1, n1]) / n2;
+    vec1 = Vector3.all(num1);
+    Expression e1_2 = Vector([n1, n1, n1]) / n2;
     eval = e1_2.evaluate(vector, cm);
     expect(eval, equals(vec1 / num2));
   }
@@ -537,11 +537,11 @@ class ExpressionTests extends TestSet {
 
     for (MathFunction fun in functions) {
       // Numbers get boxed into BoundVariable, check for those instead of contains
-      expect(fun.args, anyElement(new TypeMatcher<BoundVariable>()));
+      expect(fun.args, anyElement(TypeMatcher<BoundVariable>()));
     }
 
     // Test with variable
-    exp = new Variable('x');
+    exp = Variable('x');
     functions = _createDefaultFunctions(exp);
 
     for (MathFunction fun in functions) {
@@ -552,22 +552,22 @@ class ExpressionTests extends TestSet {
 
   /// Helper function to create a list of all default functions.
   List<MathFunction> _createDefaultFunctions(Expression exp) => [
-        new Exponential(exp),
-        new Log(exp, exp),
-        new Ln(exp),
-        new Root(5, exp),
-        new Root.sqrt(exp),
-        new Sqrt(exp),
-        new Sin(exp),
-        new Cos(exp),
-        new Tan(exp),
-        new Asin(exp),
-        new Acos(exp),
-        new Atan(exp),
-        new Ceil(exp),
-        new Floor(exp),
-        new Abs(exp),
-        new Sgn(exp)
+        Exponential(exp),
+        Log(exp, exp),
+        Ln(exp),
+        Root(5, exp),
+        Root.sqrt(exp),
+        Sqrt(exp),
+        Sin(exp),
+        Cos(exp),
+        Tan(exp),
+        Asin(exp),
+        Acos(exp),
+        Atan(exp),
+        Ceil(exp),
+        Floor(exp),
+        Abs(exp),
+        Sgn(exp)
       ];
 
   /// Tests simplification of default functions.
@@ -576,18 +576,18 @@ class ExpressionTests extends TestSet {
      *  Exponential
      */
     // e^0 = 1
-    Expression exp = new Exponential(new Number(0));
-    expect(exp.simplify(), new TypeMatcher<Number>());
+    Expression exp = Exponential(Number(0));
+    expect(exp.simplify(), TypeMatcher<Number>());
     expect((exp.simplify() as Number).value == 1, isTrue);
 
     // e^1 = e
-    exp = new Exponential(new Number(1));
-    expect(exp.simplify(), new TypeMatcher<Number>());
+    exp = Exponential(Number(1));
+    expect(exp.simplify(), TypeMatcher<Number>());
     expect((exp.simplify() as Number).value == math.e, isTrue);
 
     // e^(x*ln(y)) = y^x
-    exp = new Exponential(new Variable('x') * new Ln(new Variable('y')));
-    expect(exp.simplify(), new TypeMatcher<Power>());
+    exp = Exponential(Variable('x') * Ln(Variable('y')));
+    expect(exp.simplify(), TypeMatcher<Power>());
     expect(_isVariable((exp.simplify() as Power).first, 'y'), isTrue);
     expect(_isVariable((exp.simplify() as Power).second, 'x'), isTrue);
 
@@ -601,8 +601,8 @@ class ExpressionTests extends TestSet {
      *  Ln
      */
     // ln(1) = 0
-    exp = new Ln(new Number(1));
-    expect(exp.simplify(), new TypeMatcher<Number>());
+    exp = Ln(Number(1));
+    expect(exp.simplify(), TypeMatcher<Number>());
     expect((exp.simplify() as Number).value == 0, isTrue);
 
     /*
@@ -615,100 +615,100 @@ class ExpressionTests extends TestSet {
      * Sqrt
      */
     // sqrt(x^2) = x
-    exp = new Sqrt(new Power('x', 2));
+    exp = Sqrt(Power('x', 2));
     expect(_isVariable(exp.simplify(), 'x'), isTrue);
 
     // sqrt(0) = 0
-    exp = new Sqrt(new Number(0));
-    expect(exp.simplify(), new TypeMatcher<Number>());
+    exp = Sqrt(Number(0));
+    expect(exp.simplify(), TypeMatcher<Number>());
     expect((exp.simplify() as Number).value == 0, isTrue);
 
     // sqrt(1) = 1
-    exp = new Sqrt(new Number(1));
-    expect(exp.simplify(), new TypeMatcher<Number>());
+    exp = Sqrt(Number(1));
+    expect(exp.simplify(), TypeMatcher<Number>());
     expect((exp.simplify() as Number).value == 1, isTrue);
 
     /*
      * Sin
      */
     // sin(0) = 0
-    exp = new Sin(new Number(0));
-    expect(exp.simplify(), new TypeMatcher<Number>());
+    exp = Sin(Number(0));
+    expect(exp.simplify(), TypeMatcher<Number>());
     expect((exp.simplify() as Number).value == 0, isTrue);
 
     /*
      * Cos
      */
     // cos(0) = 1
-    exp = new Cos(new Number(0));
-    expect(exp.simplify(), new TypeMatcher<Number>());
+    exp = Cos(Number(0));
+    expect(exp.simplify(), TypeMatcher<Number>());
     expect((exp.simplify() as Number).value == 1, isTrue);
 
     /*
      * Tan
      */
     // tan(0) = 0
-    exp = new Tan(new Number(0));
-    expect(exp.simplify(), new TypeMatcher<Number>());
+    exp = Tan(Number(0));
+    expect(exp.simplify(), TypeMatcher<Number>());
     expect((exp.simplify() as Number).value == 0, isTrue);
 
     /*
      * Asin
      */
-    exp = new Asin(new Number(0));
-    expect((exp.simplify() as Asin).arg, new TypeMatcher<Variable>());
+    exp = Asin(Number(0));
+    expect((exp.simplify() as Asin).arg, TypeMatcher<Variable>());
 
     /*
      * Acos
      */
-    exp = new Acos(new Number(0));
-    expect((exp.simplify() as Acos).arg, new TypeMatcher<Variable>());
+    exp = Acos(Number(0));
+    expect((exp.simplify() as Acos).arg, TypeMatcher<Variable>());
 
     /*
      * Atan
      */
-    exp = new Atan(new Number(0));
-    expect((exp.simplify() as Atan).arg, new TypeMatcher<Variable>());
+    exp = Atan(Number(0));
+    expect((exp.simplify() as Atan).arg, TypeMatcher<Variable>());
 
     /*
      * Abs
      */
-    exp = new Abs(new Number(0));
-    expect(exp.simplify(), new TypeMatcher<Abs>());
-    expect((exp.simplify() as Abs).arg, new TypeMatcher<BoundVariable>());
+    exp = Abs(Number(0));
+    expect(exp.simplify(), TypeMatcher<Abs>());
+    expect((exp.simplify() as Abs).arg, TypeMatcher<BoundVariable>());
 
     /*
      * Ceil
      */
-    exp = new Ceil(new Floor(new Variable('x')));
-    expect((exp.simplify() as Floor).arg, new TypeMatcher<Variable>());
+    exp = Ceil(Floor(Variable('x')));
+    expect((exp.simplify() as Floor).arg, TypeMatcher<Variable>());
 
     /*
      * Floor
      */
-    exp = new Floor(new Ceil(new Variable('x')));
-    expect((exp.simplify() as Ceil).arg, new TypeMatcher<Variable>());
+    exp = Floor(Ceil(Variable('x')));
+    expect((exp.simplify() as Ceil).arg, TypeMatcher<Variable>());
 
     /*
      * Sgn
      */
-    exp = new Sgn(new Number(0));
-    expect(exp.simplify(), new TypeMatcher<Sgn>());
-    expect((exp.simplify() as Sgn).arg, new TypeMatcher<BoundVariable>());
+    exp = Sgn(Number(0));
+    expect(exp.simplify(), TypeMatcher<Sgn>());
+    expect((exp.simplify() as Sgn).arg, TypeMatcher<BoundVariable>());
   }
 
   /// Tests differentiation of default functions.
   void defFuncDifferentiation() {
-    Variable x = new Variable('x');
-    Number two = new Number(2);
+    Variable x = Variable('x');
+    Number two = Number(2);
     var diff = [
       // Expression,  deriveTo, output, outputSimplified
-      [new Exponential(x), 'x', 'exp(x) * 1.0', 'exp(x)'],
-      [new Ln(x), 'x', '1.0 / x', '1.0 / x'],
+      [Exponential(x), 'x', 'exp(x) * 1.0', 'exp(x)'],
+      [Ln(x), 'x', '1.0 / x', '1.0 / x'],
       // TODO Simplify can't cancel out terms yet, so the
       //      simplified version is still a but ugly:
       [
-        new Log(two, x),
+        Log(two, x),
         'x',
         '((((1.0 / x) * ln(2.0)) - (ln(x) * (0.0 / 2.0))) / (ln(2.0) * ln(2.0)))',
         '(((1.0 / x) * ln(2.0)) / (ln(2.0) * ln(2.0)))'
@@ -716,32 +716,32 @@ class ExpressionTests extends TestSet {
       //'1.0 / (x * ln(2.0))'],
 
       // TODO Roots are internally handled as Powers:
-      //[new Sqrt(x),        'x', '0.0', '0.0'],
-      //[new Root(2, x),     'x', '0.0', '0.0'],
+      //[Sqrt(x),        'x', '0.0', '0.0'],
+      //[Root(2, x),     'x', '0.0', '0.0'],
 
-      [new Sin(x), 'x', 'cos(x) * 1.0', 'cos(x)'],
-      [new Cos(x), 'x', '-sin(x) * 1.0', '-sin(x)'],
+      [Sin(x), 'x', 'cos(x) * 1.0', 'cos(x)'],
+      [Cos(x), 'x', '-sin(x) * 1.0', '-sin(x)'],
 
       // TODO Tan is internally handled as sin/cos:
-      //[new Tan(x),          'x', '0.0',    '0.0']
+      //[Tan(x),          'x', '0.0',    '0.0']
 
       [
-        new Asin(x),
+        Asin(x),
         'x',
         '1.0 / sqrt(1.0 - x ^ 2.0)',
         '1.0 / sqrt(1.0 - x ^ 2.0)'
       ],
       [
-        new Acos(x),
+        Acos(x),
         'x',
         '- 1.0 / sqrt(1.0 - x ^ 2.0)',
         '-(1.0 / sqrt(1.0 - x ^ 2.0))'
       ],
-      [new Atan(x), 'x', '1.0 / (1.0 + x^2.0)', '1.0 / (1.0 + x^2.0)'],
+      [Atan(x), 'x', '1.0 / (1.0 + x^2.0)', '1.0 / (1.0 + x^2.0)'],
 
-      [new Abs(x), 'x', 'sgn(x) * 1.0', 'sgn(x)'],
+      [Abs(x), 'x', 'sgn(x) * 1.0', 'sgn(x)'],
       [
-        new Abs(two * x),
+        Abs(two * x),
         'x',
         'sgn(2.0 * x) * (2.0 * 1.0 + 0.0 * x)',
         'sgn(2.0 * x) * 2.0'
@@ -762,51 +762,51 @@ class ExpressionTests extends TestSet {
   /// Tests REAL evaluation of default functions.
   void defFuncRealEval() {
     Number zero, one, infinity, negInfty, e, pi;
-    zero = new Number(0);
-    one = new Number(1);
-    infinity = new Number(double.infinity);
-    negInfty = new Number(double.negativeInfinity);
-    pi = new Number(math.pi);
-    e = new Number(math.e);
+    zero = Number(0);
+    one = Number(1);
+    infinity = Number(double.infinity);
+    negInfty = Number(double.negativeInfinity);
+    pi = Number(math.pi);
+    e = Number(math.e);
 
     /*
      * Exponential
      */
     // 0 -> 1
-    double eval = new Exponential(zero).evaluate(real, cm);
+    double eval = Exponential(zero).evaluate(real, cm);
     expect(eval, equals(1.0));
     // -1 -> 1/e
-    eval = new Exponential(-one).evaluate(real, cm);
+    eval = Exponential(-one).evaluate(real, cm);
     expect(eval, equals(1.0 / math.e));
     // 1 -> e
-    eval = new Exponential(one).evaluate(real, cm);
+    eval = Exponential(one).evaluate(real, cm);
     expect(eval, equals(math.e));
     // INFTY -> INFTY
-    eval = new Exponential(infinity).evaluate(real, cm);
+    eval = Exponential(infinity).evaluate(real, cm);
     expect(eval, equals(double.infinity));
     // -INFTY -> 0.0
-    eval = new Exponential(negInfty).evaluate(real, cm);
+    eval = Exponential(negInfty).evaluate(real, cm);
     expect(eval, equals(0.0));
 
     /*
      * Log
      */
-    Number base = new Number(2);
+    Number base = Number(2);
 
     // Log_2(0) -> -INFTY
-    eval = new Log(base, zero).evaluate(real, cm);
+    eval = Log(base, zero).evaluate(real, cm);
     expect(eval, equals(double.negativeInfinity));
     // Log_2(-1) -> NaN
-    eval = new Log(base, -one).evaluate(real, cm);
+    eval = Log(base, -one).evaluate(real, cm);
     expect(eval, isNot(equals(eval))); // (Nan != NaN) = true
     // Log_2(1) -> 0.0
-    eval = new Log(base, one).evaluate(real, cm);
+    eval = Log(base, one).evaluate(real, cm);
     expect(eval, equals(0.0));
     // Log_2(INFTY) -> INFTY
-    eval = new Log(base, infinity).evaluate(real, cm);
+    eval = Log(base, infinity).evaluate(real, cm);
     expect(eval, equals(double.infinity));
     // Log_2(-INFTY) -> INFTY
-    eval = new Log(base, negInfty).evaluate(real, cm);
+    eval = Log(base, negInfty).evaluate(real, cm);
     //expect(eval, equals(double.INFINITY)); //TODO check this
     expect(eval, isNot(equals(eval)));
 
@@ -814,22 +814,22 @@ class ExpressionTests extends TestSet {
      * Ln
      */
     // Ln(0) -> -INFTY
-    eval = new Ln(zero).evaluate(real, cm);
+    eval = Ln(zero).evaluate(real, cm);
     expect(eval, equals(double.negativeInfinity));
     // Ln(-1) -> NaN
-    eval = new Ln(-one).evaluate(real, cm);
+    eval = Ln(-one).evaluate(real, cm);
     expect(eval, isNot(equals(eval)));
     // Ln(1) -> 0.0
-    eval = new Ln(one).evaluate(real, cm);
+    eval = Ln(one).evaluate(real, cm);
     expect(eval, equals(0.0));
     // Ln(e) -> 1.0
-    eval = new Ln(e).evaluate(real, cm);
+    eval = Ln(e).evaluate(real, cm);
     expect(eval, equals(1.0));
     // Ln(INFTY) -> 0.0
-    eval = new Ln(infinity).evaluate(real, cm);
+    eval = Ln(infinity).evaluate(real, cm);
     expect(eval, equals(double.infinity));
     // Ln(-INFTY) -> 0.0
-    eval = new Ln(negInfty).evaluate(real, cm);
+    eval = Ln(negInfty).evaluate(real, cm);
     //expect(eval, equals(double.INFINITY)); //TODO check this
     expect(eval, isNot(equals(eval)));
 
@@ -837,144 +837,144 @@ class ExpressionTests extends TestSet {
      * Cos
      */
     // cos(0) -> 1.0
-    eval = new Cos(zero).evaluate(real, cm);
+    eval = Cos(zero).evaluate(real, cm);
     expect(eval, equals(1.0));
     // cos(-1) -> 0.540
-    eval = new Cos(-one).evaluate(real, cm);
+    eval = Cos(-one).evaluate(real, cm);
     expect(eval, closeTo(0.540, 0.001));
     // cos(1) -> 0.540
-    eval = new Cos(one).evaluate(real, cm);
+    eval = Cos(one).evaluate(real, cm);
     expect(eval, closeTo(0.540, 0.001));
     // cos(PI) -> -1
-    eval = new Cos(pi).evaluate(real, cm);
+    eval = Cos(pi).evaluate(real, cm);
     expect(eval, equals(-1));
     // cos(-PI) -> -1
-    eval = new Cos(-pi).evaluate(real, cm);
+    eval = Cos(-pi).evaluate(real, cm);
     expect(eval, equals(-1));
     // cos(INFTY) -> [-1,1] / NaN
-    eval = new Cos(infinity).evaluate(real, cm);
+    eval = Cos(infinity).evaluate(real, cm);
     expect(eval, isNot(equals(eval))); // NaN
     // cos(-INFTY) -> [-1,1] / NaN
-    eval = new Cos(negInfty).evaluate(real, cm);
+    eval = Cos(negInfty).evaluate(real, cm);
     expect(eval, isNot(equals(eval))); // NaN
 
     /*
      * Sin
      */
     // sin(0) -> 0.0
-    eval = new Sin(zero).evaluate(real, cm);
+    eval = Sin(zero).evaluate(real, cm);
     expect(eval, equals(0.0));
     // sin(-1) -> -0.841
-    eval = new Sin(-one).evaluate(real, cm);
+    eval = Sin(-one).evaluate(real, cm);
     expect(eval, closeTo(-0.841, 0.001));
     // sin(1) -> 0.841
-    eval = new Sin(one).evaluate(real, cm);
+    eval = Sin(one).evaluate(real, cm);
     expect(eval, closeTo(0.841, 0.001));
     // sin(PI) -> 0
-    eval = new Sin(pi).evaluate(real, cm);
+    eval = Sin(pi).evaluate(real, cm);
     expect(eval, closeTo(0, 0.00001));
     // sin(-PI) -> 0
-    eval = new Sin(-pi).evaluate(real, cm);
+    eval = Sin(-pi).evaluate(real, cm);
     expect(eval, closeTo(0, 0.00001));
     // sin(INFTY) -> [-1,1] / NaN
-    eval = new Sin(infinity).evaluate(real, cm);
+    eval = Sin(infinity).evaluate(real, cm);
     expect(eval, isNot(equals(eval))); // NaN
     // sin(-INFTY) -> [-1,1] / NaN
-    eval = new Sin(negInfty).evaluate(real, cm);
+    eval = Sin(negInfty).evaluate(real, cm);
     expect(eval, isNot(equals(eval))); // NaN
 
     /*
      * Tan
      */
     // tan(0) -> 0.0
-    eval = new Tan(zero).evaluate(real, cm);
+    eval = Tan(zero).evaluate(real, cm);
     expect(eval, equals(0.0));
     // tan(-1) -> -1.55740
-    eval = new Tan(-one).evaluate(real, cm);
+    eval = Tan(-one).evaluate(real, cm);
     expect(eval, closeTo(-1.55740, 0.00001));
     // tan(1) -> 1.55740
-    eval = new Tan(one).evaluate(real, cm);
+    eval = Tan(one).evaluate(real, cm);
     expect(eval, closeTo(1.55740, 0.00001));
     // tan(PI) -> 0
-    eval = new Tan(pi).evaluate(real, cm);
+    eval = Tan(pi).evaluate(real, cm);
     expect(eval, closeTo(0, 0.00001));
     // tan(-PI) -> 0
-    eval = new Tan(-pi).evaluate(real, cm);
+    eval = Tan(-pi).evaluate(real, cm);
     expect(eval, closeTo(0, 0.00001));
     // tan(INFTY) -> <INFTY / NaN
-    eval = new Tan(infinity).evaluate(real, cm);
+    eval = Tan(infinity).evaluate(real, cm);
     expect(eval, isNot(equals(eval))); // NaN
     // tan(-INFTY) -> <INFTY / NaN
-    eval = new Tan(negInfty).evaluate(real, cm);
+    eval = Tan(negInfty).evaluate(real, cm);
     expect(eval, isNot(equals(eval))); // NaN
 
     /*
      * Asin
      */
     // arcsin(0) = 0
-    eval = new Asin(zero).evaluate(real, cm);
+    eval = Asin(zero).evaluate(real, cm);
     expect(eval, equals(0.0));
     // arcsin(-1) = -π/2
-    eval = new Asin(-one).evaluate(real, cm);
+    eval = Asin(-one).evaluate(real, cm);
     expect(eval, closeTo(-math.pi / 2, 0.00001));
     // arcsin(1) = π/2
-    eval = new Asin(one).evaluate(real, cm);
+    eval = Asin(one).evaluate(real, cm);
     expect(eval, closeTo(math.pi / 2, 0.00001));
     // arcsin(2) = NaN
-    eval = new Asin(Number(2)).evaluate(real, cm);
+    eval = Asin(Number(2)).evaluate(real, cm);
     expect(eval, isNot(equals(eval))); // NaN
     // arcsin(-2) = NaN
-    eval = new Asin(-Number(2)).evaluate(real, cm);
+    eval = Asin(-Number(2)).evaluate(real, cm);
     expect(eval, isNot(equals(eval))); // NaN
     // arcsin(∞) = -∞
-    eval = new Asin(infinity).evaluate(real, cm);
+    eval = Asin(infinity).evaluate(real, cm);
     expect(eval, isNot(equals(eval))); // NaN
     // arcsin(-∞) = ∞
-    eval = new Asin(negInfty).evaluate(real, cm);
+    eval = Asin(negInfty).evaluate(real, cm);
     expect(eval, isNot(equals(eval))); // NaN
 
     /*
      * Acos
      */
     // arccos(0) = π/2
-    eval = new Acos(zero).evaluate(real, cm);
+    eval = Acos(zero).evaluate(real, cm);
     expect(eval, closeTo(math.pi / 2, 0.00001));
     // arccos(-1) = π
-    eval = new Acos(-one).evaluate(real, cm);
+    eval = Acos(-one).evaluate(real, cm);
     expect(eval, equals(math.pi));
     // arccos(1) = 0
-    eval = new Acos(one).evaluate(real, cm);
+    eval = Acos(one).evaluate(real, cm);
     expect(eval, equals(0.0));
     // arccos(2) = NaN
-    eval = new Acos(Number(2)).evaluate(real, cm);
+    eval = Acos(Number(2)).evaluate(real, cm);
     expect(eval, isNot(equals(eval))); // NaN
     // arccos(-2) = NaN
-    eval = new Acos(-Number(2)).evaluate(real, cm);
+    eval = Acos(-Number(2)).evaluate(real, cm);
     expect(eval, isNot(equals(eval))); // NaN
     // arccos(∞) = -∞
-    eval = new Acos(infinity).evaluate(real, cm);
+    eval = Acos(infinity).evaluate(real, cm);
     expect(eval, isNot(equals(eval))); // NaN
     // arccos(-∞) = ∞
-    eval = new Acos(negInfty).evaluate(real, cm);
+    eval = Acos(negInfty).evaluate(real, cm);
     expect(eval, isNot(equals(eval))); // NaN
 
     /*
      * Atan
      */
     // arctan(0) = 0
-    eval = new Atan(zero).evaluate(real, cm);
+    eval = Atan(zero).evaluate(real, cm);
     expect(eval, equals(0.0));
     // arctan(-1) = -π/4
-    eval = new Atan(-one).evaluate(real, cm);
+    eval = Atan(-one).evaluate(real, cm);
     expect(eval, closeTo(-math.pi / 4, 0.00001));
     // arctan(1) = π/4
-    eval = new Atan(one).evaluate(real, cm);
+    eval = Atan(one).evaluate(real, cm);
     expect(eval, closeTo(math.pi / 4, 0.00001));
     // arctan(∞) = π/2
-    eval = new Atan(infinity).evaluate(real, cm);
+    eval = Atan(infinity).evaluate(real, cm);
     expect(eval, closeTo(math.pi / 2, 0.00001));
     // arctan(-∞) = -π/2
-    eval = new Atan(negInfty).evaluate(real, cm);
+    eval = Atan(negInfty).evaluate(real, cm);
     expect(eval, closeTo(-math.pi / 2, 0.00001));
 
     /*
@@ -983,19 +983,19 @@ class ExpressionTests extends TestSet {
     int grade = 5;
 
     // root_5(0) = 0
-    eval = new Root(grade, zero).evaluate(real, cm);
+    eval = Root(grade, zero).evaluate(real, cm);
     expect(eval, equals(0.0));
     // root_5(-1) = NaN
-    eval = new Root(grade, -one).evaluate(real, cm);
+    eval = Root(grade, -one).evaluate(real, cm);
     expect(eval, isNot(equals(eval)));
     // root_5(1) = 1
-    eval = new Root(grade, one).evaluate(real, cm);
+    eval = Root(grade, one).evaluate(real, cm);
     expect(eval, equals(1));
     // root_5(2) = 1.14869
-    eval = new Root(grade, new Number(2)).evaluate(real, cm);
+    eval = Root(grade, Number(2)).evaluate(real, cm);
     expect(eval, closeTo(1.14869, 0.00001));
     // root_5(INFTY) -> INFTY
-    eval = new Root(grade, infinity).evaluate(real, cm);
+    eval = Root(grade, infinity).evaluate(real, cm);
     expect(eval, equals(double.infinity));
     /*
      *  root_5(-INFTY) -> INFTY
@@ -1004,151 +1004,151 @@ class ExpressionTests extends TestSet {
      *  TODO  This is inconsistent with Sqrt(-INFTY),
      *        which is Root(2, -INFTY).
      */
-    eval = new Root(grade, negInfty).evaluate(real, cm);
+    eval = Root(grade, negInfty).evaluate(real, cm);
     expect(eval, equals(double.infinity));
 
     /*
      * Sqrt
      */
     // sqrt(0) = 0
-    eval = new Sqrt(zero).evaluate(real, cm);
+    eval = Sqrt(zero).evaluate(real, cm);
     expect(eval, equals(0.0));
     // sqrt(-1) = NaN
-    eval = new Sqrt(-one).evaluate(real, cm);
+    eval = Sqrt(-one).evaluate(real, cm);
     expect(eval, isNot(equals(eval)));
     // sqrt(1) = 1
-    eval = new Sqrt(one).evaluate(real, cm);
+    eval = Sqrt(one).evaluate(real, cm);
     expect(eval, equals(1));
     // sqrt(2) = SQRT2
-    eval = new Sqrt(new Number(2)).evaluate(real, cm);
+    eval = Sqrt(Number(2)).evaluate(real, cm);
     expect(eval, equals(math.sqrt2));
     // sqrt(INFTY) -> INFTY
-    eval = new Sqrt(infinity).evaluate(real, cm);
+    eval = Sqrt(infinity).evaluate(real, cm);
     expect(eval, equals(double.infinity));
     // sqrt(-INFTY) ->  NaN
-    eval = new Sqrt(negInfty).evaluate(real, cm);
+    eval = Sqrt(negInfty).evaluate(real, cm);
     expect(eval, isNot(equals(eval)));
 
     /*
      * Abs
      */
     // abs(0) = 0
-    eval = new Abs(zero).evaluate(real, cm);
+    eval = Abs(zero).evaluate(real, cm);
     expect(eval, equals(0.0));
     // abs(-1) = 1
-    eval = new Abs(-one).evaluate(real, cm);
+    eval = Abs(-one).evaluate(real, cm);
     expect(eval, equals(1.0));
     // abs(1) = 1
-    eval = new Abs(one).evaluate(real, cm);
+    eval = Abs(one).evaluate(real, cm);
     expect(eval, equals(1.0));
     // abs(2) = 2
-    eval = new Abs(new Number(2)).evaluate(real, cm);
+    eval = Abs(Number(2)).evaluate(real, cm);
     expect(eval, equals(2.0));
     // abs(INFTY) -> INFTY
-    eval = new Abs(infinity).evaluate(real, cm);
+    eval = Abs(infinity).evaluate(real, cm);
     expect(eval, equals(double.infinity));
     // abs(-INFTY) -> INFTY
-    eval = new Abs(negInfty).evaluate(real, cm);
+    eval = Abs(negInfty).evaluate(real, cm);
     expect(eval, equals(double.infinity));
 
     /*
      * Sgn
      */
     // sgn(0) = 0
-    eval = new Sgn(zero).evaluate(real, cm);
+    eval = Sgn(zero).evaluate(real, cm);
     expect(eval, equals(0.0));
     // sgn(-1) = -1
-    eval = new Sgn(-one).evaluate(real, cm);
+    eval = Sgn(-one).evaluate(real, cm);
     expect(eval, equals(-1.0));
     // sgn(1) = 1
-    eval = new Sgn(one).evaluate(real, cm);
+    eval = Sgn(one).evaluate(real, cm);
     expect(eval, equals(1.0));
     // sgn(2) = 1
-    eval = new Sgn(new Number(2)).evaluate(real, cm);
+    eval = Sgn(Number(2)).evaluate(real, cm);
     expect(eval, equals(1.0));
     // sgn(INFTY) -> 1
-    eval = new Sgn(infinity).evaluate(real, cm);
+    eval = Sgn(infinity).evaluate(real, cm);
     expect(eval, equals(1.0));
     // sgn(-INFTY) -> -1
-    eval = new Sgn(negInfty).evaluate(real, cm);
+    eval = Sgn(negInfty).evaluate(real, cm);
     expect(eval, equals(-1.0));
 
     /*
      * Ceil
      */
     // ceil(0) = 0
-    eval = new Ceil(zero).evaluate(real, cm);
+    eval = Ceil(zero).evaluate(real, cm);
     expect(eval, equals(0.0));
     // ceil(-1) = -1
-    eval = new Ceil(-one).evaluate(real, cm);
+    eval = Ceil(-one).evaluate(real, cm);
     expect(eval, equals(-1.0));
     // ceil(1) = 1
-    eval = new Ceil(one).evaluate(real, cm);
+    eval = Ceil(one).evaluate(real, cm);
     expect(eval, equals(1.0));
     // ceil(1.5) = 2.0
-    eval = new Ceil(Number(1.5)).evaluate(real, cm);
+    eval = Ceil(Number(1.5)).evaluate(real, cm);
     expect(eval, equals(2.0));
     // ceil(∞) = unsupported
-    expect(() => new Ceil(infinity).evaluate(real, cm),
+    expect(() => Ceil(infinity).evaluate(real, cm),
         throwsA(TypeMatcher<UnsupportedError>()));
     // ceil(-∞) = unsupported
-    expect(() => new Ceil(negInfty).evaluate(real, cm),
+    expect(() => Ceil(negInfty).evaluate(real, cm),
         throwsA(TypeMatcher<UnsupportedError>()));
 
     /*
      * Floor
      */
     // floor(0) = 0
-    eval = new Floor(zero).evaluate(real, cm);
+    eval = Floor(zero).evaluate(real, cm);
     expect(eval, equals(0.0));
     // floor(-1) = -1
-    eval = new Floor(-one).evaluate(real, cm);
+    eval = Floor(-one).evaluate(real, cm);
     expect(eval, equals(-1.0));
     // floor(1) = 1
-    eval = new Floor(one).evaluate(real, cm);
+    eval = Floor(one).evaluate(real, cm);
     expect(eval, equals(1.0));
     // floor(1.5) = 1.0
-    eval = new Floor(Number(1.5)).evaluate(real, cm);
+    eval = Floor(Number(1.5)).evaluate(real, cm);
     expect(eval, equals(1.0));
     // floor(∞) = unsupported
-    expect(() => new Ceil(infinity).evaluate(real, cm),
+    expect(() => Ceil(infinity).evaluate(real, cm),
         throwsA(TypeMatcher<UnsupportedError>()));
     // floor(-∞) = unsupported
-    expect(() => new Ceil(negInfty).evaluate(real, cm),
+    expect(() => Ceil(negInfty).evaluate(real, cm),
         throwsA(TypeMatcher<UnsupportedError>()));
   }
 
   /// Tests INTERVAL evaluation of default functions.
   void defFuncIntervalEval() {
-    throw new UnimplementedError();
+    throw UnimplementedError();
   }
 
   /// Tests VECTOR evaluation of default functions.
   void defFuncVectorEval() {
-    throw new UnimplementedError();
+    throw UnimplementedError();
   }
 
   /// Tests creation of custom functions.
   void cusFuncCreation() {
     // Create some custom functions.
-    Variable x = new Variable('x');
+    Variable x = Variable('x');
     List<Variable> vars = [x];
-    CustomFunction cf = new CustomFunction('sqrt', vars, new Sqrt(x));
+    CustomFunction cf = CustomFunction('sqrt', vars, Sqrt(x));
 
     expect(cf.domainDimension, equals(vars.length));
-    expect(cf.expression, new TypeMatcher<Sqrt>());
+    expect(cf.expression, TypeMatcher<Sqrt>());
 
     //TODO more tests.
   }
 
   /// Tests simplification of custom functions.
   void cusFuncSimplification() {
-    throw new UnimplementedError();
+    throw UnimplementedError();
   }
 
   /// Tests differentiation of custom functions.
   void cusFuncDifferentiation() {
-    throw new UnimplementedError();
+    throw UnimplementedError();
   }
 
   /// Testss REAL evaluation of custom functions: `R^n -> R`
@@ -1156,41 +1156,41 @@ class ExpressionTests extends TestSet {
     Variable x, y, z;
     CustomFunction cf;
     List<Variable> vars;
-    x = new Variable('x');
-    y = new Variable('y');
-    z = new Variable('z');
-    ContextModel cm = new ContextModel();
+    x = Variable('x');
+    y = Variable('y');
+    z = Variable('z');
+    ContextModel cm = ContextModel();
 
     // Custom SQRT (R -> R)
     vars = [x];
-    cf = new CustomFunction('sqrt', vars, new Sqrt(x));
-    cm.bindVariable(x, new Number(4));
+    cf = CustomFunction('sqrt', vars, Sqrt(x));
+    cm.bindVariable(x, Number(4));
 
     expect(cf.evaluate(real, cm), equals(2));
 
     // Custom ADD (R^2 -> R)
     vars = [x, y];
-    cf = new CustomFunction('add', vars, x + y);
-    cm.bindVariable(y, new Number(1));
+    cf = CustomFunction('add', vars, x + y);
+    cm.bindVariable(y, Number(1));
 
     expect(cf.evaluate(real, cm), equals(5));
 
     // Custom Vector LENGTH (R^3 -> R)
     vars = [x, y, z];
-    Expression two = new Number(2);
-    cf = new CustomFunction(
-        'length', vars, new Sqrt((x ^ two) + (y ^ two) + (z ^ two)));
+    Expression two = Number(2);
+    cf = CustomFunction(
+        'length', vars, Sqrt((x ^ two) + (y ^ two) + (z ^ two)));
     cm
       ..bindVariable(x, two)
       ..bindVariable(y, two)
-      ..bindVariable(z, new Number(3));
+      ..bindVariable(z, Number(3));
 
     expect(cf.evaluate(real, cm), closeTo(4.1231, 0.0001));
   }
 
   /// Testss INTERVAL evaluation of custom functions
   void cusFuncIntervalEval() {
-    throw new UnimplementedError();
+    throw UnimplementedError();
   }
 
   /// Testss VECTOR evaluation of custom functions
@@ -1198,15 +1198,15 @@ class ExpressionTests extends TestSet {
     Variable x, y;
     CustomFunction cf;
     List<Variable> vars;
-    x = new Variable('x');
-    ContextModel cm = new ContextModel();
+    x = Variable('x');
+    ContextModel cm = ContextModel();
 
     // Custom Vector Length
     vars = [x];
-    Expression two = new Number(2);
+    Expression two = Number(2);
     // TODO This doesn't work yet.
-    //cf = new CustomFunction('length', vars, new Sqrt(x[1]^two+x[2]^two));
-    cm.bindVariable(x, new Vector([new Number(2), new Number(2)]));
+    //cf = CustomFunction('length', vars, Sqrt(x[1]^two+x[2]^two));
+    cm.bindVariable(x, Vector([Number(2), Number(2)]));
 
     expect(cf.evaluate(vector, cm), closeTo(2.82842, 0.00001));
   }
@@ -1216,15 +1216,15 @@ class ExpressionTests extends TestSet {
     Variable x, y, z;
     CustomFunction f, g;
 
-    x = new Variable('x');
-    y = new Variable('y');
-    z = new Variable('z');
-    ContextModel cm = new ContextModel();
+    x = Variable('x');
+    y = Variable('y');
+    z = Variable('z');
+    ContextModel cm = ContextModel();
 
     // Custom FUNKYSPLAT (R -> R^3)
-    Expression three = new Number(3);
-    f = new CustomFunction(
-        'funkysplat', [x], new Vector([x - three, x, x + three]));
+    Expression three = Number(3);
+    f = CustomFunction(
+        'funkysplat', [x], Vector([x - three, x, x + three]));
     cm.bindVariable(x, three);
 
     // Should evaluate to a Vector3[0.0,3.0,6.0]
@@ -1234,9 +1234,9 @@ class ExpressionTests extends TestSet {
     expect(v3.z, equals(6.0));
 
     // Custom Vector LENGTH (R^3 -> R)
-    Expression two = new Number(2);
-    g = new CustomFunction(
-        'length', [x, y, z], new Sqrt((x ^ two) + (y ^ two) + (z ^ two)));
+    Expression two = Number(2);
+    g = CustomFunction(
+        'length', [x, y, z], Sqrt((x ^ two) + (y ^ two) + (z ^ two)));
 
     /*
      * Simple Composite of two functions: R -> R^3 -> R
@@ -1258,7 +1258,7 @@ class ExpressionTests extends TestSet {
 
     expect(comp2.domainDimension, equals(1));
     expect(comp2.gDomainDimension, equals(1));
-    expect(comp2.f, new TypeMatcher<CompositeFunction>());
+    expect(comp2.f, TypeMatcher<CompositeFunction>());
     expect(comp2.f, equals(comp));
     expect(comp2.g, equals(f));
 
@@ -1272,18 +1272,18 @@ class ExpressionTests extends TestSet {
 
   /// Tests simplification of composite functions.
   void compFuncSimplification() {
-    throw new UnimplementedError();
+    throw UnimplementedError();
   }
 
   /// Tests differentiation of composite functions.
   void compFuncDifferentiation() {
-    throw new UnimplementedError();
+    throw UnimplementedError();
   }
 
   /// Tests evaluation of composite functions.
   void compFunEval() {
     // Evaluate composite functions.
-    throw new UnimplementedError();
+    throw UnimplementedError();
   }
 
   /// Checks if the given operator contains the given members.
@@ -1310,7 +1310,7 @@ class ExpressionTests extends TestSet {
   }
 
   Matcher _equalsExpression(String expr, {bool simplify: true}) =>
-      new ExpressionMatcher(expr, simplify: simplify);
+      ExpressionMatcher(expr, simplify: simplify);
 }
 
 /**
@@ -1322,7 +1322,7 @@ class ExpressionMatcher extends Matcher {
   final List<Token> _exprRPN;
   final String _expression;
   final bool _simplify;
-  static final Lexer _lexer = new Lexer();
+  static final Lexer _lexer = Lexer();
 
   /**
    * Creates a new Expression matcher. If [simplify] is true, the expression to

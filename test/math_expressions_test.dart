@@ -23,10 +23,10 @@ const num EPS = 0.000001;
  */
 void main() {
   final List<TestSet> testSets = <TestSet>[
-    new AlgebraTests(),
-    new ParserTests(),
-    new ExpressionTests()
+    AlgebraTests(),
+    ParserTests(),
+    ExpressionTests()
   ];
 
-  new TestExecutor.initWith(testSets).runTests();
+  TestExecutor.initWith(testSets).runTests();
 }

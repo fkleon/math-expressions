@@ -26,21 +26,21 @@ void _expression_creation_and_evaluation() {
   // You can either create an mathematical expression programmatically or parse
   // a string.
   // (1a) Parse expression:
-  Parser p = new Parser();
+  Parser p = Parser();
   Expression exp = p.parse('(x^2 + cos(y)) / 3');
 
   // (1b) Build expression: (x^2 + cos(y)) / 3
-  Variable x = new Variable('x'), y = new Variable('y');
-  Power xSquare = new Power(x, 2);
-  Cos yCos = new Cos(y);
-  Number three = new Number(3.0);
+  Variable x = Variable('x'), y = Variable('y');
+  Power xSquare = Power(x, 2);
+  Cos yCos = Cos(y);
+  Number three = Number(3.0);
   exp = (xSquare + yCos) / three;
 
   // Bind variables and evaluate the expression as real number.
   // (2) Bind variables:
-  ContextModel cm = new ContextModel()
-    ..bindVariable(x, new Number(2.0))
-    ..bindVariable(y, new Number(math.pi));
+  ContextModel cm = ContextModel()
+    ..bindVariable(x, Number(2.0))
+    ..bindVariable(y, Number(math.pi));
 
   // (3) Evaluate expression:
   double eval = exp.evaluate(EvaluationType.REAL, cm);
@@ -59,7 +59,7 @@ void _expression_simplification_and_differentiation() {
   print('\nExample 2: Expression simplification and differentiation\n');
 
   // (1) Parse expression:
-  Parser p = new Parser();
+  Parser p = Parser();
   Expression exp = p.parse('x*1 - (-5)');
 
   // (2) Simplify expression:
@@ -86,7 +86,7 @@ void _custom_function_definition_and_use() {
   // (1) Create and evaluate custom function: DOUBLEUP (R -> R)
   ContextModel cm = ContextModel();
   Variable x = Variable('x');
-  CustomFunction doubleup = CustomFunction('doubleup', [x], x * new Number(2));
+  CustomFunction doubleup = CustomFunction('doubleup', [x], x * Number(2));
 
   cm.bindVariable(x, Number(0.5));
 
@@ -98,8 +98,8 @@ void _custom_function_definition_and_use() {
   // Shifting to the left makes the number larger, effectively multiplying the
   // number by pow(2, shiftIndex). Custom implementation of x << i.
   Variable shiftIndex = Variable('i');
-  CustomFunction leftshift = new CustomFunction(
-      'leftshift', [x, shiftIndex], x * new Power(2, shiftIndex));
+  CustomFunction leftshift = CustomFunction(
+      'leftshift', [x, shiftIndex], x * Power(2, shiftIndex));
 
   cm.bindVariable(x, Number(250));
   cm.bindVariable(shiftIndex, Number(8));
