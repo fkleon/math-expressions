@@ -1,25 +1,21 @@
 import 'dart:math' as math;
 import 'package:math_expressions/math_expressions.dart';
 
-/**
- * This file contains three examples:
- *  - Example 1: Expression creation and evaluation
- *               (through the Parser and programmatically)
- *  - Example 2: Expression simplification and differentiation
- *  - Example 3: Custom function definition and use
- */
+/// This file contains three examples:
+///  - Example 1: Expression creation and evaluation
+///               (through the Parser and programmatically)
+///  - Example 2: Expression simplification and differentiation
+///  - Example 3: Custom function definition and use
 void main() {
   _expression_creation_and_evaluation();
   _expression_simplification_and_differentiation();
   _custom_function_definition_and_use();
 }
 
-/**
- * Example 1: Expression creation and evaluation
- *
- * How to create an expression (a) via the Parser, (b) programmatically,
- * and how to evaluate an expression given a context.
- */
+/// Example 1: Expression creation and evaluation
+///
+/// How to create an expression (a) via the Parser, (b) programmatically,
+/// and how to evaluate an expression given a context.
 void _expression_creation_and_evaluation() {
   print('\nExample 1: Expression creation and evaluation\n');
 
@@ -49,12 +45,10 @@ void _expression_creation_and_evaluation() {
   print('Evaluated expression: $eval\n  (with context: $cm)'); // = 1
 }
 
-/**
- * Example 2: Expression simplification and differentiation
- *
- * How to simplify an expression, and how to differentiate it with respect
- * to a given variable.
- */
+/// Example 2: Expression simplification and differentiation
+///
+/// How to simplify an expression, and how to differentiate it with respect
+/// to a given variable.
 void _expression_simplification_and_differentiation() {
   print('\nExample 2: Expression simplification and differentiation\n');
 
@@ -75,11 +69,9 @@ void _expression_simplification_and_differentiation() {
       'Simplified differentiated expression: ${expDerived.simplify()}'); // = 1.0
 }
 
-/**
- * Example 3: Custom function definition and use
- *
- * How to create an arbitrary custom function expression and evaluate it.
- */
+/// Example 3: Custom function definition and use
+///
+/// How to create an arbitrary custom function expression and evaluate it.
 void _custom_function_definition_and_use() {
   print('\nExample 3: Custom function definition and use\n');
 
@@ -98,8 +90,8 @@ void _custom_function_definition_and_use() {
   // Shifting to the left makes the number larger, effectively multiplying the
   // number by pow(2, shiftIndex). Custom implementation of x << i.
   Variable shiftIndex = Variable('i');
-  CustomFunction leftshift = CustomFunction(
-      'leftshift', [x, shiftIndex], x * Power(2, shiftIndex));
+  CustomFunction leftshift =
+      CustomFunction('leftshift', [x, shiftIndex], x * Power(2, shiftIndex));
 
   cm.bindVariable(x, Number(250));
   cm.bindVariable(shiftIndex, Number(8));

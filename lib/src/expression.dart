@@ -313,8 +313,7 @@ class Times extends BinaryOperator {
 
   @override
   Expression derive(String toVar) => Plus(
-      Times(first, second.derive(toVar)),
-      Times(first.derive(toVar), second));
+      Times(first, second.derive(toVar)), Times(first.derive(toVar), second));
 
   /// Possible simplifications:
   ///
@@ -830,8 +829,7 @@ class Variable extends Literal {
   Variable(this.name);
 
   @override
-  Expression derive(String toVar) =>
-      name == toVar ? Number(1.0) : Number(0.0);
+  Expression derive(String toVar) => name == toVar ? Number(1.0) : Number(0.0);
 
   @override
   String toString() => '$name';
@@ -918,8 +916,7 @@ class IntervalLiteral extends Literal {
       }
     }
 
-    throw UnsupportedError(
-        'Interval $this can not be interpreted as: $type');
+    throw UnsupportedError('Interval $this can not be interpreted as: $type');
   }
 
   @override

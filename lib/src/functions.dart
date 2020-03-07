@@ -203,8 +203,7 @@ class CustomFunction extends MathFunction {
       CustomFunction(name, args, expression.derive(toVar));
 
   @override
-  Expression simplify() =>
-      CustomFunction(name, args, expression.simplify());
+  Expression simplify() => CustomFunction(name, args, expression.simplify());
 
   // TODO: Substitute external variables?
   //       => Shouldn't be necessary as context model is handed over.
@@ -494,8 +493,7 @@ class Root extends DefaultFunction {
   ///
   /// This method is used to determine the derivation of a root
   /// expression.
-  Expression asPower() =>
-      Power(arg, Divide(Number(1), Number(n)));
+  Expression asPower() => Power(arg, Divide(Number(1), Number(n)));
 }
 
 /// The square root function. A specialisation of [Root].

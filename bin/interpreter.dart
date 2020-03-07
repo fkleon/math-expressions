@@ -25,8 +25,7 @@ void main(List<String> arguments) {
     wrapParseInput(input);
   }
 
-  stdin.transform(Utf8Decoder()).listen(
-      (line) => wrapParseInput(line.trim()),
+  stdin.transform(Utf8Decoder()).listen((line) => wrapParseInput(line.trim()),
       onError: (Object err) => print('error: $err'));
 }
 

@@ -379,12 +379,7 @@ class ExpressionTests extends TestSet {
       [Minus(1, 'x'), 'x', '0.0-1.0', '-1.0'],
       [Minus('x', 1), 'x', '1.0-0.0', '1.0'],
       [Times('x', 1), 'x', 'x*0.0+1.0*1.0', '1.0'],
-      [
-        Divide('x', 2),
-        'x',
-        '((1.0*2.0)-(x*0.0))/(2.0*2.0)',
-        '2.0/(2.0*2.0)'
-      ],
+      [Divide('x', 2), 'x', '((1.0*2.0)-(x*0.0))/(2.0*2.0)', '2.0/(2.0*2.0)'],
       [
         Modulo('x', 'x'),
         'x',
@@ -725,12 +720,7 @@ class ExpressionTests extends TestSet {
       // TODO Tan is internally handled as sin/cos:
       //[Tan(x),          'x', '0.0',    '0.0']
 
-      [
-        Asin(x),
-        'x',
-        '1.0 / sqrt(1.0 - x ^ 2.0)',
-        '1.0 / sqrt(1.0 - x ^ 2.0)'
-      ],
+      [Asin(x), 'x', '1.0 / sqrt(1.0 - x ^ 2.0)', '1.0 / sqrt(1.0 - x ^ 2.0)'],
       [
         Acos(x),
         'x',
@@ -1178,12 +1168,9 @@ class ExpressionTests extends TestSet {
     // Custom Vector LENGTH (R^3 -> R)
     vars = [x, y, z];
     Expression two = Number(2);
-    cf = CustomFunction(
-        'length', vars, Sqrt((x ^ two) + (y ^ two) + (z ^ two)));
-    cm
-      ..bindVariable(x, two)
-      ..bindVariable(y, two)
-      ..bindVariable(z, Number(3));
+    cf =
+        CustomFunction('length', vars, Sqrt((x ^ two) + (y ^ two) + (z ^ two)));
+    cm..bindVariable(x, two)..bindVariable(y, two)..bindVariable(z, Number(3));
 
     expect(cf.evaluate(real, cm), closeTo(4.1231, 0.0001));
   }
@@ -1223,8 +1210,7 @@ class ExpressionTests extends TestSet {
 
     // Custom FUNKYSPLAT (R -> R^3)
     Expression three = Number(3);
-    f = CustomFunction(
-        'funkysplat', [x], Vector([x - three, x, x + three]));
+    f = CustomFunction('funkysplat', [x], Vector([x - three, x, x + three]));
     cm.bindVariable(x, three);
 
     // Should evaluate to a Vector3[0.0,3.0,6.0]

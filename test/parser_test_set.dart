@@ -108,10 +108,10 @@ class ParserTests extends TestSet {
     // Unary Minus
     // underscoe syntax
     inputStrings.add('_1');
-    tokenStreams.add(
-        [Token('_', TokenType.UNMINUS), Token('1', TokenType.VAL)]);
-    rpnTokenStreams.add(
-        [Token('1', TokenType.VAL), Token('_', TokenType.UNMINUS)]);
+    tokenStreams
+        .add([Token('_', TokenType.UNMINUS), Token('1', TokenType.VAL)]);
+    rpnTokenStreams
+        .add([Token('1', TokenType.VAL), Token('_', TokenType.UNMINUS)]);
 
     inputStrings.add('(_1)');
     tokenStreams.add([
@@ -120,8 +120,8 @@ class ParserTests extends TestSet {
       Token('1', TokenType.VAL),
       Token(')', TokenType.RBRACE)
     ]);
-    rpnTokenStreams.add(
-        [Token('1', TokenType.VAL), Token('_', TokenType.UNMINUS)]);
+    rpnTokenStreams
+        .add([Token('1', TokenType.VAL), Token('_', TokenType.UNMINUS)]);
 
     inputStrings.add('_(1)');
     tokenStreams.add([
@@ -130,15 +130,14 @@ class ParserTests extends TestSet {
       Token('1', TokenType.VAL),
       Token(')', TokenType.RBRACE)
     ]);
-    rpnTokenStreams.add(
-        [Token('1', TokenType.VAL), Token('_', TokenType.UNMINUS)]);
+    rpnTokenStreams
+        .add([Token('1', TokenType.VAL), Token('_', TokenType.UNMINUS)]);
 
     // standard syntax
     inputStrings.add('-1');
-    tokenStreams
-        .add([Token('-', TokenType.MINUS), Token('1', TokenType.VAL)]);
-    rpnTokenStreams.add(
-        [Token('1', TokenType.VAL), Token('-', TokenType.UNMINUS)]);
+    tokenStreams.add([Token('-', TokenType.MINUS), Token('1', TokenType.VAL)]);
+    rpnTokenStreams
+        .add([Token('1', TokenType.VAL), Token('-', TokenType.UNMINUS)]);
 
     inputStrings.add('(-1)');
     tokenStreams.add([
@@ -147,8 +146,8 @@ class ParserTests extends TestSet {
       Token('1', TokenType.VAL),
       Token(')', TokenType.RBRACE)
     ]);
-    rpnTokenStreams.add(
-        [Token('1', TokenType.VAL), Token('-', TokenType.UNMINUS)]);
+    rpnTokenStreams
+        .add([Token('1', TokenType.VAL), Token('-', TokenType.UNMINUS)]);
 
     inputStrings.add('-(1)');
     tokenStreams.add([
@@ -157,8 +156,8 @@ class ParserTests extends TestSet {
       Token('1', TokenType.VAL),
       Token(')', TokenType.RBRACE)
     ]);
-    rpnTokenStreams.add(
-        [Token('1', TokenType.VAL), Token('-', TokenType.UNMINUS)]);
+    rpnTokenStreams
+        .add([Token('1', TokenType.VAL), Token('-', TokenType.UNMINUS)]);
 
     // Power
     inputStrings.add('1^1^1');
@@ -215,8 +214,8 @@ class ParserTests extends TestSet {
       Token('10', TokenType.VAL),
       Token(')', TokenType.RBRACE)
     ]);
-    rpnTokenStreams.add(
-        [Token('10', TokenType.VAL), Token('sqrt', TokenType.SQRT)]);
+    rpnTokenStreams
+        .add([Token('10', TokenType.VAL), Token('sqrt', TokenType.SQRT)]);
 
     // Cos
     inputStrings.add('cos(10)');
@@ -259,8 +258,8 @@ class ParserTests extends TestSet {
       Token('10', TokenType.VAL),
       Token(')', TokenType.RBRACE)
     ]);
-    rpnTokenStreams.add(
-        [Token('10', TokenType.VAL), Token('arccos', TokenType.ACOS)]);
+    rpnTokenStreams
+        .add([Token('10', TokenType.VAL), Token('arccos', TokenType.ACOS)]);
 
     // Arcsin
     inputStrings.add('arcsin(10)');
@@ -270,8 +269,8 @@ class ParserTests extends TestSet {
       Token('10', TokenType.VAL),
       Token(')', TokenType.RBRACE)
     ]);
-    rpnTokenStreams.add(
-        [Token('10', TokenType.VAL), Token('arcsin', TokenType.ASIN)]);
+    rpnTokenStreams
+        .add([Token('10', TokenType.VAL), Token('arcsin', TokenType.ASIN)]);
 
     // Arctan
     inputStrings.add('arctan(10)');
@@ -281,8 +280,8 @@ class ParserTests extends TestSet {
       Token('10', TokenType.VAL),
       Token(')', TokenType.RBRACE)
     ]);
-    rpnTokenStreams.add(
-        [Token('10', TokenType.VAL), Token('arctan', TokenType.ATAN)]);
+    rpnTokenStreams
+        .add([Token('10', TokenType.VAL), Token('arctan', TokenType.ATAN)]);
 
     // Abs
     inputStrings.add('abs(10)');
@@ -354,8 +353,7 @@ class ParserTests extends TestSet {
 
     // power syntax
     inputStrings.add('e^x');
-    tokenStreams
-        .add([Token('e', TokenType.EFUNC), Token('x', TokenType.VAR)]);
+    tokenStreams.add([Token('e', TokenType.EFUNC), Token('x', TokenType.VAR)]);
     rpnTokenStreams
         .add([Token('x', TokenType.VAR), Token('e', TokenType.EFUNC)]);
 
