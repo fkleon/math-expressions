@@ -1,3 +1,8 @@
+### 1.2.0 - TBD
+
+- Drop support for Dart SDK versions below 2.1.1
+- Enable `unnecessary_new` lint rule
+
 ### 1.1.1 - 2019-04-16
 
 - Package health and maintenance cleanups
@@ -8,7 +13,7 @@
 - Add arcsin, arccos, arctan functions
 - Fix floor and ceil functions
 - Update examples and documentation
-- Switch to [pendantic](https://pub.dartlang.org/packages/pedantic) analysis
+- Switch to [pedantic](https://pub.dartlang.org/packages/pedantic) analysis
   options
 
 ### 1.0.0 - 2018-08-11
