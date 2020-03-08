@@ -107,34 +107,6 @@ class ParserTests extends TestSet {
       Token('/', TokenType.DIV)
     ]);
 
-    // Unary Minus
-    // underscoe syntax
-    inputStrings.add('_1');
-    tokenStreams
-        .add([Token('_', TokenType.UNMINUS), Token('1', TokenType.VAL)]);
-    rpnTokenStreams
-        .add([Token('1', TokenType.VAL), Token('_', TokenType.UNMINUS)]);
-
-    inputStrings.add('(_1)');
-    tokenStreams.add([
-      Token('(', TokenType.LBRACE),
-      Token('_', TokenType.UNMINUS),
-      Token('1', TokenType.VAL),
-      Token(')', TokenType.RBRACE)
-    ]);
-    rpnTokenStreams
-        .add([Token('1', TokenType.VAL), Token('_', TokenType.UNMINUS)]);
-
-    inputStrings.add('_(1)');
-    tokenStreams.add([
-      Token('_', TokenType.UNMINUS),
-      Token('(', TokenType.LBRACE),
-      Token('1', TokenType.VAL),
-      Token(')', TokenType.RBRACE)
-    ]);
-    rpnTokenStreams
-        .add([Token('1', TokenType.VAL), Token('_', TokenType.UNMINUS)]);
-
     // standard syntax
     inputStrings.add('-1');
     tokenStreams.add([Token('-', TokenType.MINUS), Token('1', TokenType.VAL)]);

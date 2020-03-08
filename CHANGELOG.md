@@ -3,6 +3,7 @@
 - Drop support for Dart SDK versions below 2.1.1
 - Enable `unnecessary_new` lint rule
 - Parser throws `FormatException` instead of `StateError` or `ArgumentError`
+- Remove underscore syntax previously supported for unary minus
 
 ### 1.1.1 - 2019-04-16
 
