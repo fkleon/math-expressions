@@ -12,7 +12,9 @@ class ParserTests extends TestSet {
         'Lexer Tokenize (Infix + Postfix)': lexerTokenTest,
         'Lexer Tokenize Invalid': lexerTokenTestInvalid,
         'Parser Expression Creation': parserExpressionTest,
-        'Parser Expression Creation Invalid': parserExpressionTestInvalid
+        'Parser Expression Creation Invalid': parserExpressionTestInvalid,
+        'Parser Expression Creation from toString()':
+            parserExpressionTest_ParseFromToString,
       };
 
   @override
@@ -251,26 +253,26 @@ class ParserTests extends TestSet {
         .add([Token('10', TokenType.VAL), Token('tan', TokenType.TAN)]);
 
     // Arccos
-    inputStrings.add('arccos(10)');
+    inputStrings.add('arccos(1)');
     tokenStreams.add([
       Token('arccos', TokenType.ACOS),
       Token('(', TokenType.LBRACE),
-      Token('10', TokenType.VAL),
+      Token('1', TokenType.VAL),
       Token(')', TokenType.RBRACE)
     ]);
     rpnTokenStreams
-        .add([Token('10', TokenType.VAL), Token('arccos', TokenType.ACOS)]);
+        .add([Token('1', TokenType.VAL), Token('arccos', TokenType.ACOS)]);
 
     // Arcsin
-    inputStrings.add('arcsin(10)');
+    inputStrings.add('arcsin(1)');
     tokenStreams.add([
       Token('arcsin', TokenType.ASIN),
       Token('(', TokenType.LBRACE),
-      Token('10', TokenType.VAL),
+      Token('1', TokenType.VAL),
       Token(')', TokenType.RBRACE)
     ]);
     rpnTokenStreams
-        .add([Token('10', TokenType.VAL), Token('arcsin', TokenType.ASIN)]);
+        .add([Token('1', TokenType.VAL), Token('arcsin', TokenType.ASIN)]);
 
     // Arctan
     inputStrings.add('arctan(10)');
@@ -462,6 +464,32 @@ class ParserTests extends TestSet {
 
     for (String expr in invalidCases.keys) {
       expect(() => pars.parse(expr), invalidCases[expr]);
+    }
+  }
+
+  void parserExpressionTest_ParseFromToString() {
+    ContextModel context = ContextModel()
+      ..bindVariableName('x', Number(math.pi));
+
+    for (String inputString in inputStrings) {
+      /// Expression doesn't implement equal, so as an approximation
+      /// we're testing whether the expression re-parses and evaluates
+      /// to the same value.
+      Expression exp = pars.parse(inputString);
+
+      try {
+        Expression exp2 = pars.parse(exp.toString());
+
+        double r1 = exp.evaluate(EvaluationType.REAL, context);
+        double r2 = exp2.evaluate(EvaluationType.REAL, context);
+        expect(r2, r1, reason: 'Expected ${r2} for ${exp} (${exp2})');
+      } on FormatException catch (fe) {
+        expect(fe, isNot(isFormatException),
+            reason: 'Expected no exception for ${inputString} (${exp})');
+      } on RangeError catch (re) {
+        expect(re, isNot(isRangeError),
+            reason: 'Expected no exception for ${inputString} (${exp})');
+      }
     }
   }
 }
