@@ -1,6 +1,5 @@
 name: math_expressions
 version: 1.1.1
-author: Frederik Leonhardt <frederik.leonhardt@gmail.com>
 homepage: https://github.com/fkleon/math-expressions
 description: >-
   A library for parsing and evaluating mathematical expressions, supporting real
