@@ -452,10 +452,10 @@ class Root extends DefaultFunction {
   /// For example, to create the 5th root of x:
   ///
   ///     root = Root(5, Variable('x'));
-  Root(this.n, Expression arg) : super._unary('root', arg);
+  Root(this.n, Expression arg) : super._unary('nrt', arg);
 
   /// Creates the n-th root of arg where n is a [Number] literal.
-  Root.fromExpr(Number n, Expression arg) : super._unary('root', arg) {
+  Root.fromExpr(Number n, Expression arg) : super._unary('nrt', arg) {
     this.n = n.getConstantValue().toInt();
   }
 
@@ -463,7 +463,7 @@ class Root extends DefaultFunction {
   ///
   /// For example, to create the square root of x:
   ///
-  ///     sqrt = Root.sqrt(new Variable('x'));
+  ///     sqrt = Root.sqrt(Variable('x'));
   ///
   /// __Note__:
   /// For better simplification and display, use the [Sqrt] class.
@@ -485,7 +485,7 @@ class Root extends DefaultFunction {
       this.asPower().evaluate(type, context);
 
   @override
-  String toString() => 'nrt_$n($arg)';
+  String toString() => 'nrt($n,$arg)';
 
   /// Returns the power form of this root.
   /// E.g. root_5(x) = x^(1/5)
@@ -501,7 +501,7 @@ class Sqrt extends Root {
   ///
   /// For example, to create the square root of x:
   ///
-  ///     sqrt = Sqrt(new Variable('x'));
+  ///     sqrt = Sqrt(Variable('x'));
   Sqrt(Expression arg) : super.sqrt(arg);
 
   /// Possible simplifications:
