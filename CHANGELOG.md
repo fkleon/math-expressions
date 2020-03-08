@@ -1,4 +1,4 @@
-### 2.0.0 - TBD
+### 2.0.0 - 2020-03-08
 
 - Drop support for Dart SDK versions below 2.1.1
 - Enable `unnecessary_new` lint rule
