@@ -428,11 +428,11 @@ class ParserTests extends TestSet {
 
   void lexerTokenTestInvalid() {
     Map<String, Matcher> invalidCases = {
-      '(': throwsStateError,
-      ')': throwsStateError,
-      '1+1)': throwsStateError,
-      '(1+1': throwsStateError,
-      'log(1,': throwsStateError,
+      '(': throwsFormatException,
+      ')': throwsFormatException,
+      '1+1)': throwsFormatException,
+      '(1+1': throwsFormatException,
+      'log(1,': throwsFormatException,
     };
 
     for (String expr in invalidCases.keys) {
@@ -445,16 +445,17 @@ class ParserTests extends TestSet {
       Expression exp = pars.parse(inputString);
       // TODO Don't just test for no exceptions,
       // also test for expression content.
+      expect(exp, isNotNull);
     }
   }
 
   void parserExpressionTestInvalid() {
     Map<String, Matcher> invalidCases = {
-      '': throwsArgumentError,
-      '(': throwsStateError,
-      ')': throwsStateError,
-      '1+1)': throwsStateError,
-      '(1+1': throwsStateError,
+      '': throwsFormatException,
+      '(': throwsFormatException,
+      ')': throwsFormatException,
+      '1+1)': throwsFormatException,
+      '(1+1': throwsFormatException,
       'log(,1)': throwsRangeError,
       'log(1,)': throwsRangeError,
     };

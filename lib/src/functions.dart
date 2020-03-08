@@ -267,8 +267,7 @@ abstract class DefaultFunction extends MathFunction {
   }
 
   @override
-  String toString() =>
-      args.length == 1 ? '$name(${args[0]})' : '$name(${args[0]},${args[1]})';
+  String toString() => '$name(${args.join(',')})';
 }
 
 /// The exponential function.

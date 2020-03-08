@@ -1,7 +1,8 @@
-### 1.2.0 - TBD
+### 2.0.0 - TBD
 
 - Drop support for Dart SDK versions below 2.1.1
 - Enable `unnecessary_new` lint rule
+- Parser throws `FormatException` instead of `StateError` or `ArgumentError`
 
 ### 1.1.1 - 2019-04-16
 
