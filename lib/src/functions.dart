@@ -381,9 +381,6 @@ class Log extends DefaultFunction {
     throw UnimplementedError('Can not evaluate $name on $type yet.');
   }
 
-  @override
-  String toString() => 'log_$base($arg)';
-
   /// Returns the natural from of this logarithm.
   /// E.g. log_10(2) = ln(2) / ln(10)
   ///
