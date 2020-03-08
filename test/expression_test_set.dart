@@ -389,7 +389,7 @@ class ExpressionTests extends TestSet {
       [
         Power('x', 2),
         'x',
-        'exp(2.0 * ln(x)) * ((2.0 * (1.0 / x)) + (0.0 * ln(x)))',
+        'e(2.0 * ln(x)) * ((2.0 * (1.0 / x)) + (0.0 * ln(x)))',
         'x^2.0 * (2.0 * (1.0 / x))' // = (2x^2)/x = 2x
       ],
     ];
@@ -698,7 +698,7 @@ class ExpressionTests extends TestSet {
     Number two = Number(2);
     var diff = [
       // Expression,  deriveTo, output, outputSimplified
-      [Exponential(x), 'x', 'exp(x) * 1.0', 'exp(x)'],
+      [Exponential(x), 'x', 'e(x) * 1.0', 'e(x)'],
       [Ln(x), 'x', '1.0 / x', '1.0 / x'],
       // TODO Simplify can't cancel out terms yet, so the
       //      simplified version is still a but ugly:

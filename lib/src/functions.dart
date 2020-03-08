@@ -284,7 +284,7 @@ class Exponential extends DefaultFunction {
   ///     x = Variable('x');
   ///     exp = Exponential(x);
   ///     exp = Exponential(x + four);
-  Exponential(Expression exp) : super._unary('exp', exp);
+  Exponential(Expression exp) : super._unary('e', exp);
 
   /// The exponent of this exponential function.
   Expression get exp => getParam(0);
