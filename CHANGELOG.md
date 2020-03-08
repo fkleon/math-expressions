@@ -1,7 +1,14 @@
-### 1.2.0 - TBD
+### 2.0.0 - TBD
 
 - Drop support for Dart SDK versions below 2.1.1
 - Enable `unnecessary_new` lint rule
+- Parser throws `FormatException` instead of `StateError` or `ArgumentError` for
+  invalid input string
+- Remove underscore syntax previously supported for unary minus
+- Fix toString() parser compatibility for the following expressions:
+  - Logarithm function: Change string representation from `log_b(x)` to `log(b, x)`
+  - N-th root function: Change string representation from `nrt_n(x)` to `nrt(n, x)`
+  - Exponential function: Change string representation from `exp(x)` to `e(x)`
 
 ### 1.1.1 - 2019-04-16
 

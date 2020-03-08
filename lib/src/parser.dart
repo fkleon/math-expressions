@@ -21,7 +21,7 @@ class Parser {
   /// [Expression].
   Expression parse(String inputString) {
     if (inputString == null || inputString.trim().isEmpty) {
-      throw ArgumentError('The given input string was empty.');
+      throw FormatException('The given input string was empty.');
     }
 
     final List<Expression> exprStack = <Expression>[];
@@ -120,14 +120,14 @@ class Parser {
           currExpr = Sgn(exprStack.removeLast());
           break;
         default:
-          throw ArgumentError('Unsupported token: $currToken');
+          throw FormatException('Unsupported token: $currToken');
       }
 
       exprStack.add(currExpr);
     }
 
     if (exprStack.length > 1) {
-      throw StateError('The input String is not a correct expression');
+      throw FormatException('The input String is not a correct expression');
     }
 
     return exprStack.last;
@@ -153,7 +153,6 @@ class Lexer {
   Lexer() {
     keywords['+'] = TokenType.PLUS;
     keywords['-'] = TokenType.MINUS;
-    keywords['_'] = TokenType.UNMINUS;
     keywords['*'] = TokenType.TIMES;
     keywords['/'] = TokenType.DIV;
     keywords['%'] = TokenType.MOD;
@@ -286,7 +285,7 @@ class Lexer {
   /// [ArgumentError] if the list is empty.
   List<Token> shuntingYard(List<Token> stream) {
     if (stream.isEmpty) {
-      throw ArgumentError('The given tokenStream was empty.');
+      throw FormatException('The given tokenStream was empty.');
     }
 
     final List<Token> outputStream = <Token>[];
@@ -322,7 +321,8 @@ class Lexer {
         if (operatorBuffer.isNotEmpty &&
             operatorBuffer.last.type != TokenType.LBRACE) {
           //TODO never reached, check this.
-          throw StateError('Misplaced separator or mismatched parenthesis.');
+          throw FormatException(
+              'Misplaced separator or mismatched parenthesis.');
         }
         prevToken = curToken;
         continue;
@@ -380,7 +380,7 @@ class Lexer {
         // Expect next token on stack to be left parenthesis and pop it
         if (operatorBuffer.isEmpty ||
             operatorBuffer.removeLast().type != TokenType.LBRACE) {
-          throw StateError('Mismatched parenthesis.');
+          throw FormatException('Mismatched parenthesis.');
         }
 
         // If the token at the top of the stack is a function token, pop it onto the output queue.
@@ -399,7 +399,7 @@ class Lexer {
     while (operatorBuffer.isNotEmpty) {
       if (operatorBuffer.last.type == TokenType.LBRACE ||
           operatorBuffer.last.type == TokenType.RBRACE) {
-        throw StateError('Mismatched parenthesis.');
+        throw FormatException('Mismatched parenthesis.');
       }
       outputStream.add(operatorBuffer.removeLast());
     }
