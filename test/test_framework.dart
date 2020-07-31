@@ -34,6 +34,9 @@ class TestExecutor {
         set.testFunctions.forEach((String k, Function v) {
           test(k, () => v());
         });
+        set.testGroups.forEach((String k, Function v) {
+          group(k, () => v());
+        });
       });
     }
   }
@@ -53,5 +56,6 @@ abstract class TestSet {
   void initTests();
 
   /// Returns a map containing test function names and associated function calls.
-  Map<String, Function> get testFunctions;
+  Map<String, Function> get testFunctions => {};
+  Map<String, Function> get testGroups => {};
 }
