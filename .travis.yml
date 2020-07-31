@@ -7,12 +7,15 @@ dart:
   - "2.4.1"
   - "2.5.1"
   - "2.6.1"
+  - "2.7.2"
   - stable
   - dev
 
-matrix:
+jobs:
   allow_failures:
+    - dart: 2.6.1
     - dart: dev
+  fast_finish: true
 
 dart_task:
   - test

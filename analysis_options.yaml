@@ -1,18 +1,19 @@
 # https://www.dartlang.org/guides/language/analysis-options
 # Use Google internal analysis options from
 # https://pub.dartlang.org/packages/pedantic
-import: package:pedantic/analysis_options.yaml
+include: package:pedantic/analysis_options.yaml
 
 analyzer:
   strong-mode:
     implicit-casts: true
     implicit-dynamic: false
 
-# Source of linter options:
+# Linter rules customisations. Source of linter options:
 # http://dart-lang.github.io/linter/lints/options/options.html
 linter:
   rules:
-    - control_flow_in_finally
-    - empty_statements
-    - throw_in_finally
-    - unnecessary_new
+    control_flow_in_finally: true
+    empty_statements: true
+    throw_in_finally: true
+    unnecessary_this: false
+    omit_local_variable_types: false
