@@ -1,3 +1,7 @@
+### Unreleased
+
+- Add ability to unbind variable names (by [wdavies973](https://github.com/wdavies973))
+
 ### 2.0.0 - 2020-03-08
 
 - Drop support for Dart SDK versions below 2.1.1
