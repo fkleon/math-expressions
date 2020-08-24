@@ -77,7 +77,7 @@ class ContextModel {
   void bindVariableName(String vName, Expression e) {
     variables[vName] = e;
   }
-  
+
   /// Unbinds a variable name in this context
   void unbindVariableName(String vName) {
     variables.remove(vName);
