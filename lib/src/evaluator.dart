@@ -78,6 +78,11 @@ class ContextModel {
     variables[vName] = e;
   }
 
+  /// Unbinds a variable name in this context
+  void unbindVariableName(String vName) {
+    variables.remove(vName);
+  }
+
   /// Binds a function to this context.
   void bindFunction(MathFunction f) {
     //TODO force non-duplicates.
