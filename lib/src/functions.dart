@@ -558,7 +558,7 @@ class Sqrt extends Root {
   String toString() => 'sqrt($arg)';
 }
 
-/// The sine function.
+/// The sine function. Expects input in `radians`.
 class Sin extends DefaultFunction {
   /// Creates a new sine function with given argument expression.
   Sin(Expression arg) : super._unary('sin', arg);
@@ -604,7 +604,7 @@ class Sin extends DefaultFunction {
   }
 }
 
-/// The cosine function.
+/// The cosine function. Expects input in `radians`.
 class Cos extends DefaultFunction {
   /// Creates a new cosine function with given argument expression.
   Cos(Expression arg) : super._unary('cos', arg);
@@ -650,7 +650,7 @@ class Cos extends DefaultFunction {
   }
 }
 
-/// The tangens function.
+/// The tangens function. Expects input in `radians`.
 class Tan extends DefaultFunction {
   /// Creates a new tangens function with given argument expression.
   Tan(Expression arg) : super._unary('tan', arg);
