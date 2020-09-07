@@ -13,8 +13,7 @@ class ParserTests extends TestSet {
         'Lexer Tokenize Invalid': lexerTokenTestInvalid,
         'Parser Expression Creation': parserExpressionTest,
         'Parser Expression Creation Invalid': parserExpressionTestInvalid,
-        'Parser Expression Creation from toString()':
-            parserExpressionTest_ParseFromToString,
+        'Parser Expression Creation from toString()': parserExpressionTest_ParseFromToString,
       };
 
   @override
@@ -31,41 +30,17 @@ class ParserTests extends TestSet {
      */
     // Plus
     inputStrings.add('x + 2');
-    tokenStreams.add([
-      Token('x', TokenType.VAR),
-      Token('+', TokenType.PLUS),
-      Token('2', TokenType.VAL)
-    ]);
-    rpnTokenStreams.add([
-      Token('x', TokenType.VAR),
-      Token('2', TokenType.VAL),
-      Token('+', TokenType.PLUS)
-    ]);
+    tokenStreams.add([Token('x', TokenType.VAR), Token('+', TokenType.PLUS), Token('2', TokenType.VAL)]);
+    rpnTokenStreams.add([Token('x', TokenType.VAR), Token('2', TokenType.VAL), Token('+', TokenType.PLUS)]);
 
     // Minus
     inputStrings.add('x - 2');
-    tokenStreams.add([
-      Token('x', TokenType.VAR),
-      Token('-', TokenType.MINUS),
-      Token('2', TokenType.VAL)
-    ]);
-    rpnTokenStreams.add([
-      Token('x', TokenType.VAR),
-      Token('2', TokenType.VAL),
-      Token('-', TokenType.MINUS)
-    ]);
+    tokenStreams.add([Token('x', TokenType.VAR), Token('-', TokenType.MINUS), Token('2', TokenType.VAL)]);
+    rpnTokenStreams.add([Token('x', TokenType.VAR), Token('2', TokenType.VAL), Token('-', TokenType.MINUS)]);
 
     inputStrings.add('0 - 1');
-    tokenStreams.add([
-      Token('0', TokenType.VAL),
-      Token('-', TokenType.MINUS),
-      Token('1', TokenType.VAL)
-    ]);
-    rpnTokenStreams.add([
-      Token('0', TokenType.VAL),
-      Token('1', TokenType.VAL),
-      Token('-', TokenType.MINUS)
-    ]);
+    tokenStreams.add([Token('0', TokenType.VAL), Token('-', TokenType.MINUS), Token('1', TokenType.VAL)]);
+    rpnTokenStreams.add([Token('0', TokenType.VAL), Token('1', TokenType.VAL), Token('-', TokenType.MINUS)]);
 
     inputStrings.add('(0 - 1)');
     tokenStreams.add([
@@ -75,43 +50,22 @@ class ParserTests extends TestSet {
       Token('1', TokenType.VAL),
       Token(')', TokenType.RBRACE)
     ]);
-    rpnTokenStreams.add([
-      Token('0', TokenType.VAL),
-      Token('1', TokenType.VAL),
-      Token('-', TokenType.MINUS)
-    ]);
+    rpnTokenStreams.add([Token('0', TokenType.VAL), Token('1', TokenType.VAL), Token('-', TokenType.MINUS)]);
 
     // Multiplication
     inputStrings.add('0 * 1');
-    tokenStreams.add([
-      Token('0', TokenType.VAL),
-      Token('*', TokenType.TIMES),
-      Token('1', TokenType.VAL)
-    ]);
-    rpnTokenStreams.add([
-      Token('0', TokenType.VAL),
-      Token('1', TokenType.VAL),
-      Token('*', TokenType.TIMES)
-    ]);
+    tokenStreams.add([Token('0', TokenType.VAL), Token('*', TokenType.TIMES), Token('1', TokenType.VAL)]);
+    rpnTokenStreams.add([Token('0', TokenType.VAL), Token('1', TokenType.VAL), Token('*', TokenType.TIMES)]);
 
     // Division
     inputStrings.add('0 / 1');
-    tokenStreams.add([
-      Token('0', TokenType.VAL),
-      Token('/', TokenType.DIV),
-      Token('1', TokenType.VAL)
-    ]);
-    rpnTokenStreams.add([
-      Token('0', TokenType.VAL),
-      Token('1', TokenType.VAL),
-      Token('/', TokenType.DIV)
-    ]);
+    tokenStreams.add([Token('0', TokenType.VAL), Token('/', TokenType.DIV), Token('1', TokenType.VAL)]);
+    rpnTokenStreams.add([Token('0', TokenType.VAL), Token('1', TokenType.VAL), Token('/', TokenType.DIV)]);
 
     // standard syntax
     inputStrings.add('-1');
     tokenStreams.add([Token('-', TokenType.MINUS), Token('1', TokenType.VAL)]);
-    rpnTokenStreams
-        .add([Token('1', TokenType.VAL), Token('-', TokenType.UNMINUS)]);
+    rpnTokenStreams.add([Token('1', TokenType.VAL), Token('-', TokenType.UNMINUS)]);
 
     inputStrings.add('(-1)');
     tokenStreams.add([
@@ -120,8 +74,7 @@ class ParserTests extends TestSet {
       Token('1', TokenType.VAL),
       Token(')', TokenType.RBRACE)
     ]);
-    rpnTokenStreams
-        .add([Token('1', TokenType.VAL), Token('-', TokenType.UNMINUS)]);
+    rpnTokenStreams.add([Token('1', TokenType.VAL), Token('-', TokenType.UNMINUS)]);
 
     inputStrings.add('-(1)');
     tokenStreams.add([
@@ -130,8 +83,7 @@ class ParserTests extends TestSet {
       Token('1', TokenType.VAL),
       Token(')', TokenType.RBRACE)
     ]);
-    rpnTokenStreams
-        .add([Token('1', TokenType.VAL), Token('-', TokenType.UNMINUS)]);
+    rpnTokenStreams.add([Token('1', TokenType.VAL), Token('-', TokenType.UNMINUS)]);
 
     // Power
     inputStrings.add('1^1^1');
@@ -163,11 +115,7 @@ class ParserTests extends TestSet {
       Token('100', TokenType.VAL),
       Token(')', TokenType.RBRACE)
     ]);
-    rpnTokenStreams.add([
-      Token('10', TokenType.VAL),
-      Token('100', TokenType.VAL),
-      Token('log', TokenType.LOG)
-    ]);
+    rpnTokenStreams.add([Token('10', TokenType.VAL), Token('100', TokenType.VAL), Token('log', TokenType.LOG)]);
 
     // Ln
     inputStrings.add('ln(10)');
@@ -177,8 +125,7 @@ class ParserTests extends TestSet {
       Token('10', TokenType.VAL),
       Token(')', TokenType.RBRACE)
     ]);
-    rpnTokenStreams
-        .add([Token('10', TokenType.VAL), Token('ln', TokenType.LN)]);
+    rpnTokenStreams.add([Token('10', TokenType.VAL), Token('ln', TokenType.LN)]);
 
     // Sqrt
     inputStrings.add('sqrt(10)');
@@ -188,8 +135,7 @@ class ParserTests extends TestSet {
       Token('10', TokenType.VAL),
       Token(')', TokenType.RBRACE)
     ]);
-    rpnTokenStreams
-        .add([Token('10', TokenType.VAL), Token('sqrt', TokenType.SQRT)]);
+    rpnTokenStreams.add([Token('10', TokenType.VAL), Token('sqrt', TokenType.SQRT)]);
 
     // Cos
     inputStrings.add('cos(10)');
@@ -199,8 +145,7 @@ class ParserTests extends TestSet {
       Token('10', TokenType.VAL),
       Token(')', TokenType.RBRACE)
     ]);
-    rpnTokenStreams
-        .add([Token('10', TokenType.VAL), Token('cos', TokenType.COS)]);
+    rpnTokenStreams.add([Token('10', TokenType.VAL), Token('cos', TokenType.COS)]);
 
     // Sin
     inputStrings.add('sin(10)');
@@ -210,8 +155,7 @@ class ParserTests extends TestSet {
       Token('10', TokenType.VAL),
       Token(')', TokenType.RBRACE)
     ]);
-    rpnTokenStreams
-        .add([Token('10', TokenType.VAL), Token('sin', TokenType.SIN)]);
+    rpnTokenStreams.add([Token('10', TokenType.VAL), Token('sin', TokenType.SIN)]);
 
     // Tan
     inputStrings.add('tan(10)');
@@ -221,8 +165,7 @@ class ParserTests extends TestSet {
       Token('10', TokenType.VAL),
       Token(')', TokenType.RBRACE)
     ]);
-    rpnTokenStreams
-        .add([Token('10', TokenType.VAL), Token('tan', TokenType.TAN)]);
+    rpnTokenStreams.add([Token('10', TokenType.VAL), Token('tan', TokenType.TAN)]);
 
     // Arccos
     inputStrings.add('arccos(1)');
@@ -232,8 +175,7 @@ class ParserTests extends TestSet {
       Token('1', TokenType.VAL),
       Token(')', TokenType.RBRACE)
     ]);
-    rpnTokenStreams
-        .add([Token('1', TokenType.VAL), Token('arccos', TokenType.ACOS)]);
+    rpnTokenStreams.add([Token('1', TokenType.VAL), Token('arccos', TokenType.ACOS)]);
 
     // Arcsin
     inputStrings.add('arcsin(1)');
@@ -243,8 +185,7 @@ class ParserTests extends TestSet {
       Token('1', TokenType.VAL),
       Token(')', TokenType.RBRACE)
     ]);
-    rpnTokenStreams
-        .add([Token('1', TokenType.VAL), Token('arcsin', TokenType.ASIN)]);
+    rpnTokenStreams.add([Token('1', TokenType.VAL), Token('arcsin', TokenType.ASIN)]);
 
     // Arctan
     inputStrings.add('arctan(10)');
@@ -254,8 +195,7 @@ class ParserTests extends TestSet {
       Token('10', TokenType.VAL),
       Token(')', TokenType.RBRACE)
     ]);
-    rpnTokenStreams
-        .add([Token('10', TokenType.VAL), Token('arctan', TokenType.ATAN)]);
+    rpnTokenStreams.add([Token('10', TokenType.VAL), Token('arctan', TokenType.ATAN)]);
 
     // Abs
     inputStrings.add('abs(10)');
@@ -265,8 +205,7 @@ class ParserTests extends TestSet {
       Token('10', TokenType.VAL),
       Token(')', TokenType.RBRACE)
     ]);
-    rpnTokenStreams
-        .add([Token('10', TokenType.VAL), Token('abs', TokenType.ABS)]);
+    rpnTokenStreams.add([Token('10', TokenType.VAL), Token('abs', TokenType.ABS)]);
     // Sgn
     inputStrings.add('sgn(10)');
     tokenStreams.add([
@@ -275,8 +214,7 @@ class ParserTests extends TestSet {
       Token('10', TokenType.VAL),
       Token(')', TokenType.RBRACE)
     ]);
-    rpnTokenStreams
-        .add([Token('10', TokenType.VAL), Token('sgn', TokenType.SGN)]);
+    rpnTokenStreams.add([Token('10', TokenType.VAL), Token('sgn', TokenType.SGN)]);
 
     // n-th root
     inputStrings.add('nrt(2,10)');
@@ -288,11 +226,27 @@ class ParserTests extends TestSet {
       Token('10', TokenType.VAL),
       Token(')', TokenType.RBRACE)
     ]);
-    rpnTokenStreams.add([
-      Token('2', TokenType.VAL),
-      Token('10', TokenType.VAL),
-      Token('nrt', TokenType.ROOT)
+    rpnTokenStreams.add([Token('2', TokenType.VAL), Token('10', TokenType.VAL), Token('nrt', TokenType.ROOT)]);
+
+    // ceil
+    inputStrings.add('ceil(1.2)');
+    tokenStreams.add([
+      Token('ceil', TokenType.CEIL),
+      Token('(', TokenType.LBRACE),
+      Token('1.2', TokenType.VAL),
+      Token(')', TokenType.RBRACE)
     ]);
+    rpnTokenStreams.add([Token('1.2', TokenType.VAL), Token('ceil', TokenType.CEIL)]);
+
+    // floor
+    inputStrings.add('floor(1.2)');
+    tokenStreams.add([
+      Token('floor', TokenType.FLOOR),
+      Token('(', TokenType.LBRACE),
+      Token('1.2', TokenType.VAL),
+      Token(')', TokenType.RBRACE)
+    ]);
+    rpnTokenStreams.add([Token('1.2', TokenType.VAL), Token('floor', TokenType.FLOOR)]);
 
     inputStrings.add('nrt(5,10-1)');
     tokenStreams.add([
@@ -322,14 +276,12 @@ class ParserTests extends TestSet {
       Token('x', TokenType.VAR),
       Token(')', TokenType.RBRACE),
     ]);
-    rpnTokenStreams
-        .add([Token('x', TokenType.VAR), Token('e', TokenType.EFUNC)]);
+    rpnTokenStreams.add([Token('x', TokenType.VAR), Token('e', TokenType.EFUNC)]);
 
     // power syntax
     inputStrings.add('e^x');
     tokenStreams.add([Token('e', TokenType.EFUNC), Token('x', TokenType.VAR)]);
-    rpnTokenStreams
-        .add([Token('x', TokenType.VAR), Token('e', TokenType.EFUNC)]);
+    rpnTokenStreams.add([Token('x', TokenType.VAR), Token('e', TokenType.EFUNC)]);
 
     inputStrings.add('e^(x+2)');
     tokenStreams.add([
@@ -440,8 +392,7 @@ class ParserTests extends TestSet {
   }
 
   void parserExpressionTest_ParseFromToString() {
-    ContextModel context = ContextModel()
-      ..bindVariableName('x', Number(math.pi));
+    ContextModel context = ContextModel()..bindVariableName('x', Number(math.pi));
 
     for (String inputString in inputStrings) {
       /// Expression doesn't implement equal, so as an approximation
@@ -456,11 +407,9 @@ class ParserTests extends TestSet {
         double r2 = exp2.evaluate(EvaluationType.REAL, context);
         expect(r2, r1, reason: 'Expected ${r2} for ${exp} (${exp2})');
       } on FormatException catch (fe) {
-        expect(fe, isNot(isFormatException),
-            reason: 'Expected no exception for ${inputString} (${exp})');
+        expect(fe, isNot(isFormatException), reason: 'Expected no exception for ${inputString} (${exp})');
       } on RangeError catch (re) {
-        expect(re, isNot(isRangeError),
-            reason: 'Expected no exception for ${inputString} (${exp})');
+        expect(re, isNot(isRangeError), reason: 'Expected no exception for ${inputString} (${exp})');
       }
     }
   }
