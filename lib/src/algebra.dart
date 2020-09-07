@@ -113,30 +113,33 @@ class Interval implements Comparable<Interval> {
   ///
   ///     [a, b] + [c, d] = [a + c, b + d]
   Interval operator +(Interval i) {
-    if (this.isEmpty() || i.isEmpty())
+    if (this.isEmpty() || i.isEmpty()) {
       return Interval.empty();
-    else
+    } else {
       return Interval(this.min + i.min, this.max + i.max);
+    }
   }
 
   /// Unary minus on intervals.
   ///
   ///     -[a, b] = [-b, -a]
   Interval operator -() {
-    if (this.isEmpty())
+    if (this.isEmpty()) {
       return Interval.empty();
-    else
+    } else {
       return Interval(-max, -min);
+    }
   }
 
   /// Performs an interval subtraction.
   ///
   ///     [a, b] + [c, d] = [a - d, b - c]
   Interval operator -(Interval i) {
-    if (this.isEmpty() || i.isEmpty())
+    if (this.isEmpty() || i.isEmpty()) {
       return Interval.empty();
-    else
+    } else {
       return Interval(this.min - i.max, this.max - i.min);
+    }
   }
 
   /// Performs an interval multiplication.
@@ -296,9 +299,6 @@ class Interval implements Comparable<Interval> {
     // For now, only allow compares to other intervals.
     // Equality, less and greater tests.
     if (this < other) return -1;
-    if (this > other)
-      return 1;
-    else
-      return 0;
+    return (this > other) ? 1 : 0;
   }
 }
