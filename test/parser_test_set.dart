@@ -294,6 +294,28 @@ class ParserTests extends TestSet {
       Token('nrt', TokenType.ROOT)
     ]);
 
+    // ceil
+    inputStrings.add('ceil(1.2)');
+    tokenStreams.add([
+      Token('ceil', TokenType.CEIL),
+      Token('(', TokenType.LBRACE),
+      Token('1.2', TokenType.VAL),
+      Token(')', TokenType.RBRACE)
+    ]);
+    rpnTokenStreams
+        .add([Token('1.2', TokenType.VAL), Token('ceil', TokenType.CEIL)]);
+
+    // floor
+    inputStrings.add('floor(1.2)');
+    tokenStreams.add([
+      Token('floor', TokenType.FLOOR),
+      Token('(', TokenType.LBRACE),
+      Token('1.2', TokenType.VAL),
+      Token(')', TokenType.RBRACE)
+    ]);
+    rpnTokenStreams
+        .add([Token('1.2', TokenType.VAL), Token('floor', TokenType.FLOOR)]);
+
     inputStrings.add('nrt(5,10-1)');
     tokenStreams.add([
       Token('nrt', TokenType.ROOT),

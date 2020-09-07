@@ -188,12 +188,20 @@ class Lexer {
 
     while (iter.moveNext()) {
       final String si = iter.currentAsString;
-
       /*
        * Check if the current Character is a keyword. If it is a keyword, check if the intBuffer is not empty and add
        * a Value Token for the intBuffer and the corresponding Token for the keyword.
        */
-      if (keywords.containsKey(si)) {
+      bool keywordsContainsKey = keywords.containsKey(si);
+      /*
+      * There's a situation that 'ceil' conflict with 'e', we use this to look back the buffer and decide 
+      * which way should go.
+      */
+      if (si == 'e' && varBuffer.isNotEmpty) {
+        keywordsContainsKey = false;
+      }
+
+      if (keywordsContainsKey) {
         // check and or do intBuffer and varBuffer
         if (intBuffer.isNotEmpty) {
           _doIntBuffer(tempTokenStream);
