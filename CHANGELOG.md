@@ -1,6 +1,7 @@
-### Unreleased
+### 2.0.1 - 2020-09-07
 
 - Add ability to unbind variable names (by [wdavies973](https://github.com/wdavies973))
+- Fix parsing of `ceil` function (by [pepsin](https://github.com/pepsin))
 
 ### 2.0.0 - 2020-03-08
 
