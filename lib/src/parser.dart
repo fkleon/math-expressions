@@ -210,7 +210,8 @@ class Lexer {
           _doVarBuffer(tempTokenStream);
         }
         // MH - Bit of a hack here to handle exponentials of the form e^x rather than e(x)
-        if (keywords[si] == TokenType.POW && tempTokenStream.last.type == TokenType.EFUNC) {
+        if (keywords[si] == TokenType.POW &&
+            tempTokenStream.last.type == TokenType.EFUNC) {
           // Clear varBuffer since we have nothing to add to the stream as EFUNC is already in it
           //_doVarBuffer(tempTokenStream);
           varBuffer = '';
@@ -320,13 +321,16 @@ class Lexer {
        *  to output stream until a left brace is encountered.
        */
       if (curToken.type == TokenType.SEPAR) {
-        while (operatorBuffer.isNotEmpty && operatorBuffer.last.type != TokenType.LBRACE) {
+        while (operatorBuffer.isNotEmpty &&
+            operatorBuffer.last.type != TokenType.LBRACE) {
           outputStream.add(operatorBuffer.removeLast());
         }
         // If no left brace is encountered, separator was misplaced or parenthesis mismatch
-        if (operatorBuffer.isNotEmpty && operatorBuffer.last.type != TokenType.LBRACE) {
+        if (operatorBuffer.isNotEmpty &&
+            operatorBuffer.last.type != TokenType.LBRACE) {
           //TODO never reached, check this.
-          throw FormatException('Misplaced separator or mismatched parenthesis.');
+          throw FormatException(
+              'Misplaced separator or mismatched parenthesis.');
         }
         prevToken = curToken;
         continue;
@@ -337,7 +341,9 @@ class Lexer {
        * an unary minus, so the tokentype has to be changed.
        */
       if (curToken.type == TokenType.MINUS &&
-          (prevToken == null || prevToken.type.operator || prevToken.type == TokenType.LBRACE)) {
+          (prevToken == null ||
+              prevToken.type.operator ||
+              prevToken.type == TokenType.LBRACE)) {
         final Token newToken = Token(curToken.text, TokenType.UNMINUS);
         operatorBuffer.add(newToken);
         prevToken = newToken;
@@ -352,8 +358,12 @@ class Lexer {
        */
       if (curToken.type.operator) {
         while (operatorBuffer.isNotEmpty &&
-            ((curToken.type.leftAssociative && curToken.type.priority <= operatorBuffer.last.type.priority) ||
-                (!curToken.type.leftAssociative && curToken.type.priority < operatorBuffer.last.type.priority))) {
+            ((curToken.type.leftAssociative &&
+                    curToken.type.priority <=
+                        operatorBuffer.last.type.priority) ||
+                (!curToken.type.leftAssociative &&
+                    curToken.type.priority <
+                        operatorBuffer.last.type.priority))) {
           outputStream.add(operatorBuffer.removeLast());
         }
         operatorBuffer.add(curToken);
@@ -370,12 +380,14 @@ class Lexer {
 
       // If the current Token is a right brace, empty the operator buffer until you find a left brace.
       if (curToken.type == TokenType.RBRACE) {
-        while (operatorBuffer.isNotEmpty && operatorBuffer.last.type != TokenType.LBRACE) {
+        while (operatorBuffer.isNotEmpty &&
+            operatorBuffer.last.type != TokenType.LBRACE) {
           outputStream.add(operatorBuffer.removeLast());
         }
 
         // Expect next token on stack to be left parenthesis and pop it
-        if (operatorBuffer.isEmpty || operatorBuffer.removeLast().type != TokenType.LBRACE) {
+        if (operatorBuffer.isEmpty ||
+            operatorBuffer.removeLast().type != TokenType.LBRACE) {
           throw FormatException('Mismatched parenthesis.');
         }
 
@@ -393,7 +405,8 @@ class Lexer {
      * on top of the stack is a parenthesis, there are mismatched parenthesis.
      */
     while (operatorBuffer.isNotEmpty) {
-      if (operatorBuffer.last.type == TokenType.LBRACE || operatorBuffer.last.type == TokenType.RBRACE) {
+      if (operatorBuffer.last.type == TokenType.LBRACE ||
+          operatorBuffer.last.type == TokenType.RBRACE) {
         throw FormatException('Mismatched parenthesis.');
       }
       outputStream.add(operatorBuffer.removeLast());
@@ -424,7 +437,10 @@ class Token {
 
   /// Tokens equal, if they have equal text and types.
   @override
-  bool operator ==(Object token) => (token is Token) && (token.text == this.text) && (token.type == this.type);
+  bool operator ==(Object token) =>
+      (token is Token) &&
+      (token.text == this.text) &&
+      (token.type == this.type);
 
   @override
   int get hashCode {
@@ -462,12 +478,16 @@ class TokenType {
 
   // Operators
   static const TokenType PLUS = TokenType._internal('PLUS', 1, operator: true);
-  static const TokenType MINUS = TokenType._internal('MINUS', 1, operator: true);
-  static const TokenType TIMES = TokenType._internal('TIMES', 2, operator: true);
+  static const TokenType MINUS =
+      TokenType._internal('MINUS', 1, operator: true);
+  static const TokenType TIMES =
+      TokenType._internal('TIMES', 2, operator: true);
   static const TokenType DIV = TokenType._internal('DIV', 2, operator: true);
   static const TokenType MOD = TokenType._internal('MOD', 2, operator: true);
-  static const TokenType POW = TokenType._internal('POW', 3, leftAssociative: false, operator: true);
-  static const TokenType UNMINUS = TokenType._internal('UNMINUS', 5, leftAssociative: false, operator: true);
+  static const TokenType POW =
+      TokenType._internal('POW', 3, leftAssociative: false, operator: true);
+  static const TokenType UNMINUS =
+      TokenType._internal('UNMINUS', 5, leftAssociative: false, operator: true);
 
   // Functions
   static const TokenType SQRT = TokenType._internal('SQRT', 4, function: true);
@@ -482,9 +502,11 @@ class TokenType {
   static const TokenType ATAN = TokenType._internal('ATAN', 4, function: true);
   static const TokenType ABS = TokenType._internal('ABS', 4, function: true);
   static const TokenType CEIL = TokenType._internal('CEIL', 4, function: true);
-  static const TokenType FLOOR = TokenType._internal('FLOOR', 4, function: true);
+  static const TokenType FLOOR =
+      TokenType._internal('FLOOR', 4, function: true);
   static const TokenType SGN = TokenType._internal('SGN', 4, function: true);
-  static const TokenType EFUNC = TokenType._internal('EFUNC', 4, function: true);
+  static const TokenType EFUNC =
+      TokenType._internal('EFUNC', 4, function: true);
 
   /// The string value of this token type.
   final String value;
@@ -505,7 +527,9 @@ class TokenType {
   /// To retrieve a token type, directly access the static final fields
   /// provided by this class.
   const TokenType._internal(this.value, this.priority,
-      {this.leftAssociative = true, this.operator = false, this.function = false});
+      {this.leftAssociative = true,
+      this.operator = false,
+      this.function = false});
 
   @override
   String toString() => value;
