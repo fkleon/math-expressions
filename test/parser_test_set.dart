@@ -402,12 +402,12 @@ class ParserTests extends TestSet {
   /*
    *  Tests and variables.
    */
-  Parser pars;
-  Lexer lex;
-  List<String> inputStrings;
+  late Parser pars;
+  late Lexer lex;
+  late List<String> inputStrings;
 
-  List<List<Token>> tokenStreams;
-  List<List<Token>> rpnTokenStreams;
+  late List<List<Token>> tokenStreams;
+  late List<List<Token>> rpnTokenStreams;
 
   void lexerTokenTest() {
     for (int i = 0; i < inputStrings.length; i++) {

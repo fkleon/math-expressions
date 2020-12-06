@@ -20,7 +20,7 @@ class Parser {
   /// [StateError] if the token stream is invalid. Returns a valid
   /// [Expression].
   Expression parse(String inputString) {
-    if (inputString == null || inputString.trim().isEmpty) {
+    if (inputString.trim().isEmpty) {
       throw FormatException('The given input string was empty.');
     }
 
@@ -217,7 +217,7 @@ class Lexer {
           varBuffer = '';
         } else {
           // Normal behaviour
-          tempTokenStream.add(Token(si, keywords[si]));
+          tempTokenStream.add(Token(si, keywords[si]!));
         }
       } else {
         // Check if the current string is a Number. If it's the case add the string to the intBuffer.
@@ -281,7 +281,7 @@ class Lexer {
   /// Then clears the varBuffer.
   void _doVarBuffer(List<Token> stream) {
     if (keywords.containsKey(varBuffer)) {
-      stream.add(Token(varBuffer, keywords[varBuffer]));
+      stream.add(Token(varBuffer, keywords[varBuffer]!));
     } else {
       stream.add(Token(varBuffer, TokenType.VAR));
     }
@@ -299,7 +299,7 @@ class Lexer {
     final List<Token> outputStream = <Token>[];
     final List<Token> operatorBuffer = <Token>[];
 
-    Token prevToken;
+    Token? prevToken;
 
     for (Token curToken in stream) {
       // If the current Token is a value or a variable, put them into the output stream.
