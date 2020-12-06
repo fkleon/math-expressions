@@ -1,6 +1,3 @@
-/*
- * Contains all [TestSet]s for math_expressions.
- */
 library math_expressions_test;
 
 import 'dart:math' as math;
@@ -18,9 +15,7 @@ part 'parser_test_set.dart';
 /// relative accuracy for floating-point calculations
 const num EPS = 0.000001;
 
-/**
- * Registers all math test sets and executes the test suite afterwards.
- */
+/// Registers all math test sets and executes the test suite afterwards.
 void main() {
   final List<TestSet> testSets = <TestSet>[
     AlgebraTests(),

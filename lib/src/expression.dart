@@ -110,7 +110,7 @@ abstract class Expression {
 
 /// A binary operator takes two expressions and performs an operation on them.
 abstract class BinaryOperator extends Expression {
-  Expression first, second;
+  late Expression first, second;
 
   /// Creates a [BinaryOperator] from two given arguments.
   ///
@@ -130,7 +130,7 @@ abstract class BinaryOperator extends Expression {
 
 /// A unary operator takes one argument and performs an operation on it.
 abstract class UnaryOperator extends Expression {
-  Expression exp;
+  late Expression exp;
 
   /// Creates a [UnaryOperator] from the given argument.
   ///
@@ -328,7 +328,7 @@ class Times extends BinaryOperator {
   Expression simplify() {
     Expression firstOp = first.simplify();
     Expression secondOp = second.simplify();
-    Expression tempResult;
+    Expression? tempResult;
 
     bool negative = false;
     if (firstOp is UnaryMinus) {
@@ -731,25 +731,17 @@ class Vector extends Literal {
 
   @override
   Expression derive(String toVar) {
-    final List<Expression> elementDerivatives = List<Expression>(length);
+    final elementDerivative = elements.map((item) => item.derive(toVar))
+        .toList();
 
-    // Derive each element.
-    for (int i = 0; i < length; i++) {
-      elementDerivatives[i] = elements[i].derive(toVar);
-    }
-
-    return Vector(elementDerivatives);
+    return Vector(elementDerivative);
   }
 
   /// Simplifies all elements of this vector.
   @override
   Expression simplify() {
-    final List<Expression> simplifiedElements = List<Expression>(length);
-
-    // Simplify each element.
-    for (int i = 0; i < length; i++) {
-      simplifiedElements[i] = elements[i].simplify();
-    }
+    final simplifiedElements = elements.map((item) => item.simplify())
+        .toList();
 
     return Vector(simplifiedElements);
   }
@@ -812,11 +804,11 @@ class Vector extends Literal {
   @override
   Vector getConstantValue() {
     // TODO unit test
-    final Iterable<Expression> constVals = elements.map((e) => (e is Literal)
+    final constVals = elements.map<Expression>((e) => (e is Literal)
         ? e.getConstantValue()
         : throw UnsupportedError('Vector $this is not constant.'));
 
-    return Vector(constVals);
+    return Vector(constVals as List<Expression>);
   }
 }
 
