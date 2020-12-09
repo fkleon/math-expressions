@@ -3,37 +3,11 @@ language: dart
 dist: bionic
 
 dart:
-  - "2.1.1"
-  - "2.2.0"
-  - "2.3.2"
-  - "2.4.1"
-  - "2.5.1"
-  - "2.6.1"
-  - "2.7.2"
-  - "2.8.4"
-  - stable
+  - beta
   - dev
 
 jobs:
-  exclude:
-    - dart: "2.1.1"
-      dart_task: dartfmt
-    - dart: "2.2.0"
-      dart_task: dartfmt
-    - dart: "2.3.2"
-      dart_task: dartfmt
-    - dart: "2.4.1"
-      dart_task: dartfmt
-    - dart: "2.5.1"
-      dart_task: dartfmt
-    - dart: "2.6.1"
-      dart_task: dartfmt
-    - dart: "2.7.2"
-      dart_task: dartfmt
-    - dart: "2.8.4"
-      dart_task: dartfmt
   allow_failures:
-    - dart: "2.6.1"
     - dart: dev
   fast_finish: true
 
