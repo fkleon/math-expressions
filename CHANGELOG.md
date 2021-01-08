@@ -1,3 +1,7 @@
+### 2.0.2 - TBD
+
+- Lower precedence of unary minus to match common mathematics convention
+
 ### 2.0.1 - 2020-09-07
 
 - Add ability to unbind variable names (by [wdavies973](https://github.com/wdavies973))
