@@ -1,6 +1,7 @@
-### 2.0.2 - TBD
+### 2.0.2 - 2021-01-08
 
-- Lower precedence of unary minus to match common mathematics convention
+- Lower precedence of unary minus below power operator to match common
+  mathematics conventions so that `-x^y` is parsed as `-(x^y)` instead of `(-x)^y`
 
 ### 2.0.1 - 2020-09-07
 
