@@ -485,28 +485,28 @@ class TokenType {
   static const TokenType DIV = TokenType._internal('DIV', 2, operator: true);
   static const TokenType MOD = TokenType._internal('MOD', 2, operator: true);
   static const TokenType POW =
-      TokenType._internal('POW', 3, leftAssociative: false, operator: true);
+      TokenType._internal('POW', 4, leftAssociative: false, operator: true);
   static const TokenType UNMINUS =
-      TokenType._internal('UNMINUS', 5, leftAssociative: false, operator: true);
+      TokenType._internal('UNMINUS', 3, leftAssociative: false, operator: true);
 
   // Functions
-  static const TokenType SQRT = TokenType._internal('SQRT', 4, function: true);
-  static const TokenType ROOT = TokenType._internal('ROOT', 4, function: true);
-  static const TokenType LOG = TokenType._internal('LOG', 4, function: true);
-  static const TokenType LN = TokenType._internal('LN', 4, function: true);
-  static const TokenType COS = TokenType._internal('COS', 4, function: true);
-  static const TokenType SIN = TokenType._internal('SIN', 4, function: true);
-  static const TokenType TAN = TokenType._internal('TAN', 4, function: true);
-  static const TokenType ACOS = TokenType._internal('ACOS', 4, function: true);
-  static const TokenType ASIN = TokenType._internal('ASIN', 4, function: true);
-  static const TokenType ATAN = TokenType._internal('ATAN', 4, function: true);
-  static const TokenType ABS = TokenType._internal('ABS', 4, function: true);
-  static const TokenType CEIL = TokenType._internal('CEIL', 4, function: true);
+  static const TokenType SQRT = TokenType._internal('SQRT', 5, function: true);
+  static const TokenType ROOT = TokenType._internal('ROOT', 5, function: true);
+  static const TokenType LOG = TokenType._internal('LOG', 5, function: true);
+  static const TokenType LN = TokenType._internal('LN', 5, function: true);
+  static const TokenType COS = TokenType._internal('COS', 5, function: true);
+  static const TokenType SIN = TokenType._internal('SIN', 5, function: true);
+  static const TokenType TAN = TokenType._internal('TAN', 5, function: true);
+  static const TokenType ACOS = TokenType._internal('ACOS', 5, function: true);
+  static const TokenType ASIN = TokenType._internal('ASIN', 5, function: true);
+  static const TokenType ATAN = TokenType._internal('ATAN', 5, function: true);
+  static const TokenType ABS = TokenType._internal('ABS', 5, function: true);
+  static const TokenType CEIL = TokenType._internal('CEIL', 5, function: true);
   static const TokenType FLOOR =
-      TokenType._internal('FLOOR', 4, function: true);
-  static const TokenType SGN = TokenType._internal('SGN', 4, function: true);
+      TokenType._internal('FLOOR', 5, function: true);
+  static const TokenType SGN = TokenType._internal('SGN', 5, function: true);
   static const TokenType EFUNC =
-      TokenType._internal('EFUNC', 4, function: true);
+      TokenType._internal('EFUNC', 5, function: true);
 
   /// The string value of this token type.
   final String value;

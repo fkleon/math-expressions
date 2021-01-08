@@ -15,6 +15,7 @@ class ParserTests extends TestSet {
         'Parser Expression Creation Invalid': parserExpressionTestInvalid,
         'Parser Expression Creation from toString()':
             parserExpressionTest_ParseFromToString,
+        'Parser Operator Precedence': parserOperatorPrecedence,
       };
 
   @override
@@ -485,5 +486,13 @@ class ParserTests extends TestSet {
             reason: 'Expected no exception for ${inputString} (${exp})');
       }
     }
+  }
+
+  void parserOperatorPrecedence() {
+    Expression e = pars.parse('-3^2');
+    expect(e.toString(), equals('(-(3.0^2.0))'));
+
+    e = pars.parse('-3*2');
+    expect(e.toString(), equals('((-3.0) * 2.0)'));
   }
 }
