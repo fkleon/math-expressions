@@ -442,7 +442,7 @@ class Ln extends Log {
 //TODO: Allow n to be an expression?
 class Root extends DefaultFunction {
   /// N-th root.
-  late int n;
+  late final int n;
 
   /// Creates the n-th root of arg.
   ///

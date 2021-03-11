@@ -42,9 +42,9 @@ class AlgebraTests extends TestSet {
   /*
    *  Tests and variables.
    */
-  late Point3 p0, p1, p2;
-  late Vector3 v1, v2;
-  late Interval i, iNull1, iNull2, iPos, iNeg, iZero, iEmpty;
+  late final Point3 p0, p1, p2;
+  late final Vector3 v1, v2;
+  late final Interval i, iNull1, iNull2, iPos, iNeg, iZero, iEmpty;
 
   // Tests the expected state after point creation.
   void pointCreation() {

@@ -110,7 +110,7 @@ abstract class Expression {
 
 /// A binary operator takes two expressions and performs an operation on them.
 abstract class BinaryOperator extends Expression {
-  late Expression first, second;
+  late final Expression first, second;
 
   /// Creates a [BinaryOperator] from two given arguments.
   ///
@@ -130,7 +130,7 @@ abstract class BinaryOperator extends Expression {
 
 /// A unary operator takes one argument and performs an operation on it.
 abstract class UnaryOperator extends Expression {
-  late Expression exp;
+  late final Expression exp;
 
   /// Creates a [UnaryOperator] from the given argument.
   ///
@@ -731,8 +731,8 @@ class Vector extends Literal {
 
   @override
   Expression derive(String toVar) {
-    final elementDerivative = elements.map((item) => item.derive(toVar))
-        .toList();
+    final elementDerivative =
+        elements.map((item) => item.derive(toVar)).toList();
 
     return Vector(elementDerivative);
   }
@@ -740,8 +740,7 @@ class Vector extends Literal {
   /// Simplifies all elements of this vector.
   @override
   Expression simplify() {
-    final simplifiedElements = elements.map((item) => item.simplify())
-        .toList();
+    final simplifiedElements = elements.map((item) => item.simplify()).toList();
 
     return Vector(simplifiedElements);
   }
