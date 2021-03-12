@@ -3,6 +3,7 @@ language: dart
 dist: bionic
 
 dart:
+  - stable
   - beta
   - dev
 
