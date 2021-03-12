@@ -31,10 +31,8 @@ class TestExecutor {
     for (TestSet set in testSets) {
       group(set.name, () {
         setUp(set.initTests);
-        set.testFunctions.forEach((String k, Function? v) {
-          if (v != null) {
-            test(k, v());
-          }
+        set.testFunctions.forEach((String k, Function v) {
+          test(k, () => v());
         });
       });
     }
@@ -55,6 +53,5 @@ abstract class TestSet {
   void initTests();
 
   /// Returns a map containing test function names and associated function calls.
-  //TODO Use Reflection/Mirror API once available in Dart.
-  Map<String, Function?> get testFunctions;
+  Map<String, Function> get testFunctions;
 }
