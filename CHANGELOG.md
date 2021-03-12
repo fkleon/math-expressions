@@ -1,5 +1,6 @@
 ### 2.1.0-nullsafety.0 - 2021-03-12
 
+- Drop support for Dart SDK versions below 2.12.0
 - Migrate to null safety (thanks [albertodev01](https://github.com/albertodev01))
 
 ### 2.0.2 - 2021-01-08
