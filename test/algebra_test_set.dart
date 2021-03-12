@@ -1,8 +1,6 @@
 part of math_expressions_test;
 
-/**
- * Contains methods to test the math algebra implementation.
- */
+/// Contains methods to test the math algebra implementation.
 class AlgebraTests extends TestSet {
   @override
   String get name => 'Algebra Tests';
@@ -19,32 +17,21 @@ class AlgebraTests extends TestSet {
         'Interval Comparison': intervalComparison,
       };
 
-  // Initialises the test points and vectors
   @override
-  void initTests() {
-    // do some funky stuff
-    p0 = Point3.zero();
-    p1 = Point3(1.0, 2.0, 3.0);
-    p2 = Point3(4.0, -5.0, 7.0);
-    v1 = Vector3(1.0, -2.0, 5.0);
-    v2 = Vector3(-1.0, 0.0, -7.0);
+  void initTests() {}
 
-    iNull1 = Interval(0, 30);
-    iNull2 = Interval(-20, 0);
-    iPos = Interval(2, 7);
-    iNeg = Interval(-5, -1);
-    iZero = Interval(-1, 1);
-    iEmpty = Interval.empty();
-
-    i = Interval(0.00002, 300);
-  }
-
-  /*
-   *  Tests and variables.
-   */
-  Point3 p0, p1, p2;
-  Vector3 v1, v2;
-  Interval i, iNull1, iNull2, iPos, iNeg, iZero, iEmpty;
+  // Initialises the test points and vectors
+  final Point3 p0 = Point3.zero(),
+      p1 = Point3(1.0, 2.0, 3.0),
+      p2 = Point3(4.0, -5.0, 7.0);
+  final Vector3 v1 = Vector3(1.0, -2.0, 5.0), v2 = Vector3(-1.0, 0.0, -7.0);
+  final Interval i = Interval(0.00002, 300),
+      iNull1 = Interval(0, 30),
+      iNull2 = Interval(-20, 0),
+      iPos = Interval(2, 7),
+      iNeg = Interval(-5, -1),
+      iZero = Interval(-1, 1),
+      iEmpty = Interval.empty();
 
   // Tests the expected state after point creation.
   void pointCreation() {

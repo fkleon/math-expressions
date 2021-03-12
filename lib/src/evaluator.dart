@@ -19,14 +19,14 @@ enum EvaluationType { REAL, VECTOR, INTERVAL }
 /// It is structured hierarchically to offer nested scopes.
 class ContextModel {
   /// The parent scope.
-  ContextModel parentScope;
+  ContextModel? parentScope;
 
   /// Variable map of this scope (name -> expression).
   Map<String, Expression> variables = <String, Expression>{};
 
   /// Function set of this scope.
   // TODO: Do we even need to track function names?
-  Set<MathFunction> functions = Set<MathFunction>();
+  Set<MathFunction> functions = <MathFunction>{};
 
   /// Creates a new, empty root context model.
   ContextModel();
@@ -43,9 +43,11 @@ class ContextModel {
   /// Throws a [StateError], if variable is still unbound at the root scope.
   Expression getExpression(String varName) {
     if (variables.containsKey(varName)) {
-      return variables[varName];
-    } else if (parentScope != null) {
-      return parentScope.getExpression(varName);
+      return variables[varName]!;
+    }
+
+    if (parentScope != null) {
+      return parentScope!.getExpression(varName);
     } else {
       throw StateError('Variable not bound: $varName');
     }
@@ -62,7 +64,7 @@ class ContextModel {
       // just grab first - should not contain doubles.
       return candidates.first;
     } else if (parentScope != null) {
-      return parentScope.getFunction(name);
+      return parentScope!.getFunction(name);
     } else {
       throw StateError('Function not bound: $name');
     }

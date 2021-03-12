@@ -8,7 +8,7 @@ import 'package:math_expressions/math_expressions.dart';
 ContextModel contextModel = ContextModel();
 Lexer lexer = Lexer();
 Parser parser = Parser();
-Expression currentExpression;
+Expression? currentExpression;
 
 /// Starts a CLI interpreter for simple mathematical expressions.
 void main(List<String> arguments) {
@@ -67,7 +67,7 @@ void parseInput(String input) {
 
 void _evaluate() {
   if (currentExpression == null) throw StateError('No Expression set.');
-  double eval = currentExpression.evaluate(EvaluationType.REAL, contextModel);
+  double eval = currentExpression!.evaluate(EvaluationType.REAL, contextModel);
   print('> Variables: ${contextModel.variables}');
   print('> Result: $currentExpression = ${eval.toString()}');
 }
@@ -86,7 +86,7 @@ void _setExpr(String input) {
 void _differentiate(String input) {
   if (currentExpression == null) throw StateError('No Expression set.');
   String varName = input.substring(1);
-  Expression expr = currentExpression.derive(varName);
+  Expression expr = currentExpression!.derive(varName);
 
   /// cheap attempt to simplify new expression as much as possible
   while (expr.toString() != expr.simplify().toString()) {
