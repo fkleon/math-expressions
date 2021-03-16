@@ -1,3 +1,7 @@
+### 2.1.0
+
+- Bumped to stable release.
+
 ### 2.1.0-nullsafety.0 - 2021-03-12
 
 - Drop support for Dart SDK versions below 2.12.0
