@@ -588,6 +588,11 @@ class Sin extends DefaultFunction {
     final dynamic argEval = arg.evaluate(type, context);
 
     if (type == EvaluationType.REAL) {
+      // Compensate for inaccuracies in machine-pi.
+      // If argEval divides cleanly from pi, return 0.
+      if ((argEval / math.pi).abs() % 1 == 0) {
+        return 0.0;
+      }
       return math.sin(argEval);
     }
 
@@ -634,6 +639,12 @@ class Cos extends DefaultFunction {
     final dynamic argEval = arg.evaluate(type, context);
 
     if (type == EvaluationType.REAL) {
+      // Compensate for inaccuracies in machine-pi.
+      //
+      // If argEval divides cleanly from pi (when shifted back to Sin from Cos), return 0.
+      if (((argEval - math.pi / 2) / math.pi).abs() % 1 == 0) {
+        return 0.0;
+      }
       return math.cos(argEval);
     }
 
@@ -680,6 +691,11 @@ class Tan extends DefaultFunction {
     final dynamic argEval = arg.evaluate(type, context);
 
     if (type == EvaluationType.REAL) {
+      // Compensate for inaccuracies in machine-pi.
+      // If argEval divides cleanly from pi, return 0.
+      if ((argEval / math.pi).abs() % 1 == 0) {
+        return 0.0;
+      }
       return math.tan(argEval);
     }
 
