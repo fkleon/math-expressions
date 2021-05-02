@@ -751,9 +751,10 @@ class ExpressionTests extends TestSet {
 
   /// Tests REAL evaluation of default functions.
   void defFuncRealEval() {
-    Number zero, one, infinity, negInfty, e, pi;
+    Number zero, one, two, infinity, negInfty, e, pi;
     zero = Number(0);
     one = Number(1);
+    two = Number(2);
     infinity = Number(double.infinity);
     negInfty = Number(double.negativeInfinity);
     pi = Number(math.pi);
@@ -841,6 +842,9 @@ class ExpressionTests extends TestSet {
     // cos(-PI) -> -1
     eval = Cos(-pi).evaluate(real, cm);
     expect(eval, equals(-1));
+    // cos(PI/2) -> 0
+    eval = Cos(pi/two).evaluate(real, cm);
+    expect(eval, equals(0));
     // cos(INFTY) -> [-1,1] / NaN
     eval = Cos(infinity).evaluate(real, cm);
     expect(eval, isNot(equals(eval))); // NaN
@@ -862,10 +866,10 @@ class ExpressionTests extends TestSet {
     expect(eval, closeTo(0.841, 0.001));
     // sin(PI) -> 0
     eval = Sin(pi).evaluate(real, cm);
-    expect(eval, closeTo(0, 0.00001));
+    expect(eval, equals(0));
     // sin(-PI) -> 0
     eval = Sin(-pi).evaluate(real, cm);
-    expect(eval, closeTo(0, 0.00001));
+    expect(eval, equals(0));
     // sin(INFTY) -> [-1,1] / NaN
     eval = Sin(infinity).evaluate(real, cm);
     expect(eval, isNot(equals(eval))); // NaN
