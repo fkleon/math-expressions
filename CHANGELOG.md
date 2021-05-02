@@ -1,8 +1,8 @@
-### 2.1.1 - unreleased
+### 2.1.1 - 2021-05-02
 
 - Fix inaccuracies in sin/cos/tan when using math.pi (machine pi) (thanks [mbullington](https://github.com/mbullington))
 
-### 2.1.0
+### 2.1.0 - 2021-03-17
 
 - Bumped to stable release.
 
