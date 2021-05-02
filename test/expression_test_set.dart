@@ -843,7 +843,7 @@ class ExpressionTests extends TestSet {
     eval = Cos(-pi).evaluate(real, cm);
     expect(eval, equals(-1));
     // cos(PI/2) -> 0
-    eval = Cos(pi/two).evaluate(real, cm);
+    eval = Cos(pi / two).evaluate(real, cm);
     expect(eval, equals(0));
     // cos(INFTY) -> [-1,1] / NaN
     eval = Cos(infinity).evaluate(real, cm);
