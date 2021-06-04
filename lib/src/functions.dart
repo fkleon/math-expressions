@@ -254,6 +254,13 @@ abstract class DefaultFunction extends MathFunction {
     this.args = <Variable>[bindingVariable1, bindingVariable2];
   }
 
+  /// Creates a new function with given name and anyy arguments.
+  /// If the arguments are not variables, they will be wrapped into anonymous
+  /// variables, which bind the given expressions.
+  DefaultFunction._any(String name, List<Expression> args) : super._empty(name) {
+    this.args = args.map((arg) => _wrapIntoVariable(arg)).toList();
+  }
+
   /// Returns a variable, bound to the given [Expression].
   /// Returns the parameter itself, if it is already a variable.
   Variable _wrapIntoVariable(Expression e) {
@@ -942,4 +949,30 @@ class Sgn extends DefaultFunction {
 
     throw UnimplementedError('Can not evaluate $name on $type yet.');
   }
+}
+
+class GenericFunction extends DefaultFunction {
+  /// Creates a logarithm function with given base and argument.
+  ///
+  /// For example, to create log_10(2):
+  ///
+  ///     base = Number(10);
+  ///     arg = Number(2);
+  ///     log = Log(base, arg);
+  ///
+  /// To create a naturally based logarithm, see [Ln].
+  GenericFunction(String name, List<Expression> args, this.handler) : super._any(name, args);
+
+  dynamic handler;
+
+  @override
+  dynamic evaluate(EvaluationType type, ContextModel context) {
+    List<double> values = args.map<double>((v) => v.value.evaluate(type, context)).toList();
+    if (type == EvaluationType.REAL) return handler(values);
+
+    throw UnimplementedError('Can not evaluate $name on $type yet.');
+  }
+
+  @override
+  Expression derive(String toVar) => Number(0);
 }

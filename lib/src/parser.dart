@@ -14,6 +14,7 @@ class Parser {
 
   /// Creates a new parser.
   Parser() : lex = Lexer();
+  Map<String, dynamic> genericFunctionHandlers = <String, dynamic>{};
 
   /// Parses the given input string into an [Expression]. Throws a
   /// [ArgumentError] if the given [inputString] is empty. Throws a
@@ -119,6 +120,10 @@ class Parser {
         case TokenType.SGN:
           currExpr = Sgn(exprStack.removeLast());
           break;
+        case TokenType.FUNC:
+          currExpr = GenericFunction(currToken.text, exprStack, genericFunctionHandlers[currToken.text]);
+          exprStack.clear();
+          break;
         default:
           throw FormatException('Unsupported token: $currToken');
       }
@@ -131,6 +136,11 @@ class Parser {
     }
 
     return exprStack.last;
+  }
+
+  void addGenericFunction(String name, dynamic handler) {
+    lex.keywords[name] = TokenType.FUNC;
+    genericFunctionHandlers[name] = handler;
   }
 }
 
@@ -507,6 +517,7 @@ class TokenType {
   static const TokenType SGN = TokenType._internal('SGN', 5, function: true);
   static const TokenType EFUNC =
       TokenType._internal('EFUNC', 5, function: true);
+  static const TokenType FUNC = TokenType._internal('FUNC', 5, function: true);
 
   /// The string value of this token type.
   final String value;
