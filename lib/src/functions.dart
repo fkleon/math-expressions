@@ -967,7 +967,7 @@ class GenericFunction extends DefaultFunction {
 
   @override
   dynamic evaluate(EvaluationType type, ContextModel context) {
-    List<double> values = args.map<double>((v) => v.value.evaluate(type, context)).toList();
+    List<double> values = args.map<double>((v) => (v.value ?? context.getExpression(v.name)).evaluate(type, context)).toList();
     if (type == EvaluationType.REAL) return handler(values);
 
     throw UnimplementedError('Can not evaluate $name on $type yet.');
