@@ -121,8 +121,9 @@ class Parser {
           currExpr = Sgn(exprStack.removeLast());
           break;
         case TokenType.FUNC:
-          currExpr = GenericFunction(currToken.text, exprStack, genericFunctionHandlers[currToken.text]);
-          exprStack.clear();
+          List<Expression> args = [];
+          for (var i = 0; i < currToken.argCount; ++i) args.add(exprStack.removeLast());
+          currExpr = GenericFunction(currToken.text, args, genericFunctionHandlers[currToken.text]);
           break;
         default:
           throw FormatException('Unsupported token: $currToken');
@@ -321,6 +322,7 @@ class Lexer {
 
       // If the current Token is a function, put it onto the operator stack.
       if (curToken.type.function) {
+        curToken.argCount = 1;
         operatorBuffer.add(curToken);
         prevToken = curToken;
         continue;
@@ -335,6 +337,14 @@ class Lexer {
             operatorBuffer.last.type != TokenType.LBRACE) {
           outputStream.add(operatorBuffer.removeLast());
         }
+
+        if (operatorBuffer.length > 1) {
+          var func = operatorBuffer[operatorBuffer.length - 2];
+          if (func.type.function) {
+            ++func.argCount;
+          }
+        }
+
         // If no left brace is encountered, separator was misplaced or parenthesis mismatch
         if (operatorBuffer.isNotEmpty &&
             operatorBuffer.last.type != TokenType.LBRACE) {
@@ -441,6 +451,7 @@ class Token {
 
   /// The type of this token.
   final TokenType type;
+  int argCount = 0;
 
   /// Creates a new Token with the given text and type.
   Token(this.text, this.type);
