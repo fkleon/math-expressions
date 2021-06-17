@@ -122,7 +122,7 @@ class Parser {
           break;
         case TokenType.FUNC:
           List<Expression> args = [];
-          for (var i = 0; i < currToken.argCount; ++i) args.add(exprStack.removeLast());
+          for (var i = 0; i < currToken.argCount; ++i) args.insert(0, exprStack.removeLast());
           currExpr = GenericFunction(currToken.text, args, genericFunctionHandlers[currToken.text]);
           break;
         default:
