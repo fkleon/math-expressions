@@ -363,6 +363,7 @@ class Lexer {
       if (curToken.type == TokenType.MINUS &&
           (prevToken == null ||
               prevToken.type.operator ||
+              prevToken.type == TokenType.SEPAR ||
               prevToken.type == TokenType.LBRACE)) {
         final Token newToken = Token(curToken.text, TokenType.UNMINUS);
         operatorBuffer.add(newToken);
