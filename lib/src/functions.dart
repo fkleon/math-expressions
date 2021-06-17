@@ -254,7 +254,7 @@ abstract class DefaultFunction extends MathFunction {
     this.args = <Variable>[bindingVariable1, bindingVariable2];
   }
 
-  /// Creates a new function with given name and anyy arguments.
+  /// Creates a new function with given name and any arguments.
   /// If the arguments are not variables, they will be wrapped into anonymous
   /// variables, which bind the given expressions.
   DefaultFunction._any(String name, List<Expression> args) : super._empty(name) {
@@ -952,15 +952,10 @@ class Sgn extends DefaultFunction {
 }
 
 class GenericFunction extends DefaultFunction {
-  /// Creates a logarithm function with given base and argument.
+  /// Creates a genetic function with variable number of arguments.
   ///
-  /// For example, to create log_10(2):
+  /// For example, to create min(2,23,4,5,2314,213,5,324):
   ///
-  ///     base = Number(10);
-  ///     arg = Number(2);
-  ///     log = Log(base, arg);
-  ///
-  /// To create a naturally based logarithm, see [Ln].
   GenericFunction(String name, List<Expression> args, this.handler) : super._any(name, args);
 
   dynamic handler;
