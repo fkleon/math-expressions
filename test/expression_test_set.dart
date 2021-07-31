@@ -41,6 +41,8 @@ class ExpressionTests extends TestSet {
         'Composite Function differentiation': compFuncDifferentiation,
         'Composite Function evaluation': compFunEval
         */
+        'Generic Function creation': genFunctionCreation,
+        'Generic Function evaluation [REAL]': genFunctionRealEval,
       };
 
   @override
@@ -1275,6 +1277,34 @@ class ExpressionTests extends TestSet {
   void compFunEval() {
     // Evaluate composite functions.
     throw UnimplementedError();
+  }
+
+  /// Tests creation of generic functions.
+  void genFunctionCreation() {
+    dynamic handler = (List<double> args) => args.reduce(math.min);
+
+    // Generic list minimum (R^2 -> R)
+    GenericFunction f = GenericFunction('my_min', [n1, -n1], handler);
+
+    expect(f.name, equals('my_min'));
+    //expect(f.args, equals([BoundVariable(n1), BoundVariable(-n1)]));
+    expect(f.handler, equals(handler));
+  }
+
+  /// Tests REAL evaluation of generic functions.
+  void genFunctionRealEval() {
+    ContextModel cm = ContextModel();
+
+    Variable x = Variable('x');
+    dynamic handler = (List<double> args) => args.reduce(math.min);
+
+    // Generic list minimum (R^3 -> R)
+    GenericFunction f =
+        GenericFunction('my_min', [Number(1), -Number(1), x], handler);
+
+    cm.bindVariable(x, -Number(2));
+    double min = f.evaluate(EvaluationType.REAL, cm);
+    expect(min, equals(-2.0));
   }
 
   /// Checks if the given operator contains the given members.
