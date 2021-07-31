@@ -193,7 +193,7 @@ class CustomFunction extends MathFunction {
   ///     fExpr = x * Power(2, k);                        // The left shift operation
   ///     f = CustomFunction('leftshift', [x, k], fExpr); // Creates a function R^2 -> R from fExpr
   ///
-  /// The name of the function has no functional impact, ans is only used in the
+  /// The name of the function has no functional impact, and is only used in the
   /// string representation.
   CustomFunction(String name, List<Variable> args, this.expression)
       : super(name, args);
@@ -257,7 +257,8 @@ abstract class DefaultFunction extends MathFunction {
   /// Creates a new function with given name and any arguments.
   /// If the arguments are not variables, they will be wrapped into anonymous
   /// variables, which bind the given expressions.
-  DefaultFunction._any(String name, List<Expression> args) : super._empty(name) {
+  DefaultFunction._any(String name, List<Expression> args)
+      : super._empty(name) {
     this.args = args.map((arg) => _wrapIntoVariable(arg)).toList();
   }
 
@@ -952,17 +953,21 @@ class Sgn extends DefaultFunction {
 }
 
 class GenericFunction extends DefaultFunction {
-  /// Creates a genetic function with variable number of arguments.
+  /// Creates a generic function with variable number of arguments.
   ///
   /// For example, to create min(2,23,4,5,2314,213,5,324):
   ///
-  GenericFunction(String name, List<Expression> args, this.handler) : super._any(name, args);
+  GenericFunction(String name, List<Expression> args, this.handler)
+      : super._any(name, args);
 
   dynamic handler;
 
   @override
   dynamic evaluate(EvaluationType type, ContextModel context) {
-    List<double> values = args.map<double>((v) => (v.value ?? context.getExpression(v.name)).evaluate(type, context)).toList();
+    List<double> values = args
+        .map<double>((v) =>
+            (v.value ?? context.getExpression(v.name)).evaluate(type, context))
+        .toList();
     if (type == EvaluationType.REAL) return handler(values);
 
     throw UnimplementedError('Can not evaluate $name on $type yet.');

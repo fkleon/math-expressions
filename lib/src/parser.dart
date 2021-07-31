@@ -122,8 +122,10 @@ class Parser {
           break;
         case TokenType.FUNC:
           List<Expression> args = [];
-          for (var i = 0; i < currToken.argCount; ++i) args.insert(0, exprStack.removeLast());
-          currExpr = GenericFunction(currToken.text, args, genericFunctionHandlers[currToken.text]);
+          for (var i = 0; i < currToken.argCount; ++i)
+            args.insert(0, exprStack.removeLast());
+          currExpr = GenericFunction(
+              currToken.text, args, genericFunctionHandlers[currToken.text]);
           break;
         default:
           throw FormatException('Unsupported token: $currToken');
@@ -204,6 +206,7 @@ class Lexer {
        * a Value Token for the intBuffer and the corresponding Token for the keyword.
        */
       bool keywordsContainsKey = keywords.containsKey(si);
+
       /*
       * There's a situation that 'ceil' conflict with 'e', we use this to look back the buffer and decide 
       * which way should go.
