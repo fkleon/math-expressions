@@ -1,4 +1,4 @@
-### 2.2.0 - TBD
+### 2.2.0 - 2021-08-04
 
 - Add algorithmic function that is bound to a Dart handler function, including parser support (thanks [kamimark](https://github.com/kamimark))
 
