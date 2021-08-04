@@ -1,3 +1,7 @@
+### 2.2.0 - TBD
+
+- Add algorithmic function that is bound to a Dart handler function, including parser support (thanks [kamimark](https://github.com/kamimark))
+
 ### 2.1.1 - 2021-05-02
 
 - Fix inaccuracies in sin/cos/tan when using math.pi (machine pi) (thanks [mbullington](https://github.com/mbullington))
