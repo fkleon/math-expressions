@@ -1,15 +1,17 @@
 import 'dart:math' as math;
 import 'package:math_expressions/math_expressions.dart';
 
-/// This file contains three examples:
+/// This file contains the following examples:
 ///  - Example 1: Expression creation and evaluation
 ///               (through the Parser and programmatically)
 ///  - Example 2: Expression simplification and differentiation
-///  - Example 3: Custom function definition and use
+///  - Example 3: Custom function definition and use (function bound to expression)
+///  - Example 4: Generic function definition and use (function bound to Dart handler)
 void main() {
   _expression_creation_and_evaluation();
   _expression_simplification_and_differentiation();
   _custom_function_definition_and_use();
+  _algorithmic_function_definition_and_use();
 }
 
 /// Example 1: Expression creation and evaluation
@@ -99,4 +101,27 @@ void _custom_function_definition_and_use() {
   print('$leftshift = ${leftshift.expression}');
   print(
       'leftshift(${cm.getExpression('x')}, ${cm.getExpression('i')}) = ${leftshift.evaluate(EvaluationType.REAL, cm)}');
+}
+
+/// Example 4: Algorithmic function definition and use
+///
+/// How to create and parse an algorithmic function that's bound to a Dart handler.
+void _algorithmic_function_definition_and_use() {
+  print('\nExample 4: Algorithmic function definition and use\n');
+
+  // (1) Create expression via parser by registering a function name
+  Parser p = Parser();
+  p.addFunction('my_min', (List<double> args) => args.reduce(math.min));
+  Expression exp = p.parse('my_min(1, x, -1)');
+
+  print('my_min(1, x, -1) = $exp');
+
+  // (1) Evaluate algorithmic function: MY_MIN (R^3 -> R)
+  ContextModel cm = ContextModel();
+  Variable x = Variable('x');
+
+  cm.bindVariable(x, -Number(2));
+
+  double res = exp.evaluate(EvaluationType.REAL, cm);
+  print('my_min(1, ${cm.getExpression('x')}, -1) = $res');
 }

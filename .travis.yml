@@ -10,6 +10,7 @@ dart:
 jobs:
   allow_failures:
     - dart: dev
+    - dart: beta
   fast_finish: true
 
 dart_task:

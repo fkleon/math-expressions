@@ -14,6 +14,7 @@ class Parser {
 
   /// Creates a new parser.
   Parser() : lex = Lexer();
+  Map<String, dynamic> functionHandlers = <String, dynamic>{};
 
   /// Parses the given input string into an [Expression]. Throws a
   /// [ArgumentError] if the given [inputString] is empty. Throws a
@@ -119,6 +120,14 @@ class Parser {
         case TokenType.SGN:
           currExpr = Sgn(exprStack.removeLast());
           break;
+        case TokenType.FUNC:
+          List<Expression> args = [];
+          for (var i = 0; i < currToken.argCount; ++i) {
+            args.insert(0, exprStack.removeLast());
+          }
+          currExpr = AlgorithmicFunction(
+              currToken.text, args, functionHandlers[currToken.text]);
+          break;
         default:
           throw FormatException('Unsupported token: $currToken');
       }
@@ -131,6 +140,17 @@ class Parser {
     }
 
     return exprStack.last;
+  }
+
+  /// Registers a function handler with the parser.
+  ///
+  /// This can be used to define custom functions that run native Dart code.
+  void addFunction(String name, dynamic handler) {
+    if (lex.keywords.containsKey(name)) {
+      throw FormatException('Cannot redefine existing function $name');
+    }
+    lex.keywords[name] = TokenType.FUNC;
+    functionHandlers[name] = handler;
   }
 }
 
@@ -193,6 +213,7 @@ class Lexer {
        * a Value Token for the intBuffer and the corresponding Token for the keyword.
        */
       bool keywordsContainsKey = keywords.containsKey(si);
+
       /*
       * There's a situation that 'ceil' conflict with 'e', we use this to look back the buffer and decide 
       * which way should go.
@@ -311,6 +332,7 @@ class Lexer {
 
       // If the current Token is a function, put it onto the operator stack.
       if (curToken.type.function) {
+        curToken.argCount = 1;
         operatorBuffer.add(curToken);
         prevToken = curToken;
         continue;
@@ -325,6 +347,14 @@ class Lexer {
             operatorBuffer.last.type != TokenType.LBRACE) {
           outputStream.add(operatorBuffer.removeLast());
         }
+
+        if (operatorBuffer.length > 1) {
+          var func = operatorBuffer[operatorBuffer.length - 2];
+          if (func.type.function) {
+            ++func.argCount;
+          }
+        }
+
         // If no left brace is encountered, separator was misplaced or parenthesis mismatch
         if (operatorBuffer.isNotEmpty &&
             operatorBuffer.last.type != TokenType.LBRACE) {
@@ -343,6 +373,7 @@ class Lexer {
       if (curToken.type == TokenType.MINUS &&
           (prevToken == null ||
               prevToken.type.operator ||
+              prevToken.type == TokenType.SEPAR ||
               prevToken.type == TokenType.LBRACE)) {
         final Token newToken = Token(curToken.text, TokenType.UNMINUS);
         operatorBuffer.add(newToken);
@@ -431,6 +462,7 @@ class Token {
 
   /// The type of this token.
   final TokenType type;
+  int argCount = 0;
 
   /// Creates a new Token with the given text and type.
   Token(this.text, this.type);
@@ -507,6 +539,7 @@ class TokenType {
   static const TokenType SGN = TokenType._internal('SGN', 5, function: true);
   static const TokenType EFUNC =
       TokenType._internal('EFUNC', 5, function: true);
+  static const TokenType FUNC = TokenType._internal('FUNC', 5, function: true);
 
   /// The string value of this token type.
   final String value;

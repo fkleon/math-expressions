@@ -370,6 +370,29 @@ class ParserTests extends TestSet {
       Token('e', TokenType.EFUNC)
     ]);
 
+    // Algorithmic function
+    pars.addFunction('my_min', (List<double> args) => args.reduce(math.min));
+    lex.keywords['my_min'] = TokenType.FUNC;
+    inputStrings.add('my_min(1,x,-2)');
+    tokenStreams.add([
+      Token('my_min', TokenType.FUNC),
+      Token('(', TokenType.LBRACE),
+      Token('1', TokenType.VAL),
+      Token(',', TokenType.SEPAR),
+      Token('x', TokenType.VAR),
+      Token(',', TokenType.SEPAR),
+      Token('-', TokenType.MINUS),
+      Token('2', TokenType.VAL),
+      Token(')', TokenType.RBRACE),
+    ]);
+    rpnTokenStreams.add([
+      Token('1', TokenType.VAL),
+      Token('x', TokenType.VAR),
+      Token('2', TokenType.VAL),
+      Token('-', TokenType.UNMINUS),
+      Token('my_min', TokenType.FUNC),
+    ]);
+
     // Complex expressions
     inputStrings.add('x * 2^2.5 * log(10,100)');
     tokenStreams.add([

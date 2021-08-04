@@ -193,7 +193,7 @@ class CustomFunction extends MathFunction {
   ///     fExpr = x * Power(2, k);                        // The left shift operation
   ///     f = CustomFunction('leftshift', [x, k], fExpr); // Creates a function R^2 -> R from fExpr
   ///
-  /// The name of the function has no functional impact, ans is only used in the
+  /// The name of the function has no functional impact, and is only used in the
   /// string representation.
   CustomFunction(String name, List<Variable> args, this.expression)
       : super(name, args);
@@ -252,6 +252,14 @@ abstract class DefaultFunction extends MathFunction {
     final Variable bindingVariable1 = _wrapIntoVariable(arg1);
     final Variable bindingVariable2 = _wrapIntoVariable(arg2);
     this.args = <Variable>[bindingVariable1, bindingVariable2];
+  }
+
+  /// Creates a new function with given name and any arguments.
+  /// If the arguments are not variables, they will be wrapped into anonymous
+  /// variables, which bind the given expressions.
+  DefaultFunction._any(String name, List<Expression> args)
+      : super._empty(name) {
+    this.args = args.map((arg) => _wrapIntoVariable(arg)).toList();
   }
 
   /// Returns a variable, bound to the given [Expression].
@@ -942,4 +950,40 @@ class Sgn extends DefaultFunction {
 
     throw UnimplementedError('Can not evaluate $name on $type yet.');
   }
+}
+
+class AlgorithmicFunction extends DefaultFunction {
+  /// Creates a generic function with variable number of arguments.
+  ///
+  /// For example, to create a function that returns the minimum value
+  /// in a given list of arguments:
+  ///
+  ///     args = [ Number(2), Number(1), Number(100) ]
+  ///     handler = (List<double> args) => args.reduce(math.min)
+  ///     f = AlgorithmicFunction('my_min', args, handler);
+  ///
+  /// The name of the function has no functional impact, and is only used in the
+  /// string representation. If the function is defined via the Parser#addFunction
+  /// method instead it is supported by the parser.
+  AlgorithmicFunction(String name, List<Expression> args, this.handler)
+      : super._any(name, args);
+
+  Function handler;
+
+  @override
+  dynamic evaluate(EvaluationType type, ContextModel context) {
+    if (type == EvaluationType.REAL) {
+      List<double> values = args
+          .map<double>((v) => (v.value ?? context.getExpression(v.name))
+              .evaluate(type, context))
+          .toList();
+      return handler(values);
+    }
+
+    throw UnimplementedError('Can not evaluate $name on $type yet.');
+  }
+
+  @override
+  Expression derive(String toVar) =>
+      throw UnimplementedError('Can not derive algorithmic functions.');
 }
