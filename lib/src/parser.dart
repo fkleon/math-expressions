@@ -14,7 +14,7 @@ class Parser {
 
   /// Creates a new parser.
   Parser() : lex = Lexer();
-  Map<String, dynamic> genericFunctionHandlers = <String, dynamic>{};
+  Map<String, dynamic> functionHandlers = <String, dynamic>{};
 
   /// Parses the given input string into an [Expression]. Throws a
   /// [ArgumentError] if the given [inputString] is empty. Throws a
@@ -122,10 +122,11 @@ class Parser {
           break;
         case TokenType.FUNC:
           List<Expression> args = [];
-          for (var i = 0; i < currToken.argCount; ++i)
+          for (var i = 0; i < currToken.argCount; ++i) {
             args.insert(0, exprStack.removeLast());
-          currExpr = GenericFunction(
-              currToken.text, args, genericFunctionHandlers[currToken.text]);
+          }
+          currExpr = AlgorithmicFunction(
+              currToken.text, args, functionHandlers[currToken.text]);
           break;
         default:
           throw FormatException('Unsupported token: $currToken');
@@ -141,9 +142,15 @@ class Parser {
     return exprStack.last;
   }
 
-  void addGenericFunction(String name, dynamic handler) {
+  /// Registers a function handler with the parser.
+  ///
+  /// This can be used to define custom functions that run native Dart code.
+  void addFunction(String name, dynamic handler) {
+    if (lex.keywords.containsKey(name)) {
+      throw FormatException('Cannot redefine existing function $name');
+    }
     lex.keywords[name] = TokenType.FUNC;
-    genericFunctionHandlers[name] = handler;
+    functionHandlers[name] = handler;
   }
 }
 

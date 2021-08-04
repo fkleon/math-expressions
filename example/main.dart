@@ -11,7 +11,7 @@ void main() {
   _expression_creation_and_evaluation();
   _expression_simplification_and_differentiation();
   _custom_function_definition_and_use();
-  _generic_function_definition_and_use();
+  _algorithmic_function_definition_and_use();
 }
 
 /// Example 1: Expression creation and evaluation
@@ -103,20 +103,20 @@ void _custom_function_definition_and_use() {
       'leftshift(${cm.getExpression('x')}, ${cm.getExpression('i')}) = ${leftshift.evaluate(EvaluationType.REAL, cm)}');
 }
 
-/// Example 4: Generic function definition and use
+/// Example 4: Algorithmic function definition and use
 ///
-/// How to create and parse a generic function that's bound to a Dart handler.
-void _generic_function_definition_and_use() {
-  print('\nExample 4: Generic function definition and use\n');
+/// How to create and parse an algorithmic function that's bound to a Dart handler.
+void _algorithmic_function_definition_and_use() {
+  print('\nExample 4: Algorithmic function definition and use\n');
 
-  // (1) Create expression via parser by registering a generic function name
+  // (1) Create expression via parser by registering a function name
   Parser p = Parser();
-  p.addGenericFunction('my_min', (List<double> args) => args.reduce(math.min));
+  p.addFunction('my_min', (List<double> args) => args.reduce(math.min));
   Expression exp = p.parse('my_min(1, x, -1)');
 
   print('my_min(1, x, -1) = $exp');
 
-  // (1) Evaluate generic function: MY_MIN (R^3 -> R)
+  // (1) Evaluate algorithmic function: MY_MIN (R^3 -> R)
   ContextModel cm = ContextModel();
   Variable x = Variable('x');
 

@@ -370,9 +370,8 @@ class ParserTests extends TestSet {
       Token('e', TokenType.EFUNC)
     ]);
 
-    // Generic function
-    pars.addGenericFunction(
-        'my_min', (List<double> args) => args.reduce(math.min));
+    // Algorithmic function
+    pars.addFunction('my_min', (List<double> args) => args.reduce(math.min));
     lex.keywords['my_min'] = TokenType.FUNC;
     inputStrings.add('my_min(1,x,-2)');
     tokenStreams.add([

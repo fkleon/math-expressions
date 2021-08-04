@@ -952,27 +952,38 @@ class Sgn extends DefaultFunction {
   }
 }
 
-class GenericFunction extends DefaultFunction {
+class AlgorithmicFunction extends DefaultFunction {
   /// Creates a generic function with variable number of arguments.
   ///
-  /// For example, to create min(2,23,4,5,2314,213,5,324):
+  /// For example, to create a function that returns the minimum value
+  /// in a given list of arguments:
   ///
-  GenericFunction(String name, List<Expression> args, this.handler)
+  ///     args = [ Number(2), Number(1), Number(100) ]
+  ///     handler = (List<double> args) => args.reduce(math.min)
+  ///     f = AlgorithmicFunction('my_min', args, handler);
+  ///
+  /// The name of the function has no functional impact, and is only used in the
+  /// string representation. If the function is defined via the Parser#addFunction
+  /// method instead it is supported by the parser.
+  AlgorithmicFunction(String name, List<Expression> args, this.handler)
       : super._any(name, args);
 
-  dynamic handler;
+  Function handler;
 
   @override
   dynamic evaluate(EvaluationType type, ContextModel context) {
-    List<double> values = args
-        .map<double>((v) =>
-            (v.value ?? context.getExpression(v.name)).evaluate(type, context))
-        .toList();
-    if (type == EvaluationType.REAL) return handler(values);
+    if (type == EvaluationType.REAL) {
+      List<double> values = args
+          .map<double>((v) => (v.value ?? context.getExpression(v.name))
+              .evaluate(type, context))
+          .toList();
+      return handler(values);
+    }
 
     throw UnimplementedError('Can not evaluate $name on $type yet.');
   }
 
   @override
-  Expression derive(String toVar) => Number(0);
+  Expression derive(String toVar) =>
+      throw UnimplementedError('Can not derive algorithmic functions.');
 }
