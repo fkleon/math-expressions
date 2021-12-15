@@ -952,6 +952,40 @@ class Sgn extends DefaultFunction {
   }
 }
 
+/// simple factorial function
+/// might be expanded to the [Gamma function](https://en.wikipedia.org/wiki/Gamma_function)
+/// to allow negative and complex numbers and deriving
+class Factorial extends DefaultFunction {
+  Factorial(Expression arg) : super._unary('factorial', arg);
+
+  Expression get arg => getParam(0);
+
+  @override
+  Expression derive(String toVar) => Number(0);
+
+  @override
+  Expression simplify() => Factorial(arg.simplify());
+
+  @override
+  dynamic evaluate(EvaluationType type, ContextModel context) {
+    final dynamic argEval = arg.evaluate(type, context);
+
+    if (argEval < 0) {
+      throw ArgumentError.value(
+          argEval, 'Factorial', 'Negative values not supported.');
+    }
+    if (type == EvaluationType.REAL) {
+      dynamic product = 1;
+      for (dynamic i = 1; i <= argEval.round(); i++) {
+        product *= i;
+      }
+      return product;
+    }
+
+    throw UnimplementedError('Can not evaluate $name on $type yet.');
+  }
+}
+
 class AlgorithmicFunction extends DefaultFunction {
   /// Creates a generic function with variable number of arguments.
   ///
