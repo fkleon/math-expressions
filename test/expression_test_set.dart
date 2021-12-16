@@ -564,7 +564,8 @@ class ExpressionTests extends TestSet {
         Ceil(exp),
         Floor(exp),
         Abs(exp),
-        Sgn(exp)
+        Sgn(exp),
+        Factorial(exp)
       ];
 
   /// Tests simplification of default functions.
@@ -692,6 +693,13 @@ class ExpressionTests extends TestSet {
     exp = Sgn(Number(0));
     expect(exp.simplify(), TypeMatcher<Sgn>());
     expect((exp.simplify() as Sgn).arg, TypeMatcher<BoundVariable>());
+
+    /*
+     * Factorial
+     */
+    exp = Factorial(Number(0));
+    expect(exp.simplify(), TypeMatcher<Number>());
+    expect((exp.simplify() as Number).value == 1, isTrue);
   }
 
   /// Tests differentiation of default functions.
@@ -1112,6 +1120,28 @@ class ExpressionTests extends TestSet {
     // floor(-∞) = unsupported
     expect(() => Ceil(negInfty).evaluate(real, cm),
         throwsA(TypeMatcher<UnsupportedError>()));
+
+    /*
+     * Factorial
+     */
+    // fac(0) = 1
+    eval = Factorial(zero).evaluate(real, cm);
+    expect(eval, equals(1));
+    // fac(-1) = unsupported
+    expect(() => Factorial(-one).evaluate(real, cm),
+        throwsA(TypeMatcher<ArgumentError>()));
+    // fac(1) = 1
+    eval = Factorial(one).evaluate(real, cm);
+    expect(eval, equals(1));
+    // fac(1.5) = fac(2) = 2
+    eval = Factorial(Number(1.5)).evaluate(real, cm);
+    expect(eval, equals(2));
+    // fac(∞) = Either an error or just a weird value because it overflowed
+    /*expect(() => Factorial(infinity).evaluate(real, cm),
+        throwsA(TypeMatcher<UnsupportedError>()));*/
+    // fac(-∞) = unsupported
+    expect(() => Factorial(negInfty).evaluate(real, cm),
+        throwsA(TypeMatcher<ArgumentError>()));
   }
 
   /// Tests INTERVAL evaluation of default functions.
@@ -1147,7 +1177,7 @@ class ExpressionTests extends TestSet {
     throw UnimplementedError();
   }
 
-  /// Testss REAL evaluation of custom functions: `R^n -> R`
+  /// Tests REAL evaluation of custom functions: `R^n -> R`
   void cusFuncRealEval() {
     Variable x, y, z;
     CustomFunction cf;
@@ -1176,7 +1206,10 @@ class ExpressionTests extends TestSet {
     Expression two = Number(2);
     cf =
         CustomFunction('length', vars, Sqrt((x ^ two) + (y ^ two) + (z ^ two)));
-    cm..bindVariable(x, two)..bindVariable(y, two)..bindVariable(z, Number(3));
+    cm
+      ..bindVariable(x, two)
+      ..bindVariable(y, two)
+      ..bindVariable(z, Number(3));
 
     expect(cf.evaluate(real, cm), closeTo(4.1231, 0.0001));
   }

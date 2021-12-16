@@ -964,7 +964,13 @@ class Factorial extends DefaultFunction {
   Expression derive(String toVar) => Number(0);
 
   @override
-  Expression simplify() => Factorial(arg.simplify());
+  Expression simplify() {
+    final Expression sarg = arg.simplify();
+    if (sarg is Number && (sarg.value == 0 || sarg.value == 1)) {
+      return Number(1);
+    }
+    return Factorial(arg.simplify());
+  }
 
   @override
   dynamic evaluate(EvaluationType type, ContextModel context) {
