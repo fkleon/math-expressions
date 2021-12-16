@@ -976,7 +976,7 @@ class Factorial extends DefaultFunction {
     }
     if (type == EvaluationType.REAL) {
       dynamic product = 1;
-      for (dynamic i = 1; i <= argEval.round(); i++) {
+      for (int i = 1; i <= argEval.round(); i++) {
         product *= i;
       }
       return product;
