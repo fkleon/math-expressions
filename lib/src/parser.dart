@@ -526,7 +526,8 @@ class TokenType {
       TokenType._internal('UNMINUS', 3, leftAssociative: false, operator: true);
 
   // Functions
-  static const TokenType FACTORIAL = TokenType._internal('FACTORIAL', 5, function: true);
+  static const TokenType FACTORIAL =
+      TokenType._internal('FACTORIAL', 5, function: true);
   static const TokenType SQRT = TokenType._internal('SQRT', 5, function: true);
   static const TokenType ROOT = TokenType._internal('ROOT', 5, function: true);
   static const TokenType LOG = TokenType._internal('LOG', 5, function: true);
