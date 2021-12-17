@@ -992,6 +992,9 @@ class Factorial extends DefaultFunction {
   }
 }
 
+  @override
+  String toString() => '$arg!';
+
 class AlgorithmicFunction extends DefaultFunction {
   /// Creates a generic function with variable number of arguments.
   ///
