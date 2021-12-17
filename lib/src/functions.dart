@@ -981,7 +981,7 @@ class Factorial extends DefaultFunction {
           argEval, 'Factorial', 'Negative values not supported.');
     }
     if (type == EvaluationType.REAL) {
-      dynamic product = 1;
+      dynamic product = 1.0;
       for (int i = 1; i <= argEval.round(); i++) {
         product *= i;
       }
