@@ -120,6 +120,9 @@ class Parser {
         case TokenType.SGN:
           currExpr = Sgn(exprStack.removeLast());
           break;
+        case TokenType.FACTORIAL:
+          currExpr = Factorial(exprStack.removeLast());
+          break;
         case TokenType.FUNC:
           List<Expression> args = [];
           for (var i = 0; i < currToken.argCount; ++i) {
@@ -177,6 +180,7 @@ class Lexer {
     keywords['/'] = TokenType.DIV;
     keywords['%'] = TokenType.MOD;
     keywords['^'] = TokenType.POW;
+    keywords['!'] = TokenType.FACTORIAL;
     keywords['nrt'] = TokenType.ROOT;
     keywords['sqrt'] = TokenType.SQRT;
     keywords['log'] = TokenType.LOG;
@@ -215,7 +219,7 @@ class Lexer {
       bool keywordsContainsKey = keywords.containsKey(si);
 
       /*
-      * There's a situation that 'ceil' conflict with 'e', we use this to look back the buffer and decide 
+      * There's a situation that 'ceil' conflict with 'e', we use this to look back the buffer and decide
       * which way should go.
       */
       if (si == 'e' && varBuffer.isNotEmpty) {
@@ -522,6 +526,7 @@ class TokenType {
       TokenType._internal('UNMINUS', 3, leftAssociative: false, operator: true);
 
   // Functions
+  static const TokenType FACTORIAL = TokenType._internal('FACTORIAL', 5, function: true);
   static const TokenType SQRT = TokenType._internal('SQRT', 5, function: true);
   static const TokenType ROOT = TokenType._internal('ROOT', 5, function: true);
   static const TokenType LOG = TokenType._internal('LOG', 5, function: true);

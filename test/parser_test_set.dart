@@ -336,6 +336,15 @@ class ParserTests extends TestSet {
       Token('nrt', TokenType.ROOT)
     ]);
 
+    // Factorial
+    inputStrings.add('10!');
+    tokenStreams.add([
+      Token('10', TokenType.VAL),
+      Token('!', TokenType.FACTORIAL)
+    ]);
+    rpnTokenStreams
+        .add([Token('10', TokenType.VAL), Token('!', TokenType.FACTORIAL)]);
+
     // Exp
     // function syntax
     inputStrings.add('e(x)');
