@@ -1176,7 +1176,10 @@ class ExpressionTests extends TestSet {
     Expression two = Number(2);
     cf =
         CustomFunction('length', vars, Sqrt((x ^ two) + (y ^ two) + (z ^ two)));
-    cm..bindVariable(x, two)..bindVariable(y, two)..bindVariable(z, Number(3));
+    cm
+      ..bindVariable(x, two)
+      ..bindVariable(y, two)
+      ..bindVariable(z, Number(3));
 
     expect(cf.evaluate(real, cm), closeTo(4.1231, 0.0001));
   }
