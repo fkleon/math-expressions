@@ -979,6 +979,9 @@ class Factorial extends DefaultFunction {
     if (argEval < 0) {
       throw ArgumentError.value(
           argEval, 'Factorial', 'Negative values not supported.');
+    } else if (argEval == double.infinity) {
+      throw ArgumentError.value(
+          argEval, 'Factorial', 'Infinity not supported.');
     }
     if (type == EvaluationType.REAL) {
       dynamic product = 1.0;

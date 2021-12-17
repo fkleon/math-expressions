@@ -1136,9 +1136,9 @@ class ExpressionTests extends TestSet {
     // fac(1.5) = fac(2) = 2
     eval = Factorial(Number(1.5)).evaluate(real, cm);
     expect(eval, equals(2));
-    // fac(∞) = Either an error or just a weird value because it overflowed
-    /*expect(() => Factorial(infinity).evaluate(real, cm),
-        throwsA(TypeMatcher<UnsupportedError>()));*/
+    // fac(∞) = unsupported
+    expect(() => Factorial(infinity).evaluate(real, cm),
+        throwsA(TypeMatcher<ArgumentError>()));
     // fac(-∞) = unsupported
     expect(() => Factorial(negInfty).evaluate(real, cm),
         throwsA(TypeMatcher<ArgumentError>()));
