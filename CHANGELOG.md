@@ -5,8 +5,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-
 ## [Unreleased]
+
+## [2.3.0] - 2021-12-21
 
 ### Added
 
@@ -14,8 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Switched from Travis CI to GitHub Actions
-- Adopted [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) format
+- Switch from Travis CI to GitHub Actions
+- Adopt [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) format
 
 ## 2.2.0 - 2021-08-04
 
@@ -167,3 +168,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## 0.0.1 - 2013-10-04
 
 - Initial release of standalone version
+
+[unreleased]: https://github.com/fkleon/math-expressions/compare/2.3.0...HEAD
+[2.3.0]: https://github.com/fkleon/math-expressions/compare/2.2.0...2.3.0
