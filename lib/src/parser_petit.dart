@@ -22,13 +22,13 @@ class ExpressionParser {
       ..wrapper<String, Expression>(
           char('(').trim(), char(')').trim(), (l, e, r) => e);
 
-    // Unary operators
-    builder.group()
-      ..prefix<String, Expression>(char('-').trim(), (op, e) => UnaryMinus(e));
-
     // Binary operators (right associative)
     builder.group()
       ..right<String, Expression>(char('^').trim(), (l, op, r) => Power(l, r));
+
+    // Unary operators
+    builder.group()
+      ..prefix<String, Expression>(char('-').trim(), (op, e) => UnaryMinus(e));
 
     // Binary operators (left associative)
     builder.group()
