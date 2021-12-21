@@ -74,7 +74,8 @@ class PetitParserTests extends TestSet {
     var cases = {
       '1^1': Number(1) ^ Number(1),
       '1^0': Number(1) ^ Number(0),
-      '-1 ^ 2': -Number(1) ^ Number(2),
+      '(-1) ^ 2': -Number(1) ^ Number(2),
+      '-1^2': -(Number(1) ^ Number(2)),
       '1^0 ^20': Number(1) ^ (Number(0) ^ Number(20)),
     };
     parameterized(cases);
