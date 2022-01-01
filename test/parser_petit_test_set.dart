@@ -147,6 +147,15 @@ class PetitParserTests extends TestSet {
       'e^(x+2)': Exponential(Variable('x') + Number(2)),
       'ceil(9.5)': Ceil(Number(9.5)),
       'floor(9.5)': Floor(Number(9.5)),
+      '10!': Factorial(Number(10)),
+    };
+    parameterized(cases);
+  }
+
+  void parseAlgorithmicFunctions() {
+    var cases = {
+      'myFunction(1.0)':
+          AlgorithmicFunction('myFunction', [Number(1.0)], () => null),
     };
     parameterized(cases);
   }
