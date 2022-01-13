@@ -15,12 +15,13 @@ class Parser {
   /// Creates a new parser.
   Parser() : lex = Lexer();
   Map<String, dynamic> functionHandlers = <String, dynamic>{};
+  final String pi = math.pi.toString();
 
   /// Parses the given input string into an [Expression]. Throws a
   /// [ArgumentError] if the given [inputString] is empty. Throws a
   /// [StateError] if the token stream is invalid. Returns a valid
   /// [Expression].
-  Expression parse(String inputString) {
+  Expression parse(String inputString, [bool isRadian = true]) {
     if (inputString.trim().isEmpty) {
       throw FormatException('The given input string was empty.');
     }
@@ -91,13 +92,34 @@ class Parser {
           currExpr = Root.fromExpr(left as Number, right);
           break;
         case TokenType.SIN:
-          currExpr = Sin(exprStack.removeLast());
+          if (isRadian) {
+            currExpr = Sin(exprStack.removeLast());
+          } else {
+            String sin =
+                exprStack.removeLast().toString() + '*($pi/180)';
+            Expression expr = parse(sin);
+            currExpr = Sin(expr);
+          }
           break;
         case TokenType.COS:
-          currExpr = Cos(exprStack.removeLast());
+          if (isRadian) {
+            currExpr = Cos(exprStack.removeLast());
+          } else {
+            String cos =
+                exprStack.removeLast().toString() + '*($pi/180)';
+            Expression expr = parse(cos);
+            currExpr = Cos(expr);
+          }
           break;
         case TokenType.TAN:
-          currExpr = Tan(exprStack.removeLast());
+          if (isRadian) {
+            currExpr = Tan(exprStack.removeLast());
+          } else {
+            String tan =
+                exprStack.removeLast().toString() + '*($pi/180)';
+            Expression expr = parse(tan);
+            currExpr = Tan(expr);
+          }
           break;
         case TokenType.ASIN:
           currExpr = Asin(exprStack.removeLast());
