@@ -19,7 +19,7 @@ math_expressions is inspired by [mathExpr][] for Java and distributed under the
 This package contains a very simple [command-line interpreter](bin/interpreter.dart)
 for real numbers:
 
-    flutter pub run math_expressions:interpreter
+    dart pub run math_expressions:interpreter
 
 ### What's not working yet?
 
