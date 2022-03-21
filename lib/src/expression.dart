@@ -589,9 +589,21 @@ class Power extends BinaryOperator {
 
   @override
   dynamic evaluate(EvaluationType type, ContextModel context) {
+    final num base = first.evaluate(type, context);
     if (type == EvaluationType.REAL) {
-      return math.pow(
-          first.evaluate(type, context), second.evaluate(type, context));
+      // Consider the following equation: x^(2/y).
+      // This equation can be evaluated for any negative x, since the sub result
+      // is positive due to the even numerator. However, the IEEE Standard for
+      // for Floating-Point Arithmetic defines NaN in the case of a negative
+      // base and a finite non-integer as the exponent. That's why we rewrite
+      // the equation manually.
+      if (base.isNegative && second is Divide) {
+        final num numerator = (second as Divide).first.evaluate(type, context);
+        final num denominator =
+            (second as Divide).second.evaluate(type, context);
+        return math.pow(math.pow(base, numerator), (1 / denominator));
+      }
+      return math.pow(base, second.evaluate(type, context));
     }
 
     if (type == EvaluationType.INTERVAL) {
