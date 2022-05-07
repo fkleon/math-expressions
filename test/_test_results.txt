@@ -1,0 +1,252 @@
+-----------------
+ addThree ( 2 )  => addThree({2.0})
+ => ERROR
+Bad state: Function Handler not found: addThree
+-----------------
+ addTwo ( 3 )  => addTwo({3.0})
+vars: {}
+5.0
+-----------------
+ √100 + x  => (sqrt({100.0}) + x)
+vars: {x: 5.0}
+15.0
+-----------------
+ ∜16 + x  => (nrt(4,{16.0}) + x)
+vars: {x: 5.0}
+7.0
+-----------------
+ ∞  => Infinity
+vars: {}
+Infinity
+-----------------
+ −∞  => (-Infinity)
+vars: {}
+-Infinity
+-----------------
+ 2 − 2  => (2.0 - 2.0)
+vars: {}
+0.0
+-----------------
+ 2 × 2  => (2.0 * 2.0)
+vars: {}
+4.0
+-----------------
+ 2 ÷ 2  => (2.0 / 2.0)
+vars: {}
+1.0
+-----------------
+ −2  => (-2.0)
+vars: {}
+-2.0
+-----------------
+ - 2  => (-2.0)
+vars: {}
+-2.0
+-----------------
+ e^ 1  => e({1.0})
+vars: {}
+2.718281828459045
+-----------------
+ e^ ( 1 )  => e({1.0})
+vars: {}
+2.718281828459045
+-----------------
+ e^ ( 1 , 2 )  => ERROR
+FormatException: 
+line 1, column 2: Wrong number or types of arguments
+  ,
+1 |  e^ ( 1 , 2 ) 
+  |  ^^^^^^^^^^^^
+  '
+-----------------
+ x + 2 * 3 + x  => ((x + (2.0 * 3.0)) + x)
+vars: {x: 5.0}
+16.0
+-----------------
+ - 1 * 3  => ((-1.0) * 3.0)
+vars: {}
+-3.0
+-----------------
+ -1 ^ 2 ^ 3 * 5 ^ 6 % 7 / 8  => (((((((-1.0)^2.0)^3.0) * 5.0)^6.0) % 7.0) / 8.0)
+vars: {}
+0.125
+-----------------
+ x !  => x!
+vars: {x: 5.0}
+120.0
+-----------------
+ x ! * 2  => (x! * 2.0)
+vars: {x: 5.0}
+240.0
+-----------------
+ - x ! * 2  => ({(-x)}! * 2.0)
+ => ERROR
+Invalid argument (Factorial): Negative values not supported.: -5.0
+-----------------
+ 1 + x * 3 - sqrt ( 5 ^ 2.0 )  => ((1.0 + (x * 3.0)) - sqrt({(5.0^2.0)}))
+vars: {x: 5.0}
+11.0
+-----------------
+ π  => 3.141592653589793
+vars: {}
+3.141592653589793
+-----------------
+ π * 2  => (3.141592653589793 * 2.0)
+vars: {}
+6.283185307179586
+-----------------
+ sin ( 1 )  => sin({1.0})
+vars: {}
+0.8414709848078965
+-----------------
+ sin ( 90 ° )  => sin({1.5707963267948966})
+vars: {}
+1.0
+-----------------
+ sin ( 90 ° )  => sin({1.5707963267948966})
+vars: {}
+1.0
+-----------------
+ sin ( 85 ° + x ° )  => sin({(1.4835298641951802 + (x * 0.017453292519943295))})
+vars: {x: 5.0}
+1.0
+-----------------
+ sqrt + sqrt + 1 - 2  => (((sqrt + sqrt) + 1.0) - 2.0)
+ => ERROR
+Bad state: Variable not bound: sqrt
+-----------------
+ 1x  => ERROR
+FormatException: 
+line 1, column 3: Expected: 'EOF'
+  ,
+1 |  1x 
+  |   ^
+  '
+-----------------
+ 1 + sqrt  => (1.0 + sqrt)
+ => ERROR
+Bad state: Variable not bound: sqrt
+-----------------
+ 1 + sqrt ( 2 , 3 )  => ERROR
+FormatException: 
+line 1, column 6: Wrong number or types of arguments
+  ,
+1 |  1 + sqrt ( 2 , 3 ) 
+  |      ^^^^^^^^^^^^^^
+  '
+-----------------
+ nrt ( x , y )  => ERROR
+FormatException: 
+line 1, column 2: Wrong number or types of arguments
+  ,
+1 |  nrt ( x , y ) 
+  |  ^^^^^^^^^^^^^
+  '
+-----------------
+ nrt ( 1 )  => ERROR
+FormatException: 
+line 1, column 2: Wrong number or types of arguments
+  ,
+1 |  nrt ( 1 ) 
+  |  ^^^^^^^^^
+  '
+-----------------
+ addTwo ( 3  => ERROR
+FormatException: 
+line 1, column 13: Expected: ')'
+  ,
+1 |  addTwo ( 3  
+  |             ^
+  '
+-----------------
+ addTwo ( 3 ,  => ERROR
+FormatException: 
+line 1, column 15: Expected: 'expression'
+  ,
+1 |  addTwo ( 3 ,  
+  |               ^
+  '
+-----------------
+ addTwo ( 3 (  => ERROR
+FormatException: 
+line 1, column 13: Expected: ')'
+  ,
+1 |  addTwo ( 3 ( 
+  |             ^
+  '
+-----------------
+ x -  => ERROR
+FormatException: 
+line 1, column 6: Expected: 'expression'
+  ,
+1 |  x -  
+  |      ^
+  '
+-----------------
+ 5.x  => ERROR
+FormatException: 
+line 1, column 4: Unexpected 'x'
+  ,
+1 |  5.x 
+  |    ^
+  '
+-----------------
+ abs (- 1 )  => abs({(-1.0)})
+vars: {}
+1.0
+-----------------
+ arccos ( 1 )  => arccos({1.0})
+vars: {}
+0.0
+-----------------
+ arcsin ( 1 )  => arcsin({1.0})
+vars: {}
+1.5707963267948966
+-----------------
+ arctan ( 1 )  => arctan({1.0})
+vars: {}
+0.7853981633974483
+-----------------
+ ceil ( 1 )  => ceil({1.0})
+vars: {}
+1.0
+-----------------
+ cos ( 1 )  => cos({1.0})
+vars: {}
+0.5403023058681397
+-----------------
+ e^ ( 1 )  => e({1.0})
+vars: {}
+2.718281828459045
+-----------------
+ floor ( 1 )  => floor({1.0})
+vars: {}
+1.0
+-----------------
+ ln ( 1 )  => ln({1.0})
+vars: {}
+0.0
+-----------------
+ log ( 10 , 100 )  => log({10.0},{100.0})
+vars: {}
+2.0
+-----------------
+ nrt ( 2, 9 )  => nrt(2,{9.0})
+vars: {}
+3.0
+-----------------
+ sgn ( -5 )  => sgn({(-5.0)})
+vars: {}
+-1.0
+-----------------
+ sin ( 1 )  => sin({1.0})
+vars: {}
+0.8414709848078965
+-----------------
+ sqrt ( 9 )  => sqrt({9.0})
+vars: {}
+3.0
+-----------------
+ tan ( 1 )  => tan({1.0})
+vars: {}
+1.5574077246549023
