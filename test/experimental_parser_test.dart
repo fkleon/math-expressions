@@ -292,8 +292,7 @@ void _test() {
       data.variables.forEach((k, v) => context.bindVariable(Variable(k), v));
       if (data.hasParseErrors) {
         final state = parser.State(data.source);
-        state.context = ContextModel();
-        parser.parse(state);
+        parser.parse(state, handlers: data.handlers);
         expect(state.ok, false, reason: 'Test state.ok: ' + data.source);
         continue;
       }
@@ -333,8 +332,7 @@ void _test() {
         final result = p.parse(data.source);
         sb.writeln(' => $result');
         final context = ContextModel();
-        data.variables.forEach(
-            (key, value) => context.bindVariable(Variable(key), value));
+        data.variables.forEach((k, v) => context.bindVariable(Variable(k), v));
         Object? result2 = result.evaluate(EvaluationType.REAL, context);
         sb.writeln('vars: ${context.variables}');
         sb.writeln('$result2');

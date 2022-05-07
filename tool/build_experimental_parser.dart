@@ -181,6 +181,7 @@ Expression parseString(String source,
 
 Expression? parse(State<String> state,
     {Map<String, Function> handlers = const {}}) {
+  state.context = _Context(handlers: handlers);
   return _parse(state);
 }''';
 
@@ -212,29 +213,35 @@ const _constantExpression = Named(
       _constantNegativeInfinity,
     ));
 
-const _constantInfinity = Named(
+const _constantInfinity = Named<String, Expression>(
     '_constantInfinity',
-    Map1(Tag('∞'),
-        ExpressionAction<Expression>(['_'], 'Number(double.infinity)')));
+    Preceded(
+        Tag('∞'),
+        Calculate(
+            ExpressionAction<Expression>([], 'Number(double.infinity)'))));
 
-const _constantNegativeInfinity = Named(
+const _constantNegativeInfinity = Named<String, Expression>(
     '_constantNegativeInfinity',
-    Map1(
+    Preceded(
         Tags(['-∞', '−∞']),
-        ExpressionAction<Expression>(
-            ['_'], 'Number(double.negativeInfinity)')));
+        Calculate(ExpressionAction<Expression>(
+            [], 'Number(double.negativeInfinity)'))));
 
-const _constantPi = Named(
+const _constantPi = Named<String, Expression>(
     '_constantPi',
-    Map1(Tag('π'),
-        ExpressionAction<Expression>(['_'], 'Number(3.141592653589793)')));
+    Preceded(
+        Tag('π'),
+        Calculate(
+            ExpressionAction<Expression>([], 'Number(3.141592653589793)'))));
 
-const _decimal = Nested(
-    'decimal number',
-    Map1(Recognize(Tuple3(_memoizedDigitsForNumber, Silent(Tag('.')), _digit1)),
-        ExpressionAction<Expression>(['x'], 'Number(num.parse({{x}}))')));
+const _decimal = Named(
+    '_decimal',
+    Nested(
+        'decimal number',
+        Map1(Recognize(Tuple3(_memoizedDigits, Silent(Tag('.')), _digits)),
+            ExpressionAction<Expression>(['x'], 'Number(num.parse({{x}}))'))));
 
-const _digit1 = Named('_digit1', Digit1());
+const _digits = Named('_digit1', Digit1());
 
 const _eof = Named('_eof', Eof<String>());
 
@@ -253,7 +260,7 @@ const _exponentialFunction = Named(
 const _exponentialLiteral = Terminated(Tag('e^'), _ws);
 
 const _exponentialOperation = Named(
-    '_exponentialOperator',
+    '_exponentialOperation',
     Map2(Fast(_exponentialLiteral), _number,
         ExpressionAction<Expression>(['x'], 'Exponential({{x}})')));
 
@@ -275,14 +282,14 @@ const _integer = Named(
     '_integer',
     Expected(
         'integer',
-        Map1(Recognize(_memoizedDigitsForNumber),
+        Map1(Recognize(_memoizedDigits),
             ExpressionAction<Expression>(['x'], 'Number(int.parse({{x}}))'))));
 
 const _isIdentEnd = CharClasses([_isIdentStart, CharClass('[0-9_]')]);
 
 const _isIdentStart = CharClass('[a-zA-Z]');
 
-const _memoizedDigitsForNumber = Memoize(_digit1);
+const _memoizedDigits = Memoize(_digits);
 
 const _memoizedIdentifier = Memoize(_identifier);
 
@@ -294,14 +301,7 @@ const _multiplicative = Named(
 const _multiplicativeOperator = Named('_multiplicativeOperator',
     Terminated(Tags(['*', '×', '/', '÷', '%', '^']), _ws));
 
-const _number = Named('_number', Nested('number', _numberImpl));
-
-const _numberImpl = Named(
-    '_numberImpl',
-    Alt2(
-      _decimal,
-      _integer,
-    ));
+const _number = Named('_number', Nested('number', Alt2(_decimal, _integer)));
 
 const _openParen = Named('_openParen', Terminated(Tag('('), _ws));
 

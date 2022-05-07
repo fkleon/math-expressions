@@ -17,6 +17,7 @@ Expression parseString(String source,
 
 Expression? parse(State<String> state,
     {Map<String, Function> handlers = const {}}) {
+  state.context = _Context(handlers: handlers);
   return _parse(state);
 }
 
@@ -122,39 +123,7 @@ void _digit1(State<String> state) {
   }
 }
 
-Expression? _integer(State<String> state) {
-  Expression? $0;
-  final source = state.source;
-  final $log = state.log;
-  state.log = false;
-  Expression? $1;
-  String? $2;
-  final $pos = state.pos;
-  final $memo = state.memoized<String?>(0, false, state.pos);
-  if ($memo != null) {
-    $memo.restore(state);
-  } else {
-    final $pos1 = state.pos;
-    _digit1(state);
-    state.memoize<String?>(0, true, $pos1);
-  }
-  if (state.ok) {
-    $2 = source.slice($pos, state.pos);
-  }
-  if (state.ok) {
-    final v = $2!;
-    $1 = Number(int.parse(v));
-  }
-  state.log = $log;
-  if (state.ok) {
-    $0 = $1;
-  } else {
-    state.fail(state.pos, ParseError.expected, 0, 'integer');
-  }
-  return $0;
-}
-
-Expression? _numberImpl(State<String> state) {
+Expression? _decimal(State<String> state) {
   Expression? $0;
   final source = state.source;
   final $min = state.minErrorPos;
@@ -163,7 +132,7 @@ Expression? _numberImpl(State<String> state) {
   String? $2;
   final $pos = state.pos;
   final $pos1 = state.pos;
-  final $memo = state.memoized<String?>(0, false, state.pos);
+  final $memo = state.memoized<String?>(0, true, state.pos);
   if ($memo != null) {
     $memo.restore(state);
   } else {
@@ -204,8 +173,37 @@ Expression? _numberImpl(State<String> state) {
   } else {
     state.fail(state.pos, ParseError.expected, 0, 'decimal number');
   }
-  if (!state.ok) {
-    $0 = _integer(state);
+  return $0;
+}
+
+Expression? _integer(State<String> state) {
+  Expression? $0;
+  final source = state.source;
+  final $log = state.log;
+  state.log = false;
+  Expression? $1;
+  String? $2;
+  final $pos = state.pos;
+  final $memo = state.memoized<String?>(0, true, state.pos);
+  if ($memo != null) {
+    $memo.restore(state);
+  } else {
+    final $pos1 = state.pos;
+    _digit1(state);
+    state.memoize<String?>(0, true, $pos1);
+  }
+  if (state.ok) {
+    $2 = source.slice($pos, state.pos);
+  }
+  if (state.ok) {
+    final v = $2!;
+    $1 = Number(int.parse(v));
+  }
+  state.log = $log;
+  if (state.ok) {
+    $0 = $1;
+  } else {
+    state.fail(state.pos, ParseError.expected, 0, 'integer');
   }
   return $0;
 }
@@ -215,7 +213,10 @@ Expression? _number(State<String> state) {
   final $min = state.minErrorPos;
   state.minErrorPos = state.pos + 1;
   Expression? $1;
-  $1 = _numberImpl(state);
+  $1 = _decimal(state);
+  if (!state.ok) {
+    $1 = _integer(state);
+  }
   state.minErrorPos = $min;
   if (state.ok) {
     $0 = $1;
@@ -225,7 +226,7 @@ Expression? _number(State<String> state) {
   return $0;
 }
 
-Expression? _exponentialOperator(State<String> state) {
+Expression? _exponentialOperation(State<String> state) {
   Expression? $0;
   final source = state.source;
   final $pos = state.pos;
@@ -412,7 +413,7 @@ Expression? _exponentialFunction(State<String> state) {
 
 Expression? _exponentialExpression(State<String> state) {
   Expression? $0;
-  $0 = _exponentialOperator(state);
+  $0 = _exponentialOperation(state);
   if (!state.ok) {
     $0 = _exponentialFunction(state);
   }
@@ -422,17 +423,22 @@ Expression? _exponentialExpression(State<String> state) {
 Expression? _constantPi(State<String> state) {
   Expression? $0;
   final source = state.source;
-  String? $1;
+  final $pos = state.pos;
   state.ok = state.pos < source.length && source.codeUnitAt(state.pos) == 960;
   if (state.ok) {
     state.pos += 1;
-    $1 = 'π';
   } else {
     state.fail(state.pos, ParseError.expected, 0, 'π');
   }
   if (state.ok) {
-    final v = $1!;
-    $0 = Number(3.141592653589793);
+    state.ok = true;
+    if (state.ok) {
+      $0 = Number(3.141592653589793);
+    }
+  }
+  if (!state.ok) {
+    $0 = null;
+    state.pos = $pos;
   }
   return $0;
 }
@@ -440,17 +446,22 @@ Expression? _constantPi(State<String> state) {
 Expression? _constantInfinity(State<String> state) {
   Expression? $0;
   final source = state.source;
-  String? $1;
+  final $pos = state.pos;
   state.ok = state.pos < source.length && source.codeUnitAt(state.pos) == 8734;
   if (state.ok) {
     state.pos += 1;
-    $1 = '∞';
   } else {
     state.fail(state.pos, ParseError.expected, 0, '∞');
   }
   if (state.ok) {
-    final v = $1!;
-    $0 = Number(double.infinity);
+    state.ok = true;
+    if (state.ok) {
+      $0 = Number(double.infinity);
+    }
+  }
+  if (!state.ok) {
+    $0 = null;
+    state.pos = $pos;
   }
   return $0;
 }
@@ -458,7 +469,7 @@ Expression? _constantInfinity(State<String> state) {
 Expression? _constantNegativeInfinity(State<String> state) {
   Expression? $0;
   final source = state.source;
-  String? $1;
+  final $pos = state.pos;
   state.ok = state.pos < source.length;
   if (state.ok) {
     final pos = state.pos;
@@ -476,17 +487,20 @@ Expression? _constantNegativeInfinity(State<String> state) {
       }
     }
     state.ok = v != null;
-    if (state.ok) {
-      $1 = v;
-    }
   }
   if (!state.ok) {
     state.fail(state.pos, ParseError.expected, 0, '-∞');
     state.fail(state.pos, ParseError.expected, 0, '−∞');
   }
   if (state.ok) {
-    final v = $1!;
-    $0 = Number(double.negativeInfinity);
+    state.ok = true;
+    if (state.ok) {
+      $0 = Number(double.negativeInfinity);
+    }
+  }
+  if (!state.ok) {
+    $0 = null;
+    state.pos = $pos;
   }
   return $0;
 }

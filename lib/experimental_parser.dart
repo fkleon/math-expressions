@@ -31,7 +31,7 @@ class Parser2 implements Parser {
       throw ArgumentError.value(handler, 'handler', "Must be 'Function'");
     }
 
-    if (functionHandlers.containsKey(name) && _reservedWords.contains(name)) {
+    if (functionHandlers.containsKey(name) || _reservedWords.contains(name)) {
       throw FormatException('Cannot redefine existing function $name');
     }
 
