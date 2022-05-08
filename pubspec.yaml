@@ -4,6 +4,8 @@ homepage: https://github.com/fkleon/math-expressions
 description: A library for parsing and evaluating mathematical expressions, supporting real numbers, vectors, and basic interval arithmetic.
 
 dependencies:
+  source_span: ^1.9.0
+  tuple: ^2.0.0
   vector_math: ^2.1.0
 
 dev_dependencies:
