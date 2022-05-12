@@ -25,7 +25,11 @@ void _ws(State<String> state) {
   final source = state.source;
   while (state.pos < source.length) {
     final c = source.codeUnitAt(state.pos);
-    final ok = c <= 32 && (c >= 9 && c <= 10 || c == 13 || c == 32);
+    final ok = c <= 13
+        ? c <= 10
+            ? c >= 9
+            : c == 13
+        : c == 32;
     if (!ok) {
       break;
     }
@@ -111,7 +115,7 @@ void _digit1(State<String> state) {
   final $pos = state.pos;
   while (state.pos < source.length) {
     final c = source.codeUnitAt(state.pos);
-    final ok = c >= 48 && c <= 57;
+    final ok = c <= 57 && c >= 48;
     if (!ok) {
       break;
     }
@@ -525,16 +529,18 @@ String? _identifier(State<String> state) {
   state.ok = state.pos < source.length;
   if (state.ok) {
     final c = source.codeUnitAt(state.pos++);
-    state.ok = c <= 122 && (c >= 65 && c <= 90 || c >= 97 && c <= 122);
+    state.ok = c <= 90 ? c >= 65 : c <= 122 && c >= 97;
     if (state.ok) {
       while (state.pos < source.length) {
         final pos = state.pos;
         final c = source.codeUnitAt(state.pos++);
-        state.ok = c <= 122 &&
-            (c >= 48 && c <= 57 ||
-                c >= 65 && c <= 90 ||
-                c == 95 ||
-                c >= 97 && c <= 122);
+        state.ok = c <= 90
+            ? c <= 57
+                ? c >= 48
+                : c >= 65
+            : c <= 95
+                ? c == 95
+                : c <= 122 && c >= 97;
         if (!state.ok) {
           state.pos = pos;
           break;
