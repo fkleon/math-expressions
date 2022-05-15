@@ -55,10 +55,10 @@ Expression? _parse(State<String> state) {
     if (state.ok) {
       _eof(state);
     }
-  }
-  if (!state.ok) {
-    $0 = null;
-    state.pos = $pos;
+    if (!state.ok) {
+      $0 = null;
+      state.pos = $pos;
+    }
   }
   return $0;
 }
@@ -102,10 +102,10 @@ String? _unaryOperator(State<String> state) {
   }
   if (state.ok) {
     _ws(state);
-  }
-  if (!state.ok) {
-    $0 = null;
-    state.pos = $pos;
+    if (!state.ok) {
+      $0 = null;
+      state.pos = $pos;
+    }
   }
   return $0;
 }
@@ -156,9 +156,6 @@ Expression? _decimal(State<String> state) {
     state.log = $log;
     if (state.ok) {
       _digit1(state);
-      if (state.ok) {
-        //
-      }
     }
   }
   if (!state.ok) {
@@ -245,9 +242,9 @@ Expression? _exponentialOperation(State<String> state) {
   }
   if (state.ok) {
     _ws(state);
-  }
-  if (!state.ok) {
-    state.pos = $pos1;
+    if (!state.ok) {
+      state.pos = $pos1;
+    }
   }
   if (state.ok) {
     Expression? $1;
@@ -274,9 +271,9 @@ void _openParen(State<String> state) {
   }
   if (state.ok) {
     _ws(state);
-  }
-  if (!state.ok) {
-    state.pos = $pos;
+    if (!state.ok) {
+      state.pos = $pos;
+    }
   }
 }
 
@@ -291,9 +288,9 @@ void _comma(State<String> state) {
   }
   if (state.ok) {
     _ws(state);
-  }
-  if (!state.ok) {
-    state.pos = $pos;
+    if (!state.ok) {
+      state.pos = $pos;
+    }
   }
 }
 
@@ -347,10 +344,10 @@ List<Expression>? _arguments(State<String> state) {
     if (state.ok) {
       _closeParen(state);
     }
-  }
-  if (!state.ok) {
-    $1 = null;
-    state.pos = $pos;
+    if (!state.ok) {
+      $1 = null;
+      state.pos = $pos;
+    }
   }
   state.minErrorPos = $min;
   if (state.ok) {
@@ -381,20 +378,19 @@ Expression? _exponentialFunction(State<String> state) {
   }
   if (state.ok) {
     _ws(state);
-  }
-  if (!state.ok) {
-    $3 = null;
-    state.pos = $pos2;
+    if (!state.ok) {
+      $3 = null;
+      state.pos = $pos2;
+    }
   }
   if (state.ok) {
     List<Expression>? $4;
     $4 = _arguments(state);
     if (state.ok) {
       $2 = Tuple2($3!, $4!);
+    } else {
+      state.pos = $pos1;
     }
-  }
-  if (!state.ok) {
-    state.pos = $pos1;
   }
   if (state.ok) {
     final v = $2!;
@@ -402,9 +398,9 @@ Expression? _exponentialFunction(State<String> state) {
     if (state.ok) {
       $1 = v;
     } else {
-      final length = $pos - state.pos;
+      final length = state.pos - $pos;
       state.fail(state.pos, ParseError.message, length,
-          'Wrong number or types of arguments');
+          'Wrong number or types of arguments', $pos);
       state.pos = $pos;
     }
   }
@@ -439,10 +435,9 @@ Expression? _constantPi(State<String> state) {
     if (state.ok) {
       $0 = Number(3.141592653589793);
     }
-  }
-  if (!state.ok) {
-    $0 = null;
-    state.pos = $pos;
+    if (!state.ok) {
+      state.pos = $pos;
+    }
   }
   return $0;
 }
@@ -462,10 +457,9 @@ Expression? _constantInfinity(State<String> state) {
     if (state.ok) {
       $0 = Number(double.infinity);
     }
-  }
-  if (!state.ok) {
-    $0 = null;
-    state.pos = $pos;
+    if (!state.ok) {
+      state.pos = $pos;
+    }
   }
   return $0;
 }
@@ -501,10 +495,9 @@ Expression? _constantNegativeInfinity(State<String> state) {
     if (state.ok) {
       $0 = Number(double.negativeInfinity);
     }
-  }
-  if (!state.ok) {
-    $0 = null;
-    state.pos = $pos;
+    if (!state.ok) {
+      state.pos = $pos;
+    }
   }
   return $0;
 }
@@ -591,10 +584,10 @@ String? _identifier(State<String> state) {
   }
   if (state.ok) {
     _ws(state);
-  }
-  if (!state.ok) {
-    $0 = null;
-    state.pos = $pos;
+    if (!state.ok) {
+      $0 = null;
+      state.pos = $pos;
+    }
   }
   return $0;
 }
@@ -619,10 +612,9 @@ Expression? _functionInvocation(State<String> state) {
     $4 = _arguments(state);
     if (state.ok) {
       $2 = Tuple2($3!, $4!);
+    } else {
+      state.pos = $pos1;
     }
-  }
-  if (!state.ok) {
-    state.pos = $pos1;
   }
   if (state.ok) {
     final v = $2!;
@@ -630,9 +622,9 @@ Expression? _functionInvocation(State<String> state) {
     if (state.ok) {
       $1 = v;
     } else {
-      final length = $pos - state.pos;
+      final length = state.pos - $pos;
       state.fail(state.pos, ParseError.message, length,
-          'Wrong number or types of arguments');
+          'Wrong number or types of arguments', $pos);
       state.pos = $pos;
     }
   }
@@ -684,10 +676,10 @@ Expression? _primaryExpression(State<String> state) {
               if (state.ok) {
                 _closeParen(state);
               }
-            }
-            if (!state.ok) {
-              $1 = null;
-              state.pos = $pos1;
+              if (!state.ok) {
+                $1 = null;
+                state.pos = $pos1;
+              }
             }
           }
         }
@@ -702,10 +694,10 @@ Expression? _primaryExpression(State<String> state) {
   }
   if (state.ok) {
     _ws(state);
-  }
-  if (!state.ok) {
-    $0 = null;
-    state.pos = $pos;
+    if (!state.ok) {
+      $0 = null;
+      state.pos = $pos;
+    }
   }
   return $0;
 }
@@ -762,10 +754,10 @@ String? _postfixOperator(State<String> state) {
   }
   if (state.ok) {
     _ws(state);
-  }
-  if (!state.ok) {
-    $0 = null;
-    state.pos = $pos;
+    if (!state.ok) {
+      $0 = null;
+      state.pos = $pos;
+    }
   }
   return $0;
 }
@@ -835,10 +827,10 @@ String? _multiplicativeOperator(State<String> state) {
   }
   if (state.ok) {
     _ws(state);
-  }
-  if (!state.ok) {
-    $0 = null;
-    state.pos = $pos;
+    if (!state.ok) {
+      $0 = null;
+      state.pos = $pos;
+    }
   }
   return $0;
 }
@@ -909,10 +901,10 @@ String? _additiveOperator(State<String> state) {
   }
   if (state.ok) {
     _ws(state);
-  }
-  if (!state.ok) {
-    $0 = null;
-    state.pos = $pos;
+    if (!state.ok) {
+      $0 = null;
+      state.pos = $pos;
+    }
   }
   return $0;
 }
@@ -1048,6 +1040,8 @@ class State<T> {
 
   final List<_Memo?> _memos = List.filled(150, null);
 
+  final List<int> _starts = List.filled(150, 0);
+
   final List<Object?> _values = List.filled(150, null);
 
   State(this.source);
@@ -1055,7 +1049,7 @@ class State<T> {
   List<ParseError> get errors => _buildErrors();
 
   @pragma('vm:prefer-inline')
-  void fail(int pos, int kind, int length, Object? value) {
+  void fail(int pos, int kind, int length, Object? value, [int start = -1]) {
     if (log) {
       if (errorPos <= pos && minErrorPos <= pos) {
         if (errorPos < pos) {
@@ -1065,6 +1059,7 @@ class State<T> {
 
         _kinds[_length] = kind;
         _lengths[_length] = length;
+        _starts[_length] = start;
         _values[_length] = value;
         _length++;
       }
@@ -1126,7 +1121,7 @@ class State<T> {
     for (var i = 0; i < _length; i++) {
       final kind = _kinds[i];
       if (kind == ParseError.expected) {
-        var value = _values[i];
+        final value = _values[i];
         final escaped = _escape(value);
         expected.add(escaped);
       }
@@ -1140,13 +1135,11 @@ class State<T> {
 
     for (var i = 0; i < _length; i++) {
       final kind = _kinds[i];
-      var length = _lengths[i];
+      final length = _lengths[i];
       var value = _values[i];
-      var start = errorPos;
-      final sign = length >= 0 ? 1 : -1;
-      length = length * sign;
-      if (sign == -1) {
-        start = start - length;
+      var start = _starts[i];
+      if (start < 0) {
+        start = errorPos;
       }
 
       final end = start + (length > 0 ? length - 1 : 0);
