@@ -15,7 +15,7 @@ import 'package:parser_builder/sequence.dart';
 Future<void> main(List<String> args) async {
   final context = Context();
   await fastBuild(
-      context, [_parse, _refxpression], 'lib/src/experimental_parser.dart',
+      context, [_parse, _refExpression], 'lib/src/experimental_parser.dart',
       header: __header, footer: __footer);
 }
 
@@ -333,7 +333,7 @@ const _primaryExpression = Named(
             )),
         _ws));
 
-const _refxpression = Named<String, Expression>('_expression', _additive);
+const _refExpression = Named<String, Expression>('_expression', _additive);
 
 const _reservedWords = <String>[
   /*
