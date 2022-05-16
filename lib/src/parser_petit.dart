@@ -4,7 +4,7 @@ class ExpressionParser {
   late final p.Parser parser;
 
   ExpressionParser() {
-    final builder = ExpressionBuilder();
+    final builder = ExpressionBuilder<Expression>();
 
     // Numbers and variables
     builder.group()
@@ -19,26 +19,22 @@ class ExpressionParser {
           .flatten()
           .trim()
           .map<Expression>((value) => Variable(value)))
-      ..wrapper<String, Expression>(
-          char('(').trim(), char(')').trim(), (l, e, r) => e);
+      ..wrapper(char('(').trim(), char(')').trim(), (l, e, r) => e);
 
     // Binary operators (right associative)
-    builder.group()
-      ..right<String, Expression>(char('^').trim(), (l, op, r) => Power(l, r));
+    builder.group().right(char('^').trim(), (l, op, r) => Power(l, r));
 
     // Unary operators
-    builder.group()
-      ..prefix<String, Expression>(char('-').trim(), (op, e) => UnaryMinus(e));
+    builder.group().prefix(char('-').trim(), (op, e) => UnaryMinus(e));
 
     // Binary operators (left associative)
+    builder.group().left(char('%').trim(), (l, op, r) => Modulo(l, r));
     builder.group()
-      ..left<String, Expression>(char('%').trim(), (l, op, r) => Modulo(l, r));
+      ..left(char('*').trim(), (l, op, r) => Times(l, r))
+      ..left(char('/').trim(), (l, op, r) => Divide(l, r));
     builder.group()
-      ..left<String, Expression>(char('*').trim(), (l, op, r) => Times(l, r))
-      ..left<String, Expression>(char('/').trim(), (l, op, r) => Divide(l, r));
-    builder.group()
-      ..left<String, Expression>(char('+').trim(), (l, op, r) => Plus(l, r))
-      ..left<String, Expression>(char('-').trim(), (l, op, r) => Minus(l, r));
+      ..left(char('+').trim(), (l, op, r) => Plus(l, r))
+      ..left(char('-').trim(), (l, op, r) => Minus(l, r));
 
     // Functions
     /*
