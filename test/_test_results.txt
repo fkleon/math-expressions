@@ -53,11 +53,10 @@ vars: {}
 -----------------
  e^ ( 1 , 2 )  => ERROR
 FormatException: 
-line 1, column 2: Wrong number or types of arguments
-  ,
-1 |  e^ ( 1 , 2 ) 
-  |  ^^^^^^^^^^^^
-  '
+Wrong number or types of arguments (at character 2)
+ e^ ( 1 , 2 ) 
+ ^
+
 -----------------
  x + 2 * 3 + x  => ((x + (2.0 * 3.0)) + x)
 vars: {x: 5.0}
@@ -117,11 +116,10 @@ Bad state: Variable not bound: sqrt
 -----------------
  1x  => ERROR
 FormatException: 
-line 1, column 3: Expected: 'EOF'
-  ,
-1 |  1x 
-  |   ^
-  '
+Expected: 'EOF' (at character 3)
+ 1x 
+  ^
+
 -----------------
  1 + sqrt  => (1.0 + sqrt)
  => ERROR
@@ -129,67 +127,59 @@ Bad state: Variable not bound: sqrt
 -----------------
  1 + sqrt ( 2 , 3 )  => ERROR
 FormatException: 
-line 1, column 6: Wrong number or types of arguments
-  ,
-1 |  1 + sqrt ( 2 , 3 ) 
-  |      ^^^^^^^^^^^^^^
-  '
+Wrong number or types of arguments (at character 6)
+ 1 + sqrt ( 2 , 3 ) 
+     ^
+
 -----------------
  nrt ( x , y )  => ERROR
 FormatException: 
-line 1, column 2: Wrong number or types of arguments
-  ,
-1 |  nrt ( x , y ) 
-  |  ^^^^^^^^^^^^^
-  '
+Wrong number or types of arguments (at character 2)
+ nrt ( x , y ) 
+ ^
+
 -----------------
  nrt ( 1 )  => ERROR
 FormatException: 
-line 1, column 2: Wrong number or types of arguments
-  ,
-1 |  nrt ( 1 ) 
-  |  ^^^^^^^^^
-  '
+Wrong number or types of arguments (at character 2)
+ nrt ( 1 ) 
+ ^
+
 -----------------
  addTwo ( 3  => ERROR
 FormatException: 
-line 1, column 13: Expected: ')'
-  ,
-1 |  addTwo ( 3  
-  |             ^
-  '
+Expected: ')' (at character 13)
+ addTwo ( 3  
+            ^
+
 -----------------
  addTwo ( 3 ,  => ERROR
 FormatException: 
-line 1, column 15: Expected: 'expression'
-  ,
-1 |  addTwo ( 3 ,  
-  |               ^
-  '
+Expected: 'expression' (at character 15)
+ addTwo ( 3 ,  
+              ^
+
 -----------------
  addTwo ( 3 (  => ERROR
 FormatException: 
-line 1, column 13: Expected: ')'
-  ,
-1 |  addTwo ( 3 ( 
-  |             ^
-  '
+Expected: ')' (at character 13)
+ addTwo ( 3 ( 
+            ^
+
 -----------------
  x -  => ERROR
 FormatException: 
-line 1, column 6: Expected: 'expression'
-  ,
-1 |  x -  
-  |      ^
-  '
+Expected: 'expression' (at character 6)
+ x -  
+     ^
+
 -----------------
  5.x  => ERROR
 FormatException: 
-line 1, column 4: Unexpected 'x'
-  ,
-1 |  5.x 
-  |    ^
-  '
+Unexpected 'x' (at character 4)
+ 5.x 
+   ^
+
 -----------------
  abs (- 1 )  => abs({(-1.0)})
 vars: {}

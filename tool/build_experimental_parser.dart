@@ -16,10 +16,43 @@ Future<void> main(List<String> args) async {
   final context = Context();
   await fastBuild(
       context, [_parse, _refExpression], 'lib/src/experimental_parser.dart',
-      header: __header, footer: __footer);
+      addErrorMessageProcessor: false, header: __header, footer: __footer);
 }
 
 const __footer = r'''
+String _errorMessage(String source, List<ParseError> errors,
+    [Object? color, int maxCount = 10, String? url]) {
+  final sb = StringBuffer();
+  for (var i = 0; i < errors.length; i++) {
+    if (i > maxCount) {
+      break;
+    }
+
+    final error = errors[i];
+    final start = error.start;
+    final end = error.end + 1;
+    if (end > source.length) {
+      source += ' ' * (end - source.length);
+    }
+
+    if (sb.isNotEmpty) {
+      sb.writeln();
+    }
+
+    final exception = FormatException('$error', source, start);
+    var message = '$exception';
+    message = message.replaceFirst('FormatException: ', '');
+    sb.write(message);
+  }
+
+  if (errors.length > maxCount) {
+    sb.writeln();
+    sb.write('(${errors.length - maxCount} more errors...)');
+  }
+
+  return sb.toString();
+}
+
 Expression _toBinary(Expression left, String op, Expression right) {
   switch (op) {
     case '+':
@@ -43,9 +76,9 @@ Expression _toBinary(Expression left, String op, Expression right) {
 }
 
 Expression _toFunction(
-    State<String> state, Tuple2<String, List<Expression>> declaration) {
-  final name = declaration.item1;
-  final arguments = declaration.item2;
+    State<String> state, Result2<String, List<Expression>> declaration) {
+  final name = declaration.$0;
+  final arguments = declaration.$1;
   Expression func(bool condition, Expression Function() f) {
     if (condition) {
       return f();
@@ -127,9 +160,9 @@ Expression _toUnary(String operand, Expression expression) {
   throw StateError('Unknown unary operator: $operand');
 }
 
-bool _verifyArguments(Tuple2<String, List<Expression>> declaration) {
-  final name = declaration.item1;
-  final arguments = declaration.item2;
+bool _verifyArguments(Result2<String, List<Expression>> declaration) {
+  final name = declaration.$0;
+  final arguments = declaration.$1;
   switch (name) {
     case 'abs':
     case 'arccos':
@@ -163,8 +196,6 @@ class _Context {
 
 const __header = r'''
 import 'package:math_expressions/math_expressions.dart';
-import 'package:source_span/source_span.dart';
-import 'package:tuple/tuple.dart';
 
 Expression parseString(String source,
     {Map<String, Function> handlers = const {}}) {

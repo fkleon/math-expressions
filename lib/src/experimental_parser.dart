@@ -1,6 +1,4 @@
 import 'package:math_expressions/math_expressions.dart';
-import 'package:source_span/source_span.dart';
-import 'package:tuple/tuple.dart';
 
 Expression parseString(String source,
     {Map<String, Function> handlers = const {}}) {
@@ -361,9 +359,9 @@ List<Expression>? _arguments(State<String> state) {
 Expression? _exponentialFunction(State<String> state) {
   Expression? $0;
   final source = state.source;
-  Tuple2<String, List<Expression>>? $1;
+  Result2<String, List<Expression>>? $1;
   final $pos = state.pos;
-  Tuple2<String, List<Expression>>? $2;
+  Result2<String, List<Expression>>? $2;
   final $pos1 = state.pos;
   String? $3;
   final $pos2 = state.pos;
@@ -387,7 +385,7 @@ Expression? _exponentialFunction(State<String> state) {
     List<Expression>? $4;
     $4 = _arguments(state);
     if (state.ok) {
-      $2 = Tuple2($3!, $4!);
+      $2 = Result2($3!, $4!);
     } else {
       state.pos = $pos1;
     }
@@ -594,9 +592,9 @@ String? _identifier(State<String> state) {
 
 Expression? _functionInvocation(State<String> state) {
   Expression? $0;
-  Tuple2<String, List<Expression>>? $1;
+  Result2<String, List<Expression>>? $1;
   final $pos = state.pos;
-  Tuple2<String, List<Expression>>? $2;
+  Result2<String, List<Expression>>? $2;
   final $pos1 = state.pos;
   String? $3;
   final $memo = state.memoized<String?>(1, false, state.pos);
@@ -611,7 +609,7 @@ Expression? _functionInvocation(State<String> state) {
     List<Expression>? $4;
     $4 = _arguments(state);
     if (state.ok) {
-      $2 = Tuple2($3!, $4!);
+      $2 = Result2($3!, $4!);
     } else {
       state.pos = $pos1;
     }
@@ -950,36 +948,33 @@ Expression? _expression(State<String> state) {
   return $0;
 }
 
-String _errorMessage(String source, List<ParseError> errors,
-    [Object? color, int maxCount = 10, String? url]) {
-  final sb = StringBuffer();
-  for (var i = 0; i < errors.length; i++) {
-    if (i > maxCount) {
-      break;
-    }
+class Result2<T0, T1> {
+  final T0 $0;
+  final T1 $1;
 
-    final error = errors[i];
-    final start = error.start;
-    final end = error.end + 1;
-    if (end > source.length) {
-      source += ' ' * (end - source.length);
-    }
+  Result2(this.$0, this.$1);
 
-    final file = SourceFile.fromString(source, url: url);
-    final span = file.span(start, end);
-    if (sb.isNotEmpty) {
-      sb.writeln();
-    }
+  @override
+  int get hashCode => $0.hashCode ^ $1.hashCode;
 
-    sb.write(span.message(error.toString(), color: color));
-  }
+  @override
+  bool operator ==(other) =>
+      other is Result2 && other.$0 == $0 && other.$1 == $1;
+}
 
-  if (errors.length > maxCount) {
-    sb.writeln();
-    sb.write('(${errors.length - maxCount} more errors...)');
-  }
+class Result3<T0, T1, T2> {
+  final T0 $0;
+  final T1 $1;
+  final T2 $2;
 
-  return sb.toString();
+  Result3(this.$0, this.$1, this.$2);
+
+  @override
+  int get hashCode => $0.hashCode ^ $1.hashCode ^ $2.hashCode;
+
+  @override
+  bool operator ==(other) =>
+      other is Result3 && other.$0 == $0 && other.$1 == $1 && other.$2 == $2;
 }
 
 class ParseError {
@@ -1287,6 +1282,39 @@ class _Memo<T> {
   }
 }
 
+String _errorMessage(String source, List<ParseError> errors,
+    [Object? color, int maxCount = 10, String? url]) {
+  final sb = StringBuffer();
+  for (var i = 0; i < errors.length; i++) {
+    if (i > maxCount) {
+      break;
+    }
+
+    final error = errors[i];
+    final start = error.start;
+    final end = error.end + 1;
+    if (end > source.length) {
+      source += ' ' * (end - source.length);
+    }
+
+    if (sb.isNotEmpty) {
+      sb.writeln();
+    }
+
+    final exception = FormatException('$error', source, start);
+    var message = '$exception';
+    message = message.replaceFirst('FormatException: ', '');
+    sb.write(message);
+  }
+
+  if (errors.length > maxCount) {
+    sb.writeln();
+    sb.write('(${errors.length - maxCount} more errors...)');
+  }
+
+  return sb.toString();
+}
+
 Expression _toBinary(Expression left, String op, Expression right) {
   switch (op) {
     case '+':
@@ -1310,9 +1338,9 @@ Expression _toBinary(Expression left, String op, Expression right) {
 }
 
 Expression _toFunction(
-    State<String> state, Tuple2<String, List<Expression>> declaration) {
-  final name = declaration.item1;
-  final arguments = declaration.item2;
+    State<String> state, Result2<String, List<Expression>> declaration) {
+  final name = declaration.$0;
+  final arguments = declaration.$1;
   Expression func(bool condition, Expression Function() f) {
     if (condition) {
       return f();
@@ -1394,9 +1422,9 @@ Expression _toUnary(String operand, Expression expression) {
   throw StateError('Unknown unary operator: $operand');
 }
 
-bool _verifyArguments(Tuple2<String, List<Expression>> declaration) {
-  final name = declaration.item1;
-  final arguments = declaration.item2;
+bool _verifyArguments(Result2<String, List<Expression>> declaration) {
+  final name = declaration.$0;
+  final arguments = declaration.$1;
   switch (name) {
     case 'abs':
     case 'arccos':
