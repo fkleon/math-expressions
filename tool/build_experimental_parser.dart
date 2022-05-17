@@ -16,43 +16,10 @@ Future<void> main(List<String> args) async {
   final context = Context();
   await fastBuild(
       context, [_parse, _refExpression], 'lib/src/experimental_parser.dart',
-      addErrorMessageProcessor: false, header: __header, footer: __footer);
+      header: __header, footer: __footer);
 }
 
 const __footer = r'''
-String _errorMessage(String source, List<ParseError> errors,
-    [Object? color, int maxCount = 10, String? url]) {
-  final sb = StringBuffer();
-  for (var i = 0; i < errors.length; i++) {
-    if (i > maxCount) {
-      break;
-    }
-
-    final error = errors[i];
-    final start = error.start;
-    final end = error.end + 1;
-    if (end > source.length) {
-      source += ' ' * (end - source.length);
-    }
-
-    if (sb.isNotEmpty) {
-      sb.writeln();
-    }
-
-    final exception = FormatException('$error', source, start);
-    var message = '$exception';
-    message = message.replaceFirst('FormatException: ', '');
-    sb.write(message);
-  }
-
-  if (errors.length > maxCount) {
-    sb.writeln();
-    sb.write('(${errors.length - maxCount} more errors...)');
-  }
-
-  return sb.toString();
-}
-
 Expression _toBinary(Expression left, String op, Expression right) {
   switch (op) {
     case '+':

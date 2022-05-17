@@ -53,10 +53,9 @@ vars: {}
 -----------------
  e^ ( 1 , 2 )  => ERROR
 FormatException: 
-Wrong number or types of arguments (at character 2)
+line 1, column 2: Wrong number or types of arguments
  e^ ( 1 , 2 ) 
- ^
-
+ ^^^^^^^^^^^^
 -----------------
  x + 2 * 3 + x  => ((x + (2.0 * 3.0)) + x)
 vars: {x: 5.0}
@@ -116,10 +115,9 @@ Bad state: Variable not bound: sqrt
 -----------------
  1x  => ERROR
 FormatException: 
-Expected: 'EOF' (at character 3)
+line 1, column 3: Expected: 'EOF'
  1x 
   ^
-
 -----------------
  1 + sqrt  => (1.0 + sqrt)
  => ERROR
@@ -127,59 +125,51 @@ Bad state: Variable not bound: sqrt
 -----------------
  1 + sqrt ( 2 , 3 )  => ERROR
 FormatException: 
-Wrong number or types of arguments (at character 6)
+line 1, column 6: Wrong number or types of arguments
  1 + sqrt ( 2 , 3 ) 
-     ^
-
+     ^^^^^^^^^^^^^^
 -----------------
  nrt ( x , y )  => ERROR
 FormatException: 
-Wrong number or types of arguments (at character 2)
+line 1, column 2: Wrong number or types of arguments
  nrt ( x , y ) 
- ^
-
+ ^^^^^^^^^^^^^
 -----------------
  nrt ( 1 )  => ERROR
 FormatException: 
-Wrong number or types of arguments (at character 2)
+line 1, column 2: Wrong number or types of arguments
  nrt ( 1 ) 
- ^
-
+ ^^^^^^^^^
 -----------------
  addTwo ( 3  => ERROR
 FormatException: 
-Expected: ')' (at character 13)
- addTwo ( 3  
+line 1, column 13: Expected: ')'
+ addTwo ( 3 
             ^
-
 -----------------
  addTwo ( 3 ,  => ERROR
 FormatException: 
-Expected: 'expression' (at character 15)
- addTwo ( 3 ,  
+line 1, column 15: Expected: 'expression'
+ addTwo ( 3 , 
               ^
-
 -----------------
  addTwo ( 3 (  => ERROR
 FormatException: 
-Expected: ')' (at character 13)
+line 1, column 13: Expected: ')'
  addTwo ( 3 ( 
             ^
-
 -----------------
  x -  => ERROR
 FormatException: 
-Expected: 'expression' (at character 6)
- x -  
+line 1, column 6: Expected: 'expression'
+ x - 
      ^
-
 -----------------
  5.x  => ERROR
 FormatException: 
-Unexpected 'x' (at character 4)
+line 1, column 4: Unexpected 'x'
  5.x 
    ^
-
 -----------------
  abs (- 1 )  => abs({(-1.0)})
 vars: {}

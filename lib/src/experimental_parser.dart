@@ -948,33 +948,120 @@ Expression? _expression(State<String> state) {
   return $0;
 }
 
-class Result2<T0, T1> {
-  final T0 $0;
-  final T1 $1;
+String _errorMessage(String source, List<ParseError> errors) {
+  final sb = StringBuffer();
+  for (var i = 0; i < errors.length; i++) {
+    if (sb.isNotEmpty) {
+      sb.writeln();
+    }
 
-  Result2(this.$0, this.$1);
+    final error = errors[i];
+    final start = error.start;
+    final end = error.end;
+    RangeError.checkValidRange(start, end, source.length);
+    var row = 1;
+    var lineStart = 0, next = 0, pos = 0;
+    while (pos < source.length) {
+      final c = source.codeUnitAt(pos++);
+      if (c == 0xa || c == 0xd) {
+        next = c == 0xa ? 0xd : 0xa;
+        if (pos < source.length && source.codeUnitAt(pos) == next) {
+          pos++;
+        }
 
-  @override
-  int get hashCode => $0.hashCode ^ $1.hashCode;
+        if (pos - 1 >= start) {
+          break;
+        }
 
-  @override
-  bool operator ==(other) =>
-      other is Result2 && other.$0 == $0 && other.$1 == $1;
+        row++;
+        lineStart = pos;
+      }
+    }
+
+    int max(int x, int y) => x > y ? x : y;
+    int min(int x, int y) => x < y ? x : y;
+    final sourceLen = source.length;
+    final totalLen = sourceLen - lineStart;
+    final lineLimit = min(80, totalLen);
+    final start2 = start;
+    final end2 = min(start2 + lineLimit, end);
+    final textLen = end2 - start2;
+    final spaceLen = lineLimit - textLen;
+    final prefixLen = min(lineLimit - textLen, start2 - lineStart);
+    final list = <int>[];
+    final iterator = RuneIterator.at(source, start2);
+    for (var i = 0; i < prefixLen; i++) {
+      if (!iterator.movePrevious()) {
+        break;
+      }
+
+      list.add(iterator.current);
+    }
+
+    final column = start - lineStart + 1;
+    final left = String.fromCharCodes(list.reversed);
+    final end3 = max(end2, end2 + (spaceLen - prefixLen));
+    final textStart = end3 - lineLimit;
+    final indicatorOffset = start2 - textStart;
+    final indicatorLen = end2 - start2 + 1;
+    final right = source.substring(start2, end3);
+    var text = left + right;
+    text = text.replaceAll('\n', ' ');
+    text = text.replaceAll('\r', ' ');
+    text = text.replaceAll('\t', ' ');
+    sb.writeln('line $row, column $column: $error');
+    sb.writeln(text);
+    sb.write(' ' * indicatorOffset + '^' * indicatorLen);
+  }
+
+  return sb.toString();
 }
 
-class Result3<T0, T1, T2> {
-  final T0 $0;
-  final T1 $1;
-  final T2 $2;
+extension on String {
+  @pragma('vm:prefer-inline')
+  // ignore: unused_element
+  int readRune(State<String> state) {
+    final w1 = codeUnitAt(state.pos++);
+    if (w1 > 0xd7ff && w1 < 0xe000) {
+      if (state.pos < length) {
+        final w2 = codeUnitAt(state.pos++);
+        if ((w2 & 0xfc00) == 0xdc00) {
+          return 0x10000 + ((w1 & 0x3ff) << 10) + (w2 & 0x3ff);
+        }
 
-  Result3(this.$0, this.$1, this.$2);
+        state.pos--;
+      }
 
-  @override
-  int get hashCode => $0.hashCode ^ $1.hashCode ^ $2.hashCode;
+      throw FormatException('Invalid UTF-16 character', this, state.pos - 1);
+    }
 
-  @override
-  bool operator ==(other) =>
-      other is Result3 && other.$0 == $0 && other.$1 == $1 && other.$2 == $2;
+    return w1;
+  }
+
+  @pragma('vm:prefer-inline')
+  // ignore: unused_element
+  int runeAt(int index) {
+    final w1 = codeUnitAt(index++);
+    if (w1 > 0xd7ff && w1 < 0xe000) {
+      if (index < length) {
+        final w2 = codeUnitAt(index);
+        if ((w2 & 0xfc00) == 0xdc00) {
+          return 0x10000 + ((w1 & 0x3ff) << 10) + (w2 & 0x3ff);
+        }
+      }
+
+      throw FormatException('Invalid UTF-16 character', this, index - 1);
+    }
+
+    return w1;
+  }
+
+  /// Returns a slice (substring) of the string from [start] to [end].
+  @pragma('vm:prefer-inline')
+  // ignore: unused_element
+  String slice(int start, int end) {
+    return substring(start, end);
+  }
 }
 
 class ParseError {
@@ -1008,6 +1095,35 @@ class ParseError {
   String toString() {
     return text;
   }
+}
+
+class Result2<T0, T1> {
+  final T0 $0;
+  final T1 $1;
+
+  Result2(this.$0, this.$1);
+
+  @override
+  int get hashCode => $0.hashCode ^ $1.hashCode;
+
+  @override
+  bool operator ==(other) =>
+      other is Result2 && other.$0 == $0 && other.$1 == $1;
+}
+
+class Result3<T0, T1, T2> {
+  final T0 $0;
+  final T1 $1;
+  final T2 $2;
+
+  Result3(this.$0, this.$1, this.$2);
+
+  @override
+  int get hashCode => $0.hashCode ^ $1.hashCode ^ $2.hashCode;
+
+  @override
+  bool operator ==(other) =>
+      other is Result3 && other.$0 == $0 && other.$1 == $1 && other.$2 == $2;
 }
 
 class State<T> {
@@ -1212,53 +1328,6 @@ class State<T> {
   }
 }
 
-extension on String {
-  @pragma('vm:prefer-inline')
-  // ignore: unused_element
-  int readRune(State<String> state) {
-    final w1 = codeUnitAt(state.pos++);
-    if (w1 > 0xd7ff && w1 < 0xe000) {
-      if (state.pos < length) {
-        final w2 = codeUnitAt(state.pos++);
-        if ((w2 & 0xfc00) == 0xdc00) {
-          return 0x10000 + ((w1 & 0x3ff) << 10) + (w2 & 0x3ff);
-        }
-
-        state.pos--;
-      }
-
-      throw FormatException('Invalid UTF-16 character', this, state.pos - 1);
-    }
-
-    return w1;
-  }
-
-  @pragma('vm:prefer-inline')
-  // ignore: unused_element
-  int runeAt(int index) {
-    final w1 = codeUnitAt(index++);
-    if (w1 > 0xd7ff && w1 < 0xe000) {
-      if (index < length) {
-        final w2 = codeUnitAt(index);
-        if ((w2 & 0xfc00) == 0xdc00) {
-          return 0x10000 + ((w1 & 0x3ff) << 10) + (w2 & 0x3ff);
-        }
-      }
-
-      throw FormatException('Invalid UTF-16 character', this, index - 1);
-    }
-
-    return w1;
-  }
-
-  /// Returns a slice (substring) of the string from [start] to [end].
-  @pragma('vm:prefer-inline')
-  // ignore: unused_element
-  String slice(int start, int end) {
-    return substring(start, end);
-  }
-}
-
 class _Memo<T> {
   final int end;
 
@@ -1280,39 +1349,6 @@ class _Memo<T> {
     state.pos = end;
     return result;
   }
-}
-
-String _errorMessage(String source, List<ParseError> errors,
-    [Object? color, int maxCount = 10, String? url]) {
-  final sb = StringBuffer();
-  for (var i = 0; i < errors.length; i++) {
-    if (i > maxCount) {
-      break;
-    }
-
-    final error = errors[i];
-    final start = error.start;
-    final end = error.end + 1;
-    if (end > source.length) {
-      source += ' ' * (end - source.length);
-    }
-
-    if (sb.isNotEmpty) {
-      sb.writeln();
-    }
-
-    final exception = FormatException('$error', source, start);
-    var message = '$exception';
-    message = message.replaceFirst('FormatException: ', '');
-    sb.write(message);
-  }
-
-  if (errors.length > maxCount) {
-    sb.writeln();
-    sb.write('(${errors.length - maxCount} more errors...)');
-  }
-
-  return sb.toString();
 }
 
 Expression _toBinary(Expression left, String op, Expression right) {
