@@ -1003,7 +1003,7 @@ String _errorMessage(String source, List<ParseError> errors) {
     final end3 = max(end2, end2 + (spaceLen - prefixLen));
     final textStart = end3 - lineLimit;
     final indicatorOffset = start2 - textStart;
-    final indicatorLen = end2 - start2 + 1;
+    final indicatorLen = max(1, end2 - start2);
     final right = source.substring(start2, end3);
     var text = left + right;
     text = text.replaceAll('\n', ' ');
@@ -1061,6 +1061,30 @@ extension on String {
   // ignore: unused_element
   String slice(int start, int end) {
     return substring(start, end);
+  }
+}
+
+class MemoizedResult<T> {
+  final int end;
+
+  final bool fast;
+
+  final int id;
+
+  final bool ok;
+
+  final T? result;
+
+  final int start;
+
+  MemoizedResult(
+      this.id, this.fast, this.start, this.end, this.ok, this.result);
+
+  @pragma('vm:prefer-inline')
+  T? restore(State state) {
+    state.ok = ok;
+    state.pos = end;
+    return result;
   }
 }
 
@@ -1149,7 +1173,7 @@ class State<T> {
 
   final List<int> _lengths = List.filled(150, 0);
 
-  final List<_Memo?> _memos = List.filled(150, null);
+  final List<MemoizedResult?> _memos = List.filled(150, null);
 
   final List<int> _starts = List.filled(150, 0);
 
@@ -1183,15 +1207,15 @@ class State<T> {
 
   @pragma('vm:prefer-inline')
   void memoize<R>(int id, bool fast, int start, [R? result]) =>
-      _memos[id] = _Memo<R>(id, fast, start, pos, ok, result);
+      _memos[id] = MemoizedResult<R>(id, fast, start, pos, ok, result);
 
   @pragma('vm:prefer-inline')
-  _Memo<R>? memoized<R>(int id, bool fast, int start) {
+  MemoizedResult<R>? memoized<R>(int id, bool fast, int start) {
     final memo = _memos[id];
     return (memo != null &&
             memo.start == start &&
             (memo.fast == fast || !memo.fast))
-        ? memo as _Memo<R>
+        ? memo as MemoizedResult<R>
         : null;
   }
 
@@ -1253,7 +1277,7 @@ class State<T> {
         start = errorPos;
       }
 
-      final end = start + (length > 0 ? length - 1 : 0);
+      final end = start + length;
       switch (kind) {
         case ParseError.character:
           if (source is String) {
@@ -1324,29 +1348,6 @@ class State<T> {
       result = "'$result'";
     }
 
-    return result;
-  }
-}
-
-class _Memo<T> {
-  final int end;
-
-  final bool fast;
-
-  final int id;
-
-  final bool ok;
-
-  final T? result;
-
-  final int start;
-
-  _Memo(this.id, this.fast, this.start, this.end, this.ok, this.result);
-
-  @pragma('vm:prefer-inline')
-  T? restore(State state) {
-    state.ok = ok;
-    state.pos = end;
     return result;
   }
 }
