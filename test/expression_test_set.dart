@@ -39,7 +39,7 @@ class ExpressionTests extends TestSet {
         /*
         'Composite Function simplification': compFuncSimplification,
         'Composite Function differentiation': compFuncDifferentiation,
-         */
+        */
         'Composite Function evaluation': compFunEval,
         'Algorithmic Function creation': algorithmicFunctionCreation,
         'Algorithmic Function evaluation [REAL]': algorithmicFunctionRealEval,
