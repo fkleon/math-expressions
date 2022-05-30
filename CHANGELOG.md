@@ -7,9 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## 2.3.1- 2022-03-21
+## [2.3.1] - 2022-05-30
 
-- Evaluate roots written as powers correctly for negative bases.
+### Changed
+
+- Evaluate roots written as powers correctly for negative bases (thanks [edhom](https://github.com/edhom))
 
 ## [2.3.0] - 2021-12-21
 
@@ -174,4 +176,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Initial release of standalone version
 
 [unreleased]: https://github.com/fkleon/math-expressions/compare/2.3.0...HEAD
+[2.3.1]: https://github.com/fkleon/math-expressions/compare/2.3.0...2.3.1
 [2.3.0]: https://github.com/fkleon/math-expressions/compare/2.2.0...2.3.0
