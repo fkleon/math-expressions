@@ -39,8 +39,8 @@ class ExpressionTests extends TestSet {
         /*
         'Composite Function simplification': compFuncSimplification,
         'Composite Function differentiation': compFuncDifferentiation,
-        'Composite Function evaluation': compFunEval
-        */
+         */
+        'Composite Function evaluation': compFunEval,
         'Algorithmic Function creation': algorithmicFunctionCreation,
         'Algorithmic Function evaluation [REAL]': algorithmicFunctionRealEval,
       };
@@ -1308,8 +1308,19 @@ class ExpressionTests extends TestSet {
 
   /// Tests evaluation of composite functions.
   void compFunEval() {
-    // Evaluate composite functions.
-    throw UnimplementedError();
+    // See https://github.com/fkleon/math-expressions/pull/66#issue-1175180681
+    final x = Variable('x');
+    final one = Number(1), two = Number(2), three = Number(2);
+    final f = Power(x, Divide(two, three));
+    final g = Power(Power(x, two), Divide(one, three));
+
+    final contextModel = ContextModel()..bindVariable(x, Number(-1));
+
+    final double result1 = f.evaluate(EvaluationType.REAL, contextModel);
+    final double result2 = g.evaluate(EvaluationType.REAL, contextModel);
+
+    expect(result1, closeTo(1, EPS));
+    expect(result2, closeTo(1, EPS));
   }
 
   /// Tests creation of algorithmic functions.
