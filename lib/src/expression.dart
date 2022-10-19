@@ -603,7 +603,10 @@ class Power extends BinaryOperator {
         final double newBase = Power(base, numerator).evaluate(type, context);
         final double newExponent = 1 / denominator.evaluate(type, context);
         return Power(newBase, newExponent).evaluate(type, context);
-      } else if (base.isNegative && second is UnaryMinus) {
+      }
+      /// In case the exponent is a unary minus e.g. x^(-(2/y)), we rewrite the
+      /// equation to 1/x^(2/3), for the same reason as stated above.
+      if (base.isNegative && second is UnaryMinus) {
         final Expression exponent = (second as UnaryMinus).exp;
         return 1 / Power(base, exponent).evaluate(type, context);
       }

@@ -1327,7 +1327,8 @@ class ExpressionTests extends TestSet {
 
     final double result3 = h.evaluate(EvaluationType.REAL, contextModel);
     final double result4 = i.evaluate(EvaluationType.REAL, contextModel);
-    expect(result3, closeTo(result4, EPS));
+    expect(result3, closeTo(1, EPS));
+    expect(result4, closeTo(1, EPS));
   }
 
   /// Tests creation of algorithmic functions.
