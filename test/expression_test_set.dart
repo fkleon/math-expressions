@@ -1321,6 +1321,13 @@ class ExpressionTests extends TestSet {
 
     expect(result1, closeTo(1, EPS));
     expect(result2, closeTo(1, EPS));
+
+    final h = Power(x, UnaryMinus(Divide(two, three)));
+    final i = Divide(one, Power(x, Divide(two, three)));
+
+    final double result3 = h.evaluate(EvaluationType.REAL, contextModel);
+    final double result4 = i.evaluate(EvaluationType.REAL, contextModel);
+    expect(result3, closeTo(result4, EPS));
   }
 
   /// Tests creation of algorithmic functions.
