@@ -41,6 +41,9 @@ class Parser {
         case TokenType.UNMINUS:
           currExpr = -exprStack.removeLast();
           break;
+        case TokenType.UNPLUS:
+          currExpr = UnaryPlus(exprStack.removeLast());
+          break;
         case TokenType.PLUS:
           right = exprStack.removeLast();
           left = exprStack.removeLast();
@@ -370,16 +373,21 @@ class Lexer {
         continue;
       }
 
-      /* if the current Tokens type is MINUS and the previous Token is an operator or type LBRACE
+      /* if the current Tokens type is PLUS or MINUS and the previous Token is an operator or type LBRACE
        * or we're at the beginning of the expression (prevToken == null) the current Token is
-       * an unary minus, so the tokentype has to be changed.
+       * an unary plur or minus, so the tokentype has to be changed.
        */
-      if (curToken.type == TokenType.MINUS &&
+      if ((curToken.type == TokenType.MINUS ||
+              curToken.type == TokenType.PLUS) &&
           (prevToken == null ||
               prevToken.type.operator ||
               prevToken.type == TokenType.SEPAR ||
               prevToken.type == TokenType.LBRACE)) {
-        final Token newToken = Token(curToken.text, TokenType.UNMINUS);
+        final Token newToken = Token(
+            curToken.text,
+            curToken.type == TokenType.MINUS
+                ? TokenType.UNMINUS
+                : TokenType.UNPLUS);
         operatorBuffer.add(newToken);
         prevToken = newToken;
         continue;
@@ -524,6 +532,8 @@ class TokenType {
       TokenType._internal('POW', 4, leftAssociative: false, operator: true);
   static const TokenType UNMINUS =
       TokenType._internal('UNMINUS', 3, leftAssociative: false, operator: true);
+  static const TokenType UNPLUS =
+      TokenType._internal('UNPLUS', 3, leftAssociative: false, operator: true);
 
   // Functions
   static const TokenType FACTORIAL =

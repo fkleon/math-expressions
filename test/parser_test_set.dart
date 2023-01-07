@@ -134,6 +134,32 @@ class ParserTests extends TestSet {
     rpnTokenStreams
         .add([Token('1', TokenType.VAL), Token('-', TokenType.UNMINUS)]);
 
+    // unary plus
+    inputStrings.add('+1');
+    tokenStreams.add([Token('+', TokenType.PLUS), Token('1', TokenType.VAL)]);
+    rpnTokenStreams
+        .add([Token('1', TokenType.VAL), Token('+', TokenType.UNPLUS)]);
+
+    inputStrings.add('(+1)');
+    tokenStreams.add([
+      Token('(', TokenType.LBRACE),
+      Token('+', TokenType.PLUS),
+      Token('1', TokenType.VAL),
+      Token(')', TokenType.RBRACE)
+    ]);
+    rpnTokenStreams
+        .add([Token('1', TokenType.VAL), Token('+', TokenType.UNPLUS)]);
+
+    inputStrings.add('+(1)');
+    tokenStreams.add([
+      Token('+', TokenType.PLUS),
+      Token('(', TokenType.LBRACE),
+      Token('1', TokenType.VAL),
+      Token(')', TokenType.RBRACE)
+    ]);
+    rpnTokenStreams
+        .add([Token('1', TokenType.VAL), Token('+', TokenType.UNPLUS)]);
+
     // Power
     inputStrings.add('1^1^1');
     tokenStreams.add([

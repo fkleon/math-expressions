@@ -159,7 +159,7 @@ class ExpressionTests extends TestSet {
 
   /// Tests the convenience constructors (unary, auto-wrapping).
   void convenienceUnaryCreation() {
-    List<UnaryOperator> unOps = [UnaryMinus('x')];
+    List<UnaryOperator> unOps = [UnaryMinus('x'), UnaryPlus('x')];
 
     for (UnaryOperator unOp in unOps) {
       expect(unOp.exp, TypeMatcher<Variable>());
@@ -231,6 +231,12 @@ class ExpressionTests extends TestSet {
     expect((exp.simplify() as Minus).first, TypeMatcher<Variable>());
     expect((exp.simplify() as Minus).second, TypeMatcher<Variable>());
 
+    // a - +(b) = a - b
+    exp = Minus('a', UnaryPlus('b'));
+    expect(exp.simplify(), TypeMatcher<Minus>());
+    expect((exp.simplify() as Minus).first, TypeMatcher<Variable>());
+    expect((exp.simplify() as Minus).second, TypeMatcher<Variable>());
+
     /*
      *  Minus
      */
@@ -245,6 +251,12 @@ class ExpressionTests extends TestSet {
 
     // a - -(b) = a + b
     exp = Minus('a', UnaryMinus('b'));
+    expect(exp.simplify(), TypeMatcher<Plus>());
+    expect((exp.simplify() as Plus).first, TypeMatcher<Variable>());
+    expect((exp.simplify() as Plus).second, TypeMatcher<Variable>());
+
+    // a + +(b) = a + b
+    exp = Plus('a', UnaryPlus('b'));
     expect(exp.simplify(), TypeMatcher<Plus>());
     expect((exp.simplify() as Plus).first, TypeMatcher<Variable>());
     expect((exp.simplify() as Plus).second, TypeMatcher<Variable>());
@@ -369,6 +381,17 @@ class ExpressionTests extends TestSet {
 
     // -0 = 0
     exp = UnaryMinus(0);
+    expect((exp.simplify() as Number).value == 0, isTrue);
+
+    /*
+     *  Unary Plus
+     */
+    // +(+a) = a
+    exp = UnaryPlus(UnaryPlus('a'));
+    expect(_isVariable(exp.simplify(), 'a'), isTrue);
+
+    // +0 = 0
+    exp = UnaryPlus(0);
     expect((exp.simplify() as Number).value == 0, isTrue);
   }
 
