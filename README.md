@@ -38,10 +38,14 @@ Below are two basic examples of how to use this library. There also is some [add
 
 This example shows how to evaluate
 
-![Equation 1][exampleEq1]
+$$
+frac{(x^2+\cos y)}{3}
+$$
 
-for
-![xy][exampleEq1xy]
+
+$$
+\text{for } x=2, y=\pi
+$$
 
 #### Build the expression
 
@@ -81,7 +85,9 @@ You can either create an mathematical expression programmatically or parse a str
 
 This example shows how to simplify and differentiate
 
-![Example 2][exampleEq2]
+$$
+x \cdot 1 - (-5)
+$$
 
 * Expressions can be simplified and differentiated with respect to a given variable:
 ```dart
