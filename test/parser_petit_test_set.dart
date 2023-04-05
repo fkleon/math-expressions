@@ -27,6 +27,7 @@ class PetitParserTests extends TestSet {
 
         // Operators
         'Unary Minus': parseUnaryMinus,
+        'Unary Plus': parseUnaryPlus,
         'Power': parsePower,
         'Modulo': parseModulo,
         'Multiplication': parseMultiplication,
@@ -114,6 +115,15 @@ class PetitParserTests extends TestSet {
       '-0': -Number(0),
       '-1': -Number(1),
       '-1.0': -Number(1.0),
+    };
+    parameterized(cases);
+  }
+
+  void parseUnaryPlus() {
+    var cases = {
+      '+0': UnaryPlus(Number(0)),
+      '+1': UnaryPlus(Number(1)),
+      '+1.0': UnaryPlus(Number(1.0)),
     };
     parameterized(cases);
   }
