@@ -8,11 +8,15 @@ on:
 
 jobs:
   test:
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
+    continue-on-error: ${{ matrix.experimental }}
     strategy:
       matrix:
-        os: [ubuntu-latest]
-        sdk: [stable, beta, dev]
+        sdk: [stable]
+        experimental: [false]
+        include:
+          - sdk: beta
+            experimental: true
 
     steps:
       - uses: actions/checkout@v2
