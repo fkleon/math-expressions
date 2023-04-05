@@ -332,12 +332,12 @@ class Times extends BinaryOperator {
 
     bool negative = false;
     if (firstOp is UnaryMinus) {
-      firstOp = (firstOp as UnaryMinus).exp;
+      firstOp = (firstOp).exp;
       negative = !negative;
     }
 
     if (secondOp is UnaryMinus) {
-      secondOp = (secondOp as UnaryMinus).exp;
+      secondOp = (secondOp).exp;
       negative = !negative;
     }
 
@@ -423,12 +423,12 @@ class Divide extends BinaryOperator {
     bool negative = false;
 
     if (firstOp is UnaryMinus) {
-      firstOp = (firstOp as UnaryMinus).exp;
+      firstOp = (firstOp).exp;
       negative = !negative;
     }
 
     if (secondOp is UnaryMinus) {
-      secondOp = (secondOp as UnaryMinus).exp;
+      secondOp = (secondOp).exp;
       negative = !negative;
     }
 
@@ -446,8 +446,8 @@ class Divide extends BinaryOperator {
     // TODO cancel down/out? - needs equals on literals (and expressions?)!
   }
 
-  /// This method throws an [IntegerDivisionByZeroException],
-  /// if a divide by zero is encountered.
+  /// For real numbers this method performs a double divison and
+  /// returns [double.infinity] if a divide by zero is encountered.
   @override
   dynamic evaluate(EvaluationType type, ContextModel context) {
     final dynamic firstEval = first.evaluate(type, context);
@@ -504,7 +504,7 @@ class Modulo extends BinaryOperator {
     }
 
     if (secondOp is UnaryMinus) {
-      secondOp = (secondOp as UnaryMinus).exp;
+      secondOp = (secondOp).exp;
     }
 
     return Modulo(firstOp, secondOp);
@@ -679,7 +679,7 @@ abstract class Literal extends Expression {
   /// Throws StateError if literal is not constant, check before usage with
   /// `isConstant()`.
   dynamic getConstantValue() {
-    throw StateError('Literal ${this} is not constant.');
+    throw StateError('Literal $this is not constant.');
   }
 
   @override

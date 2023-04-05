@@ -1,14 +1,12 @@
 part of math_expressions_test;
 
-/**
- * Contains methods to test the math expression implementation.
- */
+/// Contains methods to test the math expression implementation.
 class ExpressionTests extends TestSet {
   @override
   String get name => 'Expression Tests';
 
   @override
-  get testFunctions => {
+  Map<String, Function> get testFunctions => {
         'Expression creation [REAL]': simpleRealCreation,
         'Expression creation [INTERVAL]': simpleIntervalCreation,
         'Expression Creation [VECTOR]': simpleVectorCreation,
@@ -1374,30 +1372,27 @@ class ExpressionTests extends TestSet {
     return false;
   }
 
-  Matcher _equalsExpression(String expr, {bool simplify: true}) =>
+  Matcher _equalsExpression(String expr, {bool simplify = true}) =>
       ExpressionMatcher(expr, simplify: simplify);
 }
 
-/**
- * This matcher compares [Expression]s.
- * It uses a [Lexer] to convert the given expressions to RPN and then checks
- * the token streams for equality.
- */
+/// This matcher compares [Expression]s.
+/// It uses a [Lexer] to convert the given expressions to RPN and then checks
+/// the token streams for equality.
 class ExpressionMatcher extends Matcher {
   final List<Token> _exprRPN;
   final String _expression;
   final bool _simplify;
   static final Lexer _lexer = Lexer();
 
-  /**
-   * Creates a new Expression matcher. If [simplify] is true, the expression to
-   * match will be simplified as much as possible before testing.
-   */
-  ExpressionMatcher(String expression, {bool simplify: true})
+  /// Creates a new Expression matcher. If [simplify] is true, the expression to
+  /// match will be simplified as much as possible beore testing.
+  ExpressionMatcher(String expression, {bool simplify = true})
       : this._expression = expression,
         this._exprRPN = _lexer.tokenizeToRPN(expression),
         this._simplify = simplify;
 
+  @override
   bool matches(dynamic item, Map matchState) {
     if (item is Expression) {
       // Simplify and tokenize.
