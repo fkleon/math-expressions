@@ -1,14 +1,12 @@
 part of math_expressions_test;
 
-/**
- * Contains a test set for testing the parser and lexer
- */
+/// Contains a test set for testing the parser and lexer
 class ParserTests extends TestSet {
   @override
   String get name => 'Parser Tests';
 
   @override
-  get testFunctions => {
+  Map<String, Function> get testFunctions => {
         'Lexer Tokenize (Infix + Postfix)': lexerTokenTest,
         'Lexer Tokenize Invalid': lexerTokenTestInvalid,
         'Parser Expression Creation': parserExpressionTest,
@@ -507,13 +505,13 @@ class ParserTests extends TestSet {
 
         double r1 = exp.evaluate(EvaluationType.REAL, context);
         double r2 = exp2.evaluate(EvaluationType.REAL, context);
-        expect(r2, r1, reason: 'Expected ${r2} for ${exp} (${exp2})');
+        expect(r2, r1, reason: 'Expected $r2 for $exp ($exp2)');
       } on FormatException catch (fe) {
         expect(fe, isNot(isFormatException),
-            reason: 'Expected no exception for ${inputString} (${exp})');
+            reason: 'Expected no exception for $inputString ($exp)');
       } on RangeError catch (re) {
         expect(re, isNot(isRangeError),
-            reason: 'Expected no exception for ${inputString} (${exp})');
+            reason: 'Expected no exception for $inputString ($exp)');
       }
     }
   }

@@ -4,9 +4,10 @@
 include: package:pedantic/analysis_options.yaml
 
 analyzer:
-  strong-mode:
-    implicit-casts: true
-    implicit-dynamic: false
+  language:
+    strict-casts: false
+    strict-inference: true
+    strict-raw-types: false
 
 # Linter rules customisations. Source of linter options:
 # http://dart-lang.github.io/linter/lints/options/options.html
