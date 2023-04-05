@@ -194,6 +194,36 @@ class UnaryMinus extends UnaryOperator {
   String toString() => '(-$exp)';
 }
 
+class UnaryPlus extends UnaryOperator {
+  /// Creates a new unary plus operation on the given expression.
+  ///
+  /// For example, to create +1:
+  ///
+  ///     one = Number(1);
+  ///     plus_one = UnaryPlus(one);
+  ///
+  /// or just:
+  ///
+  ///     plus_one = UnaryPlus(1);
+  UnaryPlus(dynamic exp) : super(exp);
+
+  @override
+  Expression derive(String toVar) => UnaryPlus(exp.derive(toVar));
+
+  /// Possible simplifications:
+  ///
+  /// 1. +a = a
+  @override
+  Expression simplify() => exp.simplify();
+
+  @override
+  dynamic evaluate(EvaluationType type, ContextModel context) =>
+      exp.evaluate(type, context);
+
+  @override
+  String toString() => '(+$exp)';
+}
+
 /// The plus operator performs an addition.
 class Plus extends BinaryOperator {
   /// Creates an addition operation on the given expressions.
