@@ -38,10 +38,10 @@ Below are two basic examples of how to use this library. There also is some [add
 
 This example shows how to evaluate
 
-![Equation 1][exampleEq1]
+$\frac{(x^2+\cos y)}{3}$
 
-for
-![xy][exampleEq1xy]
+
+for $x=2, y=\pi$
 
 #### Build the expression
 
@@ -81,7 +81,7 @@ You can either create an mathematical expression programmatically or parse a str
 
 This example shows how to simplify and differentiate
 
-![Example 2][exampleEq2]
+$x \cdot 1 - (-5)$
 
 * Expressions can be simplified and differentiated with respect to a given variable:
 ```dart
@@ -116,6 +116,3 @@ supporting interval arithmetics.
 [function_tree]: https://pub.dartlang.org/packages/function_tree "A library for parsing and evaluating numerical functions built from strings."
 [dartdoc]: https://pub.dartlang.org/documentation/math_expressions/latest/
 [defaultFunctions]: https://pub.dartlang.org/documentation/math_expressions/latest/math_expressions/DefaultFunction-class.html
-[exampleEq1]: https://latex.codecogs.com/gif.latex?%28x%5E2%2Bcos%28y%29%29%2F3
-[exampleEq1xy]: https://latex.codecogs.com/gif.latex?x%3D2%2Cy%3D%5Cpi
-[exampleEq2]: https://latex.codecogs.com/gif.latex?x*1-%28-5%29
