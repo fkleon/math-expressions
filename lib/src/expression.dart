@@ -628,10 +628,17 @@ class Power extends BinaryOperator {
       // base and a finite non-integer as the exponent. That's why we rewrite
       // the equation manually.
       if (base.isNegative && second is Divide) {
-        final num numerator = (second as Divide).first.evaluate(type, context);
-        final num denominator =
-            (second as Divide).second.evaluate(type, context);
-        return math.pow(math.pow(base, numerator), (1 / denominator));
+        final Expression numerator = (second as Divide).first;
+        final Expression denominator = (second as Divide).second;
+        final double newBase = Power(base, numerator).evaluate(type, context);
+        final double newExponent = 1 / denominator.evaluate(type, context);
+        return Power(newBase, newExponent).evaluate(type, context);
+      }
+      // In case the exponent is a unary minus e.g. x^(-(2/y)), we rewrite the
+      // equation to 1/x^(2/3), for the same reason as stated above.
+      if (base.isNegative && second is UnaryMinus) {
+        final Expression exponent = (second as UnaryMinus).exp;
+        return 1 / Power(base, exponent).evaluate(type, context);
       }
       return math.pow(base, second.evaluate(type, context));
     }
