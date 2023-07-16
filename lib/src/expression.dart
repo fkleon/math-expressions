@@ -872,7 +872,7 @@ class Variable extends Literal {
   Expression derive(String toVar) => name == toVar ? Number(1.0) : Number(0.0);
 
   @override
-  String toString() => '$name';
+  String toString() => name;
 
   @override
   dynamic evaluate(EvaluationType type, ContextModel context) =>

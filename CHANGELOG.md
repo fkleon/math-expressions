@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Switch from pedantic to the [official Dart lint rules](https://pub.dev/packages/lints)
+
 ## [2.4.0] - 2023-04-05
 
 ### Added

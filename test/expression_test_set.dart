@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 part of math_expressions_test;
 
 /// Contains methods to test the math expression implementation.
