@@ -1,7 +1,7 @@
-# https://www.dartlang.org/guides/language/analysis-options
-# Use Google internal analysis options from
-# https://pub.dartlang.org/packages/pedantic
-include: package:pedantic/analysis_options.yaml
+# https://dart.dev/tools/analysis#the-analysis-options-file
+# Use official Dart lint rules from
+# https://pub.dev/documentation/lints/latest/#recommended-lints
+include: package:lints/recommended.yaml
 
 analyzer:
   language:
@@ -15,6 +15,5 @@ linter:
   rules:
     control_flow_in_finally: true
     empty_statements: true
-    throw_in_finally: true
     unnecessary_this: false
-    omit_local_variable_types: false
+    constant_identifier_names: false

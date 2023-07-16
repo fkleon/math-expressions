@@ -93,7 +93,7 @@ class CompositeFunction extends MathFunction {
     MathFunction gDF;
     final Expression gD = g.derive(toVar);
 
-    if (!(gD is MathFunction)) {
+    if ((gD is! MathFunction)) {
       // Build function again..
       gDF = CustomFunction('d${g.name}', g.args, gD);
     } else {
