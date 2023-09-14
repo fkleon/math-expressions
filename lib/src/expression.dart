@@ -49,6 +49,13 @@ abstract class Expression {
   /// Unary minus operator. Creates a [UnaryMinus] expression.
   Expression operator -() => UnaryMinus(this);
 
+  /// Lower than operator. Returns 1 if true, 0 if false
+  Expression operator <(Expression exp) => LowerThan(this, exp);
+
+  /// Lower than or equal to operator. Returns 1 if true, 0 if false
+  Expression operator <=(Expression exp) => LowerThanOrEqualTo(this, exp);
+
+
   /// Derives this expression with respect to the given variable.
   Expression derive(String toVar);
   // TODO: Return simplified version of derivation. This might not be possible
@@ -274,6 +281,62 @@ class Plus extends BinaryOperator {
 
   @override
   String toString() => '($first + $second)';
+}
+
+/// The LowerThan operator returns 1 (as double) if true, 0 (as double) if false
+class LowerThan extends BinaryOperator{
+  LowerThan(dynamic first, dynamic second) : super(first, second);
+
+  @override
+  Expression derive(String toVar) =>
+      LowerThan(first.derive(toVar), second.derive(toVar));
+
+  @override
+  dynamic evaluate(EvaluationType type, ContextModel context) {
+    final dynamic firstEval = first.evaluate(type, context);
+    final dynamic secondEval = second.evaluate(type, context);
+    double _true = 1;
+    double _false = 0;
+
+    if(firstEval is double && secondEval is double){
+      if (firstEval < secondEval){
+        return _true;
+      }
+    }
+    return _false;
+  }
+
+
+  @override
+  String toString() => '($first < $second)';
+}
+
+/// The LowerThanOrEqual operator returns 1 (as double) if true, 0 (as double) if false
+class LowerThanOrEqualTo extends BinaryOperator{
+  LowerThanOrEqualTo(dynamic first, dynamic second) : super(first, second);
+
+  @override
+  Expression derive(String toVar) =>
+      LowerThanOrEqualTo(first.derive(toVar), second.derive(toVar));
+
+  @override
+  dynamic evaluate(EvaluationType type, ContextModel context) {
+    final dynamic firstEval = first.evaluate(type, context);
+    final dynamic secondEval = second.evaluate(type, context);
+    double _true = 1;
+    double _false = 0;
+
+    if(firstEval is double && secondEval is double){
+      if (firstEval <= secondEval){
+        return _true;
+      }
+    }
+    return _false;
+  }
+
+
+  @override
+  String toString() => '($first <= $second)';
 }
 
 /// The minus operator performs a subtraction.
@@ -872,7 +935,7 @@ class Variable extends Literal {
   Expression derive(String toVar) => name == toVar ? Number(1.0) : Number(0.0);
 
   @override
-  String toString() => name;
+  String toString() => '$name';
 
   @override
   dynamic evaluate(EvaluationType type, ContextModel context) =>

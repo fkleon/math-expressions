@@ -1,4 +1,4 @@
-part of math_expressions;
+﻿part of math_expressions;
 
 /// The Parser creates a mathematical [Expression] from a given input string.
 ///
@@ -73,6 +73,16 @@ class Parser {
           right = exprStack.removeLast();
           left = exprStack.removeLast();
           currExpr = left ^ right;
+          break;
+        case TokenType.LTE:
+          right = exprStack.removeLast();
+          left = exprStack.removeLast();
+          currExpr = LowerThanOrEqualTo(left, right);
+          break;
+        case TokenType.LT:
+          right = exprStack.removeLast();
+          left = exprStack.removeLast();
+          currExpr = left < right;
           break;
         case TokenType.EFUNC:
           currExpr = Exponential(exprStack.removeLast());
@@ -183,6 +193,8 @@ class Lexer {
     keywords['/'] = TokenType.DIV;
     keywords['%'] = TokenType.MOD;
     keywords['^'] = TokenType.POW;
+    keywords['<'] = TokenType.LT;
+    keywords['≤'] = TokenType.LTE;
     keywords['!'] = TokenType.FACTORIAL;
     keywords['nrt'] = TokenType.ROOT;
     keywords['sqrt'] = TokenType.SQRT;
@@ -534,6 +546,13 @@ class TokenType {
       TokenType._internal('UNMINUS', 3, leftAssociative: false, operator: true);
   static const TokenType UNPLUS =
       TokenType._internal('UNPLUS', 3, leftAssociative: false, operator: true);
+
+  // SGS added token
+  static const TokenType LT =
+  TokenType._internal('LT', 4, operator: true); // Lower than
+  static const TokenType LTE =
+  TokenType._internal('LTE', 5, operator: true, leftAssociative: false); // Lower than or equal
+
 
   // Functions
   static const TokenType FACTORIAL =
