@@ -1,4 +1,4 @@
-part of math_expressions_test;
+part of 'math_expressions_test.dart';
 
 /// Contains methods to test the math algebra implementation.
 class AlgebraTests extends TestSet {

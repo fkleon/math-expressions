@@ -1,6 +1,5 @@
 // ignore_for_file: unused_local_variable
-
-part of math_expressions_test;
+part of 'math_expressions_test.dart';
 
 /// Contains methods to test the math expression implementation.
 class ExpressionTests extends TestSet {

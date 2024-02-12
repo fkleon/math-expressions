@@ -1,4 +1,4 @@
-part of math_expressions;
+part of '../math_expressions.dart';
 
 /// The Parser creates a mathematical [Expression] from a given input string.
 ///

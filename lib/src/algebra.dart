@@ -1,4 +1,4 @@
-part of math_expressions;
+part of '../math_expressions.dart';
 
 /// A point in 3-dimensional space, which is a Vector3.
 /// This implementation supplies common mathematical operations on points.
