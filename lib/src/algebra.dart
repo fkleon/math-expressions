@@ -31,7 +31,7 @@ class Point3 extends Vector3 {
   /// Checks for equality. Two points are considered equal, if their coordinates
   /// match.
   @override
-  bool operator ==(Object? o) {
+  bool operator ==(Object o) {
     if (o is Point3) {
       return this.x == o.x && this.y == o.y && this.z == o.z;
     } else {
