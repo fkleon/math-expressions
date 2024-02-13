@@ -1,4 +1,4 @@
-part of math_expressions;
+part of '../math_expressions.dart';
 
 /// A point in 3-dimensional space, which is a Vector3.
 /// This implementation supplies common mathematical operations on points.
@@ -31,7 +31,7 @@ class Point3 extends Vector3 {
   /// Checks for equality. Two points are considered equal, if their coordinates
   /// match.
   @override
-  bool operator ==(Object? o) {
+  bool operator ==(Object o) {
     if (o is Point3) {
       return this.x == o.x && this.y == o.y && this.z == o.z;
     } else {

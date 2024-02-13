@@ -1,4 +1,4 @@
-part of math_expressions;
+part of '../math_expressions.dart';
 
 /// Mathematical expressions must be evaluated under a certain [EvaluationType].
 ///

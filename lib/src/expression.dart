@@ -1,4 +1,4 @@
-part of math_expressions;
+part of '../math_expressions.dart';
 
 /// Any Expression supports basic mathematical operations like
 /// addition, subtraction, multiplication, division, power and negate.

@@ -1,4 +1,4 @@
-part of math_expressions_test;
+part of 'math_expressions_test.dart';
 
 /// Contains a test set for testing the parser and lexer
 class ParserTests extends TestSet {
