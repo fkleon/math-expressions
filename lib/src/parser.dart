@@ -251,6 +251,10 @@ class Lexer {
         // Check if the current string is a Number. If it's the case add the string to the intBuffer.
         StringBuffer sb = StringBuffer(intBuffer);
         try {
+          // A variable can contains digits
+          if (varBuffer.isNotEmpty) {
+            throw FormatException();
+          }
           int.parse(si);
           // The current string is a number and it is added to the intBuffer.
           sb.write(si);
