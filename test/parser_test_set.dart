@@ -1,6 +1,6 @@
 part of 'math_expressions_test.dart';
 
-/// Contains a test set for testing the parser and lexer
+/// Contains a test set for testing the parser
 class ParserTests extends TestSet {
   @override
   String get name => 'Parser Tests';
@@ -10,496 +10,285 @@ class ParserTests extends TestSet {
 
   @override
   Map<String, Function> get testFunctions => {
-        'Lexer Tokenize (Infix + Postfix)': lexerTokenTest,
-        'Lexer Tokenize Invalid': lexerTokenTestInvalid,
-        'Parser Expression Creation': parserExpressionTest,
-        'Parser Expression Creation Invalid': parserExpressionTestInvalid,
-        'Parser Expression Creation from toString()':
-            parserExpressionTest_ParseFromToString,
-        'Parser Operator Precedence': parserOperatorPrecedence,
+        // TODO: Refactor these to be included in the individual test groups
+        'Parse from toString())': parseFromToString,
       };
 
   @override
-  void initTests() {
-    pars = Parser();
-    lex = Lexer();
+  Map<String, Function> get testGroups => {
+        // Literals
+        'Number': parseNumber,
+        'Variable': parseVariable,
+        'Parenthesis': parseParenthesis,
 
-    inputStrings = [];
-    tokenStreams = [];
-    rpnTokenStreams = [];
+        // Operators
+        'Unary Minus': parseUnaryMinus,
+        'Unary Plus': parseUnaryPlus,
+        'Power': parsePower,
+        'Modulo': parseModulo,
+        'Multiplication': parseMultiplication,
+        'Division': parseDivision,
+        'Addition': parsePlus,
+        'Subtraction': parseMinus,
+        'Operator Precedence': parseOperatorPrecedence,
 
-    /*
-     *  Operations
-     */
-    // Plus
-    inputStrings.add('x + 2');
-    tokenStreams.add([
-      Token('x', TokenType.VAR),
-      Token('+', TokenType.PLUS),
-      Token('2', TokenType.VAL)
-    ]);
-    rpnTokenStreams.add([
-      Token('x', TokenType.VAR),
-      Token('2', TokenType.VAL),
-      Token('+', TokenType.PLUS)
-    ]);
+        // Functions
+        'Functions': parseFunctions,
+        //'Custom functions': parseCustomFunctions,
+        'Algorithmic functions': parseAlgorithmicFunctions,
 
-    // Minus
-    inputStrings.add('x - 2');
-    tokenStreams.add([
-      Token('x', TokenType.VAR),
-      Token('-', TokenType.MINUS),
-      Token('2', TokenType.VAL)
-    ]);
-    rpnTokenStreams.add([
-      Token('x', TokenType.VAR),
-      Token('2', TokenType.VAL),
-      Token('-', TokenType.MINUS)
-    ]);
+        // Expressions
+        'Complex expression': parseComplexExpression,
 
-    inputStrings.add('0 - 1');
-    tokenStreams.add([
-      Token('0', TokenType.VAL),
-      Token('-', TokenType.MINUS),
-      Token('1', TokenType.VAL)
-    ]);
-    rpnTokenStreams.add([
-      Token('0', TokenType.VAL),
-      Token('1', TokenType.VAL),
-      Token('-', TokenType.MINUS)
-    ]);
+        // Negative test cases
+        'Invalid': parserExpressionTestInvalid,
+      };
 
-    inputStrings.add('(0 - 1)');
-    tokenStreams.add([
-      Token('(', TokenType.LBRACE),
-      Token('0', TokenType.VAL),
-      Token('-', TokenType.MINUS),
-      Token('1', TokenType.VAL),
-      Token(')', TokenType.RBRACE)
-    ]);
-    rpnTokenStreams.add([
-      Token('0', TokenType.VAL),
-      Token('1', TokenType.VAL),
-      Token('-', TokenType.MINUS)
-    ]);
+  @override
+  void initTests() {}
 
-    // Multiplication
-    inputStrings.add('0 * 1');
-    tokenStreams.add([
-      Token('0', TokenType.VAL),
-      Token('*', TokenType.TIMES),
-      Token('1', TokenType.VAL)
-    ]);
-    rpnTokenStreams.add([
-      Token('0', TokenType.VAL),
-      Token('1', TokenType.VAL),
-      Token('*', TokenType.TIMES)
-    ]);
+  Parser parser = Parser();
 
-    // Division
-    inputStrings.add('0 / 1');
-    tokenStreams.add([
-      Token('0', TokenType.VAL),
-      Token('/', TokenType.DIV),
-      Token('1', TokenType.VAL)
-    ]);
-    rpnTokenStreams.add([
-      Token('0', TokenType.VAL),
-      Token('1', TokenType.VAL),
-      Token('/', TokenType.DIV)
-    ]);
-
-    // standard syntax
-    inputStrings.add('-1');
-    tokenStreams.add([Token('-', TokenType.MINUS), Token('1', TokenType.VAL)]);
-    rpnTokenStreams
-        .add([Token('1', TokenType.VAL), Token('-', TokenType.UNMINUS)]);
-
-    inputStrings.add('(-1)');
-    tokenStreams.add([
-      Token('(', TokenType.LBRACE),
-      Token('-', TokenType.MINUS),
-      Token('1', TokenType.VAL),
-      Token(')', TokenType.RBRACE)
-    ]);
-    rpnTokenStreams
-        .add([Token('1', TokenType.VAL), Token('-', TokenType.UNMINUS)]);
-
-    inputStrings.add('-(1)');
-    tokenStreams.add([
-      Token('-', TokenType.MINUS),
-      Token('(', TokenType.LBRACE),
-      Token('1', TokenType.VAL),
-      Token(')', TokenType.RBRACE)
-    ]);
-    rpnTokenStreams
-        .add([Token('1', TokenType.VAL), Token('-', TokenType.UNMINUS)]);
-
-    // unary plus
-    inputStrings.add('+1');
-    tokenStreams.add([Token('+', TokenType.PLUS), Token('1', TokenType.VAL)]);
-    rpnTokenStreams
-        .add([Token('1', TokenType.VAL), Token('+', TokenType.UNPLUS)]);
-
-    inputStrings.add('(+1)');
-    tokenStreams.add([
-      Token('(', TokenType.LBRACE),
-      Token('+', TokenType.PLUS),
-      Token('1', TokenType.VAL),
-      Token(')', TokenType.RBRACE)
-    ]);
-    rpnTokenStreams
-        .add([Token('1', TokenType.VAL), Token('+', TokenType.UNPLUS)]);
-
-    inputStrings.add('+(1)');
-    tokenStreams.add([
-      Token('+', TokenType.PLUS),
-      Token('(', TokenType.LBRACE),
-      Token('1', TokenType.VAL),
-      Token(')', TokenType.RBRACE)
-    ]);
-    rpnTokenStreams
-        .add([Token('1', TokenType.VAL), Token('+', TokenType.UNPLUS)]);
-
-    // Power
-    inputStrings.add('1^1^1');
-    tokenStreams.add([
-      Token('1', TokenType.VAL),
-      Token('^', TokenType.POW),
-      Token('1', TokenType.VAL),
-      Token('^', TokenType.POW),
-      Token('1', TokenType.VAL)
-    ]);
-    rpnTokenStreams.add([
-      Token('1', TokenType.VAL),
-      Token('1', TokenType.VAL),
-      Token('1', TokenType.VAL),
-      Token('^', TokenType.POW),
-      Token('^', TokenType.POW)
-    ]);
-
-    /*
-     *  Functions
-     */
-    // Log
-    inputStrings.add('log(10,100)');
-    tokenStreams.add([
-      Token('log', TokenType.LOG),
-      Token('(', TokenType.LBRACE),
-      Token('10', TokenType.VAL),
-      Token(',', TokenType.SEPAR),
-      Token('100', TokenType.VAL),
-      Token(')', TokenType.RBRACE)
-    ]);
-    rpnTokenStreams.add([
-      Token('10', TokenType.VAL),
-      Token('100', TokenType.VAL),
-      Token('log', TokenType.LOG)
-    ]);
-
-    // Ln
-    inputStrings.add('ln(10)');
-    tokenStreams.add([
-      Token('ln', TokenType.LN),
-      Token('(', TokenType.LBRACE),
-      Token('10', TokenType.VAL),
-      Token(')', TokenType.RBRACE)
-    ]);
-    rpnTokenStreams
-        .add([Token('10', TokenType.VAL), Token('ln', TokenType.LN)]);
-
-    // Sqrt
-    inputStrings.add('sqrt(10)');
-    tokenStreams.add([
-      Token('sqrt', TokenType.SQRT),
-      Token('(', TokenType.LBRACE),
-      Token('10', TokenType.VAL),
-      Token(')', TokenType.RBRACE)
-    ]);
-    rpnTokenStreams
-        .add([Token('10', TokenType.VAL), Token('sqrt', TokenType.SQRT)]);
-
-    // Cos
-    inputStrings.add('cos(10)');
-    tokenStreams.add([
-      Token('cos', TokenType.COS),
-      Token('(', TokenType.LBRACE),
-      Token('10', TokenType.VAL),
-      Token(')', TokenType.RBRACE)
-    ]);
-    rpnTokenStreams
-        .add([Token('10', TokenType.VAL), Token('cos', TokenType.COS)]);
-
-    // Sin
-    inputStrings.add('sin(10)');
-    tokenStreams.add([
-      Token('sin', TokenType.SIN),
-      Token('(', TokenType.LBRACE),
-      Token('10', TokenType.VAL),
-      Token(')', TokenType.RBRACE)
-    ]);
-    rpnTokenStreams
-        .add([Token('10', TokenType.VAL), Token('sin', TokenType.SIN)]);
-
-    // Tan
-    inputStrings.add('tan(10)');
-    tokenStreams.add([
-      Token('tan', TokenType.TAN),
-      Token('(', TokenType.LBRACE),
-      Token('10', TokenType.VAL),
-      Token(')', TokenType.RBRACE)
-    ]);
-    rpnTokenStreams
-        .add([Token('10', TokenType.VAL), Token('tan', TokenType.TAN)]);
-
-    // Arccos
-    inputStrings.add('arccos(1)');
-    tokenStreams.add([
-      Token('arccos', TokenType.ACOS),
-      Token('(', TokenType.LBRACE),
-      Token('1', TokenType.VAL),
-      Token(')', TokenType.RBRACE)
-    ]);
-    rpnTokenStreams
-        .add([Token('1', TokenType.VAL), Token('arccos', TokenType.ACOS)]);
-
-    // Arcsin
-    inputStrings.add('arcsin(1)');
-    tokenStreams.add([
-      Token('arcsin', TokenType.ASIN),
-      Token('(', TokenType.LBRACE),
-      Token('1', TokenType.VAL),
-      Token(')', TokenType.RBRACE)
-    ]);
-    rpnTokenStreams
-        .add([Token('1', TokenType.VAL), Token('arcsin', TokenType.ASIN)]);
-
-    // Arctan
-    inputStrings.add('arctan(10)');
-    tokenStreams.add([
-      Token('arctan', TokenType.ATAN),
-      Token('(', TokenType.LBRACE),
-      Token('10', TokenType.VAL),
-      Token(')', TokenType.RBRACE)
-    ]);
-    rpnTokenStreams
-        .add([Token('10', TokenType.VAL), Token('arctan', TokenType.ATAN)]);
-
-    // Abs
-    inputStrings.add('abs(10)');
-    tokenStreams.add([
-      Token('abs', TokenType.ABS),
-      Token('(', TokenType.LBRACE),
-      Token('10', TokenType.VAL),
-      Token(')', TokenType.RBRACE)
-    ]);
-    rpnTokenStreams
-        .add([Token('10', TokenType.VAL), Token('abs', TokenType.ABS)]);
-    // Sgn
-    inputStrings.add('sgn(10)');
-    tokenStreams.add([
-      Token('sgn', TokenType.SGN),
-      Token('(', TokenType.LBRACE),
-      Token('10', TokenType.VAL),
-      Token(')', TokenType.RBRACE)
-    ]);
-    rpnTokenStreams
-        .add([Token('10', TokenType.VAL), Token('sgn', TokenType.SGN)]);
-
-    // n-th root
-    inputStrings.add('nrt(2,10)');
-    tokenStreams.add([
-      Token('nrt', TokenType.ROOT),
-      Token('(', TokenType.LBRACE),
-      Token('2', TokenType.VAL),
-      Token(',', TokenType.SEPAR),
-      Token('10', TokenType.VAL),
-      Token(')', TokenType.RBRACE)
-    ]);
-    rpnTokenStreams.add([
-      Token('2', TokenType.VAL),
-      Token('10', TokenType.VAL),
-      Token('nrt', TokenType.ROOT)
-    ]);
-
-    // ceil
-    inputStrings.add('ceil(1.2)');
-    tokenStreams.add([
-      Token('ceil', TokenType.CEIL),
-      Token('(', TokenType.LBRACE),
-      Token('1.2', TokenType.VAL),
-      Token(')', TokenType.RBRACE)
-    ]);
-    rpnTokenStreams
-        .add([Token('1.2', TokenType.VAL), Token('ceil', TokenType.CEIL)]);
-
-    // floor
-    inputStrings.add('floor(1.2)');
-    tokenStreams.add([
-      Token('floor', TokenType.FLOOR),
-      Token('(', TokenType.LBRACE),
-      Token('1.2', TokenType.VAL),
-      Token(')', TokenType.RBRACE)
-    ]);
-    rpnTokenStreams
-        .add([Token('1.2', TokenType.VAL), Token('floor', TokenType.FLOOR)]);
-
-    inputStrings.add('nrt(5,10-1)');
-    tokenStreams.add([
-      Token('nrt', TokenType.ROOT),
-      Token('(', TokenType.LBRACE),
-      Token('5', TokenType.VAL),
-      Token(',', TokenType.SEPAR),
-      Token('10', TokenType.VAL),
-      Token('-', TokenType.MINUS),
-      Token('1', TokenType.VAL),
-      Token(')', TokenType.RBRACE)
-    ]);
-    rpnTokenStreams.add([
-      Token('5', TokenType.VAL),
-      Token('10', TokenType.VAL),
-      Token('1', TokenType.VAL),
-      Token('-', TokenType.MINUS),
-      Token('nrt', TokenType.ROOT)
-    ]);
-
-    // Factorial
-    inputStrings.add('10!');
-    tokenStreams
-        .add([Token('10', TokenType.VAL), Token('!', TokenType.FACTORIAL)]);
-    rpnTokenStreams
-        .add([Token('10', TokenType.VAL), Token('!', TokenType.FACTORIAL)]);
-
-    // Exp
-    // function syntax
-    inputStrings.add('e(x)');
-    tokenStreams.add([
-      Token('e', TokenType.EFUNC),
-      Token('(', TokenType.LBRACE),
-      Token('x', TokenType.VAR),
-      Token(')', TokenType.RBRACE),
-    ]);
-    rpnTokenStreams
-        .add([Token('x', TokenType.VAR), Token('e', TokenType.EFUNC)]);
-
-    // power syntax
-    inputStrings.add('e^x');
-    tokenStreams.add([Token('e', TokenType.EFUNC), Token('x', TokenType.VAR)]);
-    rpnTokenStreams
-        .add([Token('x', TokenType.VAR), Token('e', TokenType.EFUNC)]);
-
-    inputStrings.add('e^(x+2)');
-    tokenStreams.add([
-      Token('e', TokenType.EFUNC),
-      Token('(', TokenType.LBRACE),
-      Token('x', TokenType.VAR),
-      Token('+', TokenType.PLUS),
-      Token('2', TokenType.VAL),
-      Token(')', TokenType.RBRACE)
-    ]);
-    rpnTokenStreams.add([
-      Token('x', TokenType.VAR),
-      Token('2', TokenType.VAL),
-      Token('+', TokenType.PLUS),
-      Token('e', TokenType.EFUNC)
-    ]);
-
-    // Algorithmic function
-    pars.addFunction('my_min', (List<double> args) => args.reduce(math.min));
-    lex.keywords['my_min'] = TokenType.FUNC;
-    inputStrings.add('my_min(1,x,-2)');
-    tokenStreams.add([
-      Token('my_min', TokenType.FUNC),
-      Token('(', TokenType.LBRACE),
-      Token('1', TokenType.VAL),
-      Token(',', TokenType.SEPAR),
-      Token('x', TokenType.VAR),
-      Token(',', TokenType.SEPAR),
-      Token('-', TokenType.MINUS),
-      Token('2', TokenType.VAL),
-      Token(')', TokenType.RBRACE),
-    ]);
-    rpnTokenStreams.add([
-      Token('1', TokenType.VAL),
-      Token('x', TokenType.VAR),
-      Token('2', TokenType.VAL),
-      Token('-', TokenType.UNMINUS),
-      Token('my_min', TokenType.FUNC),
-    ]);
-
-    // Complex expressions
-    inputStrings.add('x * 2^2.5 * log(10,100)');
-    tokenStreams.add([
-      Token('x', TokenType.VAR),
-      Token('*', TokenType.TIMES),
-      Token('2', TokenType.VAL),
-      Token('^', TokenType.POW),
-      Token('2.5', TokenType.VAL),
-      Token('*', TokenType.TIMES),
-      Token('log', TokenType.LOG),
-      Token('(', TokenType.LBRACE),
-      Token('10', TokenType.VAL),
-      Token(',', TokenType.SEPAR),
-      Token('100', TokenType.VAL),
-      Token(')', TokenType.RBRACE)
-    ]);
-    rpnTokenStreams.add([
-      Token('x', TokenType.VAR),
-      Token('2', TokenType.VAL),
-      Token('2.5', TokenType.VAL),
-      Token('^', TokenType.POW),
-      Token('*', TokenType.TIMES),
-      Token('10', TokenType.VAL),
-      Token('100', TokenType.VAL),
-      Token('log', TokenType.LOG),
-      Token('*', TokenType.TIMES)
-    ]);
+  void parameterized(Map<String, Expression> cases) {
+    cases.forEach((key, value) {
+      test('$key -> $value',
+          () => expect(parser.parse(key).toString(), value.toString()));
+    });
   }
 
-  /*
-   *  Tests and variables.
-   */
-  late Parser pars;
-  late Lexer lex;
-  late List<String> inputStrings;
-
-  late List<List<Token>> tokenStreams;
-  late List<List<Token>> rpnTokenStreams;
-
-  void lexerTokenTest() {
-    for (int i = 0; i < inputStrings.length; i++) {
-      String input = inputStrings[i];
-
-      // Test infix streams
-      List<Token> infixStream = lex.tokenize(input);
-      expect(infixStream, orderedEquals(tokenStreams[i]));
-
-      // Test RPN streams
-      List<Token> rpnStream = lex.shuntingYard(infixStream);
-      expect(rpnStream, orderedEquals(rpnTokenStreams[i]));
-    }
+  void parseNumber() {
+    var cases = {
+      '0': Number(0),
+      '1': Number(1),
+      '1.0': Number(1.0),
+      math.pi.toStringAsFixed(11): Number(3.14159265359),
+      '0.0': Number(0.0),
+      // max precision 15 digits
+      '999999999999999': Number(999999999999999),
+    };
+    parameterized(cases);
   }
 
-  void lexerTokenTestInvalid() {
-    Map<String, Matcher> invalidCases = {
-      '(': throwsFormatException,
-      ')': throwsFormatException,
-      '1+1)': throwsFormatException,
-      '(1+1': throwsFormatException,
-      'log(1,': throwsFormatException,
+  void parseVariable() {
+    var cases = {
+      'x': Variable('x'),
+      ' x': Variable('x'),
+      '(y )': Variable('y'),
+      //'var2': Variable('var2'), // Does not support numbers in variable names
+      'longname': Variable('longname'),
+    };
+    parameterized(cases);
+  }
+
+  void parseUnaryMinus() {
+    var cases = {
+      '-0': -Number(0),
+      '-1': -Number(1),
+      '-1.0': -Number(1.0),
+    };
+    parameterized(cases);
+  }
+
+  void parseUnaryPlus() {
+    var cases = {
+      '+0': UnaryPlus(Number(0)),
+      '+1': UnaryPlus(Number(1)),
+      '+1.0': UnaryPlus(Number(1.0)),
+    };
+    parameterized(cases);
+  }
+
+  void parsePower() {
+    var cases = {
+      '1^1': Number(1) ^ Number(1),
+      '1^0': Number(1) ^ Number(0),
+      '(-1) ^ 2': -Number(1) ^ Number(2),
+      '-1^2': -(Number(1) ^ Number(2)),
+      '1^0 ^20': Number(1) ^ (Number(0) ^ Number(20)),
+    };
+    parameterized(cases);
+  }
+
+  void parseModulo() {
+    var cases = {
+      '1%1': Number(1) % Number(1),
+      '100.0 % 20': Number(100.0) % Number(20),
+    };
+    parameterized(cases);
+  }
+
+  void parseMultiplication() {
+    var cases = {
+      '0 * 1': Number(0) * Number(1),
+      '-2.0 * 5': -Number(2.0) * Number(5),
+    };
+    parameterized(cases);
+  }
+
+  void parseDivision() {
+    var cases = {
+      '0 / 1': Number(0) / Number(1),
+      '-2.0 / 5': -Number(2.0) / Number(5),
+    };
+    parameterized(cases);
+  }
+
+  void parsePlus() {
+    var cases = {
+      'x + 2': Variable('x') + Number(2),
+    };
+    parameterized(cases);
+  }
+
+  void parseMinus() {
+    var cases = {
+      'x - 2': Variable('x') - Number(2),
+      '0 - 2': Number(0) - Number(2),
+    };
+    parameterized(cases);
+  }
+
+  void parseOperatorPrecedence() {
+    var cases = {
+      '-3^2': UnaryMinus(Number(3.0) ^ Number(2.0)),
+      '-3*2': UnaryMinus(Number(3.0)) * Number(2.0),
+    };
+    parameterized(cases);
+  }
+
+  void parseParenthesis() {
+    var cases = {
+      '(0)': Number(0),
+      '(0-x)': Number(0) - Variable('x'),
+    };
+    parameterized(cases);
+  }
+
+  void parseFunctions() {
+    var cases = {
+      'log(10,100)': Log(Number(10), Number(100)),
+      'ln(2)': Ln(Number(2)),
+      'sqrt(10)': Sqrt(Number(10)),
+      // n-th root
+      'nrt(2,10)': Root(2, Number(10)),
+      'nrt(5,10-1)': Root(5, Number(10) - Number(1)),
+      'cos(10)': Cos(Number(10)),
+      'sin(10)': Sin(Number(10)),
+      'tan(10)': Tan(Number(10)),
+      'arccos(1)': Acos(Number(1)),
+      'arcsin(1)': Asin(Number(1)),
+      'arctan(10)': Atan(Number(10)),
+      'abs(10)': Abs(Number(10)),
+      'sgn(10)': Sgn(Number(10)),
+      // Exponential - function syntax
+      'e(x)': Exponential(Variable('x')),
+      // Exponential - power syntax
+      'e^x': Exponential(Variable('x')),
+      'e^(x+2)': Exponential(Variable('x') + Number(2)),
+      'ceil(9.5)': Ceil(Number(9.5)),
+      'floor(9.5)': Floor(Number(9.5)),
+      '10!': Factorial(Number(10)),
+    };
+    parameterized(cases);
+  }
+
+  void parseCustomFunctions() {
+    var cases = {
+      'myCustomFunction(x)':
+          CustomFunction('myCustomFunction', [Variable('x')], Number(0)),
+    };
+    parameterized(cases);
+  }
+
+  void parseAlgorithmicFunctions() {
+    var cases = {
+      'myAlgorithmicFunction(1.0)': AlgorithmicFunction(
+          'myAlgorithmicFunction', [Number(1.0)], () => null),
+      'my_min(1,x,-2)': AlgorithmicFunction('my_min',
+          [Number(1), Variable('x'), UnaryMinus(Number(2))], () => null),
     };
 
-    for (String expr in invalidCases.keys) {
-      expect(() => lex.tokenizeToRPN(expr), invalidCases[expr]);
+    if (!parser.functionHandlers.containsKey('myAlgorithmicFunction')) {
+      parser.addFunction('myAlgorithmicFunction', () => null);
     }
+
+    if (!parser.functionHandlers.containsKey('my_min')) {
+      parser.addFunction(
+          'my_min', (List<double> args) => args.reduce(math.min));
+    }
+
+    parameterized(cases);
   }
 
-  void parserExpressionTest() {
-    for (String inputString in inputStrings) {
-      Expression exp = pars.parse(inputString);
-      // TODO Don't just test for no exceptions,
-      // also test for expression content.
-      expect(exp, isNotNull);
+  void parseComplexExpression() {
+    var cases = {
+      'x * 2^2.5 * log(10,100)': Variable('x') *
+          Power(Number(2), Number(2.5)) *
+          Log(Number(10), Number(100))
+    };
+    parameterized(cases);
+  }
+
+  void parseFromToString() {
+    const expressions = [
+      'x + 2',
+      'x - 2',
+      '0 - 1',
+      '(0 - 1)',
+      '0 * 1',
+      '0 / 1',
+      '-1',
+      '(-1)',
+      '-(1)',
+      '+1',
+      '(+1)',
+      '+(1)',
+      '1^1^1',
+      'log(10,100)',
+      'ln(10)',
+      'sqrt(10)',
+      'cos(10)',
+      'sin(10)',
+      'tan(10)',
+      'arccos(1)',
+      'arcsin(1)',
+      'arctan(10)',
+      'abs(10)',
+      'sgn(10)',
+      'nrt(2,10)',
+      'nrt(5,10-1)',
+      'ceil(1.2)',
+      'floor(1.2)',
+      '10!',
+      'e(x)',
+      'e^x',
+      'e^(x+2)',
+      'my_min(1,x,-2)',
+      'x * 2^2.5 * log(10,100)',
+    ];
+
+    ContextModel context = ContextModel()
+      ..bindVariableName('x', Number(math.pi));
+
+    for (String expression in expressions) {
+      /// Expression doesn't implement equal, so as an approximation
+      /// we're testing whether the expression re-parses and evaluates
+      /// to the same value.
+      Expression exp = parser.parse(expression);
+
+      try {
+        Expression exp2 = parser.parse(exp.toString());
+
+        double r1 = exp.evaluate(EvaluationType.REAL, context);
+        double r2 = exp2.evaluate(EvaluationType.REAL, context);
+        expect(r2, r1, reason: 'Expected $r2 for $exp ($exp2)');
+      } on FormatException catch (fe) {
+        expect(fe, isNot(isFormatException),
+            reason: 'Expected no exception for $expression ($exp)');
+      } on RangeError catch (re) {
+        expect(re, isNot(isRangeError),
+            reason: 'Expected no exception for $expression ($exp)');
+      }
     }
   }
 
@@ -515,41 +304,7 @@ class ParserTests extends TestSet {
     };
 
     for (String expr in invalidCases.keys) {
-      expect(() => pars.parse(expr), invalidCases[expr]);
+      test(expr, () => expect(() => parser.parse(expr), invalidCases[expr]));
     }
-  }
-
-  void parserExpressionTest_ParseFromToString() {
-    ContextModel context = ContextModel()
-      ..bindVariableName('x', Number(math.pi));
-
-    for (String inputString in inputStrings) {
-      /// Expression doesn't implement equal, so as an approximation
-      /// we're testing whether the expression re-parses and evaluates
-      /// to the same value.
-      Expression exp = pars.parse(inputString);
-
-      try {
-        Expression exp2 = pars.parse(exp.toString());
-
-        double r1 = exp.evaluate(EvaluationType.REAL, context);
-        double r2 = exp2.evaluate(EvaluationType.REAL, context);
-        expect(r2, r1, reason: 'Expected $r2 for $exp ($exp2)');
-      } on FormatException catch (fe) {
-        expect(fe, isNot(isFormatException),
-            reason: 'Expected no exception for $inputString ($exp)');
-      } on RangeError catch (re) {
-        expect(re, isNot(isRangeError),
-            reason: 'Expected no exception for $inputString ($exp)');
-      }
-    }
-  }
-
-  void parserOperatorPrecedence() {
-    Expression e = pars.parse('-3^2');
-    expect(e.toString(), equals('(-(3.0^2.0))'));
-
-    e = pars.parse('-3*2');
-    expect(e.toString(), equals('((-3.0) * 2.0)'));
   }
 }
