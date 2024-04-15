@@ -195,8 +195,7 @@ class CustomFunction extends MathFunction {
   ///
   /// The name of the function has no functional impact, and is only used in the
   /// string representation.
-  CustomFunction(String name, List<Variable> args, this.expression)
-      : super(name, args);
+  CustomFunction(super.name, super.args, this.expression);
 
   @override
   Expression derive(String toVar) =>
@@ -235,7 +234,7 @@ abstract class DefaultFunction extends MathFunction {
   /// __Note__:
   /// Must only be used internally for pre-defined functions, as it does not
   /// contain any expression. The Evaluator needs to know how to handle this.
-  DefaultFunction._unary(String name, Expression arg) : super._empty(name) {
+  DefaultFunction._unary(super.name, Expression arg) : super._empty() {
     final Variable bindingVariable = _wrapIntoVariable(arg);
     this.args = <Variable>[bindingVariable];
   }
@@ -247,8 +246,8 @@ abstract class DefaultFunction extends MathFunction {
   /// __Note__:
   /// Must only be used internally for pre-defined functions, as it does not
   /// contain any expression. The Evaluator needs to know how to handle this.
-  DefaultFunction._binary(String name, Expression arg1, Expression arg2)
-      : super._empty(name) {
+  DefaultFunction._binary(super.name, Expression arg1, Expression arg2)
+      : super._empty() {
     final Variable bindingVariable1 = _wrapIntoVariable(arg1);
     final Variable bindingVariable2 = _wrapIntoVariable(arg2);
     this.args = <Variable>[bindingVariable1, bindingVariable2];
@@ -257,8 +256,7 @@ abstract class DefaultFunction extends MathFunction {
   /// Creates a new function with given name and any arguments.
   /// If the arguments are not variables, they will be wrapped into anonymous
   /// variables, which bind the given expressions.
-  DefaultFunction._any(String name, List<Expression> args)
-      : super._empty(name) {
+  DefaultFunction._any(super.name, List<Expression> args) : super._empty() {
     this.args = args.map((arg) => _wrapIntoVariable(arg)).toList();
   }
 
@@ -407,7 +405,7 @@ class Ln extends Log {
   ///     ln = Ln(num10);
   ///
   /// To create a logarithm with arbitrary base, see [Log].
-  Ln(Expression arg) : super._ln(arg);
+  Ln(super.arg) : super._ln();
 
   @override
   Expression derive(String toVar) => arg.derive(toVar) / arg;
@@ -507,7 +505,7 @@ class Sqrt extends Root {
   /// For example, to create the square root of x:
   ///
   ///     sqrt = Sqrt(Variable('x'));
-  Sqrt(Expression arg) : super.sqrt(arg);
+  Sqrt(super.arg) : super.sqrt();
 
   /// Possible simplifications:
   ///
@@ -1011,8 +1009,7 @@ class AlgorithmicFunction extends DefaultFunction {
   /// The name of the function has no functional impact, and is only used in the
   /// string representation. If the function is defined via the Parser#addFunction
   /// method instead it is supported by the parser.
-  AlgorithmicFunction(String name, List<Expression> args, this.handler)
-      : super._any(name, args);
+  AlgorithmicFunction(super.name, super.args, this.handler) : super._any();
 
   Function handler;
 

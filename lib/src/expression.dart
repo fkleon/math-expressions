@@ -159,7 +159,7 @@ class UnaryMinus extends UnaryOperator {
   /// or just:
   ///
   ///     minus_one = UnaryMinus(1);
-  UnaryMinus(dynamic exp) : super(exp);
+  UnaryMinus(super.exp);
 
   @override
   Expression derive(String toVar) => UnaryMinus(exp.derive(toVar));
@@ -205,7 +205,7 @@ class UnaryPlus extends UnaryOperator {
   /// or just:
   ///
   ///     plus_one = UnaryPlus(1);
-  UnaryPlus(dynamic exp) : super(exp);
+  UnaryPlus(super.exp);
 
   @override
   Expression derive(String toVar) => UnaryPlus(exp.derive(toVar));
@@ -235,7 +235,7 @@ class Plus extends BinaryOperator {
   /// or:
   ///
   ///     addition = Variable('x') + Number(4);
-  Plus(dynamic first, dynamic second) : super(first, second);
+  Plus(super.first, super.second);
 
   @override
   Expression derive(String toVar) =>
@@ -287,7 +287,7 @@ class Minus extends BinaryOperator {
   /// or:
   ///
   ///     subtraction = Number(5) - Variable('x');
-  Minus(dynamic first, dynamic second) : super(first, second);
+  Minus(super.first, super.second);
 
   @override
   Expression derive(String toVar) =>
@@ -339,7 +339,7 @@ class Times extends BinaryOperator {
   /// or:
   ///
   ///     product = Number(7) * Variable('x');
-  Times(dynamic first, dynamic second) : super(first, second);
+  Times(super.first, super.second);
 
   @override
   Expression derive(String toVar) => Plus(
@@ -430,7 +430,7 @@ class Divide extends BinaryOperator {
   /// or:
   ///
   ///     div = Variable('x') / (Variable('y') + Number(2));
-  Divide(dynamic dividend, dynamic divisor) : super(dividend, divisor);
+  Divide(super.dividend, super.divisor);
 
   @override
   Expression derive(String toVar) =>
@@ -512,7 +512,7 @@ class Modulo extends BinaryOperator {
   /// or:
   ///
   ///     r = Variable('x') % (Variable('y') + Number(2));
-  Modulo(dynamic dividend, dynamic divisor) : super(dividend, divisor);
+  Modulo(super.dividend, super.divisor);
 
   @override
   Expression derive(String toVar) {
@@ -567,7 +567,7 @@ class Power extends BinaryOperator {
   /// or:
   ///
   ///     pow = Variable('x') ^ Number(3.0);
-  Power(dynamic x, dynamic exp) : super(x, exp);
+  Power(super.x, super.exp);
 
   @override
   Expression derive(String toVar) => this.asE().derive(toVar);
@@ -767,7 +767,7 @@ class Vector extends Literal {
   ///
   ///     x = y = z = Number(1);
   ///     vec3 = Vector([x, y, z]);
-  Vector(List<Expression> elements) : super(elements);
+  Vector(List<Expression> super.elements);
 
   /// Convenience operator to access vector elements.
   Expression operator [](int i) => elements[i];
