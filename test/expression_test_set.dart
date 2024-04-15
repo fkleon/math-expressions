@@ -7,6 +7,9 @@ class ExpressionTests extends TestSet {
   String get name => 'Expression Tests';
 
   @override
+  String get tags => 'expression';
+
+  @override
   Map<String, Function> get testFunctions => {
         'Expression creation [REAL]': simpleRealCreation,
         'Expression creation [INTERVAL]': simpleIntervalCreation,

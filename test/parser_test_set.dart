@@ -6,6 +6,9 @@ class ParserTests extends TestSet {
   String get name => 'Parser Tests';
 
   @override
+  String get tags => 'parser';
+
+  @override
   Map<String, Function> get testFunctions => {
         'Lexer Tokenize (Infix + Postfix)': lexerTokenTest,
         'Lexer Tokenize Invalid': lexerTokenTestInvalid,
