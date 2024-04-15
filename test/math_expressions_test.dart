@@ -5,6 +5,7 @@ import 'dart:math' as math;
 import 'package:test/test.dart';
 import 'package:vector_math/vector_math.dart' show Vector3;
 import 'package:math_expressions/math_expressions.dart';
+import 'package:petitparser/reflection.dart';
 
 import 'test_framework.dart';
 

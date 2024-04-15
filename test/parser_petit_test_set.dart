@@ -1,4 +1,4 @@
-part of math_expressions_test;
+part of 'math_expressions_test.dart';
 
 /// Contains a test set for testing the parser and lexer
 class PetitParserTests extends TestSet {
@@ -6,9 +6,19 @@ class PetitParserTests extends TestSet {
   String get name => 'Petit Parser Tests';
 
   @override
+  String get tags => 'petitparser';
+
+  @override
   Map<String, Function> get testGroups => {
+        // Lint
+        'Lint': lint,
+
+        // Literals
         'Number': parseNumber,
         'Variable': parseVariable,
+        'Parenthesis': parseParenthesis,
+
+        // Operators
         'Unary Minus': parseUnaryMinus,
         'Unary Plus': parseUnaryPlus,
         'Power': parsePower,
@@ -17,12 +27,17 @@ class PetitParserTests extends TestSet {
         'Division': parseDivision,
         'Addition': parsePlus,
         'Subtraction': parseMinus,
-        'Parenthesis': parseParenthesis,
-        //'Logarithm': parseLog,
-        //'Natural Logarithm': parseLn,
-        /// TODO functions
+        'Operator Precedence': parseOperatorPrecedence,
+
+        // Functions
         'Functions': parseFunctions,
-        //'Algorithmic functions': parseAlgorithmicFunctions,
+        'Custom functions': parseCustomFunctions,
+        'Algorithmic functions': parseAlgorithmicFunctions,
+
+        // Expressions
+        'Complex expression': parseComplexExpression,
+
+        // Negative test cases
         'Invalid': parserExpressionTestInvalid,
       };
 
@@ -35,6 +50,12 @@ class PetitParserTests extends TestSet {
     cases.forEach((key, value) {
       test('$key -> $value',
           () => expect(parser.parse(key).toString(), value.toString()));
+    });
+  }
+
+  void lint() {
+    test('detect common problems', () {
+      expect(linter(parser.parser), isEmpty);
     });
   }
 
@@ -130,6 +151,14 @@ class PetitParserTests extends TestSet {
     parameterized(cases);
   }
 
+  void parseOperatorPrecedence() {
+    var cases = {
+      '-3^2': UnaryMinus(Number(3.0) ^ Number(2.0)),
+      '-3*2': UnaryMinus(Number(3.0)) * Number(2.0),
+    };
+    parameterized(cases);
+  }
+
   void parseParenthesis() {
     var cases = {
       '(0)': Number(0),
@@ -143,8 +172,10 @@ class PetitParserTests extends TestSet {
       'log(10,100)': Log(Number(10), Number(100)),
       'ln(2)': Ln(Number(2)),
       'sqrt(10)': Sqrt(Number(10)),
+      // n-th root
       'nrt(2,10)': Root(2, Number(10)),
       'nrt(5,10-1)': Root(5, Number(10) - Number(1)),
+      'cos(10)': Cos(Number(10)),
       'sin(10)': Sin(Number(10)),
       'tan(10)': Tan(Number(10)),
       'arccos(1)': Acos(Number(1)),
@@ -152,7 +183,9 @@ class PetitParserTests extends TestSet {
       'arctan(10)': Atan(Number(10)),
       'abs(10)': Abs(Number(10)),
       'sgn(10)': Sgn(Number(10)),
+      // Exponential - function syntax
       'e(x)': Exponential(Variable('x')),
+      // Exponential - power syntax
       'e^x': Exponential(Variable('x')),
       'e^(x+2)': Exponential(Variable('x') + Number(2)),
       'ceil(9.5)': Ceil(Number(9.5)),
@@ -162,10 +195,29 @@ class PetitParserTests extends TestSet {
     parameterized(cases);
   }
 
+  void parseCustomFunctions() {
+    var cases = {
+      'myCustomFunction(x)':
+          CustomFunction('myCustomFunction', [Variable('x')], Number(0)),
+    };
+    parameterized(cases);
+  }
+
   void parseAlgorithmicFunctions() {
     var cases = {
-      'myFunction(1.0)':
-          AlgorithmicFunction('myFunction', [Number(1.0)], () => null),
+      'myAlgorithmicFunction(1.0)': AlgorithmicFunction(
+          'myAlgorithmicFunction', [Number(1.0)], () => null),
+      'my_min(1,x,-2)': AlgorithmicFunction('my_min',
+          [Number(1), Variable('x'), UnaryMinus(Number(2))], () => null),
+    };
+    parameterized(cases);
+  }
+
+  void parseComplexExpression() {
+    var cases = {
+      'x * 2^2.5 * log(10,100)': Variable('x') *
+          Power(Number(2), Number(2.5)) *
+          Log(Number(10), Number(100))
     };
     parameterized(cases);
   }
@@ -182,7 +234,7 @@ class PetitParserTests extends TestSet {
     };
 
     for (String expr in invalidCases.keys) {
-      test('$expr', () => expect(() => parser.parse(expr), invalidCases[expr]));
+      test(expr, () => expect(() => parser.parse(expr), invalidCases[expr]));
     }
   }
 }
