@@ -6,8 +6,16 @@ class ExpressionParser {
   ExpressionParser() {
     final builder = ExpressionBuilder<Expression>();
 
+    final p.Parser<String> identifier =
+        (letter() & word().star()).flatten().trim();
+
+    final function = ref0(() => identifier) &
+        char('(') &
+        ref0(() => identifier) &
+        char(')').map((value) => null);
+
     // Numbers and variables
-    builder.group()
+    builder
       ..primitive(digit()
           .plus()
           .seq(char('.').seq(digit().plus()).optional())
@@ -19,7 +27,7 @@ class ExpressionParser {
           .flatten()
           .trim()
           .map<Expression>((value) => Variable(value)))
-      ..wrapper(char('(').trim(), char(')').trim(), (l, e, r) => e);
+      ..group().wrapper(char('(').trim(), char(')').trim(), (l, e, r) => e);
 
     // Binary operators (right associative)
     builder.group().right(char('^').trim(), (l, op, r) => Power(l, r));
@@ -39,11 +47,14 @@ class ExpressionParser {
       ..left(char('-').trim(), (l, op, r) => Minus(l, r));
 
     // Functions
-    /*
-    builder.group()
-      ..primitive((letter().plus() & char('(') & letter().plus() & char(')'))
-          .map((x) => CustomFunction(x[0], x.sublist(1), null)));
-    */
+
+    // Custom function
+    builder.primitive((letter().plus() &
+            char('(') &
+            letter().plus() &
+            char(')'))
+        .map((x) => CustomFunction(
+            x[0], x.sublist(1).map((e) => Variable(e)).toList(), Number(0))));
 
     parser = builder.build().end();
   }

@@ -49,6 +49,9 @@ abstract class Expression {
   /// Unary minus operator. Creates a [UnaryMinus] expression.
   Expression operator -() => UnaryMinus(this);
 
+  /// Unary plus operator. Creates a [UnaryPlus] expression.
+  //Expression operator +() => UnaryPlus(this);
+
   /// Derives this expression with respect to the given variable.
   Expression derive(String toVar);
   // TODO: Return simplified version of derivation. This might not be possible
