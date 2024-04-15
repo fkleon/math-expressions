@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Add support for parsing variables containing digits (thanks [alexander-zubkov](https://github.com/alexander-zubkov))
 - Drop support for Dart SDK versions below 3.0.0
 - Switch from pedantic to the [official Dart lint rules](https://pub.dev/packages/lints)
 

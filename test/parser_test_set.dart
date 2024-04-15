@@ -74,7 +74,9 @@ class ParserTests extends TestSet {
       'x': Variable('x'),
       ' x': Variable('x'),
       '(y )': Variable('y'),
-      //'var2': Variable('var2'), // Does not support numbers in variable names
+      'var2': Variable('var2'),
+      'va2r': Variable('va2r'),
+      '\$s2': Variable('\$s2'),
       'longname': Variable('longname'),
     };
     parameterized(cases);

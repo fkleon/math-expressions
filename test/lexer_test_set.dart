@@ -80,7 +80,9 @@ class LexerTests extends TestSet {
       ' x': [Token('x', TokenType.VAR)],
       'y': [Token('y', TokenType.VAR)],
       '(y )': [Token('y', TokenType.VAR)],
-      //'var2': [Token('var2', TokenType.VAR)], // Does not support numbers in variable names
+      'var2': [Token('var2', TokenType.VAR)],
+      'va2r': [Token('va2r', TokenType.VAR)],
+      '\$s2': [Token('\$s2', TokenType.VAR)],
       'longname': [Token('longname', TokenType.VAR)],
     };
     parameterizedRpn(cases);
