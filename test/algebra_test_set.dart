@@ -6,6 +6,9 @@ class AlgebraTests extends TestSet {
   String get name => 'Algebra Tests';
 
   @override
+  String get tags => 'algebra';
+
+  @override
   Map<String, Function> get testFunctions => {
         'Point Creation': pointCreation,
         'Point Equality': pointEquality,

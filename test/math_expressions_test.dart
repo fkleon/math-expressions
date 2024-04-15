@@ -10,6 +10,7 @@ import 'test_framework.dart';
 
 part 'algebra_test_set.dart';
 part 'expression_test_set.dart';
+part 'lexer_test_set.dart';
 part 'parser_test_set.dart';
 
 /// relative accuracy for floating-point calculations
@@ -19,6 +20,7 @@ const num EPS = 0.000001;
 void main() {
   final List<TestSet> testSets = <TestSet>[
     AlgebraTests(),
+    LexerTests(),
     ParserTests(),
     ExpressionTests()
   ];

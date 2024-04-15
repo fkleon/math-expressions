@@ -32,7 +32,10 @@ class TestExecutor {
       group(set.name, () {
         setUp(set.initTests);
         set.testFunctions.forEach((String k, Function v) {
-          test(k, () => v());
+          test(k, () => v(), tags: set.tags);
+        });
+        set.testGroups.forEach((String k, Function v) {
+          group(k, () => v(), tags: set.tags);
         });
       });
     }
@@ -49,9 +52,15 @@ abstract class TestSet {
   /// Returns the designated name of this test set.
   String get name;
 
+  /// Returns the tags to be attached to this test set.
+  String? get tags => null;
+
   /// Initializes any requirements for the tests to run.
   void initTests();
 
   /// Returns a map containing test function names and associated function calls.
-  Map<String, Function> get testFunctions;
+  Map<String, Function> get testFunctions => {};
+
+  /// Returns a map containing test group names and associated function calls.
+  Map<String, Function> get testGroups => {};
 }
