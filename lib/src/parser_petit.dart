@@ -1,4 +1,4 @@
-part of math_expressions;
+part of '../math_expressions.dart';
 
 class ExpressionParser {
   late final p.Parser parser;
@@ -48,7 +48,7 @@ class ExpressionParser {
 
   Expression parse(String input) {
     Result<dynamic> result = parser.parse(input);
-    if (result.isFailure) {
+    if (result is Failure) {
       throw FormatException(result.message);
     } else {
       print(result.value);
