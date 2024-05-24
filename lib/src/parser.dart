@@ -16,15 +16,31 @@ class Parser {
   Parser() : lex = Lexer();
   Map<String, dynamic> functionHandlers = <String, dynamic>{};
 
-  /// Parses the given input string into an [Expression]. Throws a
-  /// [ArgumentError] if the given [inputString] is empty. Throws a
-  /// [StateError] if the token stream is invalid. Returns a valid
-  /// [Expression].
-  Expression parse(String inputString) {
+  /// Parses the given input string into an [Expression]. If
+  /// [multiplyWithParentheses] is true you can multiply using 
+  /// parentheses. Throws  [ArgumentError] if the given [inputString] 
+  /// is empty. Throws a [StateError] if the token stream is 
+  /// invalid. Returns a valid [Expression].
+  Expression parse(String inputString,{
+    bool multiplyWithParentheses=false
+  }) {
     if (inputString.trim().isEmpty) {
       throw FormatException('The given input string was empty.');
     }
-
+    if (multiplyWithParentheses) {
+      inputString=inputString.trim().replaceAll(' ', '');
+      final codeUnits= [...inputString.codeUnits];
+      for (int i = 0; i < codeUnits.length; i++) {
+        if (String.fromCharCode(codeUnits[i])==')' && i!=codeUnits.length-1) {
+          final nextSymbol=String.fromCharCode(codeUnits[i+1]);
+          if ([')','/','*','-','+'].every((element) => nextSymbol!=element)) {
+            codeUnits.insert(i+1, '*'.codeUnits.first);
+          }
+        }
+      }
+      inputString=String.fromCharCodes(codeUnits);
+    }
+      
     final List<Expression> exprStack = <Expression>[];
     final List<Token> inputStream = lex.tokenizeToRPN(inputString);
 

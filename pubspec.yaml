@@ -1,5 +1,5 @@
 name: math_expressions
-version: 2.5.0
+version: 2.5.1
 homepage: https://github.com/fkleon/math-expressions
 description: A library for parsing and evaluating mathematical expressions, supporting real numbers, vectors, and basic interval arithmetic.
 
