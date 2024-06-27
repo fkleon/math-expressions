@@ -17,32 +17,20 @@ class Parser {
   Map<String, dynamic> functionHandlers = <String, dynamic>{};
 
   /// Parses the given input string into an [Expression]. If
-  /// [multiplyWithParentheses] is true you can multiply using 
-  /// parentheses. Throws  [ArgumentError] if the given [inputString] 
-  /// is empty. Throws a [StateError] if the token stream is 
+  /// [multiplyWithParentheses] is true you can multiply using
+  /// parentheses. Throws  [ArgumentError] if the given [inputString]
+  /// is empty. Throws a [StateError] if the token stream is
   /// invalid. Returns a valid [Expression].
-  Expression parse(String inputString,{
-    bool multiplyWithParentheses=false
-  }) {
+  Expression parse(String inputString, {bool multiplyWithParentheses = false}) {
     if (inputString.trim().isEmpty) {
       throw FormatException('The given input string was empty.');
     }
-    if (multiplyWithParentheses) {
-      inputString=inputString.trim().replaceAll(' ', '');
-      final codeUnits= [...inputString.codeUnits];
-      for (int i = 0; i < codeUnits.length; i++) {
-        if (String.fromCharCode(codeUnits[i])==')' && i!=codeUnits.length-1) {
-          final nextSymbol=String.fromCharCode(codeUnits[i+1]);
-          if ([')','/','*','-','+'].every((element) => nextSymbol!=element)) {
-            codeUnits.insert(i+1, '*'.codeUnits.first);
-          }
-        }
-      }
-      inputString=String.fromCharCodes(codeUnits);
-    }
-      
+
     final List<Expression> exprStack = <Expression>[];
-    final List<Token> inputStream = lex.tokenizeToRPN(inputString);
+    final List<Token> inputStream = lex.tokenizeToRPN(
+      inputString,
+      multiplyWithParentheses: multiplyWithParentheses,
+    );
 
     for (Token currToken in inputStream) {
       Expression currExpr, left, right;
@@ -224,7 +212,8 @@ class Lexer {
 
   /// Tokenizes a given input string.
   /// Returns a list of [Token] in infix notation.
-  List<Token> tokenize(String inputString) {
+  List<Token> tokenize(String inputString,
+      { bool multiplyWithParentheses=false}) {
     final List<Token> tempTokenStream = <Token>[];
     final String clearedString = inputString.replaceAll(' ', '').trim();
     final RuneIterator iter = clearedString.runes.iterator;
@@ -314,6 +303,27 @@ class Lexer {
     if (varBuffer.isNotEmpty) {
       // There are no more symbols in the input string but there is still a variable or keyword in the varBuffer
       _doVarBuffer(tempTokenStream);
+    }
+    if (multiplyWithParentheses) {
+      for (int i = 0; i < tempTokenStream.length; i++) {
+        if (tempTokenStream[i].type == TokenType.RBRACE &&
+            i != tempTokenStream.length - 1) {
+          final nextSymbol = tempTokenStream[i + 1];
+          if ([
+            TokenType.RBRACE,
+            TokenType.DIV,
+            TokenType.TIMES,
+            TokenType.MINUS,
+            TokenType.PLUS,
+            TokenType.MOD,
+          ].every((element) => nextSymbol.type != element)) {
+            tempTokenStream.insert(
+              i + 1,
+              Token('*', TokenType.TIMES),
+            );
+          }
+        }
+      }
     }
     return tempTokenStream;
   }
@@ -481,8 +491,12 @@ class Lexer {
   /// This method invokes the createTokenStream methode to create an infix token
   /// stream and then invokes the shunting yard method to transform this stream
   /// into a RPN (reverse polish notation) token stream.
-  List<Token> tokenizeToRPN(String inputString) {
-    final List<Token> infixStream = tokenize(inputString);
+  List<Token> tokenizeToRPN(String inputString,
+      {bool multiplyWithParentheses = false}) {
+    final List<Token> infixStream = tokenize(
+      inputString,
+      multiplyWithParentheses: multiplyWithParentheses,
+    );
     return shuntingYard(infixStream);
   }
 }

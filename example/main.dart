@@ -125,4 +125,3 @@ void _algorithmic_function_definition_and_use() {
   double res = exp.evaluate(EvaluationType.REAL, cm);
   print('my_min(1, ${cm.getExpression('x')}, -1) = $res');
 }
-
