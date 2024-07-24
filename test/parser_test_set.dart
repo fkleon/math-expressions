@@ -142,7 +142,7 @@ class ParserTests extends TestSet {
       '(5)(5)': Number(5) * Number(5),
       '(-2.0)5': -Number(2.0) * Number(5),
     };
-    parameterized(cases,multiplyWithParentheses: true);
+    parameterized(cases, multiplyWithParentheses: true);
   }
 
   void parseDivision() {

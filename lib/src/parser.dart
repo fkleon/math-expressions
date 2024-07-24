@@ -213,7 +213,7 @@ class Lexer {
   /// Tokenizes a given input string.
   /// Returns a list of [Token] in infix notation.
   List<Token> tokenize(String inputString,
-      { bool multiplyWithParentheses=false}) {
+      {bool multiplyWithParentheses = false}) {
     final List<Token> tempTokenStream = <Token>[];
     final String clearedString = inputString.replaceAll(' ', '').trim();
     final RuneIterator iter = clearedString.runes.iterator;
