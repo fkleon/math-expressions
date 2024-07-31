@@ -27,6 +27,7 @@ class ParserTests extends TestSet {
         'Power': parsePower,
         'Modulo': parseModulo,
         'Multiplication': parseMultiplication,
+        'MultiplicationWithParentheses': parseMultiplicationWithParentheses,
         'Division': parseDivision,
         'Addition': parsePlus,
         'Subtraction': parseMinus,
@@ -49,10 +50,19 @@ class ParserTests extends TestSet {
 
   Parser parser = Parser();
 
-  void parameterized(Map<String, Expression> cases) {
+  void parameterized(Map<String, Expression> cases,
+      {bool multiplyWithParentheses = false}) {
     cases.forEach((key, value) {
-      test('$key -> $value',
-          () => expect(parser.parse(key).toString(), value.toString()));
+      test(
+          '$key -> $value',
+          () => expect(
+              parser
+                  .parse(
+                    key,
+                    multiplyWithParentheses: multiplyWithParentheses,
+                  )
+                  .toString(),
+              value.toString()));
     });
   }
 
@@ -125,6 +135,14 @@ class ParserTests extends TestSet {
       '-2.0 * 5': -Number(2.0) * Number(5),
     };
     parameterized(cases);
+  }
+
+  void parseMultiplicationWithParentheses() {
+    var cases = {
+      '(5)(5)': Number(5) * Number(5),
+      '(-2.0)5': -Number(2.0) * Number(5),
+    };
+    parameterized(cases, multiplyWithParentheses: true);
   }
 
   void parseDivision() {
