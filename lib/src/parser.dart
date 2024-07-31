@@ -13,15 +13,16 @@ class Parser {
   final Lexer lex;
 
   /// Creates a new parser.
-  Parser() : lex = Lexer();
+  /// The given [options] can be used to configure the behaviour.
+  Parser([ParserOptions options = const ParserOptions()])
+      : lex = Lexer(options);
   Map<String, dynamic> functionHandlers = <String, dynamic>{};
 
-  /// Parses the given input string into an [Expression]. If
-  /// [multiplyWithParentheses] is true you can multiply using
-  /// parentheses. Throws  [ArgumentError] if the given [inputString]
+  /// Parses the given input string into an [Expression].
+  /// Throws a [ArgumentError] if the given [inputString]
   /// is empty. Throws a [StateError] if the token stream is
   /// invalid. Returns a valid [Expression].
-  Expression parse(String inputString, {bool multiplyWithParentheses = false}) {
+  Expression parse(String inputString) {
     if (inputString.trim().isEmpty) {
       throw FormatException('The given input string was empty.');
     }
@@ -29,7 +30,6 @@ class Parser {
     final List<Expression> exprStack = <Expression>[];
     final List<Token> inputStream = lex.tokenizeToRPN(
       inputString,
-      multiplyWithParentheses: multiplyWithParentheses,
     );
 
     for (Token currToken in inputStream) {
@@ -164,6 +164,13 @@ class Parser {
   }
 }
 
+class ParserOptions {
+  /// If [implicitMultiplication] is true the parser will allow
+  /// implicit multiplication using parentheses.
+  final bool implicitMultiplication;
+  const ParserOptions({this.implicitMultiplication = false});
+}
+
 /// The lexer creates tokens (see [TokenType] and [Token]) from an input string.
 /// The input string is expected to be in
 /// [infix notation form](https://en.wikipedia.org/wiki/Infix_notation).
@@ -173,6 +180,8 @@ class Parser {
 class Lexer {
   final Map<String, TokenType> keywords = <String, TokenType>{};
 
+  final ParserOptions options;
+
   /// Buffer for numbers
   String intBuffer = '';
 
@@ -180,7 +189,7 @@ class Lexer {
   String varBuffer = '';
 
   /// Creates a new lexer.
-  Lexer() {
+  Lexer([this.options = const ParserOptions()]) {
     keywords['+'] = TokenType.PLUS;
     keywords['-'] = TokenType.MINUS;
     keywords['*'] = TokenType.TIMES;
@@ -212,8 +221,7 @@ class Lexer {
 
   /// Tokenizes a given input string.
   /// Returns a list of [Token] in infix notation.
-  List<Token> tokenize(String inputString,
-      {bool multiplyWithParentheses = false}) {
+  List<Token> tokenize(String inputString) {
     final List<Token> tempTokenStream = <Token>[];
     final String clearedString = inputString.replaceAll(' ', '').trim();
     final RuneIterator iter = clearedString.runes.iterator;
@@ -304,7 +312,7 @@ class Lexer {
       // There are no more symbols in the input string but there is still a variable or keyword in the varBuffer
       _doVarBuffer(tempTokenStream);
     }
-    if (multiplyWithParentheses) {
+    if (options.implicitMultiplication) {
       for (int i = 0; i < tempTokenStream.length; i++) {
         if (tempTokenStream[i].type == TokenType.RBRACE &&
             i != tempTokenStream.length - 1) {
@@ -491,11 +499,9 @@ class Lexer {
   /// This method invokes the createTokenStream methode to create an infix token
   /// stream and then invokes the shunting yard method to transform this stream
   /// into a RPN (reverse polish notation) token stream.
-  List<Token> tokenizeToRPN(String inputString,
-      {bool multiplyWithParentheses = false}) {
+  List<Token> tokenizeToRPN(String inputString) {
     final List<Token> infixStream = tokenize(
       inputString,
-      multiplyWithParentheses: multiplyWithParentheses,
     );
     return shuntingYard(infixStream);
   }

@@ -21,6 +21,7 @@ class LexerTests extends TestSet {
         'Power': tokenizePower,
         'Modulo': tokenizeModulo,
         'Multiplication': tokenizeMultiplication,
+        'ImplicitMultiplication': tokenizeImplicitMultiplication,
         'Division': tokenizeDivision,
         'Plus': tokenizePlus,
         'Minus': tokenizeMinus,
@@ -39,7 +40,7 @@ class LexerTests extends TestSet {
   @override
   void initTests() {}
 
-  Lexer lex = Lexer();
+  final Lexer lex = Lexer();
 
   // Test RPN
   void parameterizedRpn(Map<String, List<Token>> cases) {
@@ -50,14 +51,18 @@ class LexerTests extends TestSet {
   }
 
   /// Test infix and RPN
-  void parameterized(Map<String, (List<Token>, List<Token>)> cases) {
+  void parameterized(Map<String, (List<Token> infix, List<Token> rpn)> cases,
+      {Lexer? lexer}) {
+    lexer ??= this.lex;
     cases.forEach((expression, value) {
       var (infix, rpn) = value;
       test('$expression -> $infix -> $rpn', () {
-        var infixStream = lex.tokenize(expression);
-        expect(infixStream, orderedEquals(infix));
-        var rpnStream = lex.shuntingYard(infixStream);
-        expect(rpnStream, orderedEquals(rpn));
+        var infixStream = lexer!.tokenize(expression);
+        expect(infixStream, orderedEquals(infix),
+            reason: 'Incorrect infix notation');
+        var rpnStream = lexer.shuntingYard(infixStream);
+        expect(rpnStream, orderedEquals(rpn),
+            reason: "Incorrect reverse polish notation");
       });
     });
   }
@@ -216,6 +221,45 @@ class LexerTests extends TestSet {
       ),
     };
     parameterized(cases);
+  }
+
+  void tokenizeImplicitMultiplication() {
+    var cases = {
+      '(0)(1)': (
+        [
+          Token('(', TokenType.LBRACE),
+          Token('0', TokenType.VAL),
+          Token(')', TokenType.RBRACE),
+          Token('*', TokenType.TIMES),
+          Token('(', TokenType.LBRACE),
+          Token('1', TokenType.VAL),
+          Token(')', TokenType.RBRACE),
+        ],
+        [
+          Token('0', TokenType.VAL),
+          Token('1', TokenType.VAL),
+          Token('*', TokenType.TIMES)
+        ]
+      ),
+      '(-2.0)5': (
+        [
+          Token('(', TokenType.LBRACE),
+          Token('-', TokenType.MINUS),
+          Token('2.0', TokenType.VAL),
+          Token(')', TokenType.RBRACE),
+          Token('*', TokenType.TIMES),
+          Token('5', TokenType.VAL),
+        ],
+        [
+          Token('2.0', TokenType.VAL),
+          Token('-', TokenType.UNMINUS),
+          Token('5', TokenType.VAL),
+          Token('*', TokenType.TIMES),
+        ]
+      ),
+    };
+    var lexer = Lexer(ParserOptions(implicitMultiplication: true));
+    parameterized(cases, lexer: lexer);
   }
 
   void tokenizeDivision() {
