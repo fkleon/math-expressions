@@ -321,6 +321,7 @@ class ParserTests extends TestSet {
       '(1+1': throwsFormatException,
       'log(,1)': throwsRangeError,
       'log(1,)': throwsRangeError,
+      '8E': throwsFormatException,
     };
 
     for (String expr in invalidCases.keys) {
