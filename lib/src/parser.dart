@@ -2,19 +2,40 @@ part of '../math_expressions.dart';
 
 /// The Parser creates a mathematical [Expression] from a given input string.
 ///
-/// It uses a [Lexer] to create a RPN token stream and then builds the
-/// expression.
-///
 /// Usage example:
 ///
-///     Parser p = Parser();
+///     ExpressionParser p = ShuntingYardParser();
 ///     Expression exp = p.parse("(x^2 + cos(y)) / 3");
-class Parser {
+abstract class ExpressionParser {
+  /// Parses the given input string into an [Expression].
+  /// Throws a [FormatException] if the given [input]
+  /// is empty or invalid.
+  /// Returns a valid [Expression].
+  Expression parse(String input);
+
+  /// Registers a function [name] and [handler] with the parser.
+  ///
+  /// This can be used to define custom functions that run native Dart code.
+  ///
+  /// Throws a [FormatException] if the given [name] is already defined and
+  /// [replace] is false.
+  void addFunction(String name, dynamic handler, {bool replace = false});
+}
+
+/// The default parser. This type alias is deprecated, use [ShuntingYardParser]
+/// instead.
+@Deprecated('Use [ShuntingYardParser]')
+typedef Parser = ShuntingYardParser;
+
+/// The ShuntingYardParser uses a [Lexer] to tokenise the input into a RPN
+/// token stream, and then builds the expression using the Shunting-yard
+/// algorithm.
+class ShuntingYardParser implements ExpressionParser {
   final Lexer lex;
 
   /// Creates a new parser.
   /// The given [options] can be used to configure the behaviour.
-  Parser([ParserOptions options = const ParserOptions()])
+  ShuntingYardParser([ParserOptions options = const ParserOptions()])
       : lex = Lexer(options);
   Map<String, dynamic> functionHandlers = <String, dynamic>{};
 
@@ -22,6 +43,7 @@ class Parser {
   /// Throws a [ArgumentError] if the given [inputString]
   /// is empty. Throws a [StateError] if the token stream is
   /// invalid. Returns a valid [Expression].
+  @override
   Expression parse(String inputString) {
     if (inputString.trim().isEmpty) {
       throw FormatException('The given input string was empty.');
@@ -152,11 +174,9 @@ class Parser {
     return exprStack.last;
   }
 
-  /// Registers a function handler with the parser.
-  ///
-  /// This can be used to define custom functions that run native Dart code.
-  void addFunction(String name, dynamic handler) {
-    if (lex.keywords.containsKey(name)) {
+  @override
+  void addFunction(String name, dynamic handler, {bool replace = false}) {
+    if (lex.keywords.containsKey(name) && !replace) {
       throw FormatException('Cannot redefine existing function $name');
     }
     lex.keywords[name] = TokenType.FUNC;
@@ -176,7 +196,7 @@ class ParserOptions {
 /// [infix notation form](https://en.wikipedia.org/wiki/Infix_notation).
 /// The lexer can convert an infix stream into a
 /// [postfix stream](https://en.wikipedia.org/wiki/Reverse_Polish_notation)
-/// (Reverse Polish Notation) for further processing by a [Parser].
+/// (Reverse Polish Notation) for further processing by a [ShuntingYardParser].
 class Lexer {
   final Map<String, TokenType> keywords = <String, TokenType>{};
 

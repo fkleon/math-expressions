@@ -48,9 +48,10 @@ class ParserTests extends TestSet {
   @override
   void initTests() {}
 
-  Parser parser = Parser();
+  ExpressionParser parser = ShuntingYardParser();
 
-  void parameterized(Map<String, Expression> cases, {Parser? parser}) {
+  void parameterized(Map<String, Expression> cases,
+      {ExpressionParser? parser}) {
     parser ??= this.parser;
     cases.forEach((key, value) {
       test(
@@ -141,7 +142,8 @@ class ParserTests extends TestSet {
       '(5)(5)': Number(5) * Number(5),
       '(-2.0)5': -Number(2.0) * Number(5),
     };
-    var parser = Parser(ParserOptions(implicitMultiplication: true));
+    var parser =
+        ShuntingYardParser(ParserOptions(implicitMultiplication: true));
     parameterized(cases, parser: parser);
   }
 
@@ -228,14 +230,9 @@ class ParserTests extends TestSet {
           [Number(1), Variable('x'), UnaryMinus(Number(2))], () => null),
     };
 
-    if (!parser.functionHandlers.containsKey('myAlgorithmicFunction')) {
-      parser.addFunction('myAlgorithmicFunction', () => null);
-    }
-
-    if (!parser.functionHandlers.containsKey('my_min')) {
-      parser.addFunction(
-          'my_min', (List<double> args) => args.reduce(math.min));
-    }
+    parser.addFunction('myAlgorithmicFunction', () => null, replace: true);
+    parser.addFunction('my_min', (List<double> args) => args.reduce(math.min),
+        replace: true);
 
     parameterized(cases);
   }

@@ -66,7 +66,7 @@ abstract class Expression {
 
   /// Returns a string version of this expression.
   /// Subclasses should override this method. The output should be kept
-  /// compatible with the [Parser].
+  /// compatible with the [ExpressionParser].
   @override
   String toString();
 

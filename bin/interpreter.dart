@@ -7,7 +7,7 @@ import 'package:math_expressions/math_expressions.dart';
 
 ContextModel contextModel = ContextModel();
 Lexer lexer = Lexer();
-Parser parser = Parser();
+ExpressionParser parser = ShuntingYardParser();
 Expression? currentExpression;
 
 /// Starts a CLI interpreter for simple mathematical expressions.

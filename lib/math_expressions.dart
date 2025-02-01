@@ -27,7 +27,8 @@
 /// expressions.
 ///
 /// The libary supports the three basic data types [Number], [Interval] and
-/// [Vector]. It includes a [Parser] to create [Expression]s from Strings.
+/// [Vector]. It includes the [ShuntingYardParser] to create [Expression]s from
+/// string inputs.
 library math_expressions;
 
 import 'dart:math' as math;
