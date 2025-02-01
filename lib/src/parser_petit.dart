@@ -77,7 +77,8 @@ class GrammarParser implements ExpressionParser {
 
     final builder = ExpressionBuilder<Expression>();
 
-    final identifier = (letter() & word().star()).flatten().trim();
+    final identifier =
+        ((letter() | char('\$')) & word().star()).flatten().trim();
 
     final arguments = seq3(
             char('('),
