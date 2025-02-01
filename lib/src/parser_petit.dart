@@ -108,7 +108,9 @@ class GrammarParser implements ExpressionParser {
       // Generic constants, functions or variables
       ..primitive(functionOrVariable)
       // Parenthesis to group terms
-      ..group().wrapper(char('(').trim(), char(')').trim(), (l, e, r) => e);
+      ..group().wrapper(char('(').trim(), char(')').trim(), (l, e, r) => e)
+      // Backwards compat: Curly braces to group function arguments
+      ..group().wrapper(char('{').trim(), char('}').trim(), (l, e, r) => e);
 
     // Binary operators (right associative)
     builder.group().right(char('^').trim(), (l, op, r) => Power(l, r));
