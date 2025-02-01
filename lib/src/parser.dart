@@ -22,9 +22,9 @@ abstract class ExpressionParser {
   void addFunction(String name, dynamic handler, {bool replace = false});
 }
 
-/// The default parser. This type alias is deprecated, use [ShuntingYardParser]
-/// instead.
-@Deprecated('Use [ShuntingYardParser]')
+/// The default parser. This type alias is deprecated, use [GrammarParser]
+/// or the legacy [ShuntingYardParser] instead.
+@Deprecated('Use [GrammarParser] or [ShuntingYardParser]')
 typedef Parser = ShuntingYardParser;
 
 /// The ShuntingYardParser uses a [Lexer] to tokenise the input into a RPN

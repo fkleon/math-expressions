@@ -7,12 +7,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [unreleased]
 
+### Added
+
+- Add a modern grammar-based expression parser. This is opt-in at this stage,
+  and can be used by instantiating a `GrammarParser` instead of the legacy
+  `Parser`.
+  The new parser fixes some long-standing issues with expression parsing, but
+  is still missing a few features that were previously supported by the legacy
+  parser:
+  - Implicit multiplication is not supported yet.
+  - Parsing of the n-th root function is not supported yet.
+- Add support for parsing constants, with initial support for `pi`and `e`
+  (Euler's constant). #26
+
 ### Deprecated
 
 - Renamed the existing expression parser to `ShuntingYardParser`. This parser
   is now in maintenance mode and will not receive any new features.
   `Parser` remains as a deprecated type alias to this legacy implemenation to
   maintain backwards compatibility.
+
+### Fixed
+
+- Exception when define variable Number with character "e" #82
+- Suppress conversion into e function #61
+- Variables should resolve before keywords. #31
 
 ## [2.6.0] - 2024-07-31
 
@@ -32,6 +51,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Rewrite expression parser to use a grammar-based parsing (with petitparser).
 - Drop support for Dart SDK versions below 3.0.0
 - Refactor unit test suites and improve test coverage
 - Switch from pedantic to the [official Dart lint rules](https://pub.dev/packages/lints)
