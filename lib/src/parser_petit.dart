@@ -102,6 +102,9 @@ class GrammarParser implements ExpressionParser {
           .trim()
           .map(num.parse)
           .map<Expression>((n) => Number(n)))
+      // Special case for exponential function notation of form `e^x`
+      ..primitive(seq2(char('e').trim() & char('^').trim(), builder.loopback)
+          .map2((_, exp) => Exponential(exp)))
       // Generic constants, functions or variables
       ..primitive(functionOrVariable)
       // Parenthesis to group terms
