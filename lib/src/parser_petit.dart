@@ -114,6 +114,8 @@ class GrammarParser implements ExpressionParser {
     builder.group().right(char('^').trim(), (l, op, r) => Power(l, r));
 
     // Unary operators
+    builder.group().postfix(char('!').trim(), (e, op) => Factorial(e));
+
     builder.group()
       ..prefix(char('-').trim(), (op, e) => UnaryMinus(e))
       ..prefix(char('+').trim(), (op, e) => UnaryPlus(e));
