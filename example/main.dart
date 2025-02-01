@@ -24,7 +24,7 @@ void _expression_creation_and_evaluation() {
   // You can either create an mathematical expression programmatically or parse
   // a string.
   // (1a) Parse expression:
-  ExpressionParser p = ShuntingYardParser();
+  ExpressionParser p = GrammarParser();
   Expression exp = p.parse('(x^2 + cos(y)) / 3');
 
   // (1b) Build expression: (x^2 + cos(y)) / 3
@@ -55,7 +55,7 @@ void _expression_simplification_and_differentiation() {
   print('\nExample 2: Expression simplification and differentiation\n');
 
   // (1) Parse expression:
-  ExpressionParser p = ShuntingYardParser();
+  ExpressionParser p = GrammarParser();
   Expression exp = p.parse('x*1 - (-5)');
 
   // (2) Simplify expression:
@@ -110,7 +110,7 @@ void _algorithmic_function_definition_and_use() {
   print('\nExample 4: Algorithmic function definition and use\n');
 
   // (1) Create expression via parser by registering a function name
-  ExpressionParser p = ShuntingYardParser();
+  ExpressionParser p = GrammarParser();
   p.addFunction('my_min', (List<double> args) => args.reduce(math.min));
   Expression exp = p.parse('my_min(1, x, -1)');
 

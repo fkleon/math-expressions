@@ -58,7 +58,7 @@ You can either create an mathematical expression programmatically or parse a str
 
 * Create the expression via the parser:
 ```dart
-  Parser p = Parser();
+  ExpressionParser p = GrammarParser();
   Expression exp = p.parse("(x^2 + cos(y)) / 3");
 ```
 
