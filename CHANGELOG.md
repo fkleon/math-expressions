@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.7.0-rc.2]
 
+### Added
+
+- Add support for n-th root function to `GrammarParser`.
+
 ### Fixed
 
 - Tighten dependency constraints to fix issue with lower bounds dependencies.

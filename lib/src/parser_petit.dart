@@ -28,7 +28,7 @@ class GrammarParser implements ExpressionParser {
   /// Functions with two arguments.
   final functions2 = {
     'log': Log.new,
-    //'nrt': Root.fromExpr,
+    'nrt': Root.fromExpr,
   };
 
   /// Dynamically defined algorithmic functions.
