@@ -87,6 +87,7 @@ class ParserTests extends TestSet {
       'var2': Variable('var2'),
       'va2r': Variable('va2r'),
       '\$s2': Variable('\$s2'),
+      'Veränderung': Variable('Veränderung'),
       'longname': Variable('longname'),
     };
     parameterized(cases);

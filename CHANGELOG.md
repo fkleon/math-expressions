@@ -28,6 +28,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   parser:
   - Implicit multiplication is not supported yet.
   - Parsing of the n-th root function is not supported yet.
+  - Identifier naming is more restrictive, names must start with a letter or `$`,
+    followed by any number of word characters (letter or digit). This is mostly
+    relevant for user-provided identifiers (algorithmic functions and variables).
 - Add support for parsing constants, with initial support for `pi`and `e`
   (Euler's constant). #26
 
