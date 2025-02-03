@@ -92,7 +92,13 @@ class PetitParserTests extends TestSet {
   void parseConstant() {
     var cases = {
       'e': Number(math.e),
+      'ln10': Number(math.ln10),
+      'ln2': Number(math.ln2),
+      'log10e': Number(math.log10e),
+      'log2e': Number(math.log2e),
       'pi': Number(math.pi),
+      'sqrt1_2': Number(math.sqrt1_2),
+      'sqrt2': Number(math.sqrt2),
     };
     parameterized(cases);
   }

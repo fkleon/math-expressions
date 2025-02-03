@@ -6,7 +6,16 @@ class GrammarParser implements ExpressionParser {
   late final pp.Parser<Expression> parser;
 
   /// Constants and their values.
-  final constants = {'e': math.e, 'pi': math.pi};
+  final constants = <String, num>{
+    'e': math.e,
+    'pi': math.pi,
+    'ln10': math.ln10,
+    'ln2': math.ln2,
+    'log10e': math.log10e,
+    'log2e': math.log2e,
+    'sqrt1_2': math.sqrt1_2,
+    'sqrt2': math.sqrt2,
+  };
 
   /// Functions with one argument.
   final functions1 = {

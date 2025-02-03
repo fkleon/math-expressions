@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.7.0-rc.3] - 2025-02-03
+
+### Added
+
+- Add support for additional constants to `GrammarParser`: `ln10`, `ln2`,
+  `log10e`, `log2e`, `sqrt1_2` and `sqrt2`.
 
 ## [2.7.0-rc.2] - 2025-02-02
 
@@ -251,6 +257,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 [unreleased]: https://github.com/fkleon/math-expressions/compare/2.7.0...HEAD
+[2.7.0-rc.3]: https://github.com/fkleon/math-expressions/compare/2.7.0-rc.2...2.7.0-rc.3
 [2.7.0-rc.2]: https://github.com/fkleon/math-expressions/compare/2.7.0-rc.1...2.7.0-rc.2
 [2.7.0-rc.1]: https://github.com/fkleon/math-expressions/compare/2.6.0...2.7.0-rc.1
 [2.6.0]: https://github.com/fkleon/math-expressions/compare/2.5.0...2.6.0
