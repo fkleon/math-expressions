@@ -22,6 +22,7 @@ class PetitParserTests extends TestSet {
         // Literals
         'Number': parseNumber,
         'Constant': parseConstant,
+        'Custom Constant': parseCustomConstant,
         'Variable': parseVariable,
         'Parenthesis': parseParenthesis,
 
@@ -101,6 +102,28 @@ class PetitParserTests extends TestSet {
       'sqrt2': Number(math.sqrt2),
     };
     parameterized(cases);
+  }
+
+  void parseCustomConstant() {
+    const PHI = 1.6180339887;
+    var constants = {
+      'π': math.pi,
+      'Π': math.pi,
+      '∏': math.pi,
+      'ᴨ': math.pi,
+      'phi': PHI,
+      'Φ': PHI,
+      'φ': PHI,
+      'ϕ': PHI,
+      'ɸ': PHI,
+    };
+
+    var cases = constants.map((k, v) => MapEntry(k, Number(v)));
+
+    ExpressionParser parser =
+        GrammarParser(ParserOptions(constants: constants));
+
+    parameterized(cases, parser: parser);
   }
 
   void parseVariable() {

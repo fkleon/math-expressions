@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add support for additional constants to `GrammarParser`: `ln10`, `ln2`,
   `log10e`, `log2e`, `sqrt1_2` and `sqrt2`.
+- Add ability to specify custom constants through `ParserOptions`: This enables
+  parsing of constant symbols that do not match the allowed variable identifier
+  naming schema.
 
 ## [2.7.0-rc.2] - 2025-02-02
 

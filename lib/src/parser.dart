@@ -188,7 +188,12 @@ class ParserOptions {
   /// If [implicitMultiplication] is true the parser will allow
   /// implicit multiplication using parentheses.
   final bool implicitMultiplication;
-  const ParserOptions({this.implicitMultiplication = false});
+
+  /// A map of additional constant symbols and their values.
+  final Map<String, num> constants;
+
+  const ParserOptions(
+      {this.constants = const {}, this.implicitMultiplication = false});
 }
 
 /// The lexer creates tokens (see [TokenType] and [Token]) from an input string.
@@ -210,6 +215,10 @@ class Lexer {
 
   /// Creates a new lexer.
   Lexer([this.options = const ParserOptions()]) {
+    if (options.constants.isNotEmpty) {
+      throw UnimplementedError('Constants are not supported by this parser');
+    }
+
     keywords['+'] = TokenType.PLUS;
     keywords['-'] = TokenType.MINUS;
     keywords['*'] = TokenType.TIMES;

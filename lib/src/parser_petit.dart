@@ -47,33 +47,35 @@ class GrammarParser implements ExpressionParser {
   /// May return a constant, function or variable.
   Expression _createBinding(String name, List<Expression> arguments) {
     switch (arguments.length) {
-      // Check for Constant
+      // Check for Constant or Variable
       case 0:
-        if (constants.containsKey(name)) {
-          return Number(constants[name]!);
-        }
+        var val = constants[name];
+        return (val != null) ? Number(val) : Variable(name);
       // Check for Function with one argument
       case 1:
-        if (functions1.containsKey(name)) {
-          return functions1[name]!(arguments[0]);
+        var fun1 = functions1[name];
+        if (fun1 != null) {
+          return fun1(arguments[0]);
         }
         continue custom;
       // Check for Function with two arguments
       case 2:
-        if (functions2.containsKey(name)) {
-          return functions2[name]!(arguments[0], arguments[1]);
+        var fun2 = functions2[name];
+        if (fun2 != null) {
+          return fun2(arguments[0], arguments[1]);
         }
         continue custom;
       // Check for Algorithmic function
       custom:
       default:
-        if (functionsC.containsKey(name)) {
+        var fun = functionsC[name];
+        if (fun != null) {
           return AlgorithmicFunction(name, arguments, functionsC[name]);
         }
     }
 
-    // No function match, return Variable
-    return Variable(name);
+    // No match
+    throw ArgumentError.value(name);
   }
 
   /// Creates a new parser.
@@ -84,10 +86,17 @@ class GrammarParser implements ExpressionParser {
           'Implicit multiplication is not supported by this parser');
     }
 
+    this.constants.addAll(options.constants);
+
     final builder = ExpressionBuilder<Expression>();
 
-    final identifier =
-        ((letter() | char('\$')) & word().star()).flatten().trim();
+    final constant =
+        ChoiceParser(constants.keys.map((s) => s.toParser().trim()));
+
+    final identifier = constant |
+        ((letter() | char('\$')) & word().star())
+            .flatten('Identifier expected')
+            .trim();
 
     final arguments = seq3(
             char('('),
@@ -101,16 +110,16 @@ class GrammarParser implements ExpressionParser {
     final functionOrVariable = seq2(identifier, arguments)
         .map2((name, args) => _createBinding(name, args));
 
+    final number = (digit().plus() & (char('.') & digit().plus()).optional())
+        .flatten('Number expected')
+        .trim()
+        .map(num.parse)
+        .map(Number.new);
+
     // Numbers and variables
     builder
       // Numbers
-      ..primitive(digit()
-          .plus()
-          .seq(char('.').seq(digit().plus()).optional())
-          .flatten()
-          .trim()
-          .map(num.parse)
-          .map<Expression>((n) => Number(n)))
+      ..primitive(number)
       // Special case for exponential function notation of form `e^x`
       ..primitive(seq2(char('e').trim() & char('^').trim(), builder.loopback)
           .map2((_, exp) => Exponential(exp)))
