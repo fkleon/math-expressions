@@ -73,6 +73,8 @@ class ParserTests extends TestSet {
       '1.0': Number(1.0),
       math.pi.toStringAsFixed(11): Number(3.14159265359),
       '0.0': Number(0.0),
+      '.5': Number(0.5),
+      '5.': Number(5.0),
       // max precision 15 digits
       '999999999999999': Number(999999999999999),
     };
@@ -89,6 +91,8 @@ class ParserTests extends TestSet {
       '\$s2': Variable('\$s2'),
       'Veränderung': Variable('Veränderung'),
       'longname': Variable('longname'),
+      'π': Variable('π'),
+      'Φ': Variable('Φ'),
     };
     parameterized(cases);
   }
