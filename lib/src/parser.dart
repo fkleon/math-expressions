@@ -184,6 +184,17 @@ class ShuntingYardParser implements ExpressionParser {
   }
 }
 
+/// [ParserOptions] can be used to customise the behaviour of an
+/// [ExpressionParser].
+///
+/// For example, to define additional constant symbols that the parser should
+/// recognise:
+///
+///     ParserOptions o = ParserOptions(constants: {
+///       'π': math.pi,
+///     }));
+///     ExpressionParser p = GrammarParser(o);
+///     Expression radius = p.parse("2*π*r");
 class ParserOptions {
   /// If [implicitMultiplication] is true the parser will allow
   /// implicit multiplication using parentheses.
