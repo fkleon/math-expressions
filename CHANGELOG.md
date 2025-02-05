@@ -5,6 +5,29 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.7.0] - 2025-02-05
+
+### Added
+
+- Rewrite of the expression parser, available as `GrammarParser`.
+  - Add support for constants: `e`, `pi`, `ln10`, `ln2`, `log10e`, `log2e`,
+    `sqrt1_2` and `sqrt2`.
+  - Custom constant symbols are supported via `ParserOptions`.
+  - Identifier naming is more restrictive. Names must start with a letter or
+    `$`, followed by any number of word characters (letter or digit).
+  - This library now depends on `petitparser`.
+
+### Deprecated
+
+- The old expression parser is now deprecated. It is still exposed under the
+  type alias `Parser` to maintain backwards compatibility.
+
+### Fixed
+
+- Exception when define variable Number with character "e" #82
+- Suppress conversion into e function #61
+- Variables should resolve before keywords. #31
+
 ## [2.7.0-rc.3] - 2025-02-03
 
 ### Added
@@ -260,6 +283,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 [unreleased]: https://github.com/fkleon/math-expressions/compare/2.7.0...HEAD
+[2.7.0]: https://github.com/fkleon/math-expressions/compare/2.6.0...2.7.0
 [2.7.0-rc.3]: https://github.com/fkleon/math-expressions/compare/2.7.0-rc.2...2.7.0-rc.3
 [2.7.0-rc.2]: https://github.com/fkleon/math-expressions/compare/2.7.0-rc.1...2.7.0-rc.2
 [2.7.0-rc.1]: https://github.com/fkleon/math-expressions/compare/2.6.0...2.7.0-rc.1
