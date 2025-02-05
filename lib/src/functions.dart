@@ -458,8 +458,8 @@ class Root extends DefaultFunction {
   Root(this.n, Expression arg) : super._unary('nrt', arg);
 
   /// Creates the n-th root of arg where n is a [Number] literal.
-  Root.fromExpr(Number n, Expression arg) : super._unary('nrt', arg) {
-    this.n = n.getConstantValue().toInt();
+  Root.fromExpr(Expression n, Expression arg) : super._unary('nrt', arg) {
+    this.n = (n as Number).getConstantValue().toInt();
   }
 
   /// Creates the square root of arg.

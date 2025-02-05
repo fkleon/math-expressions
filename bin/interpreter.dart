@@ -6,8 +6,7 @@ import 'dart:io';
 import 'package:math_expressions/math_expressions.dart';
 
 ContextModel contextModel = ContextModel();
-Lexer lexer = Lexer();
-Parser parser = Parser();
+ExpressionParser parser = GrammarParser();
 Expression? currentExpression;
 
 /// Starts a CLI interpreter for simple mathematical expressions.
@@ -73,11 +72,7 @@ void _evaluate() {
 }
 
 void _setExpr(String input) {
-  var tokens = lexer.tokenize(input);
-  var rpn = lexer.tokenizeToRPN(input);
   var expr = parser.parse(input);
-  print('> Tokens: $tokens');
-  print('> RPN: $rpn');
   print('> Expression: $expr');
 
   currentExpression = expr;

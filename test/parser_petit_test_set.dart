@@ -1,12 +1,12 @@
 part of 'math_expressions_test.dart';
 
 /// Contains a test set for testing the parser
-class ParserTests extends TestSet {
+class PetitParserTests extends TestSet {
   @override
-  String get name => 'Parser Tests';
+  String get name => 'Petit Parser Tests';
 
   @override
-  String get tags => 'parser';
+  String get tags => 'petitparser';
 
   @override
   Map<String, Function> get testFunctions => {
@@ -16,8 +16,13 @@ class ParserTests extends TestSet {
 
   @override
   Map<String, Function> get testGroups => {
+        // Lint
+        'Lint': lint,
+
         // Literals
         'Number': parseNumber,
+        'Constant': parseConstant,
+        'Custom Constant': parseCustomConstant,
         'Variable': parseVariable,
         'Parenthesis': parseParenthesis,
 
@@ -27,7 +32,7 @@ class ParserTests extends TestSet {
         'Power': parsePower,
         'Modulo': parseModulo,
         'Multiplication': parseMultiplication,
-        'ImplicitMultiplication': parseImplicitMultiplication,
+        //'ImplicitMultiplication': parseImplicitMultiplication,
         'Division': parseDivision,
         'Addition': parsePlus,
         'Subtraction': parseMinus,
@@ -48,7 +53,7 @@ class ParserTests extends TestSet {
   @override
   void initTests() {}
 
-  ExpressionParser parser = ShuntingYardParser();
+  GrammarParser parser = GrammarParser();
 
   void parameterized(Map<String, Expression> cases,
       {ExpressionParser? parser}) {
@@ -66,6 +71,12 @@ class ParserTests extends TestSet {
     });
   }
 
+  void lint() {
+    test('detect common problems', () {
+      expect(linter(parser.parser), isEmpty);
+    });
+  }
+
   void parseNumber() {
     var cases = {
       '0': Number(0),
@@ -73,12 +84,46 @@ class ParserTests extends TestSet {
       '1.0': Number(1.0),
       math.pi.toStringAsFixed(11): Number(3.14159265359),
       '0.0': Number(0.0),
-      '.5': Number(0.5),
-      '5.': Number(5.0),
       // max precision 15 digits
       '999999999999999': Number(999999999999999),
     };
     parameterized(cases);
+  }
+
+  void parseConstant() {
+    var cases = {
+      'e': Number(math.e),
+      'ln10': Number(math.ln10),
+      'ln2': Number(math.ln2),
+      'log10e': Number(math.log10e),
+      'log2e': Number(math.log2e),
+      'pi': Number(math.pi),
+      'sqrt1_2': Number(math.sqrt1_2),
+      'sqrt2': Number(math.sqrt2),
+    };
+    parameterized(cases);
+  }
+
+  void parseCustomConstant() {
+    const PHI = 1.6180339887;
+    var constants = {
+      'π': math.pi,
+      'Π': math.pi,
+      '∏': math.pi,
+      'ᴨ': math.pi,
+      'phi': PHI,
+      'Φ': PHI,
+      'φ': PHI,
+      'ϕ': PHI,
+      'ɸ': PHI,
+    };
+
+    var cases = constants.map((k, v) => MapEntry(k, Number(v)));
+
+    ExpressionParser parser =
+        GrammarParser(ParserOptions(constants: constants));
+
+    parameterized(cases, parser: parser);
   }
 
   void parseVariable() {
@@ -89,10 +134,8 @@ class ParserTests extends TestSet {
       'var2': Variable('var2'),
       'va2r': Variable('va2r'),
       '\$s2': Variable('\$s2'),
-      'Veränderung': Variable('Veränderung'),
+      //'Veränderung': Variable('Veränderung'),
       'longname': Variable('longname'),
-      'π': Variable('π'),
-      'Φ': Variable('Φ'),
     };
     parameterized(cases);
   }
@@ -147,8 +190,8 @@ class ParserTests extends TestSet {
       '(5)(5)': Number(5) * Number(5),
       '(-2.0)5': -Number(2.0) * Number(5),
     };
-    var parser =
-        ShuntingYardParser(ParserOptions(implicitMultiplication: true));
+
+    var parser = GrammarParser(ParserOptions(implicitMultiplication: true));
     parameterized(cases, parser: parser);
   }
 
@@ -307,9 +350,6 @@ class ParserTests extends TestSet {
       } on FormatException catch (fe) {
         expect(fe, isNot(isFormatException),
             reason: 'Expected no exception for $expression ($exp)');
-      } on RangeError catch (re) {
-        expect(re, isNot(isRangeError),
-            reason: 'Expected no exception for $expression ($exp)');
       }
     }
   }
@@ -321,8 +361,10 @@ class ParserTests extends TestSet {
       ')': throwsFormatException,
       '1+1)': throwsFormatException,
       '(1+1': throwsFormatException,
-      'log(,1)': throwsRangeError,
-      'log(1,)': throwsRangeError,
+      'log(,1)': throwsFormatException,
+      'log(1,)': throwsFormatException,
+      '8e': throwsFormatException,
+      '8E': throwsFormatException,
     };
 
     for (String expr in invalidCases.keys) {

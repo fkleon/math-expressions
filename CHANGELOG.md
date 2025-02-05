@@ -2,8 +2,59 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [2.7.0-rc.3] - 2025-02-03
+
+### Added
+
+- Add support for additional constants to `GrammarParser`: `ln10`, `ln2`,
+  `log10e`, `log2e`, `sqrt1_2` and `sqrt2`.
+- Add ability to specify custom constants through `ParserOptions`: This enables
+  parsing of constant symbols that do not match the allowed variable identifier
+  naming schema.
+
+## [2.7.0-rc.2] - 2025-02-02
+
+### Added
+
+- Add support for n-th root function to `GrammarParser`.
+
+### Fixed
+
+- Tighten dependency constraints to fix issue with lower bounds dependencies.
+
+## [2.7.0-rc.1] - 2025-02-01
+
+### Added
+
+- Add a modern grammar-based expression parser. This is opt-in at this stage,
+  and can be used by instantiating a `GrammarParser` instead of the legacy
+  `Parser`.
+  The new parser fixes some long-standing issues with expression parsing, but
+  is still missing a few features that were previously supported by the legacy
+  parser:
+  - Implicit multiplication is not supported yet.
+  - Parsing of the n-th root function is not supported yet.
+  - Identifier naming is more restrictive, names must start with a letter or `$`,
+    followed by any number of word characters (letter or digit). This is mostly
+    relevant for user-provided identifiers (algorithmic functions and variables).
+- Add support for parsing constants, with initial support for `pi`and `e`
+  (Euler's constant). #26
+
+### Deprecated
+
+- Renamed the existing expression parser to `ShuntingYardParser`. This parser
+  is now in maintenance mode and will not receive any new features.
+  `Parser` remains as a deprecated type alias to this legacy implemenation to
+  maintain backwards compatibility.
+
+### Fixed
+
+- Exception when define variable Number with character "e" #82
+- Suppress conversion into e function #61
+- Variables should resolve before keywords. #31
 
 ## [2.6.0] - 2024-07-31
 
@@ -23,6 +74,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Rewrite expression parser to use a grammar-based parsing (with petitparser).
 - Drop support for Dart SDK versions below 3.0.0
 - Refactor unit test suites and improve test coverage
 - Switch from pedantic to the [official Dart lint rules](https://pub.dev/packages/lints)
@@ -206,7 +258,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Initial release of standalone version
 
-[unreleased]: https://github.com/fkleon/math-expressions/compare/2.6.0...HEAD
+
+[unreleased]: https://github.com/fkleon/math-expressions/compare/2.7.0...HEAD
+[2.7.0-rc.3]: https://github.com/fkleon/math-expressions/compare/2.7.0-rc.2...2.7.0-rc.3
+[2.7.0-rc.2]: https://github.com/fkleon/math-expressions/compare/2.7.0-rc.1...2.7.0-rc.2
+[2.7.0-rc.1]: https://github.com/fkleon/math-expressions/compare/2.6.0...2.7.0-rc.1
 [2.6.0]: https://github.com/fkleon/math-expressions/compare/2.5.0...2.6.0
 [2.5.0]: https://github.com/fkleon/math-expressions/compare/2.4.0...2.5.0
 [2.4.0]: https://github.com/fkleon/math-expressions/compare/2.3.1...2.4.0
