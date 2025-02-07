@@ -97,7 +97,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Rewrite expression parser to use a grammar-based parsing (with petitparser).
 - Drop support for Dart SDK versions below 3.0.0
 - Refactor unit test suites and improve test coverage
 - Switch from pedantic to the [official Dart lint rules](https://pub.dev/packages/lints)
