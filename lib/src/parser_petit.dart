@@ -2,6 +2,14 @@ part of '../math_expressions.dart';
 
 /// This parser uses a grammar-based approach to parse the input and
 /// build the expression.
+///
+/// It's possible to customise the default symbols and functions by subclassing
+/// this parser. For example, to remove the constant 'e':
+///
+///     class MyGrammarParser extends GrammarParser {
+///       MyGrammarParser([super.options]) {
+///         constants.remove('e');
+///     }
 class GrammarParser implements ExpressionParser {
   late final pp.Parser<Expression> parser;
 

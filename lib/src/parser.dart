@@ -195,6 +195,9 @@ class ShuntingYardParser implements ExpressionParser {
 ///     }));
 ///     ExpressionParser p = GrammarParser(o);
 ///     Expression radius = p.parse("2*π*r");
+///
+/// To customise the default constants supported by the parser, subclass the
+/// parser, see [GrammarParser] for an example.
 class ParserOptions {
   /// If [implicitMultiplication] is true the parser will allow
   /// implicit multiplication using parentheses.

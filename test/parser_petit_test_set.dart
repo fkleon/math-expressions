@@ -48,6 +48,9 @@ class PetitParserTests extends TestSet {
 
         // Negative test cases
         'Invalid': parserExpressionTestInvalid,
+
+        // Parser customisation via subclass
+        'Customisation': parseWithCustomisation,
       };
 
   @override
@@ -370,5 +373,18 @@ class PetitParserTests extends TestSet {
     for (String expr in invalidCases.keys) {
       test(expr, () => expect(() => parser.parse(expr), invalidCases[expr]));
     }
+  }
+
+  void parseWithCustomisation() {
+    var cases = {'e': Variable('e')};
+
+    // MyGrammarParser removes the constant 'e' so it's interpreted as variable
+    parameterized(cases, parser: MyGrammarParser());
+  }
+}
+
+class MyGrammarParser extends GrammarParser {
+  MyGrammarParser([super.options]) {
+    constants.remove('e');
   }
 }
