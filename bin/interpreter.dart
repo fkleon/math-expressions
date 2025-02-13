@@ -5,7 +5,8 @@ import 'dart:io';
 
 import 'package:math_expressions/math_expressions.dart';
 
-ContextModel contextModel = ContextModel();
+ContextModel context = ContextModel();
+RealEvaluator evaluator = RealEvaluator(context);
 ExpressionParser parser = GrammarParser();
 Expression? currentExpression;
 
@@ -66,8 +67,8 @@ void parseInput(String input) {
 
 void _evaluate() {
   if (currentExpression == null) throw StateError('No Expression set.');
-  double eval = currentExpression!.evaluate(EvaluationType.REAL, contextModel);
-  print('> Variables: ${contextModel.variables}');
+  num eval = evaluator.evaluate(currentExpression!);
+  print('> Variables: ${context.variables}');
   print('> Result: $currentExpression = ${eval.toString()}');
 }
 
@@ -95,12 +96,12 @@ void _setVar(String input) {
   String varName = input.split('=')[0].trim();
   String expression = input.split('=')[1].trim();
   var expr = parser.parse(expression);
-  contextModel.bindVariableName(varName, expr);
+  context.bindVariableName(varName, expr);
   print('> Bound variable $varName to $expr.');
 }
 
 void _getVar(String input) {
   String varName = input.substring(1);
-  var expr = contextModel.getExpression(varName);
+  var expr = context.getExpression(varName);
   print('> $varName is bound to $expr.');
 }
