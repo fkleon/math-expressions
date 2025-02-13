@@ -49,10 +49,10 @@ You can either create an mathematical expression programmatically or parse a str
 
 * Create the expression programmatically:
 ```dart
-  Variable x = Variable('x'), y = Variable('y');
-  Power xSquare = Power(x, 2);
-  Cos yCos = Cos(y);
-  Number three = Number(3.0);
+  var x = Variable('x'), y = Variable('y');
+  var xSquare = Power(x, 2);
+  var yCos = Cos(y);
+  var three = Number(3.0);
   Expression exp = (xSquare + yCos) / three;
 ```
 
@@ -67,12 +67,13 @@ You can either create an mathematical expression programmatically or parse a str
 * Bind variables and evaluate the expression as real number:
 ```dart
   // Bind variables:
-  ContextModel cm = ContextModel();
-  cm.bindVariable(x, Number(2.0));
-  cm.bindVariable(y, Number(Math.PI));
+  var context = ContextModel()
+    ..bindVariableName('x', Number(2.0));
+    ..bindVariableName('y', Number(math.pi));
 
   // Evaluate expression:
-  double eval = exp.evaluate(EvaluationType.REAL, cm);
+  var evaluator = RealEvaluator(context);
+  num eval = evaluator.evaluate(exp);
 
   print(eval) // = 1.0
 ```

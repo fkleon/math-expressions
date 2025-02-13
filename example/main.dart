@@ -28,23 +28,24 @@ void _expression_creation_and_evaluation() {
   Expression exp = p.parse('(x^2 + cos(y)) / 3');
 
   // (1b) Build expression: (x^2 + cos(y)) / 3
-  Variable x = Variable('x'), y = Variable('y');
-  Power xSquare = Power(x, 2);
-  Cos yCos = Cos(y);
-  Number three = Number(3.0);
+  var x = Variable('x'), y = Variable('y');
+  var xSquare = Power(x, 2);
+  var yCos = Cos(y);
+  var three = Number(3.0);
   exp = (xSquare + yCos) / three;
 
   // Bind variables and evaluate the expression as real number.
   // (2) Bind variables:
-  ContextModel cm = ContextModel()
+  var context = ContextModel()
     ..bindVariable(x, Number(2.0))
     ..bindVariable(y, Number(math.pi));
 
   // (3) Evaluate expression:
-  double eval = exp.evaluate(EvaluationType.REAL, cm);
+  var evaluator = RealEvaluator(context);
+  num eval = evaluator.evaluate(exp);
 
   print('Expression: $exp');
-  print('Evaluated expression: $eval\n  (with context: $cm)'); // = 1
+  print('Evaluated expression: $eval\n  (with context: $context)'); // = 1
 }
 
 /// Example 2: Expression simplification and differentiation
@@ -78,29 +79,30 @@ void _custom_function_definition_and_use() {
   print('\nExample 3: Custom function definition and use\n');
 
   // (1) Create and evaluate custom function: DOUBLEUP (R -> R)
-  ContextModel cm = ContextModel();
-  Variable x = Variable('x');
+  var context = ContextModel();
+  var evaluator = RealEvaluator(context);
+  var x = Variable('x');
   CustomFunction doubleup = CustomFunction('doubleup', [x], x * Number(2));
 
-  cm.bindVariable(x, Number(0.5));
+  context.bindVariable(x, Number(0.5));
 
   print('$doubleup = ${doubleup.expression}');
   print(
-      'doubleup(${cm.getExpression('x')}) = ${doubleup.evaluate(EvaluationType.REAL, cm)}\n');
+      'doubleup(${context.getExpression('x')}) = ${evaluator.evaluate(doubleup)}\n');
 
   // (1) Create and evaluate custom function: LEFTSHIFT (R² -> R)
   // Shifting to the left makes the number larger, effectively multiplying the
   // number by pow(2, shiftIndex). Custom implementation of x << i.
-  Variable shiftIndex = Variable('i');
+  var shiftIndex = Variable('i');
   CustomFunction leftshift =
       CustomFunction('leftshift', [x, shiftIndex], x * Power(2, shiftIndex));
 
-  cm.bindVariable(x, Number(250));
-  cm.bindVariable(shiftIndex, Number(8));
+  context.bindVariable(x, Number(250));
+  context.bindVariable(shiftIndex, Number(8));
 
   print('$leftshift = ${leftshift.expression}');
   print(
-      'leftshift(${cm.getExpression('x')}, ${cm.getExpression('i')}) = ${leftshift.evaluate(EvaluationType.REAL, cm)}');
+      'leftshift(${context.getExpression('x')}, ${context.getExpression('i')}) = ${evaluator.evaluate(leftshift)}');
 }
 
 /// Example 4: Algorithmic function definition and use
@@ -117,11 +119,12 @@ void _algorithmic_function_definition_and_use() {
   print('my_min(1, x, -1) = $exp');
 
   // (1) Evaluate algorithmic function: MY_MIN (R^3 -> R)
-  ContextModel cm = ContextModel();
-  Variable x = Variable('x');
+  var context = ContextModel();
+  var evaluator = RealEvaluator(context);
+  var x = Variable('x');
 
-  cm.bindVariable(x, -Number(2));
+  context.bindVariable(x, -Number(2));
 
-  double res = exp.evaluate(EvaluationType.REAL, cm);
-  print('my_min(1, ${cm.getExpression('x')}, -1) = $res');
+  num res = evaluator.evaluate(exp);
+  print('my_min(1, ${context.getExpression('x')}, -1) = $res');
 }
