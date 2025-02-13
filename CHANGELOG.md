@@ -11,10 +11,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add support for listing all variables in an `Expression` with the
   `VariableCollector` visitor. #73
+- Add support for evaluating an `Expresssion` as a real number with the
+  `RealEvaluator` visitor. This offers a strongly typed interface and
+  replaces `Expression.evaluate()`:
+
+  ```dart
+  // Old
+  dynamic result = expression.evaluate(EvaluationType.REAL, context);
+
+  // New
+  var evaluator = RealEvaluator(context);
+  int result = evaluator.evaluate(expression);
+  ```
 
 ### Changed
 
 - The `Root`function now accepts an `Expression` as degree.
+
+### Deprecated
+
+- The `Expression.evaluate()` method. Use `RealEvaluator` instead.
 
 ## [2.7.0] - 2025-02-05
 

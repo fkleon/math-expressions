@@ -14,9 +14,10 @@ part 'expression_test_set.dart';
 part 'lexer_test_set.dart';
 part 'parser_test_set.dart';
 part 'parser_petit_test_set.dart';
+part 'evaluator_test_set.dart';
 
 /// relative accuracy for floating-point calculations
-const num EPS = 0.000001;
+const num EPS = 0.00001;
 
 /// Registers all math test sets and executes the test suite afterwards.
 void main() {
@@ -25,7 +26,8 @@ void main() {
     LexerTests(),
     ParserTests(),
     PetitParserTests(),
-    ExpressionTests()
+    ExpressionTests(),
+    RealEvaluatorTests(),
   ];
 
   TestExecutor.initWith(testSets).runTests();

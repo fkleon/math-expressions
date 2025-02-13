@@ -62,6 +62,9 @@ abstract class Expression {
   //       possible with the current model, see above.
 
   /// Evaluates this expression according to given type and context.
+  ///
+  /// This method is deprecated, use [RealEvaluator] instead.
+  @Deprecated("Use [RealEvaluator]")
   dynamic evaluate(EvaluationType type, ContextModel context);
 
   /// Accepts an [ExpressionVisitor] and visits all nodes of this expression
