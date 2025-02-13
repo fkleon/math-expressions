@@ -10,8 +10,6 @@ part of '../math_expressions.dart';
 /// - VECTOR
 /// - INTERVAL
 ///
-/// __Note__: This class emulates an enumeration, since they are not supported
-/// by Dart yet.
 enum EvaluationType { REAL, VECTOR, INTERVAL }
 
 /// The context model keeps track of all known variables and functions.
@@ -19,17 +17,17 @@ enum EvaluationType { REAL, VECTOR, INTERVAL }
 /// It is structured hierarchically to offer nested scopes.
 class ContextModel {
   /// The parent scope.
-  ContextModel? parentScope;
+  final ContextModel? parentScope;
 
   /// Variable map of this scope (name -> expression).
-  Map<String, Expression> variables = <String, Expression>{};
+  final Map<String, Expression> variables = <String, Expression>{};
 
   /// Function set of this scope.
   // TODO: Do we even need to track function names?
-  Set<MathFunction> functions = <MathFunction>{};
+  final Set<MathFunction> functions = <MathFunction>{};
 
   /// Creates a new, empty root context model.
-  ContextModel();
+  ContextModel() : parentScope = null;
 
   /// Internal constructor for creating a child scope.
   ContextModel._child(this.parentScope);

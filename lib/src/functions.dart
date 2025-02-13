@@ -7,7 +7,7 @@ abstract class MathFunction extends Expression {
   /// Name of this function.
   String name;
 
-  /// List of arguments of this function. Arguments ust be of type [Variable].
+  /// List of arguments of this function. Arguments must be of type [Variable].
   List<Variable> args;
 
   /// Creates a new function with the given name and arguments.

@@ -863,7 +863,7 @@ class Vector extends Literal {
 /// A variable is a named literal.
 class Variable extends Literal {
   /// The name of this variable.
-  String name;
+  final String name;
 
   /// Creates a variable literal with given name.
   Variable(this.name);

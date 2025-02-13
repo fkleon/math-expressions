@@ -9,6 +9,7 @@ part of '../math_expressions.dart';
 ///     class MyGrammarParser extends GrammarParser {
 ///       MyGrammarParser([super.options]) {
 ///         constants.remove('e');
+///       }
 ///     }
 class GrammarParser implements ExpressionParser {
   late final pp.Parser<Expression> parser;

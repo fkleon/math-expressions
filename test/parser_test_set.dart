@@ -45,9 +45,6 @@ class ParserTests extends TestSet {
         'Invalid': parserExpressionTestInvalid,
       };
 
-  @override
-  void initTests() {}
-
   ExpressionParser parser = ShuntingYardParser();
 
   void parameterized(Map<String, Expression> cases,
