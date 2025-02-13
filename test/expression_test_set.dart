@@ -1359,7 +1359,7 @@ class ExpressionTests extends TestSet {
 
   /// Tests creation of algorithmic functions.
   void algorithmicFunctionCreation() {
-    dynamic handler = (List<double> args) => args.reduce(math.min);
+    handler(List<double> args) => args.reduce(math.min);
 
     // Generic list minimum (R^2 -> R)
     AlgorithmicFunction f = AlgorithmicFunction('my_min', [n1, -n1], handler);
@@ -1374,7 +1374,7 @@ class ExpressionTests extends TestSet {
     ContextModel cm = ContextModel();
 
     Variable x = Variable('x');
-    dynamic handler = (List<double> args) => args.reduce(math.min);
+    handler(List<double> args) => args.reduce(math.min);
 
     // Generic list minimum (R^3 -> R)
     AlgorithmicFunction f =

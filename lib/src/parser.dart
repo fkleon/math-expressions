@@ -19,7 +19,8 @@ abstract class ExpressionParser {
   ///
   /// Throws a [FormatException] if the given [name] is already defined and
   /// [replace] is false.
-  void addFunction(String name, dynamic handler, {bool replace = false});
+  void addFunction(String name, double Function(List<double>) handler,
+      {bool replace = false});
 }
 
 /// The default parser. This type alias is deprecated, use [GrammarParser]
@@ -175,7 +176,8 @@ class ShuntingYardParser implements ExpressionParser {
   }
 
   @override
-  void addFunction(String name, dynamic handler, {bool replace = false}) {
+  void addFunction(String name, double Function(List<double>) handler,
+      {bool replace = false}) {
     if (lex.keywords.containsKey(name) && !replace) {
       throw FormatException('Cannot redefine existing function $name');
     }

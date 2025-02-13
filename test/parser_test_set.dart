@@ -226,13 +226,13 @@ class ParserTests extends TestSet {
 
   void parseAlgorithmicFunctions() {
     var cases = {
-      'myAlgorithmicFunction(1.0)': AlgorithmicFunction(
-          'myAlgorithmicFunction', [Number(1.0)], () => null),
+      'myAlgorithmicFunction(1.0)':
+          AlgorithmicFunction('myAlgorithmicFunction', [Number(1.0)], (_) => 0),
       'my_min(1,x,-2)': AlgorithmicFunction('my_min',
-          [Number(1), Variable('x'), UnaryMinus(Number(2))], () => null),
+          [Number(1), Variable('x'), UnaryMinus(Number(2))], (_) => 0),
     };
 
-    parser.addFunction('myAlgorithmicFunction', () => null, replace: true);
+    parser.addFunction('myAlgorithmicFunction', (_) => 0, replace: true);
     parser.addFunction('my_min', (List<double> args) => args.reduce(math.min),
         replace: true);
 

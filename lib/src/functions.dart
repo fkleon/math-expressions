@@ -1111,7 +1111,7 @@ class AlgorithmicFunction extends DefaultFunction {
   /// method instead it is supported by the parser.
   AlgorithmicFunction(super.name, super.args, this.handler) : super._any();
 
-  Function handler;
+  double Function(List<double>) handler;
 
   @override
   dynamic evaluate(EvaluationType type, ContextModel context) {

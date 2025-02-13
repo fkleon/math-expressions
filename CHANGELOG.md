@@ -27,6 +27,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - The `Root`function now accepts an `Expression` as degree.
+- Handler functions passed to `AlgorithmicFunction` can no longer be
+  dynamically typed.
 
 ### Deprecated
 

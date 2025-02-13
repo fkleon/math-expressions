@@ -50,7 +50,7 @@ class GrammarParser implements ExpressionParser {
   };
 
   /// Dynamically defined algorithmic functions.
-  final functionsC = <String, dynamic>{};
+  final functionsC = <String, double Function(List<double>)>{};
 
   /// Creates an expression from the given identifier, and list of arguments.
   /// May return a constant, function or variable.
@@ -79,7 +79,7 @@ class GrammarParser implements ExpressionParser {
       default:
         var fun = functionsC[name];
         if (fun != null) {
-          return AlgorithmicFunction(name, arguments, functionsC[name]);
+          return AlgorithmicFunction(name, arguments, fun);
         }
     }
 
@@ -172,7 +172,8 @@ class GrammarParser implements ExpressionParser {
   }
 
   @override
-  void addFunction(String name, dynamic handler, {bool replace = false}) {
+  void addFunction(String name, double Function(List<double>) handler,
+      {bool replace = false}) {
     if (functionsC.containsKey(name) && !replace) {
       throw FormatException('Cannot redefine existing function $name');
     }
