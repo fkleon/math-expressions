@@ -577,7 +577,7 @@ class ExpressionTests extends TestSet {
         Exponential(exp),
         Log(exp, exp),
         Ln(exp),
-        Root(5, exp),
+        Root(Number(5), exp),
         Root.sqrt(exp),
         Sqrt(exp),
         Sin(exp),
@@ -1009,7 +1009,7 @@ class ExpressionTests extends TestSet {
     /*
      * Root
      */
-    int grade = 5;
+    var grade = Number(5);
 
     // root_5(0) = 0
     eval = Root(grade, zero).evaluate(real, cm);

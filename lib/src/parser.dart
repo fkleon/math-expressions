@@ -117,7 +117,7 @@ class ShuntingYardParser implements ExpressionParser {
         case TokenType.ROOT:
           right = exprStack.removeLast();
           left = exprStack.removeLast();
-          currExpr = Root.fromExpr(left as Number, right);
+          currExpr = Root(left, right);
           break;
         case TokenType.SIN:
           currExpr = Sin(exprStack.removeLast());

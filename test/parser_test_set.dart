@@ -194,8 +194,8 @@ class ParserTests extends TestSet {
       'ln(2)': Ln(Number(2)),
       'sqrt(10)': Sqrt(Number(10)),
       // n-th root
-      'nrt(2,10)': Root(2, Number(10)),
-      'nrt(5,10-1)': Root(5, Number(10) - Number(1)),
+      'nrt(2,10)': Root(Number(2), Number(10)),
+      'nrt(5,10-1)': Root(Number(5), Number(10) - Number(1)),
       'cos(10)': Cos(Number(10)),
       'sin(10)': Sin(Number(10)),
       'tan(10)': Tan(Number(10)),

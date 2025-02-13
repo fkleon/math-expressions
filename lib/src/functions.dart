@@ -445,22 +445,13 @@ class Ln extends Log {
 }
 
 /// The n-th root function. n needs to be a natural number.
-//TODO: Allow n to be an expression?
 class Root extends DefaultFunction {
-  /// N-th root.
-  late final int n;
-
   /// Creates the n-th root of arg.
   ///
   /// For example, to create the 5th root of x:
   ///
-  ///     root = Root(5, Variable('x'));
-  Root(this.n, Expression arg) : super._unary('nrt', arg);
-
-  /// Creates the n-th root of arg where n is a [Number] literal.
-  Root.fromExpr(Expression n, Expression arg) : super._unary('nrt', arg) {
-    this.n = (n as Number).getConstantValue().toInt();
-  }
+  ///     root = Root(Number(5), Variable('x'));
+  Root(Expression n, Expression arg) : super._binary('nrt', n, arg);
 
   /// Creates the square root of arg.
   ///
@@ -470,18 +461,17 @@ class Root extends DefaultFunction {
   ///
   /// __Note__:
   /// For better simplification and display, use the [Sqrt] class.
-  Root.sqrt(Expression arg)
-      : n = 2,
-        super._unary('sqrt', arg);
+  Root.sqrt(Expression arg) : this(Number(2), arg);
 
-  Expression get arg => getParam(0);
+  Expression get n => getParam(0);
+  Expression get arg => getParam(1);
 
   @override
   Expression derive(String toVar) => this.asPower().derive(toVar);
 
   /// Simplify argument.
   @override
-  Expression simplify() => Root(n, arg.simplify());
+  Expression simplify() => Root(n.simplify(), arg.simplify());
 
   @override
   dynamic evaluate(EvaluationType type, ContextModel context) =>
@@ -495,7 +485,7 @@ class Root extends DefaultFunction {
   ///
   /// This method is used to determine the derivation of a root
   /// expression.
-  Expression asPower() => Power(arg, Divide(Number(1), Number(n)));
+  Expression asPower() => Power(arg, Divide(Number(1), n));
 }
 
 /// The square root function. A specialisation of [Root].
