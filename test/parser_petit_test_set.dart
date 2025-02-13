@@ -335,8 +335,8 @@ class PetitParserTests extends TestSet {
       'x * 2^2.5 * log(10,100)',
     ];
 
-    ContextModel context = ContextModel()
-      ..bindVariableName('x', Number(math.pi));
+    var context = ContextModel()..bindVariableName('x', Number(math.pi));
+    var evaluator = RealEvaluator(context);
 
     for (String expression in expressions) {
       /// Expression doesn't implement equal, so as an approximation
@@ -347,8 +347,8 @@ class PetitParserTests extends TestSet {
       try {
         Expression exp2 = parser.parse(exp.toString());
 
-        double r1 = exp.evaluate(EvaluationType.REAL, context);
-        double r2 = exp2.evaluate(EvaluationType.REAL, context);
+        num r1 = evaluator.evaluate(exp);
+        num r2 = evaluator.evaluate(exp2);
         expect(r2, r1, reason: 'Expected $r2 for $exp ($exp2)');
       } on FormatException catch (fe) {
         expect(fe, isNot(isFormatException),
