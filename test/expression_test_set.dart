@@ -45,6 +45,7 @@ class ExpressionTests extends TestSet {
         'Composite Function evaluation': compFunEval,
         'Algorithmic Function creation': algorithmicFunctionCreation,
         'Algorithmic Function evaluation [REAL]': algorithmicFunctionRealEval,
+        'Expression visitor': testVisitor,
       };
 
   @override
@@ -1382,6 +1383,13 @@ class ExpressionTests extends TestSet {
     cm.bindVariable(x, -Number(2));
     double min = f.evaluate(EvaluationType.REAL, cm);
     expect(min, equals(-2.0));
+  }
+
+  void testVisitor() {
+    var exp = Exponential(UnaryMinus(Number(0) + Variable('x')));
+    var visitor = VariableCollector();
+    var variables = visitor.evaluate(exp);
+    expect(variables, equals({'x'}));
   }
 
   /// Checks if the given operator contains the given members.

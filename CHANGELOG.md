@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [unreleased]
 
+### Added
+
+- Add support for listing all variables in an `Expression` with the
+  `VariableCollector` visitor. #73
+
 ### Changed
 
 - The `Root`function now accepts an `Expression` as degree.

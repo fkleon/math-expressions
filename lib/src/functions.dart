@@ -20,6 +20,14 @@ abstract class MathFunction extends Expression {
   /// arguments.
   MathFunction._empty(this.name) : args = [];
 
+  @override
+  void accept(ExpressionVisitor visitor) {
+    for (var arg in args) {
+      arg.accept(visitor);
+    }
+    visitor.visitFunction(this);
+  }
+
   /// Compose operator. Creates a [CompositeFunction].
   MathFunction operator &(MathFunction g) => CompositeFunction(this, g);
 
@@ -216,6 +224,12 @@ class CustomFunction extends MathFunction {
       expression.evaluate(type, context);
 
   @override
+  void accept(ExpressionVisitor visitor) {
+    expression.accept(visitor);
+    visitor.visitCustomFunction(this);
+  }
+
+  @override
   String toFullString() => '$name($args) = $expression';
 }
 
@@ -340,6 +354,12 @@ class Exponential extends DefaultFunction {
 
     throw UnimplementedError('Can not evaluate $name on $type yet.');
   }
+
+  @override
+  void accept(ExpressionVisitor visitor) {
+    super.accept(visitor);
+    visitor.visitExponential(this);
+  }
 }
 
 /// The logarithm function.
@@ -385,6 +405,12 @@ class Log extends DefaultFunction {
     }
 
     throw UnimplementedError('Can not evaluate $name on $type yet.');
+  }
+
+  @override
+  void accept(ExpressionVisitor visitor) {
+    super.accept(visitor);
+    visitor.visitLog(this);
   }
 
   /// Returns the natural from of this logarithm.
@@ -441,6 +467,12 @@ class Ln extends Log {
   }
 
   @override
+  void accept(ExpressionVisitor visitor) {
+    this.arg.accept(visitor);
+    visitor.visitLn(this);
+  }
+
+  @override
   String toString() => 'ln($arg)';
 }
 
@@ -476,6 +508,12 @@ class Root extends DefaultFunction {
   @override
   dynamic evaluate(EvaluationType type, ContextModel context) =>
       this.asPower().evaluate(type, context);
+
+  @override
+  void accept(ExpressionVisitor visitor) {
+    super.accept(visitor);
+    visitor.visitRoot(this);
+  }
 
   @override
   String toString() => 'nrt($n,$arg)';
@@ -551,6 +589,12 @@ class Sqrt extends Root {
   }
 
   @override
+  void accept(ExpressionVisitor visitor) {
+    arg.accept(visitor);
+    visitor.visitSqrt(this);
+  }
+
+  @override
   String toString() => 'sqrt($arg)';
 }
 
@@ -602,6 +646,12 @@ class Sin extends DefaultFunction {
     }
 
     throw UnimplementedError('Can not evaluate $name on $type yet.');
+  }
+
+  @override
+  void accept(ExpressionVisitor visitor) {
+    super.accept(visitor);
+    visitor.visitSin(this);
   }
 }
 
@@ -655,6 +705,12 @@ class Cos extends DefaultFunction {
 
     throw UnimplementedError('Can not evaluate $name on $type yet.');
   }
+
+  @override
+  void accept(ExpressionVisitor visitor) {
+    super.accept(visitor);
+    visitor.visitCos(this);
+  }
 }
 
 /// The tangens function. Expects input in `radians`.
@@ -702,6 +758,12 @@ class Tan extends DefaultFunction {
     throw UnimplementedError('Can not evaluate $name on $type yet.');
   }
 
+  @override
+  void accept(ExpressionVisitor visitor) {
+    super.accept(visitor);
+    visitor.visitTan(this);
+  }
+
   /// Returns this tangens as sine and cosine representation:
   /// `tan(x) = sin(x) / cos(x)`
   Expression asSinCos() => Sin(arg) / Cos(arg);
@@ -736,6 +798,12 @@ class Asin extends DefaultFunction {
     // TODO VECTOR and INTERVAL evaluation
     throw UnimplementedError('Can not evaluate $name on $type yet.');
   }
+
+  @override
+  void accept(ExpressionVisitor visitor) {
+    super.accept(visitor);
+    visitor.visitAsin(this);
+  }
 }
 
 /// The arcus cosine function.
@@ -767,6 +835,12 @@ class Acos extends DefaultFunction {
     // TODO VECTOR and INTERVAL evaluation
     throw UnimplementedError('Can not evaluate $name on $type yet.');
   }
+
+  @override
+  void accept(ExpressionVisitor visitor) {
+    super.accept(visitor);
+    visitor.visitAcos(this);
+  }
 }
 
 /// The arcus tangens function.
@@ -797,6 +871,12 @@ class Atan extends DefaultFunction {
 
     // TODO VECTOR and INTERVAL evaluation
     throw UnimplementedError('Can not evaluate $name on $type yet.');
+  }
+
+  @override
+  void accept(ExpressionVisitor visitor) {
+    super.accept(visitor);
+    visitor.visitAtan(this);
   }
 }
 
@@ -830,6 +910,12 @@ class Abs extends DefaultFunction {
     }
 
     throw UnimplementedError('Can not evaluate $name on $type yet.');
+  }
+
+  @override
+  void accept(ExpressionVisitor visitor) {
+    super.accept(visitor);
+    visitor.visitAbs(this);
   }
 }
 
@@ -870,6 +956,12 @@ class Ceil extends DefaultFunction {
 
     throw UnimplementedError('Can not evaluate $name on $type yet.');
   }
+
+  @override
+  void accept(ExpressionVisitor visitor) {
+    super.accept(visitor);
+    visitor.visitCeil(this);
+  }
 }
 
 /// The floor function.
@@ -909,6 +1001,12 @@ class Floor extends DefaultFunction {
 
     throw UnimplementedError('Can not evaluate $name on $type yet.');
   }
+
+  @override
+  void accept(ExpressionVisitor visitor) {
+    super.accept(visitor);
+    visitor.visitFloor(this);
+  }
 }
 
 /// The sign function.
@@ -937,6 +1035,12 @@ class Sgn extends DefaultFunction {
     }
 
     throw UnimplementedError('Can not evaluate $name on $type yet.');
+  }
+
+  @override
+  void accept(ExpressionVisitor visitor) {
+    super.accept(visitor);
+    visitor.visitSgn(this);
   }
 }
 
@@ -984,6 +1088,12 @@ class Factorial extends DefaultFunction {
 
     throw UnimplementedError('Can not evaluate $name on $type yet.');
   }
+
+  @override
+  void accept(ExpressionVisitor visitor) {
+    super.accept(visitor);
+    visitor.visitFactorial(this);
+  }
 }
 
 class AlgorithmicFunction extends DefaultFunction {
@@ -1014,6 +1124,12 @@ class AlgorithmicFunction extends DefaultFunction {
     }
 
     throw UnimplementedError('Can not evaluate $name on $type yet.');
+  }
+
+  @override
+  void accept(ExpressionVisitor visitor) {
+    super.accept(visitor);
+    visitor.visitAlgorithmicFunction(this);
   }
 
   @override

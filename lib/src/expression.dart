@@ -64,6 +64,10 @@ abstract class Expression {
   /// Evaluates this expression according to given type and context.
   dynamic evaluate(EvaluationType type, ContextModel context);
 
+  /// Accepts an [ExpressionVisitor] and visits all nodes of this expression
+  /// tree in Postfix order.
+  void accept(ExpressionVisitor visitor);
+
   /// Returns a string version of this expression.
   /// Subclasses should override this method. The output should be kept
   /// compatible with the [ExpressionParser].
@@ -126,6 +130,13 @@ abstract class BinaryOperator extends Expression {
 
   /// Creates a new [BinaryOperator] from two given expressions.
   BinaryOperator.raw(this.first, this.second);
+
+  @override
+  void accept(ExpressionVisitor visitor) {
+    this.first.accept(visitor);
+    this.second.accept(visitor);
+    visitor.visitBinaryOperator(this);
+  }
 }
 
 /// A unary operator takes one argument and performs an operation on it.
@@ -145,6 +156,12 @@ abstract class UnaryOperator extends Expression {
 
   /// Creates a [UnaryOperator] from the given expression.
   UnaryOperator.raw(this.exp);
+
+  @override
+  void accept(ExpressionVisitor visitor) {
+    this.exp.accept(visitor);
+    visitor.visitUnaryOperator(this);
+  }
 }
 
 /// The unary minus negates its argument.
@@ -191,6 +208,12 @@ class UnaryMinus extends UnaryOperator {
       -(exp.evaluate(type, context));
 
   @override
+  void accept(ExpressionVisitor visitor) {
+    super.accept(visitor);
+    visitor.visitUnaryMinus(this);
+  }
+
+  @override
   String toString() => '(-$exp)';
 }
 
@@ -219,6 +242,12 @@ class UnaryPlus extends UnaryOperator {
   @override
   dynamic evaluate(EvaluationType type, ContextModel context) =>
       exp.evaluate(type, context);
+
+  @override
+  void accept(ExpressionVisitor visitor) {
+    super.accept(visitor);
+    visitor.visitUnaryPlus(this);
+  }
 
   @override
   String toString() => '(+$exp)';
@@ -273,6 +302,12 @@ class Plus extends BinaryOperator {
       first.evaluate(type, context) + second.evaluate(type, context);
 
   @override
+  void accept(ExpressionVisitor visitor) {
+    super.accept(visitor);
+    visitor.visitPlus(this);
+  }
+
+  @override
   String toString() => '($first + $second)';
 }
 
@@ -323,6 +358,12 @@ class Minus extends BinaryOperator {
   @override
   dynamic evaluate(EvaluationType type, ContextModel context) =>
       first.evaluate(type, context) - second.evaluate(type, context);
+
+  @override
+  void accept(ExpressionVisitor visitor) {
+    super.accept(visitor);
+    visitor.visitMinus(this);
+  }
 
   @override
   String toString() => '($first - $second)';
@@ -416,6 +457,12 @@ class Times extends BinaryOperator {
   }
 
   @override
+  void accept(ExpressionVisitor visitor) {
+    super.accept(visitor);
+    visitor.visitTimes(this);
+  }
+
+  @override
   String toString() => '($first * $second)';
 }
 
@@ -497,6 +544,12 @@ class Divide extends BinaryOperator {
   }
 
   @override
+  void accept(ExpressionVisitor visitor) {
+    super.accept(visitor);
+    visitor.visitDivide(this);
+  }
+
+  @override
   String toString() => '($first / $second)';
 }
 
@@ -551,6 +604,12 @@ class Modulo extends BinaryOperator {
 
     throw UnimplementedError(
         'Evaluate Modulo with type $type not supported yet.');
+  }
+
+  @override
+  void accept(ExpressionVisitor visitor) {
+    super.accept(visitor);
+    visitor.visitModulo(this);
   }
 
   @override
@@ -692,6 +751,12 @@ class Power extends BinaryOperator {
   }
 
   @override
+  void accept(ExpressionVisitor visitor) {
+    super.accept(visitor);
+    visitor.visitPower(this);
+  }
+
+  @override
   String toString() => '($first^$second)';
 
   /// Returns the exponential form of this operation.
@@ -708,6 +773,14 @@ abstract class Literal extends Expression {
   /// Creates a literal. The optional paramter `value` can be used to specify
   /// its value.
   Literal([this.value]);
+
+  @override
+  void accept(ExpressionVisitor visitor) {
+    if (this.value is Expression) {
+      this.value.accept(visitor);
+    }
+    visitor.visitLiteral(this);
+  }
 
   /// Returns true, if this literal is a constant.
   bool isConstant() => false;
@@ -753,6 +826,11 @@ class Number extends Literal {
     }
 
     throw UnsupportedError('Number $this can not be interpreted as: $type');
+  }
+
+  @override
+  void accept(ExpressionVisitor visitor) {
+    visitor.visitNumber(this);
   }
 
   @override
@@ -846,6 +924,14 @@ class Vector extends Literal {
   }
 
   @override
+  void accept(ExpressionVisitor visitor) {
+    for (var element in elements) {
+      element.accept(visitor);
+    }
+    visitor.visitVector(this);
+  }
+
+  @override
   bool isConstant() => elements.fold(
       true, (prev, elem) => prev && (elem is Literal && elem.isConstant()));
 
@@ -877,6 +963,11 @@ class Variable extends Literal {
   @override
   dynamic evaluate(EvaluationType type, ContextModel context) =>
       context.getExpression(name).evaluate(type, context);
+
+  @override
+  void accept(ExpressionVisitor visitor) {
+    visitor.visitVariable(this);
+  }
 }
 
 /// A bound variable is an anonymous variable, e.g. a variable without name,
@@ -909,6 +1000,14 @@ class BoundVariable extends Variable {
   @override
   dynamic evaluate(EvaluationType type, ContextModel context) =>
       value.evaluate(type, context);
+
+  @override
+  void accept(ExpressionVisitor visitor) {
+    if (this.value is Expression) {
+      this.value.accept(visitor);
+    }
+    visitor.visitBoundVariable(this);
+  }
 
   /// Put bound variable in curly brackets to make them distinguishable.
   @override
@@ -957,6 +1056,13 @@ class IntervalLiteral extends Literal {
     }
 
     throw UnsupportedError('Interval $this can not be interpreted as: $type');
+  }
+
+  @override
+  void accept(ExpressionVisitor visitor) {
+    this.min.accept(visitor);
+    this.max.accept(visitor);
+    visitor.visitInterval(this);
   }
 
   @override

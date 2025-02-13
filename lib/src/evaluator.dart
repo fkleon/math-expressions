@@ -95,3 +95,27 @@ class ContextModel {
       'VARS: ${variables.toString()}, '
       'FUNCS: ${functions.toString()}]';
 }
+
+/// An expression visitor that collects all variables in an expression.
+class VariableCollector extends NullExpressionVisitor {
+  final Set<String> _variables = {};
+
+  /// Evaluate the given expression.
+  ///
+  /// Returns the distinct variable names found in the given expression.
+  Iterable<String> evaluate(Expression exp) {
+    assert(_variables.isEmpty);
+
+    try {
+      exp.accept(this);
+      return {..._variables};
+    } finally {
+      _variables.clear();
+    }
+  }
+
+  @override
+  void visitVariable(Variable literal) {
+    this._variables.add(literal.name);
+  }
+}
