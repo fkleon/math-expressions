@@ -475,3 +475,138 @@ class RealEvaluator extends ExpressionEvaluator<num> {
     push1(product);
   }
 }
+
+class IntervalEvaluator extends ExpressionEvaluator<Interval> {
+  /// Create a new evaluator with the given context.
+  IntervalEvaluator([ContextModel? context])
+      : super(EvaluationType.INTERVAL, context ?? ContextModel());
+
+  @override
+  void visitNumber(Number literal) {
+    if (literal.value is num) {
+      push1(Interval(literal.value, literal.value));
+    } else if (literal.value is Interval) {
+      push1(literal.value);
+    } else {
+      throw UnsupportedError(
+          'Number $literal with type ${literal.value.runtimeType} can not be interpreted as: $type');
+    }
+  }
+
+  @override
+  void visitInterval(IntervalLiteral literal) {
+    var (max, min) = pop2();
+    // Expect min and max expressions to evaluate to real numbers,
+    // i.e. an interval with min == max.
+    assert(min.min == min.max);
+    assert(max.min == max.max);
+    push1(Interval(min.min, max.min));
+  }
+
+  @override
+  void visitUnaryPlus(UnaryPlus op) {
+    // no-op
+  }
+
+  @override
+  void visitUnaryMinus(UnaryMinus op) {
+    var (val,) = pop1();
+    push1(-val);
+  }
+
+  @override
+  void visitPlus(Plus op) {
+    var (addend, augend) = pop2();
+    push1(augend + addend);
+  }
+
+  @override
+  void visitMinus(Minus op) {
+    var (subtrahend, minuend) = pop2();
+    push1(minuend - subtrahend);
+  }
+
+  @override
+  void visitTimes(Times op) {
+    var (multiplicand, multiplier) = pop2();
+    push1(multiplier * multiplicand);
+  }
+
+  @override
+  void visitDivide(Divide op) {
+    var (divisor, dividend) = pop2();
+    push1(dividend / divisor);
+  }
+
+  @override
+  void visitModulo(Modulo op) {
+    throw UnimplementedError(
+        'Evaluate Modulo with type $type not supported yet.');
+  }
+
+  @override
+  void visitPower(Power op) {
+    // Expect base to be interval.
+    var (exp, base) = pop2();
+
+    // Expect exponent to be a natural number.
+    int exponent = exp.min.toInt();
+    num evalMin, evalMax;
+
+    // Distinction of cases depending on oddity of exponent.
+    if (exponent.isOdd) {
+      // [x, y]^n = [x^n, y^n] for n = odd
+      evalMin = math.pow(base.min, exponent);
+      evalMax = math.pow(base.max, exponent);
+    } else {
+      // [x, y]^n = [x^n, y^n] for x >= 0
+      if (base.min >= 0) {
+        // Positive interval.
+        evalMin = math.pow(base.min, exponent);
+        evalMax = math.pow(base.max, exponent);
+      }
+
+      // [x, y]^n = [y^n, x^n] for y < 0
+      if (base.min >= 0) {
+        // Positive interval.
+        evalMin = math.pow(base.max, exponent);
+        evalMax = math.pow(base.min, exponent);
+      }
+
+      // [x, y]^n = [0, max(x^n, y^n)] otherwise
+      evalMin = 0;
+      evalMax =
+          math.max(math.pow(base.min, exponent), math.pow(base.min, exponent));
+    }
+
+    assert(evalMin <= evalMax);
+    push1(Interval(evalMin, evalMax));
+  }
+
+  @override
+  void visitFunction(MathFunction func) {
+    if (func is! Exponential) {
+      throw UnimplementedError(
+          '${func.runtimeType} can not be evaluated as: $type');
+    }
+  }
+
+  @override
+  void visitExponential(Exponential func) {
+    var (val,) = pop1();
+
+    // Special case of a^[x, y] = [a^x, a^y] for a > 1 (with a = e)
+    // Expect exponent to be interval.
+    push1(Interval(math.exp(val.min), math.exp(val.max)));
+  }
+
+  @override
+  void visitLn(Ln func) {
+    this.visitFunction(func);
+  }
+
+  @override
+  void visitSqrt(Sqrt func) {
+    this.visitFunction(func);
+  }
+}

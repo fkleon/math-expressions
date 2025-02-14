@@ -15,6 +15,7 @@ part 'lexer_test_set.dart';
 part 'parser_test_set.dart';
 part 'parser_petit_test_set.dart';
 part 'evaluator_test_set.dart';
+part 'evaluator_interval_test_set.dart';
 
 /// relative accuracy for floating-point calculations
 const num EPS = 0.00001;
@@ -28,6 +29,7 @@ void main() {
     PetitParserTests(),
     ExpressionTests(),
     RealEvaluatorTests(),
+    IntervalEvaluatorTests(),
   ];
 
   TestExecutor.initWith(testSets).runTests();
