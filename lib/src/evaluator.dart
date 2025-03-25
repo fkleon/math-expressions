@@ -599,3 +599,225 @@ class IntervalEvaluator extends ExpressionEvaluator<Interval> {
     push1(Interval(math.exp(val.min), math.exp(val.max)));
   }
 }
+
+/// The vector evaluator can operate on mixed datatypes,
+/// so is typed less strict. The underlying data types could
+/// be Vector2, Vector3, Vector4 and double (scalars).
+class VectorEvaluator extends ExpressionEvaluator<Object> {
+  /// Create a new evaluator with the given context.
+  VectorEvaluator([ContextModel? context])
+      : super(EvaluationType.VECTOR, context ?? ContextModel());
+
+  @override
+  List<double> popN(int count) {
+    return super.popN(count).cast<double>().reversed.toList();
+  }
+
+  @override
+  void visitNumber(Number literal) {
+    if (literal.value is num) {
+      // Interpret number as scalar
+      push1(literal.value);
+    } else if (literal.value is Vector2 ||
+        literal.value is Vector3 ||
+        literal.value is Vector4) {
+      push1(literal.value);
+    } else {
+      throw UnsupportedError(
+          'Number $literal with type ${literal.value.runtimeType} can not be interpreted as: $type');
+    }
+  }
+
+  @override
+  void visitVector(Vector literal) {
+    var elems = popN(literal.length);
+
+    switch (literal.length) {
+      case 0:
+        return;
+      case 1:
+        // Does not seem to be a vector, evaluate as scalar.
+        return push1(elems[0]);
+      case 2:
+        return push1(Vector2.array(elems));
+      case 3:
+        return push1(Vector3.array(elems));
+      case 4:
+        return push1(Vector4.array(elems));
+      default:
+        throw UnsupportedError(
+            'Vector $literal with length ${literal.length} can not be interpreted as: $type');
+    }
+  }
+
+  @override
+  void visitUnaryPlus(UnaryPlus op) {
+    // no-op
+  }
+
+  @override
+  void visitUnaryMinus(UnaryMinus op) {
+    var (val,) = pop1();
+
+    if (val is Vector2) {
+      return push1(-val);
+    }
+
+    if (val is Vector3) {
+      return push1(-val);
+    }
+
+    if (val is Vector4) {
+      return push1(-val);
+    }
+
+    throw UnsupportedError(
+        '${op.runtimeType} of ${val.runtimeType} can not be evaluated as: $type');
+  }
+
+  @override
+  void visitPlus(Plus op) {
+    var (addend, augend) = pop2();
+
+    // double and double
+    if (addend is num && augend is num) {
+      var realEvaluator = RealEvaluator(this.context);
+      return push1(realEvaluator.evaluate(op));
+    }
+
+    // vector and vector
+    if (addend is Vector2 && augend is Vector2) {
+      return push1(augend + addend);
+    }
+
+    if (addend is Vector3 && augend is Vector3) {
+      return push1(augend + addend);
+    }
+
+    if (addend is Vector4 && augend is Vector4) {
+      return push1(augend + addend);
+    }
+
+    throw UnsupportedError(
+        '${op.runtimeType} of ${addend.runtimeType} and ${augend.runtimeType} can not be evaluated as: $type');
+  }
+
+  @override
+  void visitMinus(Minus op) {
+    var (subtrahend, minuend) = pop2();
+
+    // double and double
+    if (subtrahend is num && minuend is num) {
+      var realEvaluator = RealEvaluator(this.context);
+      return push1(realEvaluator.evaluate(op));
+    }
+
+    // vector and vector
+    if (minuend is Vector2 && subtrahend is Vector2) {
+      return push1(minuend - subtrahend);
+    }
+
+    if (minuend is Vector3 && subtrahend is Vector3) {
+      return push1(minuend - subtrahend);
+    }
+
+    if (minuend is Vector4 && subtrahend is Vector4) {
+      return push1(minuend - subtrahend);
+    }
+
+    throw UnsupportedError(
+        '${op.runtimeType} of ${minuend.runtimeType} and ${subtrahend.runtimeType} can not be evaluated as: $type');
+  }
+
+  @override
+  void visitTimes(Times op) {
+    var (multiplicand, multiplier) = pop2();
+
+    // double and double
+    if (multiplicand is num && multiplier is num) {
+      var realEvaluator = RealEvaluator(this.context);
+      return push1(realEvaluator.evaluate(op));
+    }
+
+    // vector and vector
+    if (multiplicand is Vector2 && multiplier is Vector2) {
+      return push1(multiplicand..multiply(multiplier));
+    }
+
+    if (multiplicand is Vector3 && multiplier is Vector3) {
+      return push1(multiplicand..multiply(multiplier));
+    }
+
+    if (multiplicand is Vector4 && multiplier is Vector4) {
+      return push1(multiplicand..multiply(multiplier));
+    }
+
+    // vector and scalar
+    if (multiplicand is Vector2 && multiplier is double) {
+      return push1(multiplicand * multiplier);
+    }
+
+    if (multiplicand is Vector3 && multiplier is double) {
+      return push1(multiplicand * multiplier);
+    }
+
+    if (multiplicand is Vector4 && multiplier is double) {
+      return push1(multiplicand * multiplier);
+    }
+
+    throw UnsupportedError(
+        '${op.runtimeType} of ${multiplicand.runtimeType} and ${multiplier.runtimeType} can not be evaluated as: $type');
+  }
+
+  @override
+  void visitDivide(Divide op) {
+    var (divisor, dividend) = pop2();
+
+    // double and double
+    if (divisor is Number && dividend is Number) {
+      var realEvaluator = RealEvaluator(this.context);
+      return push1(realEvaluator.evaluate(op));
+    }
+
+    // vector and vector
+    if (divisor is Vector2 && dividend is Vector2) {
+      return push1(divisor..divide(dividend));
+    }
+
+    if (divisor is Vector3 && dividend is Vector3) {
+      return push1(divisor..divide(dividend));
+    }
+
+    if (divisor is Vector4 && dividend is Vector4) {
+      return push1(divisor..div(dividend));
+    }
+
+    // vector and scalar
+    if (divisor is Vector2 && dividend is double) {
+      return push1(divisor / dividend);
+    }
+
+    if (divisor is Vector3 && dividend is double) {
+      return push1(divisor / dividend);
+    }
+
+    if (divisor is Vector4 && dividend is double) {
+      return push1(divisor / dividend);
+    }
+
+    throw UnsupportedError(
+        '${op.runtimeType} of ${divisor.runtimeType} and ${dividend.runtimeType} can not be evaluated as: $type');
+  }
+
+  @override
+  void visitModulo(Modulo op) {
+    throw UnimplementedError(
+        'Evaluate Modulo with type $type not supported yet.');
+  }
+
+  @override
+  void visitPower(Power op) {
+    throw UnimplementedError(
+        'Evaluate Power with type $type not supported yet.');
+  }
+}
