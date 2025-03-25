@@ -550,6 +550,7 @@ class IntervalEvaluator extends ExpressionEvaluator<Interval> {
     var (exp, base) = pop2();
 
     // Expect exponent to be a natural number.
+    assert(exp.min == exp.max);
     int exponent = exp.min.toInt();
     num evalMin, evalMax;
 

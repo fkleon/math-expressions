@@ -139,7 +139,7 @@ class IntervalEvaluatorTests extends TestSet {
       i1 * i2: int1 * int2,
       i1 / i2: int1 / int2,
       i1 % i2: throwsA(isUnimplementedError),
-      i1 ^ i2: Interval(57.6650390625, 3125.0),
+      i1 ^ n2: Interval(57.6650390625, 3125.0),
     };
     parameterized(cases);
   }
