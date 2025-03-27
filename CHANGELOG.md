@@ -11,9 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add support for listing all variables in an `Expression` with the
   `VariableCollector` visitor. #73
-- Add support for evaluating an `Expresssion` as a real number with the
-  `RealEvaluator` visitor. This offers a strongly typed interface and
-  replaces `Expression.evaluate()`:
+- Add support for evaluating an `Expression` with the visitor interface:
+  `RealEvaluator` (as real number), `IntervalEvaluator` (as interval),
+  `VectorEvalutor` (as vector).
+  This offers a strongly typed interface and replaces `Expression.evaluate()`:
 
   ```dart
   // Old
