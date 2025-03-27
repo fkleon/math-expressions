@@ -8,6 +8,8 @@ part of '../math_expressions.dart';
 /// * Provides a fallback for visiting abstract classes in the class hierarchy.
 ///   This allows future extensions without changing the base interface.
 abstract class ExpressionVisitor<T> {
+  bool visitEnter(Expression exp);
+
   // Literals
   T visitLiteral(Literal literal);
   T visitNumber(Number literal);
@@ -56,6 +58,9 @@ abstract class ExpressionVisitor<T> {
 
 /// Default ("null") implementation of the expression visitor.
 abstract class NullExpressionVisitor implements ExpressionVisitor<void> {
+  @override
+  bool visitEnter(Expression exp) => true;
+
   // Literals
   @override
   void visitLiteral(Literal literal) {}

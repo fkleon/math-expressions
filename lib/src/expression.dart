@@ -928,8 +928,10 @@ class Vector extends Literal {
 
   @override
   void accept(ExpressionVisitor visitor) {
-    for (var element in elements) {
-      element.accept(visitor);
+    if (visitor.visitEnter(this)) {
+      for (var element in elements) {
+        element.accept(visitor);
+      }
     }
     visitor.visitVector(this);
   }
@@ -1063,8 +1065,10 @@ class IntervalLiteral extends Literal {
 
   @override
   void accept(ExpressionVisitor visitor) {
-    this.min.accept(visitor);
-    this.max.accept(visitor);
+    if (visitor.visitEnter(this)) {
+      this.min.accept(visitor);
+      this.max.accept(visitor);
+    }
     visitor.visitInterval(this);
   }
 

@@ -482,6 +482,17 @@ class IntervalEvaluator extends ExpressionEvaluator<Interval> {
       : super(EvaluationType.INTERVAL, context ?? ContextModel());
 
   @override
+  bool visitEnter(Expression exp) {
+    if (exp is IntervalLiteral) {
+      // Skip visiting this sub-tree, and handle
+      // nested evaluation in visitInterval() instead.
+      return false;
+    }
+
+    return super.visitEnter(exp);
+  }
+
+  @override
   void visitNumber(Number literal) {
     if (literal.value is num) {
       push1(Interval(literal.value, literal.value));
@@ -495,12 +506,11 @@ class IntervalEvaluator extends ExpressionEvaluator<Interval> {
 
   @override
   void visitInterval(IntervalLiteral literal) {
-    var (max, min) = pop2();
-    // Expect min and max expressions to evaluate to real numbers,
-    // i.e. an interval with min == max.
-    assert(min.min == min.max);
-    assert(max.min == max.max);
-    push1(Interval(min.min, max.min));
+    // Evaulate the interval boundaries as REAL numbers.
+    var eval = RealEvaluator(this.context);
+    var (min, max) = (eval.evaluate(literal.min), eval.evaluate(literal.max));
+
+    push1(Interval(min, max));
   }
 
   @override
@@ -626,6 +636,16 @@ class VectorEvaluator extends ExpressionEvaluator<Object> {
   }
 
   @override
+  bool visitEnter(Expression exp) {
+    if (exp is Vector) {
+      // Skip visiting this sub-tree, and handle
+      // nested evaluation in visitVector() instead.
+      return false;
+    }
+    return super.visitEnter(exp);
+  }
+
+  @override
   void visitNumber(Number literal) {
     if (literal.value is num) {
       // Interpret number as scalar
@@ -642,7 +662,10 @@ class VectorEvaluator extends ExpressionEvaluator<Object> {
 
   @override
   void visitVector(Vector literal) {
-    var elems = popN(literal.length);
+    // Evaulate each vector element as REAL number.
+    var eval = RealEvaluator(this.context);
+    var elems =
+        literal.elements.map(eval.evaluate).map((n) => n.toDouble()).toList();
 
     switch (literal.length) {
       case 0:
@@ -695,11 +718,6 @@ class VectorEvaluator extends ExpressionEvaluator<Object> {
   void visitPlus(Plus op) {
     var (addend, augend) = pop2();
 
-    // double and double
-    if (augend is num && addend is num) {
-      return push1(this.realEvaluator.evaluate(op));
-    }
-
     // vector and vector
     if (augend is Vector2 && addend is Vector2) {
       return push1(augend + addend);
@@ -721,11 +739,6 @@ class VectorEvaluator extends ExpressionEvaluator<Object> {
   void visitMinus(Minus op) {
     var (subtrahend, minuend) = pop2();
 
-    // double and double
-    if (minuend is num && subtrahend is num) {
-      return push1(this.realEvaluator.evaluate(op));
-    }
-
     // vector and vector
     if (minuend is Vector2 && subtrahend is Vector2) {
       return push1(minuend - subtrahend);
@@ -746,11 +759,6 @@ class VectorEvaluator extends ExpressionEvaluator<Object> {
   @override
   void visitTimes(Times op) {
     var (multiplicand, multiplier) = pop2();
-
-    // double and double
-    if (multiplier is num && multiplicand is num) {
-      return push1(this.realEvaluator.evaluate(op));
-    }
 
     // vector and vector
     if (multiplier is Vector2 && multiplicand is Vector2) {
@@ -790,11 +798,6 @@ class VectorEvaluator extends ExpressionEvaluator<Object> {
   @override
   void visitDivide(Divide op) {
     var (divisor, dividend) = pop2();
-
-    // double and double
-    if (dividend is Number && divisor is Number) {
-      return push1(this.realEvaluator.evaluate(op));
-    }
 
     // vector and vector
     if (dividend is Vector2 && divisor is Vector2) {
@@ -841,21 +844,5 @@ class VectorEvaluator extends ExpressionEvaluator<Object> {
   void visitPower(Power op) {
     throw UnimplementedError(
         '${op.runtimeType} with type $type not supported yet.');
-  }
-
-  @override
-  void visitFunction(MathFunction func) {
-    throw UnimplementedError(
-        '${func.runtimeType} can not be evaluated as: $type');
-  }
-
-  @override
-  void visitLn(Ln func) {
-    this.visitFunction(func);
-  }
-
-  @override
-  void visitSqrt(Sqrt func) {
-    this.visitFunction(func);
   }
 }
