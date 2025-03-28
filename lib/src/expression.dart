@@ -63,9 +63,19 @@ abstract class Expression {
 
   /// Evaluates this expression according to given type and context.
   ///
-  /// This method is deprecated, use [RealEvaluator] instead.
-  @Deprecated("Use [RealEvaluator]")
-  dynamic evaluate(EvaluationType type, ContextModel context);
+  /// This method is deprecated, use [RealEvaluator], [IntervalEvaluator], or
+  /// [VectorEvaluator] instead.
+  @Deprecated("Use [RealEvaluator], [IntervalEvaluator], or [VectorEvaluator]")
+  dynamic evaluate(EvaluationType type, ContextModel context) {
+    switch (type) {
+      case EvaluationType.REAL:
+        return RealEvaluator(context).evaluate(this);
+      case EvaluationType.INTERVAL:
+        return IntervalEvaluator(context).evaluate(this);
+      case EvaluationType.VECTOR:
+        return VectorEvaluator(context).evaluate(this);
+    }
+  }
 
   /// Accepts an [ExpressionVisitor] and visits all nodes of this expression
   /// tree in Postfix order.
@@ -207,10 +217,6 @@ class UnaryMinus extends UnaryOperator {
   }
 
   @override
-  dynamic evaluate(EvaluationType type, ContextModel context) =>
-      -(exp.evaluate(type, context));
-
-  @override
   void accept(ExpressionVisitor visitor) {
     super.accept(visitor);
     visitor.visitUnaryMinus(this);
@@ -241,10 +247,6 @@ class UnaryPlus extends UnaryOperator {
   /// 1. +a = a
   @override
   Expression simplify() => exp.simplify();
-
-  @override
-  dynamic evaluate(EvaluationType type, ContextModel context) =>
-      exp.evaluate(type, context);
 
   @override
   void accept(ExpressionVisitor visitor) {
@@ -301,10 +303,6 @@ class Plus extends BinaryOperator {
   }
 
   @override
-  dynamic evaluate(EvaluationType type, ContextModel context) =>
-      first.evaluate(type, context) + second.evaluate(type, context);
-
-  @override
   void accept(ExpressionVisitor visitor) {
     super.accept(visitor);
     visitor.visitPlus(this);
@@ -357,10 +355,6 @@ class Minus extends BinaryOperator {
     //TODO -a + b = b - a
     //TODO -a - b = - (a + b)
   }
-
-  @override
-  dynamic evaluate(EvaluationType type, ContextModel context) =>
-      first.evaluate(type, context) - second.evaluate(type, context);
 
   @override
   void accept(ExpressionVisitor visitor) {
@@ -442,24 +436,6 @@ class Times extends BinaryOperator {
   }
 
   @override
-  dynamic evaluate(EvaluationType type, ContextModel context) {
-    final dynamic firstEval = first.evaluate(type, context);
-    final dynamic secondEval = second.evaluate(type, context);
-
-    if (type == EvaluationType.VECTOR) {
-      if (secondEval is double) {
-        // scale - nothing special to do
-      } else {
-        // multiply
-        final dynamic eval = firstEval.clone()..multiply(secondEval);
-        return eval;
-      }
-    }
-
-    return firstEval * secondEval;
-  }
-
-  @override
   void accept(ExpressionVisitor visitor) {
     super.accept(visitor);
     visitor.visitTimes(this);
@@ -526,26 +502,6 @@ class Divide extends BinaryOperator {
     // TODO cancel down/out? - needs equals on literals (and expressions?)!
   }
 
-  /// For real numbers this method performs a double divison and
-  /// returns [double.infinity] if a divide by zero is encountered.
-  @override
-  dynamic evaluate(EvaluationType type, ContextModel context) {
-    final dynamic firstEval = first.evaluate(type, context);
-    final dynamic secondEval = second.evaluate(type, context);
-
-    if (type == EvaluationType.VECTOR) {
-      if (secondEval is double) {
-        // scale - nothing special to do
-      } else {
-        // divide
-        final dynamic eval = firstEval.clone()..divide(secondEval);
-        return eval;
-      }
-    }
-
-    return firstEval / secondEval;
-  }
-
   @override
   void accept(ExpressionVisitor visitor) {
     super.accept(visitor);
@@ -594,19 +550,6 @@ class Modulo extends BinaryOperator {
     }
 
     return Modulo(firstOp, secondOp);
-  }
-
-  @override
-  dynamic evaluate(EvaluationType type, ContextModel context) {
-    final dynamic firstEval = first.evaluate(type, context);
-    final dynamic secondEval = second.evaluate(type, context);
-
-    if (type == EvaluationType.REAL) {
-      return firstEval % secondEval;
-    }
-
-    throw UnimplementedError(
-        'Evaluate Modulo with type $type not supported yet.');
   }
 
   @override
@@ -680,80 +623,6 @@ class Power extends BinaryOperator {
   }
 
   @override
-  dynamic evaluate(EvaluationType type, ContextModel context) {
-    final num base = first.evaluate(type, context);
-    if (type == EvaluationType.REAL) {
-      // Consider the following equation: x^(2/y).
-      // This equation can be evaluated for any negative x, since the sub result
-      // is positive due to the even numerator. However, the IEEE Standard for
-      // for Floating-Point Arithmetic defines NaN in the case of a negative
-      // base and a finite non-integer as the exponent. That's why we rewrite
-      // the equation manually.
-      if (base.isNegative && second is Divide) {
-        final Expression numerator = (second as Divide).first;
-        final Expression denominator = (second as Divide).second;
-        final double newBase = Power(base, numerator).evaluate(type, context);
-        final double newExponent = 1 / denominator.evaluate(type, context);
-        return Power(newBase, newExponent).evaluate(type, context);
-      }
-      // In case the exponent is a unary minus e.g. x^(-(2/y)), we rewrite the
-      // equation to 1/x^(2/3), for the same reason as stated above.
-      if (base.isNegative && second is UnaryMinus) {
-        final Expression exponent = (second as UnaryMinus).exp;
-        return 1 / Power(base, exponent).evaluate(type, context);
-      }
-      return math.pow(base, second.evaluate(type, context));
-    }
-
-    if (type == EvaluationType.INTERVAL) {
-      // Expect base to be interval.
-      final Interval interval = first.evaluate(type, context);
-
-      // Expect exponent to be a natural number.
-      dynamic exponent = second.evaluate(EvaluationType.REAL, context);
-
-      if (exponent is double) {
-        //print('Warning, expected natural exponent but is real. Interpreting as int: ${this}');
-        exponent = exponent.toInt();
-      }
-
-      num evalMin, evalMax;
-      // Distinction of cases depending on oddity of exponent.
-      if (exponent.isOdd) {
-        // [x, y]^n = [x^n, y^n] for n = odd
-        evalMin = math.pow(interval.min, exponent);
-        evalMax = math.pow(interval.max, exponent);
-      } else {
-        // [x, y]^n = [x^n, y^n] for x >= 0
-        if (interval.min >= 0) {
-          // Positive interval.
-          evalMin = math.pow(interval.min, exponent);
-          evalMax = math.pow(interval.max, exponent);
-        }
-
-        // [x, y]^n = [y^n, x^n] for y < 0
-        if (interval.min >= 0) {
-          // Positive interval.
-          evalMin = math.pow(interval.max, exponent);
-          evalMax = math.pow(interval.min, exponent);
-        }
-
-        // [x, y]^n = [0, max(x^n, y^n)] otherwise
-        evalMin = 0;
-        evalMax = math.max(
-            math.pow(interval.min, exponent), math.pow(interval.min, exponent));
-      }
-
-      assert(evalMin <= evalMax);
-
-      return Interval(evalMin, evalMax);
-    }
-
-    throw UnimplementedError(
-        'Evaluate Power with type $type not supported yet.');
-  }
-
-  @override
   void accept(ExpressionVisitor visitor) {
     super.accept(visitor);
     visitor.visitPower(this);
@@ -812,26 +681,6 @@ class Number extends Literal {
   double getConstantValue() => value;
 
   @override
-  dynamic evaluate(EvaluationType type, ContextModel context) {
-    if (type == EvaluationType.REAL) {
-      return value;
-    }
-
-    if (type == EvaluationType.INTERVAL) {
-      // interpret number as interval
-      final IntervalLiteral intLit = IntervalLiteral.fromSingle(this);
-      return intLit.evaluate(type, context);
-    }
-
-    if (type == EvaluationType.VECTOR) {
-      // interpret number as scalar
-      return value;
-    }
-
-    throw UnsupportedError('Number $this can not be interpreted as: $type');
-  }
-
-  @override
   void accept(ExpressionVisitor visitor) {
     visitor.visitNumber(this);
   }
@@ -876,57 +725,6 @@ class Vector extends Literal {
   }
 
   @override
-  dynamic evaluate(EvaluationType type, ContextModel context) {
-    if (type == EvaluationType.VECTOR) {
-      // XXX Support for vectors in vectors
-      final EvaluationType elementType = EvaluationType.REAL;
-
-      if (length == 1) {
-        // Does not seem to be a vector, try to return REAL.
-        return elements[0].evaluate(elementType, context);
-      }
-
-      // Interpret vector elements as REAL.
-      if (length == 2) {
-        double x, y;
-        x = elements[0].evaluate(elementType, context);
-        y = elements[1].evaluate(elementType, context);
-        return Vector2(x, y);
-      }
-
-      if (length == 3) {
-        double x, y, z;
-        x = elements[0].evaluate(elementType, context);
-        y = elements[1].evaluate(elementType, context);
-        z = elements[2].evaluate(elementType, context);
-        return Vector3(x, y, z);
-      }
-
-      if (length == 4) {
-        double x, y, z, w;
-        x = elements[0].evaluate(elementType, context);
-        y = elements[1].evaluate(elementType, context);
-        z = elements[2].evaluate(elementType, context);
-        w = elements[3].evaluate(elementType, context);
-        return Vector4(x, y, z, w);
-      }
-
-      if (length > 4) {
-        throw UnimplementedError(
-            'Vector of arbitrary length (> 4) are not supported yet.');
-      }
-    }
-
-    if (type == EvaluationType.REAL && length == 1) {
-      // Interpret vector as real number.
-      return elements[0].evaluate(type, context);
-    }
-
-    throw UnsupportedError(
-        'Vector $this with length $length can not be interpreted as: $type');
-  }
-
-  @override
   void accept(ExpressionVisitor visitor) {
     if (visitor.visitEnter(this)) {
       for (var element in elements) {
@@ -966,10 +764,6 @@ class Variable extends Literal {
   String toString() => name;
 
   @override
-  dynamic evaluate(EvaluationType type, ContextModel context) =>
-      context.getExpression(name).evaluate(type, context);
-
-  @override
   void accept(ExpressionVisitor visitor) {
     visitor.visitVariable(this);
   }
@@ -1001,10 +795,6 @@ class BoundVariable extends Variable {
   //      How to reassign anonymous variables to functions?
   @override
   Expression simplify() => value.simplify();
-
-  @override
-  dynamic evaluate(EvaluationType type, ContextModel context) =>
-      value.evaluate(type, context);
 
   @override
   void accept(ExpressionVisitor visitor) {
@@ -1041,27 +831,6 @@ class IntervalLiteral extends Literal {
 
   @override
   Expression simplify() => IntervalLiteral(min.simplify(), max.simplify());
-
-  @override
-  dynamic evaluate(EvaluationType type, ContextModel context) {
-    // Interval borders should evaluate to real numbers..
-    final num minEval = min.evaluate(EvaluationType.REAL, context);
-    final num maxEval = max.evaluate(EvaluationType.REAL, context);
-
-    if (type == EvaluationType.INTERVAL) {
-      return Interval(minEval, maxEval);
-    }
-
-    if (type == EvaluationType.REAL) {
-      // If min == max, we can interpret an interval as real.
-      //TODO But should we?
-      if (minEval == maxEval) {
-        return minEval;
-      }
-    }
-
-    throw UnsupportedError('Interval $this can not be interpreted as: $type');
-  }
 
   @override
   void accept(ExpressionVisitor visitor) {

@@ -433,6 +433,9 @@ class RealEvaluator extends ExpressionEvaluator<num> {
   @override
   void visitDivide(Divide op) {
     var (divisor, dividend) = pop2();
+
+    /// For real numbers this method performs a double divison and
+    /// returns [double.infinity] if a divide by zero is encountered.
     push1(dividend / divisor);
   }
 
@@ -763,13 +766,47 @@ class IntervalEvaluator extends ExpressionEvaluator<Interval> {
   }
 
   @override
+  void visitLog(Log func) {
+    // TODO prevent entering to avoid unnecessary computation
+    var (_, _) = pop2();
+    // Convert to natural logarithm
+    // log_a([x, y]) = [log_a(x), log_a(y)] for [x, y] positive and a > 1
+    func.asNaturalLogarithm().accept(this);
+  }
+
+  @override
   void visitLn(Ln func) {
-    this.visitFunction(func);
+    var (val,) = pop1();
+    push1(Interval(math.log(val.min), math.log(val.max)));
+  }
+
+  @override
+  void visitRoot(Root func) {
+    // TODO prevent entering to avoid unnecessary computation
+    var (_, _) = pop2();
+    // Convert to power form
+    func.asPower().accept(this);
   }
 
   @override
   void visitSqrt(Sqrt func) {
-    this.visitFunction(func);
+    var (val,) = pop1();
+    // Piecewiese sqrting.
+    push1(Interval(math.sqrt(val.min), math.sqrt(val.max)));
+  }
+
+  @override
+  void visitSin(Sin func) {
+    // TODO evaluate endpoints and critical points ((1/2 + n) * pi)
+    // or just return [-1, 1] if half a period is in the given interval
+    super.visitSin(func);
+  }
+
+  @override
+  void visitCos(Cos func) {
+    // TODO evaluate endpoints and critical points (n * pi)
+    // or just return [-1, 1] if half a period is in the given interval
+    super.visitCos(func);
   }
 }
 
@@ -839,7 +876,7 @@ class VectorEvaluator extends ExpressionEvaluator<Object> {
         return push1(Vector4.array(elems));
       default:
         throw UnsupportedError(
-            'Vector $literal with length ${literal.length} can not be interpreted as: $type');
+            'Vector of arbitrary length (> 4) are not supported.');
     }
   }
 
