@@ -477,6 +477,8 @@ class RealEvaluatorTests extends TestSet {
           (args) => args.reduce(math.min)): -2.0,
       AlgorithmicFunction('am_pm', [], (_) => DateTime.now().hour < 12 ? 0 : 1):
           isIn([1, 0]),
+      AlgorithmicFunction('div', [x, Number(1)], (args) => args[0] / args[1]):
+          -2.0,
     };
 
     var ctx = ContextModel()..bindVariable(x, -Number(2));

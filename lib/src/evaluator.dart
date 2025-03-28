@@ -327,7 +327,8 @@ class RealEvaluator extends ExpressionEvaluator<num> {
 
   @override
   void visitAlgorithmicFunction(AlgorithmicFunction func) {
-    var vals = popN(func.args.length).map((n) => n.toDouble()).toList();
+    var vals =
+        popN(func.args.length).reversed.map((n) => n.toDouble()).toList();
     push1(func.handler(vals));
   }
 
