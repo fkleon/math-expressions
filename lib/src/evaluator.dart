@@ -180,27 +180,175 @@ abstract class ExpressionEvaluator<T> extends NullExpressionVisitor {
     this._values.push(val);
   }
 
+  UnimplementedError _unimplemented(Expression exp) {
+    throw UnimplementedError(
+        '${this.runtimeType} does not implement: ${exp.runtimeType}');
+  }
+
   @override
   void visitNumber(Number literal) {
-    throw UnsupportedError('Number $literal can not be interpreted as: $type');
+    throw _unimplemented(literal);
   }
 
   @override
   void visitVector(Vector literal) {
-    throw UnsupportedError(
-        'Vector $literal with length ${literal.length} can not be interpreted as: $type');
+    throw _unimplemented(literal);
   }
 
   @override
   void visitInterval(IntervalLiteral literal) {
-    throw UnsupportedError(
-        'Interval $literal can not be interpreted as: $type');
+    throw _unimplemented(literal);
   }
 
   @override
   void visitVariable(Variable literal) {
     // Resolve variable and evaluate its expression
     this.context.getExpression(literal.name).accept(this);
+  }
+
+  @override
+  void visitUnaryPlus(UnaryPlus op) {
+    throw _unimplemented(op);
+  }
+
+  @override
+  void visitUnaryMinus(UnaryMinus op) {
+    throw _unimplemented(op);
+  }
+
+  @override
+  void visitPlus(Plus op) {
+    throw _unimplemented(op);
+  }
+
+  @override
+  void visitMinus(Minus op) {
+    throw _unimplemented(op);
+  }
+
+  @override
+  void visitTimes(Times op) {
+    throw _unimplemented(op);
+  }
+
+  @override
+  void visitDivide(Divide op) {
+    throw _unimplemented(op);
+  }
+
+  @override
+  void visitModulo(Modulo op) {
+    throw _unimplemented(op);
+  }
+
+  @override
+  void visitPower(Power op) {
+    throw _unimplemented(op);
+  }
+
+  @override
+  void visitFunction(MathFunction func) {
+    // no-op
+  }
+
+  @override
+  void visitDefaultFunction(DefaultFunction func) {
+    // no-op
+  }
+
+  @override
+  void visitAlgorithmicFunction(AlgorithmicFunction func) {
+    throw _unimplemented(func);
+  }
+
+  @override
+  void visitCustomFunction(CustomFunction func) {
+    // nothing to do, this is simply a proxy object to an underlying expression
+  }
+
+  @override
+  void visitCompositeFunction(CompositeFunction func) {
+    throw _unimplemented(func);
+  }
+
+  @override
+  void visitExponential(Exponential func) {
+    throw _unimplemented(func);
+  }
+
+  @override
+  void visitLog(Log func) {
+    throw _unimplemented(func);
+  }
+
+  @override
+  void visitLn(Ln func) {
+    throw _unimplemented(func);
+  }
+
+  @override
+  void visitRoot(Root func) {
+    throw _unimplemented(func);
+  }
+
+  @override
+  void visitSqrt(Sqrt func) {
+    throw _unimplemented(func);
+  }
+
+  @override
+  void visitSin(Sin func) {
+    throw _unimplemented(func);
+  }
+
+  @override
+  void visitCos(Cos func) {
+    throw _unimplemented(func);
+  }
+
+  @override
+  void visitTan(Tan func) {
+    throw _unimplemented(func);
+  }
+
+  @override
+  void visitAsin(Asin func) {
+    throw _unimplemented(func);
+  }
+
+  @override
+  void visitAcos(Acos func) {
+    throw _unimplemented(func);
+  }
+
+  @override
+  void visitAtan(Atan func) {
+    throw _unimplemented(func);
+  }
+
+  @override
+  void visitAbs(Abs func) {
+    throw _unimplemented(func);
+  }
+
+  @override
+  void visitCeil(Ceil func) {
+    throw _unimplemented(func);
+  }
+
+  @override
+  void visitFloor(Floor func) {
+    throw _unimplemented(func);
+  }
+
+  @override
+  void visitSgn(Sgn func) {
+    throw _unimplemented(func);
+  }
+
+  @override
+  void visitFactorial(Factorial func) {
+    throw _unimplemented(func);
   }
 }
 
@@ -549,12 +697,6 @@ class IntervalEvaluator extends ExpressionEvaluator<Interval> {
   }
 
   @override
-  void visitModulo(Modulo op) {
-    throw UnimplementedError(
-        'Evaluate Modulo with type $type not supported yet.');
-  }
-
-  @override
   void visitPower(Power op) {
     // Expect base to be interval.
     var (exp, base) = pop2();
@@ -592,14 +734,6 @@ class IntervalEvaluator extends ExpressionEvaluator<Interval> {
 
     assert(evalMin <= evalMax);
     push1(Interval(evalMin, evalMax));
-  }
-
-  @override
-  void visitFunction(MathFunction func) {
-    if (func is! Exponential) {
-      throw UnimplementedError(
-          '${func.runtimeType} can not be evaluated as: $type');
-    }
   }
 
   @override
@@ -832,17 +966,5 @@ class VectorEvaluator extends ExpressionEvaluator<Object> {
 
     throw UnsupportedError(
         '${op.runtimeType} of ${dividend.runtimeType} and ${divisor.runtimeType} can not be evaluated as: $type');
-  }
-
-  @override
-  void visitModulo(Modulo op) {
-    throw UnimplementedError(
-        '${op.runtimeType} with type $type not supported yet.');
-  }
-
-  @override
-  void visitPower(Power op) {
-    throw UnimplementedError(
-        '${op.runtimeType} with type $type not supported yet.');
   }
 }
