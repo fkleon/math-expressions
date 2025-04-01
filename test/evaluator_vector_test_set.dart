@@ -159,8 +159,8 @@ class VectorEvaluatorTests extends TestSet {
       v1 % n2: throwsA(isUnimplementedError),
       v1 ^ n2: throwsA(isUnimplementedError),
       // vector and scalar: scalar must be on right-hand side of expression
-      n2 * v1: throwsA(isUnsupportedError),
-      n2 / v1: throwsA(isUnsupportedError),
+      n2 * v1: throwsA(isArgumentError),
+      n2 / v1: throwsA(isArgumentError),
     };
     parameterized(cases);
   }

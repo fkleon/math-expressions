@@ -779,7 +779,7 @@ class VectorEvaluator extends ExpressionEvaluator<Object> {
     }
 
     if (multiplier is num) {
-      throw UnsupportedError(
+      throw ArgumentError.value(op, "multiplier",
           '${op.runtimeType} as $type requires scalar to be on right-hand side of the expression.');
     }
 
@@ -823,7 +823,7 @@ class VectorEvaluator extends ExpressionEvaluator<Object> {
     }
 
     if (dividend is num) {
-      throw UnsupportedError(
+      throw ArgumentError.value(op, "dividend",
           '${op.runtimeType} as $type requires scalar to be on right-hand side of the expression.');
     }
 
