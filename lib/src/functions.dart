@@ -22,8 +22,10 @@ abstract class MathFunction extends Expression {
 
   @override
   void accept(ExpressionVisitor visitor) {
-    for (var arg in args) {
-      arg.accept(visitor);
+    if (visitor.visitEnter(this)) {
+      for (var arg in args) {
+        arg.accept(visitor);
+      }
     }
     visitor.visitFunction(this);
   }
@@ -89,7 +91,7 @@ class CompositeFunction extends MathFunction {
       : super('comp(${f.name},${g.name})', f.args);
 
   /// The domain of the 'second' function, which should match the range
-  /// of the 'first function.
+  /// of the 'first' function.
   int get gDomainDimension => g.domainDimension;
 
   /// The domain of the 'first' function.
@@ -121,6 +123,11 @@ class CompositeFunction extends MathFunction {
     return CompositeFunction(fSimpl, gSimpl);
   }
 
+  @override
+  void accept(ExpressionVisitor visitor) {
+    visitor.visitCompositeFunction(this);
+  }
+
   /// The EvaluationType of `f` is detected automatically based on
   /// the domain dimension of `g`. This is because the input of
   /// `g` is the output of `f` (composite function).
@@ -129,12 +136,10 @@ class CompositeFunction extends MathFunction {
   /// information on the expected output.
   ///
   /// Furthermore `g` is assigned a separate child scope of the given
-  /// `context`, so that variable naming does not interfer with the
+  /// `context`, so that variable naming does not interfere with the
   /// evaluation.
   @override
   dynamic evaluate(EvaluationType type, ContextModel context) {
-    //TODO - Check if necessary variables have been bound to context.
-    //     - Type checks.
     dynamic fEval;
     final ContextModel childScope = context.createChildScope();
 
@@ -177,7 +182,6 @@ class CompositeFunction extends MathFunction {
       return g.evaluate(type, childScope);
     }
 
-    //TODO Handle arbitrary vectors.
     throw UnimplementedError('Vectors > 4 not supported yet.');
   }
 }

@@ -366,6 +366,17 @@ class RealEvaluator extends ExpressionEvaluator<num> {
       : super(EvaluationType.REAL, context ?? ContextModel());
 
   @override
+  bool visitEnter(Expression exp) {
+    if (exp is CompositeFunction) {
+      // Skip visiting this sub-tree, and handle
+      // nested evaluation in visitCompositeFunction() instead.
+      return false;
+    }
+
+    return super.visitEnter(exp);
+  }
+
+  @override
   void visitNumber(Number literal) {
     push1(literal.value);
   }
@@ -483,6 +494,12 @@ class RealEvaluator extends ExpressionEvaluator<num> {
   @override
   void visitCustomFunction(CustomFunction func) {
     // nothing to do, this is simply a proxy object to an underlying expression
+  }
+
+  @override
+  void visitCompositeFunction(CompositeFunction func) {
+    assert(func.domainDimension == 1);
+    push1(func.evaluate(this.type, context));
   }
 
   @override
@@ -776,6 +793,13 @@ class VectorEvaluator extends ExpressionEvaluator<Object> {
       // nested evaluation in visitVector() instead.
       return false;
     }
+
+    if (exp is CompositeFunction) {
+      // Skip visiting this sub-tree, and handle
+      // nested evaluation in visitCompositeFunction() instead.
+      return false;
+    }
+
     return super.visitEnter(exp);
   }
 
@@ -966,5 +990,11 @@ class VectorEvaluator extends ExpressionEvaluator<Object> {
 
     throw UnsupportedError(
         '${op.runtimeType} of ${dividend.runtimeType} and ${divisor.runtimeType} can not be evaluated as: $type');
+  }
+
+  @override
+  void visitCompositeFunction(CompositeFunction func) {
+    assert(func.domainDimension >= 1);
+    push1(func.evaluate(this.type, context));
   }
 }

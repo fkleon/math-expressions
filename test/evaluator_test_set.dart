@@ -47,7 +47,7 @@ class RealEvaluatorTests extends TestSet {
         // Custom functions
         'Algorithmic Function': evaluateAlgorithmicFunction,
         'Custom Function': evaluateCustomFunction,
-        //'Composite Function': evaluateCompositeFunction,
+        'Composite Function': evaluateCompositeFunction,
 
         // Complex expressions
         'Expression': evaluateExpression,
@@ -519,41 +519,47 @@ class RealEvaluatorTests extends TestSet {
         CustomFunction('funkysplat', [x], Vector([x - three, x, x + three]));
     var v3 = Vector3(0.0, 3.0, 6.0);
 
+    // Should evaluate to a Vector3[0.0,3.0,6.0]
+    test('CompositeFunction: f-function', () {
+      var evalVector = VectorEvaluator(ContextModel()..bindVariable(x, three));
+      expect(evalVector.evaluate(f), v3);
+    });
+
     // Custom Vector LENGTH (R^3 -> R)
     var g = CustomFunction(
         'length', [x, y, z], Sqrt((x ^ two) + (y ^ two) + (z ^ two)));
+
+    test('CompositeFunction: g-function', () {
+      var evalReal = RealEvaluator(ContextModel()
+        ..bindVariable(x, three)
+        ..bindVariable(y, three)
+        ..bindVariable(z, three));
+      expect(evalReal.evaluate(g), closeTo(5.196152423, EPS));
+    });
 
     /*
      * Simple Composite of two functions: R -> R^3 -> R
      */
     var comp = (f & g) as CompositeFunction;
 
+    // Should evaluate to the length of v3
+    test('CompositeFunction: f & g', () {
+      var evalReal = RealEvaluator(ContextModel()..bindVariable(x, three));
+      expect(evalReal.evaluate(comp), closeTo(v3.length, EPS));
+    });
+
     /*
      * Extended Composite of three functions: R -> R^3 -> R -> R^3
      */
     var comp2 = (comp & f) as CompositeFunction; // = f & g & f
 
-    var cases = {
-      // Should evaluate to a Vector3[0.0,3.0,6.0]
-      f: v3,
-      // Should evaluate to the length of v3
-      comp: closeTo(v3.length, 0.0001),
-      // Should evaluate to a Vector3[v3.len-3,v3.len,v3.len+3]
-      // Note: Need to use EvaluationType.VECTOR here.
-      comp2: throwsA(isUnsupportedError),
-      /*
-      comp2:
-      expect(v3_2.x, closeTo(v3.length - 3.0, 0.0001));
-      expect(v3_2.y, closeTo(v3.length, 0.0001));
-      expect(v3_2.z, closeTo(v3.length + 3.0, 0.0001));
-      */
-    };
-
-    var ctx = ContextModel()..bindVariable(x, three);
-    // TODO: Need vector eval
-    var eval = RealEvaluator(ctx);
-
-    parameterized(cases, evaluator: eval);
+    // Should evaluate to a Vector3[v3.len-3,v3.len,v3.len+3]
+    // Note: Need to use EvaluationType.VECTOR here.
+    test('CompositeFunction: f & g & f', () {
+      var evalVector = VectorEvaluator(ContextModel()..bindVariable(x, three));
+      expect(evalVector.evaluate(comp2),
+          Vector3(v3.length - 3, v3.length, v3.length + 3));
+    });
   }
 
   void evaluateExpression() {
