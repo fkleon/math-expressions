@@ -35,7 +35,7 @@ class TestExecutor {
           test(k, () => v(), tags: set.tags);
         });
         set.testGroups.forEach((String k, Function v) {
-          group(k, () => v(), tags: set.tags);
+          group('[$k]', () => v(), tags: set.tags);
         });
       });
     }
