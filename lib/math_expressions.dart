@@ -42,8 +42,9 @@ import 'package:petitparser/petitparser.dart' hide Parser;
 import 'package:petitparser/petitparser.dart' as pp show Parser;
 
 part 'src/algebra.dart';
+part 'src/ast.dart';
+part 'src/evaluator.dart';
 part 'src/expression.dart';
 part 'src/functions.dart';
 part 'src/parser.dart';
 part 'src/parser_petit.dart';
-part 'src/evaluator.dart';

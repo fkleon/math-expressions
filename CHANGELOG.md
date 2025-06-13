@@ -5,6 +5,36 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [unreleased]
+
+### Added
+
+- Add support for listing all variables in an `Expression` with the
+  `VariableCollector` visitor. #73
+- Add support for evaluating an `Expression` with the visitor interface:
+  `RealEvaluator` (as real number), `IntervalEvaluator` (as interval),
+  `VectorEvalutor` (as vector).
+  This offers a strongly typed interface and replaces `Expression.evaluate()`:
+
+  ```dart
+  // Old
+  dynamic result = expression.evaluate(EvaluationType.REAL, context);
+
+  // New
+  var evaluator = RealEvaluator(context);
+  int result = evaluator.evaluate(expression);
+  ```
+
+### Changed
+
+- The `Root`function now accepts an `Expression` as degree.
+- Handler functions passed to `AlgorithmicFunction` can no longer be
+  dynamically typed.
+
+### Deprecated
+
+- The `Expression.evaluate()` method. Use `RealEvaluator` instead.
+
 ## [2.7.0] - 2025-02-05
 
 ### Added

@@ -45,9 +45,6 @@ class ParserTests extends TestSet {
         'Invalid': parserExpressionTestInvalid,
       };
 
-  @override
-  void initTests() {}
-
   ExpressionParser parser = ShuntingYardParser();
 
   void parameterized(Map<String, Expression> cases,
@@ -197,8 +194,8 @@ class ParserTests extends TestSet {
       'ln(2)': Ln(Number(2)),
       'sqrt(10)': Sqrt(Number(10)),
       // n-th root
-      'nrt(2,10)': Root(2, Number(10)),
-      'nrt(5,10-1)': Root(5, Number(10) - Number(1)),
+      'nrt(2,10)': Root(Number(2), Number(10)),
+      'nrt(5,10-1)': Root(Number(5), Number(10) - Number(1)),
       'cos(10)': Cos(Number(10)),
       'sin(10)': Sin(Number(10)),
       'tan(10)': Tan(Number(10)),
@@ -229,13 +226,13 @@ class ParserTests extends TestSet {
 
   void parseAlgorithmicFunctions() {
     var cases = {
-      'myAlgorithmicFunction(1.0)': AlgorithmicFunction(
-          'myAlgorithmicFunction', [Number(1.0)], () => null),
+      'myAlgorithmicFunction(1.0)':
+          AlgorithmicFunction('myAlgorithmicFunction', [Number(1.0)], (_) => 0),
       'my_min(1,x,-2)': AlgorithmicFunction('my_min',
-          [Number(1), Variable('x'), UnaryMinus(Number(2))], () => null),
+          [Number(1), Variable('x'), UnaryMinus(Number(2))], (_) => 0),
     };
 
-    parser.addFunction('myAlgorithmicFunction', () => null, replace: true);
+    parser.addFunction('myAlgorithmicFunction', (_) => 0, replace: true);
     parser.addFunction('my_min', (List<double> args) => args.reduce(math.min),
         replace: true);
 
@@ -289,8 +286,8 @@ class ParserTests extends TestSet {
       'x * 2^2.5 * log(10,100)',
     ];
 
-    ContextModel context = ContextModel()
-      ..bindVariableName('x', Number(math.pi));
+    var context = ContextModel()..bindVariableName('x', Number(math.pi));
+    var evaluator = RealEvaluator(context);
 
     for (String expression in expressions) {
       /// Expression doesn't implement equal, so as an approximation
@@ -301,8 +298,8 @@ class ParserTests extends TestSet {
       try {
         Expression exp2 = parser.parse(exp.toString());
 
-        double r1 = exp.evaluate(EvaluationType.REAL, context);
-        double r2 = exp2.evaluate(EvaluationType.REAL, context);
+        num r1 = evaluator.evaluate(exp);
+        num r2 = evaluator.evaluate(exp2);
         expect(r2, r1, reason: 'Expected $r2 for $exp ($exp2)');
       } on FormatException catch (fe) {
         expect(fe, isNot(isFormatException),

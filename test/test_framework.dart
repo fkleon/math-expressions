@@ -35,7 +35,7 @@ class TestExecutor {
           test(k, () => v(), tags: set.tags);
         });
         set.testGroups.forEach((String k, Function v) {
-          group(k, () => v(), tags: set.tags);
+          group('[$k]', () => v(), tags: set.tags);
         });
       });
     }
@@ -56,7 +56,7 @@ abstract class TestSet {
   String? get tags => null;
 
   /// Initializes any requirements for the tests to run.
-  void initTests();
+  void initTests() {}
 
   /// Returns a map containing test function names and associated function calls.
   Map<String, Function> get testFunctions => {};

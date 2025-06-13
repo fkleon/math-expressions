@@ -7,7 +7,7 @@ abstract class MathFunction extends Expression {
   /// Name of this function.
   String name;
 
-  /// List of arguments of this function. Arguments ust be of type [Variable].
+  /// List of arguments of this function. Arguments must be of type [Variable].
   List<Variable> args;
 
   /// Creates a new function with the given name and arguments.
@@ -19,6 +19,16 @@ abstract class MathFunction extends Expression {
   /// Must only be used internally by subclasses, as it does not define any
   /// arguments.
   MathFunction._empty(this.name) : args = [];
+
+  @override
+  void accept(ExpressionVisitor visitor) {
+    if (visitor.visitEnter(this)) {
+      for (var arg in args) {
+        arg.accept(visitor);
+      }
+    }
+    visitor.visitFunction(this);
+  }
 
   /// Compose operator. Creates a [CompositeFunction].
   MathFunction operator &(MathFunction g) => CompositeFunction(this, g);
@@ -81,7 +91,7 @@ class CompositeFunction extends MathFunction {
       : super('comp(${f.name},${g.name})', f.args);
 
   /// The domain of the 'second' function, which should match the range
-  /// of the 'first function.
+  /// of the 'first' function.
   int get gDomainDimension => g.domainDimension;
 
   /// The domain of the 'first' function.
@@ -113,6 +123,11 @@ class CompositeFunction extends MathFunction {
     return CompositeFunction(fSimpl, gSimpl);
   }
 
+  @override
+  void accept(ExpressionVisitor visitor) {
+    visitor.visitCompositeFunction(this);
+  }
+
   /// The EvaluationType of `f` is detected automatically based on
   /// the domain dimension of `g`. This is because the input of
   /// `g` is the output of `f` (composite function).
@@ -121,12 +136,10 @@ class CompositeFunction extends MathFunction {
   /// information on the expected output.
   ///
   /// Furthermore `g` is assigned a separate child scope of the given
-  /// `context`, so that variable naming does not interfer with the
+  /// `context`, so that variable naming does not interfere with the
   /// evaluation.
   @override
   dynamic evaluate(EvaluationType type, ContextModel context) {
-    //TODO - Check if necessary variables have been bound to context.
-    //     - Type checks.
     dynamic fEval;
     final ContextModel childScope = context.createChildScope();
 
@@ -169,7 +182,6 @@ class CompositeFunction extends MathFunction {
       return g.evaluate(type, childScope);
     }
 
-    //TODO Handle arbitrary vectors.
     throw UnimplementedError('Vectors > 4 not supported yet.');
   }
 }
@@ -204,16 +216,11 @@ class CustomFunction extends MathFunction {
   @override
   Expression simplify() => CustomFunction(name, args, expression.simplify());
 
-  // TODO: Substitute external variables?
-  //       => Shouldn't be necessary as context model is handed over.
-  //          (FL 2013-11-08)
   @override
-  dynamic evaluate(EvaluationType type, ContextModel context) =>
-      // TODO: First check if all necessary variables are bound.
-      //       => Not necessary with current system, has to be handled by calling
-      //          instance (throws unbound variable exception).
-      //          (FL 2013-11-08)
-      expression.evaluate(type, context);
+  void accept(ExpressionVisitor visitor) {
+    expression.accept(visitor);
+    visitor.visitCustomFunction(this);
+  }
 
   @override
   String toFullString() => '$name($args) = $expression';
@@ -324,21 +331,9 @@ class Exponential extends DefaultFunction {
   }
 
   @override
-  dynamic evaluate(EvaluationType type, ContextModel context) {
-    final dynamic expEval = exp.evaluate(type, context);
-
-    if (type == EvaluationType.REAL) {
-      // Expect exponent to be real number.
-      return math.exp(expEval);
-    }
-
-    if (type == EvaluationType.INTERVAL) {
-      // Special case of a^[x, y] = [a^x, a^y] for a > 1 (with a = e)
-      // Expect exponent to be interval.
-      return Interval(math.exp(expEval.min), math.exp(expEval.max));
-    }
-
-    throw UnimplementedError('Can not evaluate $name on $type yet.');
+  void accept(ExpressionVisitor visitor) {
+    super.accept(visitor);
+    visitor.visitExponential(this);
   }
 }
 
@@ -373,18 +368,9 @@ class Log extends DefaultFunction {
   Expression simplify() => Log(base.simplify(), arg.simplify());
 
   @override
-  dynamic evaluate(EvaluationType type, ContextModel context) {
-    if (type == EvaluationType.REAL) {
-      // Be lazy, convert to Ln.
-      return asNaturalLogarithm().evaluate(type, context);
-    }
-
-    if (type == EvaluationType.INTERVAL) {
-      // log_a([x, y]) = [log_a(x), log_a(y)] for [x, y] positive and a > 1
-      return asNaturalLogarithm().evaluate(type, context);
-    }
-
-    throw UnimplementedError('Can not evaluate $name on $type yet.');
+  void accept(ExpressionVisitor visitor) {
+    super.accept(visitor);
+    visitor.visitLog(this);
   }
 
   /// Returns the natural from of this logarithm.
@@ -425,19 +411,9 @@ class Ln extends Log {
   }
 
   @override
-  dynamic evaluate(EvaluationType type, ContextModel context) {
-    final dynamic argEval = arg.evaluate(type, context);
-
-    if (type == EvaluationType.REAL) {
-      return math.log(argEval);
-    }
-
-    if (type == EvaluationType.INTERVAL) {
-      // Expect argument of type interval
-      return Interval(math.log(argEval.min), math.log(argEval.max));
-    }
-
-    throw UnimplementedError('Can not evaluate $name on $type yet.');
+  void accept(ExpressionVisitor visitor) {
+    this.arg.accept(visitor);
+    visitor.visitLn(this);
   }
 
   @override
@@ -445,22 +421,13 @@ class Ln extends Log {
 }
 
 /// The n-th root function. n needs to be a natural number.
-//TODO: Allow n to be an expression?
 class Root extends DefaultFunction {
-  /// N-th root.
-  late final int n;
-
   /// Creates the n-th root of arg.
   ///
   /// For example, to create the 5th root of x:
   ///
-  ///     root = Root(5, Variable('x'));
-  Root(this.n, Expression arg) : super._unary('nrt', arg);
-
-  /// Creates the n-th root of arg where n is a [Number] literal.
-  Root.fromExpr(Expression n, Expression arg) : super._unary('nrt', arg) {
-    this.n = (n as Number).getConstantValue().toInt();
-  }
+  ///     root = Root(Number(5), Variable('x'));
+  Root(Expression n, Expression arg) : super._binary('nrt', n, arg);
 
   /// Creates the square root of arg.
   ///
@@ -470,22 +437,23 @@ class Root extends DefaultFunction {
   ///
   /// __Note__:
   /// For better simplification and display, use the [Sqrt] class.
-  Root.sqrt(Expression arg)
-      : n = 2,
-        super._unary('sqrt', arg);
+  Root.sqrt(Expression arg) : this(Number(2), arg);
 
-  Expression get arg => getParam(0);
+  Expression get n => getParam(0);
+  Expression get arg => getParam(1);
 
   @override
   Expression derive(String toVar) => this.asPower().derive(toVar);
 
   /// Simplify argument.
   @override
-  Expression simplify() => Root(n, arg.simplify());
+  Expression simplify() => Root(n.simplify(), arg.simplify());
 
   @override
-  dynamic evaluate(EvaluationType type, ContextModel context) =>
-      this.asPower().evaluate(type, context);
+  void accept(ExpressionVisitor visitor) {
+    super.accept(visitor);
+    visitor.visitRoot(this);
+  }
 
   @override
   String toString() => 'nrt($n,$arg)';
@@ -495,7 +463,7 @@ class Root extends DefaultFunction {
   ///
   /// This method is used to determine the derivation of a root
   /// expression.
-  Expression asPower() => Power(arg, Divide(Number(1), Number(n)));
+  Expression asPower() => Power(arg, Divide(Number(1), n));
 }
 
 /// The square root function. A specialisation of [Root].
@@ -541,23 +509,9 @@ class Sqrt extends Root {
   }
 
   @override
-  dynamic evaluate(EvaluationType type, ContextModel context) {
-    final dynamic argEval = arg.evaluate(type, context);
-
-    if (type == EvaluationType.REAL) {
-      return math.sqrt(argEval);
-    }
-
-    if (type == EvaluationType.VECTOR) {
-      //TODO apply function to all vector elements
-    }
-
-    if (type == EvaluationType.INTERVAL) {
-      // Piecewiese sqrting.
-      return Interval(math.sqrt(argEval.min), math.sqrt(argEval.max));
-    }
-
-    throw UnimplementedError('Can not evaluate $name on $type yet.');
+  void accept(ExpressionVisitor visitor) {
+    arg.accept(visitor);
+    visitor.visitSqrt(this);
   }
 
   @override
@@ -590,28 +544,9 @@ class Sin extends DefaultFunction {
   }
 
   @override
-  dynamic evaluate(EvaluationType type, ContextModel context) {
-    final dynamic argEval = arg.evaluate(type, context);
-
-    if (type == EvaluationType.REAL) {
-      // Compensate for inaccuracies in machine-pi.
-      // If argEval divides cleanly from pi, return 0.
-      if ((argEval / math.pi).abs() % 1 == 0) {
-        return 0.0;
-      }
-      return math.sin(argEval);
-    }
-
-    if (type == EvaluationType.VECTOR) {
-      //TODO Apply function to all vector elements
-    }
-
-    if (type == EvaluationType.INTERVAL) {
-      // TODO evaluate endpoints and critical points ((1/2 + n) * pi)
-      // or just return [-1, 1] if half a period is in the given interval
-    }
-
-    throw UnimplementedError('Can not evaluate $name on $type yet.');
+  void accept(ExpressionVisitor visitor) {
+    super.accept(visitor);
+    visitor.visitSin(this);
   }
 }
 
@@ -641,29 +576,9 @@ class Cos extends DefaultFunction {
   }
 
   @override
-  dynamic evaluate(EvaluationType type, ContextModel context) {
-    final dynamic argEval = arg.evaluate(type, context);
-
-    if (type == EvaluationType.REAL) {
-      // Compensate for inaccuracies in machine-pi.
-      //
-      // If argEval divides cleanly from pi (when shifted back to Sin from Cos), return 0.
-      if (((argEval - math.pi / 2) / math.pi).abs() % 1 == 0) {
-        return 0.0;
-      }
-      return math.cos(argEval);
-    }
-
-    if (type == EvaluationType.VECTOR) {
-      //TODO apply function to all vector elements
-    }
-
-    if (type == EvaluationType.INTERVAL) {
-      // TODO evaluate endpoints and critical points (n * pi)
-      // or just return [-1, 1] if half a period is in the given interval
-    }
-
-    throw UnimplementedError('Can not evaluate $name on $type yet.');
+  void accept(ExpressionVisitor visitor) {
+    super.accept(visitor);
+    visitor.visitCos(this);
   }
 }
 
@@ -693,23 +608,9 @@ class Tan extends DefaultFunction {
   }
 
   @override
-  dynamic evaluate(EvaluationType type, ContextModel context) {
-    final dynamic argEval = arg.evaluate(type, context);
-
-    if (type == EvaluationType.REAL) {
-      // Compensate for inaccuracies in machine-pi.
-      // If argEval divides cleanly from pi, return 0.
-      if ((argEval / math.pi).abs() % 1 == 0) {
-        return 0.0;
-      }
-      return math.tan(argEval);
-    }
-
-    if (type == EvaluationType.VECTOR) {
-      //TODO apply function to all vector elements
-    }
-
-    throw UnimplementedError('Can not evaluate $name on $type yet.');
+  void accept(ExpressionVisitor visitor) {
+    super.accept(visitor);
+    visitor.visitTan(this);
   }
 
   /// Returns this tangens as sine and cosine representation:
@@ -736,15 +637,9 @@ class Asin extends DefaultFunction {
   }
 
   @override
-  dynamic evaluate(EvaluationType type, ContextModel context) {
-    final dynamic argEval = arg.evaluate(type, context);
-
-    if (type == EvaluationType.REAL) {
-      return math.asin(argEval);
-    }
-
-    // TODO VECTOR and INTERVAL evaluation
-    throw UnimplementedError('Can not evaluate $name on $type yet.');
+  void accept(ExpressionVisitor visitor) {
+    super.accept(visitor);
+    visitor.visitAsin(this);
   }
 }
 
@@ -767,15 +662,9 @@ class Acos extends DefaultFunction {
   }
 
   @override
-  dynamic evaluate(EvaluationType type, ContextModel context) {
-    final dynamic argEval = arg.evaluate(type, context);
-
-    if (type == EvaluationType.REAL) {
-      return math.acos(argEval);
-    }
-
-    // TODO VECTOR and INTERVAL evaluation
-    throw UnimplementedError('Can not evaluate $name on $type yet.');
+  void accept(ExpressionVisitor visitor) {
+    super.accept(visitor);
+    visitor.visitAcos(this);
   }
 }
 
@@ -798,15 +687,9 @@ class Atan extends DefaultFunction {
   }
 
   @override
-  dynamic evaluate(EvaluationType type, ContextModel context) {
-    final dynamic argEval = arg.evaluate(type, context);
-
-    if (type == EvaluationType.REAL) {
-      return math.atan(argEval);
-    }
-
-    // TODO VECTOR and INTERVAL evaluation
-    throw UnimplementedError('Can not evaluate $name on $type yet.');
+  void accept(ExpressionVisitor visitor) {
+    super.accept(visitor);
+    visitor.visitAtan(this);
   }
 }
 
@@ -828,18 +711,9 @@ class Abs extends DefaultFunction {
   Expression simplify() => Abs(arg.simplify());
 
   @override
-  dynamic evaluate(EvaluationType type, ContextModel context) {
-    final dynamic argEval = arg.evaluate(type, context);
-
-    if (type == EvaluationType.REAL) {
-      return argEval.abs();
-    }
-
-    if (type == EvaluationType.VECTOR) {
-      //TODO apply function to all vector elements
-    }
-
-    throw UnimplementedError('Can not evaluate $name on $type yet.');
+  void accept(ExpressionVisitor visitor) {
+    super.accept(visitor);
+    visitor.visitAbs(this);
   }
 }
 
@@ -867,18 +741,9 @@ class Ceil extends DefaultFunction {
   }
 
   @override
-  dynamic evaluate(EvaluationType type, ContextModel context) {
-    final dynamic argEval = arg.evaluate(type, context);
-
-    if (type == EvaluationType.REAL) {
-      return argEval.ceil().toDouble();
-    }
-
-    if (type == EvaluationType.VECTOR) {
-      //TODO apply function to all vector elements
-    }
-
-    throw UnimplementedError('Can not evaluate $name on $type yet.');
+  void accept(ExpressionVisitor visitor) {
+    super.accept(visitor);
+    visitor.visitCeil(this);
   }
 }
 
@@ -906,18 +771,9 @@ class Floor extends DefaultFunction {
   }
 
   @override
-  dynamic evaluate(EvaluationType type, ContextModel context) {
-    final dynamic argEval = arg.evaluate(type, context);
-
-    if (type == EvaluationType.REAL) {
-      return argEval.floor().toDouble();
-    }
-
-    if (type == EvaluationType.VECTOR) {
-      //TODO apply function to all vector elements
-    }
-
-    throw UnimplementedError('Can not evaluate $name on $type yet.');
+  void accept(ExpressionVisitor visitor) {
+    super.accept(visitor);
+    visitor.visitFloor(this);
   }
 }
 
@@ -937,16 +793,9 @@ class Sgn extends DefaultFunction {
   Expression simplify() => Sgn(arg.simplify());
 
   @override
-  dynamic evaluate(EvaluationType type, ContextModel context) {
-    final dynamic argEval = arg.evaluate(type, context);
-
-    if (type == EvaluationType.REAL) {
-      if (argEval < 0) return -1.0;
-      if (argEval == 0) return 0.0;
-      if (argEval > 0) return 1.0;
-    }
-
-    throw UnimplementedError('Can not evaluate $name on $type yet.');
+  void accept(ExpressionVisitor visitor) {
+    super.accept(visitor);
+    visitor.visitSgn(this);
   }
 }
 
@@ -974,25 +823,9 @@ class Factorial extends DefaultFunction {
   }
 
   @override
-  dynamic evaluate(EvaluationType type, ContextModel context) {
-    final dynamic argEval = arg.evaluate(type, context);
-
-    if (argEval < 0) {
-      throw ArgumentError.value(
-          argEval, 'Factorial', 'Negative values not supported.');
-    } else if (argEval == double.infinity) {
-      throw ArgumentError.value(
-          argEval, 'Factorial', 'Infinity not supported.');
-    }
-    if (type == EvaluationType.REAL) {
-      dynamic product = 1.0;
-      for (int i = 1; i <= argEval.round(); i++) {
-        product *= i;
-      }
-      return product;
-    }
-
-    throw UnimplementedError('Can not evaluate $name on $type yet.');
+  void accept(ExpressionVisitor visitor) {
+    super.accept(visitor);
+    visitor.visitFactorial(this);
   }
 }
 
@@ -1011,19 +844,12 @@ class AlgorithmicFunction extends DefaultFunction {
   /// method instead it is supported by the parser.
   AlgorithmicFunction(super.name, super.args, this.handler) : super._any();
 
-  Function handler;
+  double Function(List<double>) handler;
 
   @override
-  dynamic evaluate(EvaluationType type, ContextModel context) {
-    if (type == EvaluationType.REAL) {
-      List<double> values = args
-          .map<double>((v) => (v.value ?? context.getExpression(v.name))
-              .evaluate(type, context))
-          .toList();
-      return handler(values);
-    }
-
-    throw UnimplementedError('Can not evaluate $name on $type yet.');
+  void accept(ExpressionVisitor visitor) {
+    super.accept(visitor);
+    visitor.visitAlgorithmicFunction(this);
   }
 
   @override
