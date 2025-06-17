@@ -56,8 +56,9 @@ class ContextModel {
   ///
   /// Throws a [StateError], if function is still unbound at the root scope.
   MathFunction getFunction(String name) {
-    final Iterable<MathFunction> candidates =
-        functions.where((mathFunction) => mathFunction.name == name);
+    final Iterable<MathFunction> candidates = functions.where(
+      (mathFunction) => mathFunction.name == name,
+    );
     if (candidates.isNotEmpty) {
       // just grab first - should not contain doubles.
       return candidates.first;
@@ -90,7 +91,8 @@ class ContextModel {
   }
 
   @override
-  String toString() => 'ContextModel['
+  String toString() =>
+      'ContextModel['
       'PARENT: $parentScope, '
       'VARS: ${variables.toString()}, '
       'FUNCS: ${functions.toString()}]';
@@ -182,7 +184,8 @@ abstract class ExpressionEvaluator<T> extends NullExpressionVisitor {
 
   UnimplementedError _unimplemented(Expression exp) {
     throw UnimplementedError(
-        '${this.runtimeType} does not implement: ${exp.runtimeType}');
+      '${this.runtimeType} does not implement: ${exp.runtimeType}',
+    );
   }
 
   @override
@@ -363,7 +366,7 @@ abstract class ExpressionEvaluator<T> extends NullExpressionVisitor {
 class RealEvaluator extends ExpressionEvaluator<num> {
   /// Create a new evaluator with the given context.
   RealEvaluator([ContextModel? context])
-      : super(EvaluationType.REAL, context ?? ContextModel());
+    : super(EvaluationType.REAL, context ?? ContextModel());
 
   @override
   bool visitEnter(Expression exp) {
@@ -489,8 +492,9 @@ class RealEvaluator extends ExpressionEvaluator<num> {
 
   @override
   void visitAlgorithmicFunction(AlgorithmicFunction func) {
-    var vals =
-        popN(func.args.length).reversed.map((n) => n.toDouble()).toList();
+    var vals = popN(
+      func.args.length,
+    ).reversed.map((n) => n.toDouble()).toList();
     push1(func.handler(vals));
   }
 
@@ -618,8 +622,8 @@ class RealEvaluator extends ExpressionEvaluator<num> {
     var ret = val == 0
         ? 0.0
         : val < 0
-            ? -1.0
-            : 1.0;
+        ? -1.0
+        : 1.0;
     push1(ret);
   }
 
@@ -629,7 +633,10 @@ class RealEvaluator extends ExpressionEvaluator<num> {
 
     if (val < 0) {
       throw ArgumentError.value(
-          val, 'Factorial', 'Negative values not supported.');
+        val,
+        'Factorial',
+        'Negative values not supported.',
+      );
     }
 
     if (val == double.infinity) {
@@ -647,7 +654,7 @@ class RealEvaluator extends ExpressionEvaluator<num> {
 class IntervalEvaluator extends ExpressionEvaluator<Interval> {
   /// Create a new evaluator with the given context.
   IntervalEvaluator([ContextModel? context])
-      : super(EvaluationType.INTERVAL, context ?? ContextModel());
+    : super(EvaluationType.INTERVAL, context ?? ContextModel());
 
   @override
   bool visitEnter(Expression exp) {
@@ -668,7 +675,8 @@ class IntervalEvaluator extends ExpressionEvaluator<Interval> {
       push1(literal.value);
     } else {
       throw UnsupportedError(
-          'Number $literal with type ${literal.value.runtimeType} can not be interpreted as: $type');
+        'Number $literal with type ${literal.value.runtimeType} can not be interpreted as: $type',
+      );
     }
   }
 
@@ -748,8 +756,10 @@ class IntervalEvaluator extends ExpressionEvaluator<Interval> {
 
       // [x, y]^n = [0, max(x^n, y^n)] otherwise
       evalMin = 0;
-      evalMax =
-          math.max(math.pow(base.min, exponent), math.pow(base.min, exponent));
+      evalMax = math.max(
+        math.pow(base.min, exponent),
+        math.pow(base.min, exponent),
+      );
     }
 
     assert(evalMin <= evalMax);
@@ -816,7 +826,7 @@ class IntervalEvaluator extends ExpressionEvaluator<Interval> {
 class VectorEvaluator extends ExpressionEvaluator<Object> {
   /// Create a new evaluator with the given context.
   VectorEvaluator([ContextModel? context])
-      : super(EvaluationType.VECTOR, context ?? ContextModel());
+    : super(EvaluationType.VECTOR, context ?? ContextModel());
 
   @override
   List<double> popN(int count) {
@@ -851,7 +861,8 @@ class VectorEvaluator extends ExpressionEvaluator<Object> {
       push1(literal.value);
     } else {
       throw UnsupportedError(
-          'Number $literal with type ${literal.value.runtimeType} can not be interpreted as: $type');
+        'Number $literal with type ${literal.value.runtimeType} can not be interpreted as: $type',
+      );
     }
   }
 
@@ -859,8 +870,10 @@ class VectorEvaluator extends ExpressionEvaluator<Object> {
   void visitVector(Vector literal) {
     // Evaulate each vector element as REAL number.
     var eval = RealEvaluator(this.context);
-    var elems =
-        literal.elements.map(eval.evaluate).map((n) => n.toDouble()).toList();
+    var elems = literal.elements
+        .map(eval.evaluate)
+        .map((n) => n.toDouble())
+        .toList();
 
     switch (literal.length) {
       case 0:
@@ -876,7 +889,8 @@ class VectorEvaluator extends ExpressionEvaluator<Object> {
         return push1(Vector4.array(elems));
       default:
         throw UnsupportedError(
-            'Vector of arbitrary length (> 4) are not supported.');
+          'Vector of arbitrary length (> 4) are not supported.',
+        );
     }
   }
 
@@ -906,7 +920,8 @@ class VectorEvaluator extends ExpressionEvaluator<Object> {
     }
 
     throw UnsupportedError(
-        '${op.runtimeType} of ${val.runtimeType} can not be evaluated as: $type');
+      '${op.runtimeType} of ${val.runtimeType} can not be evaluated as: $type',
+    );
   }
 
   @override
@@ -927,7 +942,8 @@ class VectorEvaluator extends ExpressionEvaluator<Object> {
     }
 
     throw UnsupportedError(
-        '${op.runtimeType} of ${augend.runtimeType} and ${addend.runtimeType} can not be evaluated as: $type');
+      '${op.runtimeType} of ${augend.runtimeType} and ${addend.runtimeType} can not be evaluated as: $type',
+    );
   }
 
   @override
@@ -948,7 +964,8 @@ class VectorEvaluator extends ExpressionEvaluator<Object> {
     }
 
     throw UnsupportedError(
-        '${op.runtimeType} of ${minuend.runtimeType} and ${subtrahend.runtimeType} can not be evaluated as: $type');
+      '${op.runtimeType} of ${minuend.runtimeType} and ${subtrahend.runtimeType} can not be evaluated as: $type',
+    );
   }
 
   @override
@@ -982,12 +999,16 @@ class VectorEvaluator extends ExpressionEvaluator<Object> {
     }
 
     if (multiplier is num) {
-      throw ArgumentError.value(op, "multiplier",
-          '${op.runtimeType} as $type requires scalar to be on right-hand side of the expression.');
+      throw ArgumentError.value(
+        op,
+        "multiplier",
+        '${op.runtimeType} as $type requires scalar to be on right-hand side of the expression.',
+      );
     }
 
     throw UnsupportedError(
-        '${op.runtimeType} of ${multiplier.runtimeType} and ${multiplicand.runtimeType} can not be evaluated as: $type');
+      '${op.runtimeType} of ${multiplier.runtimeType} and ${multiplicand.runtimeType} can not be evaluated as: $type',
+    );
   }
 
   @override
@@ -1021,12 +1042,16 @@ class VectorEvaluator extends ExpressionEvaluator<Object> {
     }
 
     if (dividend is num) {
-      throw ArgumentError.value(op, "dividend",
-          '${op.runtimeType} as $type requires scalar to be on right-hand side of the expression.');
+      throw ArgumentError.value(
+        op,
+        "dividend",
+        '${op.runtimeType} as $type requires scalar to be on right-hand side of the expression.',
+      );
     }
 
     throw UnsupportedError(
-        '${op.runtimeType} of ${dividend.runtimeType} and ${divisor.runtimeType} can not be evaluated as: $type');
+      '${op.runtimeType} of ${dividend.runtimeType} and ${divisor.runtimeType} can not be evaluated as: $type',
+    );
   }
 
   @override

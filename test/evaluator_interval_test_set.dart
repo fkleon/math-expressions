@@ -9,42 +9,42 @@ class IntervalEvaluatorTests extends TestSet {
 
   @override
   Map<String, Function> get testGroups => {
-        // Literals
-        'Number': evaluateNumber,
-        'Vector': evaluateVector,
-        'Interval': evaluateInterval,
-        'Variable': evaluateVariable,
-        'BoundVariable': evaluateBoundVariable,
+    // Literals
+    'Number': evaluateNumber,
+    'Vector': evaluateVector,
+    'Interval': evaluateInterval,
+    'Variable': evaluateVariable,
+    'BoundVariable': evaluateBoundVariable,
 
-        // Operators
-        'UnaryOperator': evaluateUnaryOperator,
-        'BinaryOperator': evaluateBinaryOperator,
+    // Operators
+    'UnaryOperator': evaluateUnaryOperator,
+    'BinaryOperator': evaluateBinaryOperator,
 
-        // Default functions
-        'Exponential': evaluateExponential,
-        'Log': evaluateLog,
-        'Ln': evaluateLn,
-        'Root': evaluateRoot,
-        'Sqrt': evaluateSqrt,
-        'Sin': evaluateSin,
-        'Cos': evaluateCos,
-        'Tan': evaluateTan,
-        'Asin': evaluateAsin,
-        'Acos': evaluateAcos,
-        'Atan': evaluateAtan,
-        'Abs': evaluateAbs,
-        'Ceil': evaluateCeil,
-        'Floor': evaluateFloor,
-        'Sgn': evaluateSgn,
-        'Factorial': evaluateFactorial,
+    // Default functions
+    'Exponential': evaluateExponential,
+    'Log': evaluateLog,
+    'Ln': evaluateLn,
+    'Root': evaluateRoot,
+    'Sqrt': evaluateSqrt,
+    'Sin': evaluateSin,
+    'Cos': evaluateCos,
+    'Tan': evaluateTan,
+    'Asin': evaluateAsin,
+    'Acos': evaluateAcos,
+    'Atan': evaluateAtan,
+    'Abs': evaluateAbs,
+    'Ceil': evaluateCeil,
+    'Floor': evaluateFloor,
+    'Sgn': evaluateSgn,
+    'Factorial': evaluateFactorial,
 
-        // Custom functions
-        'Algorithmic Function': evaluateAlgorithmicFunction,
-        // 'Custom Function': evaluateCustomFunction,
+    // Custom functions
+    'Algorithmic Function': evaluateAlgorithmicFunction,
+    // 'Custom Function': evaluateCustomFunction,
 
-        // Complex expressions
-        'Expression': evaluateExpression,
-      };
+    // Complex expressions
+    'Expression': evaluateExpression,
+  };
 
   final evaluator = IntervalEvaluator();
 
@@ -53,13 +53,17 @@ class IntervalEvaluatorTests extends TestSet {
   final two = Number(2);
   final pi = Number(math.pi);
 
-  void parameterized(Map<Expression, dynamic> cases,
-      {ExpressionEvaluator? evaluator}) {
+  void parameterized(
+    Map<Expression, dynamic> cases, {
+    ExpressionEvaluator? evaluator,
+  }) {
     evaluator ??= this.evaluator;
     cases.forEach((key, value) {
       if (value is Throws) {
-        test('$key -> $value',
-            () => expect(() => evaluator!.evaluate(key), value));
+        test(
+          '$key -> $value',
+          () => expect(() => evaluator!.evaluate(key), value),
+        );
       } else {
         test('$key -> $value', () => expect(evaluator!.evaluate(key), value));
       }
@@ -72,7 +76,7 @@ class IntervalEvaluatorTests extends TestSet {
       one: Interval(1.0, 1.0),
       Number(0.5): Interval(0.5, 0.5),
       // max precision 15 digits
-      Number(999999999999999): Interval(999999999999999, 999999999999999)
+      Number(999999999999999): Interval(999999999999999, 999999999999999),
     };
     parameterized(cases);
   }
@@ -96,17 +100,19 @@ class IntervalEvaluatorTests extends TestSet {
       Variable('∞'): Interval(double.infinity, double.infinity),
     };
 
-    var evaluator = IntervalEvaluator(ContextModel()
-      ..bindVariableName('x', Number(12))
-      ..bindVariableName('y', two * Variable('x'))
-      ..bindVariableName('∞', Number(double.infinity)));
+    var evaluator = IntervalEvaluator(
+      ContextModel()
+        ..bindVariableName('x', Number(12))
+        ..bindVariableName('y', two * Variable('x'))
+        ..bindVariableName('∞', Number(double.infinity)),
+    );
 
     parameterized(cases, evaluator: evaluator);
   }
 
   void evaluateBoundVariable() {
     var cases = <Expression, Interval>{
-      BoundVariable(IntervalLiteral(Number(9), Number(9))): Interval(9.0, 9.0)
+      BoundVariable(IntervalLiteral(Number(9), Number(9))): Interval(9.0, 9.0),
     };
     parameterized(cases);
   }
@@ -157,8 +163,10 @@ class IntervalEvaluatorTests extends TestSet {
 
     var cases = {
       // Log_2(0) -> -∞
-      Log(base, IntervalLiteral(zero, zero)):
-          Interval(double.negativeInfinity, double.negativeInfinity),
+      Log(base, IntervalLiteral(zero, zero)): Interval(
+        double.negativeInfinity,
+        double.negativeInfinity,
+      ),
     };
     parameterized(cases);
   }
@@ -166,8 +174,10 @@ class IntervalEvaluatorTests extends TestSet {
   void evaluateLn() {
     var cases = {
       // Ln(0) -> -∞
-      Ln(IntervalLiteral(zero, zero)):
-          Interval(double.negativeInfinity, double.negativeInfinity),
+      Ln(IntervalLiteral(zero, zero)): Interval(
+        double.negativeInfinity,
+        double.negativeInfinity,
+      ),
       // Ln(1) -> 0
       Ln(IntervalLiteral(one, zero)): Interval(0, double.negativeInfinity),
     };
@@ -207,9 +217,7 @@ class IntervalEvaluatorTests extends TestSet {
   }
 
   void evaluateTan() {
-    var cases = {
-      Tan(IntervalLiteral(zero, zero)): throwsA(isUnsupportedError),
-    };
+    var cases = {Tan(IntervalLiteral(zero, zero)): throwsA(isUnsupportedError)};
     parameterized(cases);
   }
 
@@ -235,9 +243,7 @@ class IntervalEvaluatorTests extends TestSet {
   }
 
   void evaluateAbs() {
-    var cases = {
-      Abs(IntervalLiteral(zero, zero)): throwsA(isUnsupportedError),
-    };
+    var cases = {Abs(IntervalLiteral(zero, zero)): throwsA(isUnsupportedError)};
     parameterized(cases);
   }
 
@@ -256,9 +262,7 @@ class IntervalEvaluatorTests extends TestSet {
   }
 
   void evaluateSgn() {
-    var cases = {
-      Sgn(IntervalLiteral(zero, zero)): throwsA(isUnsupportedError),
-    };
+    var cases = {Sgn(IntervalLiteral(zero, zero)): throwsA(isUnsupportedError)};
     parameterized(cases);
   }
 
@@ -272,8 +276,9 @@ class IntervalEvaluatorTests extends TestSet {
   void evaluateAlgorithmicFunction() {
     var x = Variable('x');
     var cases = {
-      AlgorithmicFunction('identity', [x], (args) => args[0]):
-          throwsA(isUnimplementedError)
+      AlgorithmicFunction('identity', [x], (args) => args[0]): throwsA(
+        isUnimplementedError,
+      ),
     };
 
     var ctx = ContextModel()..bindVariable(x, IntervalLiteral(zero, one));

@@ -67,9 +67,11 @@ void _expression_simplification_and_differentiation() {
   Expression expDerived = exp.derive('x');
 
   print(
-      'Differentiated expression: $expDerived'); // = (((x * 0.0) + (1.0 * 1.0)) - -(0.0))
+    'Differentiated expression: $expDerived',
+  ); // = (((x * 0.0) + (1.0 * 1.0)) - -(0.0))
   print(
-      'Simplified differentiated expression: ${expDerived.simplify()}'); // = 1.0
+    'Simplified differentiated expression: ${expDerived.simplify()}',
+  ); // = 1.0
 }
 
 /// Example 3: Custom function definition and use
@@ -88,21 +90,25 @@ void _custom_function_definition_and_use() {
 
   print('$doubleup = ${doubleup.expression}');
   print(
-      'doubleup(${context.getExpression('x')}) = ${evaluator.evaluate(doubleup)}\n');
+    'doubleup(${context.getExpression('x')}) = ${evaluator.evaluate(doubleup)}\n',
+  );
 
   // (1) Create and evaluate custom function: LEFTSHIFT (R² -> R)
   // Shifting to the left makes the number larger, effectively multiplying the
   // number by pow(2, shiftIndex). Custom implementation of x << i.
   var shiftIndex = Variable('i');
-  CustomFunction leftshift =
-      CustomFunction('leftshift', [x, shiftIndex], x * Power(2, shiftIndex));
+  CustomFunction leftshift = CustomFunction('leftshift', [
+    x,
+    shiftIndex,
+  ], x * Power(2, shiftIndex));
 
   context.bindVariable(x, Number(250));
   context.bindVariable(shiftIndex, Number(8));
 
   print('$leftshift = ${leftshift.expression}');
   print(
-      'leftshift(${context.getExpression('x')}, ${context.getExpression('i')}) = ${evaluator.evaluate(leftshift)}');
+    'leftshift(${context.getExpression('x')}, ${context.getExpression('i')}) = ${evaluator.evaluate(leftshift)}',
+  );
 }
 
 /// Example 4: Algorithmic function definition and use

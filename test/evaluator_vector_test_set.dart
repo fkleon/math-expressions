@@ -9,42 +9,42 @@ class VectorEvaluatorTests extends TestSet {
 
   @override
   Map<String, Function> get testGroups => {
-        // Literals
-        'Number': evaluateNumber,
-        'Vector': evaluateVector,
-        'Interval': evaluateInterval,
-        'Variable': evaluateVariable,
-        'BoundVariable': evaluateBoundVariable,
+    // Literals
+    'Number': evaluateNumber,
+    'Vector': evaluateVector,
+    'Interval': evaluateInterval,
+    'Variable': evaluateVariable,
+    'BoundVariable': evaluateBoundVariable,
 
-        // Operators
-        'UnaryOperator': evaluateUnaryOperator,
-        'BinaryOperator': evaluateBinaryOperator,
+    // Operators
+    'UnaryOperator': evaluateUnaryOperator,
+    'BinaryOperator': evaluateBinaryOperator,
 
-        // Default functions
-        'Exponential': evaluateExponential,
-        'Log': evaluateLog,
-        'Ln': evaluateLn,
-        'Root': evaluateRoot,
-        'Sqrt': evaluateSqrt,
-        'Sin': evaluateSin,
-        'Cos': evaluateCos,
-        'Tan': evaluateTan,
-        'Asin': evaluateAsin,
-        'Acos': evaluateAcos,
-        'Atan': evaluateAtan,
-        'Abs': evaluateAbs,
-        'Ceil': evaluateCeil,
-        'Floor': evaluateFloor,
-        'Sgn': evaluateSgn,
-        'Factorial': evaluateFactorial,
+    // Default functions
+    'Exponential': evaluateExponential,
+    'Log': evaluateLog,
+    'Ln': evaluateLn,
+    'Root': evaluateRoot,
+    'Sqrt': evaluateSqrt,
+    'Sin': evaluateSin,
+    'Cos': evaluateCos,
+    'Tan': evaluateTan,
+    'Asin': evaluateAsin,
+    'Acos': evaluateAcos,
+    'Atan': evaluateAtan,
+    'Abs': evaluateAbs,
+    'Ceil': evaluateCeil,
+    'Floor': evaluateFloor,
+    'Sgn': evaluateSgn,
+    'Factorial': evaluateFactorial,
 
-        // Custom functions
-        'Algorithmic Function': evaluateAlgorithmicFunction,
-        //'Custom Function': evaluateCustomFunction,
+    // Custom functions
+    'Algorithmic Function': evaluateAlgorithmicFunction,
+    //'Custom Function': evaluateCustomFunction,
 
-        // Complex expressions
-        'Expression': evaluateExpression,
-      };
+    // Complex expressions
+    'Expression': evaluateExpression,
+  };
 
   final evaluator = VectorEvaluator();
 
@@ -52,13 +52,17 @@ class VectorEvaluatorTests extends TestSet {
   final one = Number(1);
   final two = Number(2);
 
-  void parameterized(Map<Expression, dynamic> cases,
-      {ExpressionEvaluator? evaluator}) {
+  void parameterized(
+    Map<Expression, dynamic> cases, {
+    ExpressionEvaluator? evaluator,
+  }) {
     evaluator ??= this.evaluator;
     cases.forEach((key, value) {
       if (value is Throws) {
-        test('$key -> $value',
-            () => expect(() => evaluator!.evaluate(key), value));
+        test(
+          '$key -> $value',
+          () => expect(() => evaluator!.evaluate(key), value),
+        );
       } else {
         test('$key -> $value', () => expect(evaluator!.evaluate(key), value));
       }
@@ -67,10 +71,7 @@ class VectorEvaluatorTests extends TestSet {
 
   void evaluateNumber() {
     // Evaluates as scalar
-    var cases = {
-      zero: 0,
-      one: 1,
-    };
+    var cases = {zero: 0, one: 1};
     parameterized(cases);
   }
 
@@ -89,9 +90,7 @@ class VectorEvaluatorTests extends TestSet {
   }
 
   void evaluateInterval() {
-    var cases = {
-      IntervalLiteral(one, two): throwsA(isUnsupportedError),
-    };
+    var cases = {IntervalLiteral(one, two): throwsA(isUnsupportedError)};
     parameterized(cases);
   }
 
@@ -102,11 +101,15 @@ class VectorEvaluatorTests extends TestSet {
       Variable('∞'): Vector2.all(double.infinity),
     };
 
-    var evaluator = VectorEvaluator(ContextModel()
-      ..bindVariableName('x', Vector([one, one]))
-      ..bindVariableName('y', Variable('x') * two)
-      ..bindVariableName(
-          '∞', Vector([Number(double.infinity), Number(double.infinity)])));
+    var evaluator = VectorEvaluator(
+      ContextModel()
+        ..bindVariableName('x', Vector([one, one]))
+        ..bindVariableName('y', Variable('x') * two)
+        ..bindVariableName(
+          '∞',
+          Vector([Number(double.infinity), Number(double.infinity)]),
+        ),
+    );
 
     parameterized(cases, evaluator: evaluator);
   }
@@ -175,116 +178,87 @@ class VectorEvaluatorTests extends TestSet {
   void evaluateLog() {
     Number base = Number(2.0);
 
-    var cases = {
-      Log(base, Vector([])): throwsA(isUnimplementedError),
-    };
+    var cases = {Log(base, Vector([])): throwsA(isUnimplementedError)};
     parameterized(cases);
   }
 
   void evaluateLn() {
-    var cases = {
-      Ln(Vector([])): throwsA(isUnimplementedError),
-    };
+    var cases = {Ln(Vector([])): throwsA(isUnimplementedError)};
     parameterized(cases);
   }
 
   void evaluateRoot() {
     var grade = Number(5);
-    var cases = {
-      Root(grade, Vector([])): throwsA(isUnimplementedError),
-    };
+    var cases = {Root(grade, Vector([])): throwsA(isUnimplementedError)};
     parameterized(cases);
   }
 
   void evaluateSqrt() {
-    var cases = {
-      Sqrt(Vector([])): throwsA(isUnimplementedError),
-    };
+    var cases = {Sqrt(Vector([])): throwsA(isUnimplementedError)};
     parameterized(cases);
   }
 
   void evaluateSin() {
-    var cases = {
-      Sin(Vector([])): throwsA(isUnimplementedError),
-    };
+    var cases = {Sin(Vector([])): throwsA(isUnimplementedError)};
     parameterized(cases);
   }
 
   void evaluateCos() {
-    var cases = {
-      Cos(Vector([])): throwsA(isUnimplementedError),
-    };
+    var cases = {Cos(Vector([])): throwsA(isUnimplementedError)};
     parameterized(cases);
   }
 
   void evaluateTan() {
-    var cases = {
-      Tan(Vector([])): throwsA(isUnimplementedError),
-    };
+    var cases = {Tan(Vector([])): throwsA(isUnimplementedError)};
     parameterized(cases);
   }
 
   void evaluateAsin() {
-    var cases = {
-      Asin(Vector([])): throwsA(isUnimplementedError),
-    };
+    var cases = {Asin(Vector([])): throwsA(isUnimplementedError)};
     parameterized(cases);
   }
 
   void evaluateAcos() {
-    var cases = {
-      Acos(Vector([])): throwsA(isUnimplementedError),
-    };
+    var cases = {Acos(Vector([])): throwsA(isUnimplementedError)};
     parameterized(cases);
   }
 
   void evaluateAtan() {
-    var cases = {
-      Atan(Vector([])): throwsA(isUnimplementedError),
-    };
+    var cases = {Atan(Vector([])): throwsA(isUnimplementedError)};
     parameterized(cases);
   }
 
   void evaluateAbs() {
-    var cases = {
-      Abs(Vector([])): throwsA(isUnimplementedError),
-    };
+    var cases = {Abs(Vector([])): throwsA(isUnimplementedError)};
     parameterized(cases);
   }
 
   void evaluateCeil() {
-    var cases = {
-      Ceil(Vector([])): throwsA(isUnimplementedError),
-    };
+    var cases = {Ceil(Vector([])): throwsA(isUnimplementedError)};
     parameterized(cases);
   }
 
   void evaluateFloor() {
-    var cases = {
-      Floor(Vector([])): throwsA(isUnimplementedError),
-    };
+    var cases = {Floor(Vector([])): throwsA(isUnimplementedError)};
     parameterized(cases);
   }
 
   void evaluateSgn() {
-    var cases = {
-      Sgn(Vector([])): throwsA(isUnimplementedError),
-    };
+    var cases = {Sgn(Vector([])): throwsA(isUnimplementedError)};
     parameterized(cases);
   }
 
   void evaluateFactorial() {
-    var cases = {
-      Factorial(Vector([])): throwsA(isUnimplementedError),
-    };
+    var cases = {Factorial(Vector([])): throwsA(isUnimplementedError)};
     parameterized(cases);
   }
 
   void evaluateAlgorithmicFunction() {
     var x = Variable('x');
     var cases = {
-      AlgorithmicFunction('identity', [x], (args) => args[0]):
-          throwsA(isUnimplementedError)
+      AlgorithmicFunction('identity', [x], (args) => args[0]): throwsA(
+        isUnimplementedError,
+      ),
     };
 
     var ctx = ContextModel()..bindVariable(x, Vector([zero, one]));

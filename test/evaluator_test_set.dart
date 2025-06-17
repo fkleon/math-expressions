@@ -12,46 +12,46 @@ class RealEvaluatorTests extends TestSet {
 
   @override
   Map<String, Function> get testGroups => {
-        // Literals
-        'Number': evaluateNumber,
-        'Vector': evaluateVector,
-        'Interval': evaluateInterval,
-        'Variable': evaluateVariable,
-        'BoundVariable': evaluateBoundVariable,
+    // Literals
+    'Number': evaluateNumber,
+    'Vector': evaluateVector,
+    'Interval': evaluateInterval,
+    'Variable': evaluateVariable,
+    'BoundVariable': evaluateBoundVariable,
 
-        // Operators: generic cases
-        'UnaryOperator': evaluateUnaryOperator,
-        'BinaryOperator': evaluateBinaryOperator,
+    // Operators: generic cases
+    'UnaryOperator': evaluateUnaryOperator,
+    'BinaryOperator': evaluateBinaryOperator,
 
-        // Operators: special cases
-        'Power': evaluatePower,
+    // Operators: special cases
+    'Power': evaluatePower,
 
-        // Default functions
-        'Exponential': evaluateExponential,
-        'Log': evaluateLog,
-        'Ln': evaluateLn,
-        'Root': evaluateRoot,
-        'Sqrt': evaluateSqrt,
-        'Sin': evaluateSin,
-        'Cos': evaluateCos,
-        'Tan': evaluateTan,
-        'Asin': evaluateAsin,
-        'Acos': evaluateAcos,
-        'Atan': evaluateAtan,
-        'Abs': evaluateAbs,
-        'Ceil': evaluateCeil,
-        'Floor': evaluateFloor,
-        'Sgn': evaluateSgn,
-        'Factorial': evaluateFactorial,
+    // Default functions
+    'Exponential': evaluateExponential,
+    'Log': evaluateLog,
+    'Ln': evaluateLn,
+    'Root': evaluateRoot,
+    'Sqrt': evaluateSqrt,
+    'Sin': evaluateSin,
+    'Cos': evaluateCos,
+    'Tan': evaluateTan,
+    'Asin': evaluateAsin,
+    'Acos': evaluateAcos,
+    'Atan': evaluateAtan,
+    'Abs': evaluateAbs,
+    'Ceil': evaluateCeil,
+    'Floor': evaluateFloor,
+    'Sgn': evaluateSgn,
+    'Factorial': evaluateFactorial,
 
-        // Custom functions
-        'Algorithmic Function': evaluateAlgorithmicFunction,
-        'Custom Function': evaluateCustomFunction,
-        'Composite Function': evaluateCompositeFunction,
+    // Custom functions
+    'Algorithmic Function': evaluateAlgorithmicFunction,
+    'Custom Function': evaluateCustomFunction,
+    'Composite Function': evaluateCompositeFunction,
 
-        // Complex expressions
-        'Expression': evaluateExpression,
-      };
+    // Complex expressions
+    'Expression': evaluateExpression,
+  };
 
   final evaluator = RealEvaluator();
 
@@ -63,13 +63,17 @@ class RealEvaluatorTests extends TestSet {
   final pi = Number(math.pi);
   final e = Number(math.e);
 
-  void parameterized(Map<Expression, dynamic> cases,
-      {ExpressionEvaluator? evaluator}) {
+  void parameterized(
+    Map<Expression, dynamic> cases, {
+    ExpressionEvaluator? evaluator,
+  }) {
     evaluator ??= this.evaluator;
     cases.forEach((key, value) {
       if (value is Throws) {
-        test('$key -> $value',
-            () => expect(() => evaluator!.evaluate(key), value));
+        test(
+          '$key -> $value',
+          () => expect(() => evaluator!.evaluate(key), value),
+        );
       } else {
         test('$key -> $value', () => expect(evaluator!.evaluate(key), value));
       }
@@ -82,7 +86,7 @@ class RealEvaluatorTests extends TestSet {
       one: 1.0,
       Number(0.5): 0.5,
       // max precision 15 digits
-      Number(999999999999999): 999999999999999
+      Number(999999999999999): 999999999999999,
     };
     parameterized(cases);
   }
@@ -110,10 +114,12 @@ class RealEvaluatorTests extends TestSet {
       Variable('∞'): double.infinity,
     };
 
-    var evaluator = RealEvaluator(ContextModel()
-      ..bindVariableName('x', Number(12))
-      ..bindVariableName('y', two * Variable('x'))
-      ..bindVariableName('∞', Number(double.infinity)));
+    var evaluator = RealEvaluator(
+      ContextModel()
+        ..bindVariableName('x', Number(12))
+        ..bindVariableName('y', two * Variable('x'))
+        ..bindVariableName('∞', Number(double.infinity)),
+    );
 
     parameterized(cases, evaluator: evaluator);
   }
@@ -473,8 +479,11 @@ class RealEvaluatorTests extends TestSet {
   void evaluateAlgorithmicFunction() {
     var x = Variable('x');
     var cases = {
-      AlgorithmicFunction('my_min', [Number(1), -Number(1), x],
-          (args) => args.reduce(math.min)): -2.0,
+      AlgorithmicFunction('my_min', [
+        Number(1),
+        -Number(1),
+        x,
+      ], (args) => args.reduce(math.min)): -2.0,
       AlgorithmicFunction('am_pm', [], (_) => DateTime.now().hour < 12 ? 0 : 1):
           isIn([1, 0]),
       AlgorithmicFunction('div', [x, Number(1)], (args) => args[0] / args[1]):
@@ -496,9 +505,14 @@ class RealEvaluatorTests extends TestSet {
       // Custom ADD (R^2 -> R)
       CustomFunction('add', [x, y], x + y): 5,
       // Custom Vector LENGTH (R^3 -> R)
-      CustomFunction(
-              'length', [x, y, z], Sqrt((x ^ two) + (y ^ two) + (z ^ two))):
-          closeTo(5.099019, EPS),
+      CustomFunction('length', [
+        x,
+        y,
+        z,
+      ], Sqrt((x ^ two) + (y ^ two) + (z ^ two))): closeTo(
+        5.099019,
+        EPS,
+      ),
     };
 
     var ctx = ContextModel()
@@ -515,8 +529,9 @@ class RealEvaluatorTests extends TestSet {
 
     // Custom FUNKYSPLAT (R -> R^3)
     var three = Number(3);
-    var f =
-        CustomFunction('funkysplat', [x], Vector([x - three, x, x + three]));
+    var f = CustomFunction('funkysplat', [
+      x,
+    ], Vector([x - three, x, x + three]));
     var v3 = Vector3(0.0, 3.0, 6.0);
 
     // Should evaluate to a Vector3[0.0,3.0,6.0]
@@ -526,14 +541,19 @@ class RealEvaluatorTests extends TestSet {
     });
 
     // Custom Vector LENGTH (R^3 -> R)
-    var g = CustomFunction(
-        'length', [x, y, z], Sqrt((x ^ two) + (y ^ two) + (z ^ two)));
+    var g = CustomFunction('length', [
+      x,
+      y,
+      z,
+    ], Sqrt((x ^ two) + (y ^ two) + (z ^ two)));
 
     test('CompositeFunction: g-function', () {
-      var evalReal = RealEvaluator(ContextModel()
-        ..bindVariable(x, three)
-        ..bindVariable(y, three)
-        ..bindVariable(z, three));
+      var evalReal = RealEvaluator(
+        ContextModel()
+          ..bindVariable(x, three)
+          ..bindVariable(y, three)
+          ..bindVariable(z, three),
+      );
       expect(evalReal.evaluate(g), closeTo(5.196152423, EPS));
     });
 
@@ -557,8 +577,10 @@ class RealEvaluatorTests extends TestSet {
     // Note: Need to use EvaluationType.VECTOR here.
     test('CompositeFunction: f & g & f', () {
       var evalVector = VectorEvaluator(ContextModel()..bindVariable(x, three));
-      expect(evalVector.evaluate(comp2),
-          Vector3(v3.length - 3, v3.length, v3.length + 3));
+      expect(
+        evalVector.evaluate(comp2),
+        Vector3(v3.length - 3, v3.length, v3.length + 3),
+      );
     });
   }
 
@@ -568,7 +590,13 @@ class RealEvaluatorTests extends TestSet {
           closeTo(-21.0, EPS),
       UnaryMinus(Variable('x')) *
           AlgorithmicFunction(
-              'am', [], (_) => DateTime.now().hour < 12 ? 1 : 0): isIn([0, -5]),
+            'am',
+            [],
+            (_) => DateTime.now().hour < 12 ? 1 : 0,
+          ): isIn([
+        0,
+        -5,
+      ]),
     };
 
     var ctx = ContextModel()..bindVariableName('x', Number(5));

@@ -44,10 +44,7 @@ class GrammarParser implements ExpressionParser {
   };
 
   /// Functions with two arguments.
-  final functions2 = {
-    'log': Log.new,
-    'nrt': Root.new,
-  };
+  final functions2 = {'log': Log.new, 'nrt': Root.new};
 
   /// Dynamically defined algorithmic functions.
   final functionsC = <String, double Function(List<double>)>{};
@@ -92,32 +89,34 @@ class GrammarParser implements ExpressionParser {
   GrammarParser([ParserOptions options = const ParserOptions()]) {
     if (options.implicitMultiplication) {
       throw UnimplementedError(
-          'Implicit multiplication is not supported by this parser');
+        'Implicit multiplication is not supported by this parser',
+      );
     }
 
     this.constants.addAll(options.constants);
 
     final builder = ExpressionBuilder<Expression>();
 
-    final constant =
-        ChoiceParser(constants.keys.map((s) => s.toParser().trim()));
+    final constant = ChoiceParser(
+      constants.keys.map((s) => s.toParser().trim()),
+    );
 
-    final identifier = constant |
+    final identifier =
+        constant |
         ((letter() | char('\$')) & word().star())
             .flatten(message: 'Identifier expected')
             .trim();
 
     final arguments = seq3(
-            char('('),
-            builder.loopback
-                .starSeparated(char(','))
-                .map((args) => args.elements),
-            char(')'))
-        .map3((_, args, __) => args)
-        .optionalWith(const <Expression>[]);
+      char('('),
+      builder.loopback.starSeparated(char(',')).map((args) => args.elements),
+      char(')'),
+    ).map3((_, args, _) => args).optionalWith(const <Expression>[]);
 
-    final functionOrVariable = seq2(identifier, arguments)
-        .map2((name, args) => _createBinding(name, args));
+    final functionOrVariable = seq2(
+      identifier,
+      arguments,
+    ).map2((name, args) => _createBinding(name, args));
 
     final number = (digit().plus() & (char('.') & digit().plus()).optional())
         .flatten(message: 'Number expected')
@@ -130,8 +129,12 @@ class GrammarParser implements ExpressionParser {
       // Numbers
       ..primitive(number)
       // Special case for exponential function notation of form `e^x`
-      ..primitive(seq2(char('e').trim() & char('^').trim(), builder.loopback)
-          .map2((_, exp) => Exponential(exp)))
+      ..primitive(
+        seq2(
+          char('e').trim() & char('^').trim(),
+          builder.loopback,
+        ).map2((_, exp) => Exponential(exp)),
+      )
       // Generic constants, functions or variables
       ..primitive(functionOrVariable)
       // Parenthesis to group terms
@@ -172,8 +175,11 @@ class GrammarParser implements ExpressionParser {
   }
 
   @override
-  void addFunction(String name, double Function(List<double>) handler,
-      {bool replace = false}) {
+  void addFunction(
+    String name,
+    double Function(List<double>) handler, {
+    bool replace = false,
+  }) {
     if (functionsC.containsKey(name) && !replace) {
       throw FormatException('Cannot redefine existing function $name');
     }

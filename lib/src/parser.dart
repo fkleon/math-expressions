@@ -19,8 +19,11 @@ abstract class ExpressionParser {
   ///
   /// Throws a [FormatException] if the given [name] is already defined and
   /// [replace] is false.
-  void addFunction(String name, double Function(List<double>) handler,
-      {bool replace = false});
+  void addFunction(
+    String name,
+    double Function(List<double>) handler, {
+    bool replace = false,
+  });
 }
 
 /// The default parser. This type alias is deprecated, use [GrammarParser]
@@ -37,7 +40,7 @@ class ShuntingYardParser implements ExpressionParser {
   /// Creates a new parser.
   /// The given [options] can be used to configure the behaviour.
   ShuntingYardParser([ParserOptions options = const ParserOptions()])
-      : lex = Lexer(options);
+    : lex = Lexer(options);
   Map<String, dynamic> functionHandlers = <String, dynamic>{};
 
   /// Parses the given input string into an [Expression].
@@ -51,9 +54,7 @@ class ShuntingYardParser implements ExpressionParser {
     }
 
     final List<Expression> exprStack = <Expression>[];
-    final List<Token> inputStream = lex.tokenizeToRPN(
-      inputString,
-    );
+    final List<Token> inputStream = lex.tokenizeToRPN(inputString);
 
     for (Token currToken in inputStream) {
       Expression currExpr, left, right;
@@ -159,7 +160,10 @@ class ShuntingYardParser implements ExpressionParser {
             args.insert(0, exprStack.removeLast());
           }
           currExpr = AlgorithmicFunction(
-              currToken.text, args, functionHandlers[currToken.text]);
+            currToken.text,
+            args,
+            functionHandlers[currToken.text],
+          );
           break;
         default:
           throw FormatException('Unsupported token: $currToken');
@@ -176,8 +180,11 @@ class ShuntingYardParser implements ExpressionParser {
   }
 
   @override
-  void addFunction(String name, double Function(List<double>) handler,
-      {bool replace = false}) {
+  void addFunction(
+    String name,
+    double Function(List<double>) handler, {
+    bool replace = false,
+  }) {
     if (lex.keywords.containsKey(name) && !replace) {
       throw FormatException('Cannot redefine existing function $name');
     }
@@ -208,8 +215,10 @@ class ParserOptions {
   /// A map of additional constant symbols and their values.
   final Map<String, num> constants;
 
-  const ParserOptions(
-      {this.constants = const {}, this.implicitMultiplication = false});
+  const ParserOptions({
+    this.constants = const {},
+    this.implicitMultiplication = false,
+  });
 }
 
 /// The lexer creates tokens (see [TokenType] and [Token]) from an input string.
@@ -370,10 +379,7 @@ class Lexer {
             TokenType.PLUS,
             TokenType.MOD,
           ].every((element) => nextSymbol.type != element)) {
-            tempTokenStream.insert(
-              i + 1,
-              Token('*', TokenType.TIMES),
-            );
+            tempTokenStream.insert(i + 1, Token('*', TokenType.TIMES));
           }
         }
       }
@@ -450,7 +456,8 @@ class Lexer {
             operatorBuffer.last.type != TokenType.LBRACE) {
           //TODO never reached, check this.
           throw FormatException(
-              'Misplaced separator or mismatched parenthesis.');
+            'Misplaced separator or mismatched parenthesis.',
+          );
         }
         prevToken = curToken;
         continue;
@@ -467,10 +474,11 @@ class Lexer {
               prevToken.type == TokenType.SEPAR ||
               prevToken.type == TokenType.LBRACE)) {
         final Token newToken = Token(
-            curToken.text,
-            curToken.type == TokenType.MINUS
-                ? TokenType.UNMINUS
-                : TokenType.UNPLUS);
+          curToken.text,
+          curToken.type == TokenType.MINUS
+              ? TokenType.UNMINUS
+              : TokenType.UNPLUS,
+        );
         operatorBuffer.add(newToken);
         prevToken = newToken;
         continue;
@@ -545,9 +553,7 @@ class Lexer {
   /// stream and then invokes the shunting yard method to transform this stream
   /// into a RPN (reverse polish notation) token stream.
   List<Token> tokenizeToRPN(String inputString) {
-    final List<Token> infixStream = tokenize(
-      inputString,
-    );
+    final List<Token> infixStream = tokenize(inputString);
     return shuntingYard(infixStream);
   }
 }
@@ -607,22 +613,43 @@ class TokenType {
 
   // Operators
   static const TokenType PLUS = TokenType._internal('PLUS', 1, operator: true);
-  static const TokenType MINUS =
-      TokenType._internal('MINUS', 1, operator: true);
-  static const TokenType TIMES =
-      TokenType._internal('TIMES', 2, operator: true);
+  static const TokenType MINUS = TokenType._internal(
+    'MINUS',
+    1,
+    operator: true,
+  );
+  static const TokenType TIMES = TokenType._internal(
+    'TIMES',
+    2,
+    operator: true,
+  );
   static const TokenType DIV = TokenType._internal('DIV', 2, operator: true);
   static const TokenType MOD = TokenType._internal('MOD', 2, operator: true);
-  static const TokenType POW =
-      TokenType._internal('POW', 4, leftAssociative: false, operator: true);
-  static const TokenType UNMINUS =
-      TokenType._internal('UNMINUS', 3, leftAssociative: false, operator: true);
-  static const TokenType UNPLUS =
-      TokenType._internal('UNPLUS', 3, leftAssociative: false, operator: true);
+  static const TokenType POW = TokenType._internal(
+    'POW',
+    4,
+    leftAssociative: false,
+    operator: true,
+  );
+  static const TokenType UNMINUS = TokenType._internal(
+    'UNMINUS',
+    3,
+    leftAssociative: false,
+    operator: true,
+  );
+  static const TokenType UNPLUS = TokenType._internal(
+    'UNPLUS',
+    3,
+    leftAssociative: false,
+    operator: true,
+  );
 
   // Functions
-  static const TokenType FACTORIAL =
-      TokenType._internal('FACTORIAL', 5, function: true);
+  static const TokenType FACTORIAL = TokenType._internal(
+    'FACTORIAL',
+    5,
+    function: true,
+  );
   static const TokenType SQRT = TokenType._internal('SQRT', 5, function: true);
   static const TokenType ROOT = TokenType._internal('ROOT', 5, function: true);
   static const TokenType LOG = TokenType._internal('LOG', 5, function: true);
@@ -635,11 +662,17 @@ class TokenType {
   static const TokenType ATAN = TokenType._internal('ATAN', 5, function: true);
   static const TokenType ABS = TokenType._internal('ABS', 5, function: true);
   static const TokenType CEIL = TokenType._internal('CEIL', 5, function: true);
-  static const TokenType FLOOR =
-      TokenType._internal('FLOOR', 5, function: true);
+  static const TokenType FLOOR = TokenType._internal(
+    'FLOOR',
+    5,
+    function: true,
+  );
   static const TokenType SGN = TokenType._internal('SGN', 5, function: true);
-  static const TokenType EFUNC =
-      TokenType._internal('EFUNC', 5, function: true);
+  static const TokenType EFUNC = TokenType._internal(
+    'EFUNC',
+    5,
+    function: true,
+  );
   static const TokenType FUNC = TokenType._internal('FUNC', 5, function: true);
 
   /// The string value of this token type.
@@ -660,10 +693,13 @@ class TokenType {
   /// Internal constructor for a [TokenType].
   /// To retrieve a token type, directly access the static final fields
   /// provided by this class.
-  const TokenType._internal(this.value, this.priority,
-      {this.leftAssociative = true,
-      this.operator = false,
-      this.function = false});
+  const TokenType._internal(
+    this.value,
+    this.priority, {
+    this.leftAssociative = true,
+    this.operator = false,
+    this.function = false,
+  });
 
   @override
   String toString() => value;

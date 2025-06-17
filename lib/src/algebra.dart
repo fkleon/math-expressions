@@ -41,9 +41,10 @@ class Point3 extends Vector3 {
 
   /// Performs a linear interpolation between two points.
   Point3 lerp(Point3 p2, num coeff) => Point3(
-      this.x * coeff + p2.x * (1 - coeff),
-      this.y * coeff + p2.y * (1 - coeff),
-      this.z * coeff + p2.z * (1 - coeff));
+    this.x * coeff + p2.x * (1 - coeff),
+    this.y * coeff + p2.y * (1 - coeff),
+    this.z * coeff + p2.z * (1 - coeff),
+  );
   // TODO 3d lerp?
 
   /// Transforms the point to its homogeneous vector4 representation.
@@ -105,9 +106,9 @@ class Interval implements Comparable<Interval> {
 
   /// Internal constructor for an empty set.
   Interval._empty()
-      : this.min = double.nan,
-        this.max = double.nan,
-        this._emptySet = true;
+    : this.min = double.nan,
+      this.max = double.nan,
+      this._emptySet = true;
 
   /// Performs an interval addition.
   ///
@@ -148,9 +149,17 @@ class Interval implements Comparable<Interval> {
   Interval operator *(Interval i) {
     if (this.isEmpty() || i.isEmpty()) return Interval.empty();
     final num min = _min(
-        this.min * i.min, this.min * i.max, this.max * i.min, this.max * i.max);
+      this.min * i.min,
+      this.min * i.max,
+      this.max * i.min,
+      this.max * i.max,
+    );
     final num max = _max(
-        this.min * i.min, this.min * i.max, this.max * i.min, this.max * i.max);
+      this.min * i.min,
+      this.min * i.max,
+      this.max * i.min,
+      this.max * i.max,
+    );
     return Interval(min, max);
   }
 

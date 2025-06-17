@@ -11,30 +11,30 @@ class ExpressionTests extends TestSet {
 
   @override
   Map<String, Function> get testFunctions => {
-        'Expression creation [REAL]': simpleRealCreation,
-        'Expression creation [INTERVAL]': simpleIntervalCreation,
-        'Expression Creation [VECTOR]': simpleVectorCreation,
-        'Binary Op Convenience creation': convenienceBinaryCreation,
-        'Unary Op Convenience creation': convenienceUnaryCreation,
-        'Operator simplification': baseOperatorSimplification,
-        'Operator differentiation': baseOperatorDifferentiation,
-        'Default Function creation': defFuncCreation,
-        'Default Function simplification': defFuncSimplification,
-        'Default Function differentiation': defFuncDifferentiation,
-        'Custom Function creation': cusFuncCreation,
-        /*
+    'Expression creation [REAL]': simpleRealCreation,
+    'Expression creation [INTERVAL]': simpleIntervalCreation,
+    'Expression Creation [VECTOR]': simpleVectorCreation,
+    'Binary Op Convenience creation': convenienceBinaryCreation,
+    'Unary Op Convenience creation': convenienceUnaryCreation,
+    'Operator simplification': baseOperatorSimplification,
+    'Operator differentiation': baseOperatorDifferentiation,
+    'Default Function creation': defFuncCreation,
+    'Default Function simplification': defFuncSimplification,
+    'Default Function differentiation': defFuncDifferentiation,
+    'Custom Function creation': cusFuncCreation,
+    /*
         'Custom Function simplification': cusFuncSimplification,
         'Custom Function differentiation': cusFuncDifferentiation,
         */
-        'Composite Function creation': compFunCreation,
-        /*
+    'Composite Function creation': compFunCreation,
+    /*
         'Composite Function simplification': compFuncSimplification,
         'Composite Function differentiation': compFuncDifferentiation,
         */
-        'Composite Function evaluation': compFunEval,
-        'Algorithmic Function creation': algorithmicFunctionCreation,
-        'Expression visitor': testVisitor,
-      };
+    'Composite Function evaluation': compFunEval,
+    'Algorithmic Function creation': algorithmicFunctionCreation,
+    'Expression visitor': testVisitor,
+  };
 
   @override
   void initTests() {
@@ -139,7 +139,7 @@ class ExpressionTests extends TestSet {
       Divide('x', 2),
       Plus('x', 2),
       Minus('x', 2),
-      Power('x', 2)
+      Power('x', 2),
     ];
 
     for (BinaryOperator binOp in binOps) {
@@ -260,22 +260,26 @@ class ExpressionTests extends TestSet {
     expect(exp.simplify(), TypeMatcher<UnaryMinus>());
     expect((exp.simplify() as UnaryMinus).exp, TypeMatcher<Times>());
     expect(
-        _isVariable(((exp.simplify() as UnaryMinus).exp as Times).first, 'a'),
-        isTrue);
+      _isVariable(((exp.simplify() as UnaryMinus).exp as Times).first, 'a'),
+      isTrue,
+    );
     expect(
-        _isVariable(((exp.simplify() as UnaryMinus).exp as Times).second, 'b'),
-        isTrue);
+      _isVariable(((exp.simplify() as UnaryMinus).exp as Times).second, 'b'),
+      isTrue,
+    );
 
     // a * -b = - (a * b)
     exp = Times('a', UnaryMinus('b'));
     expect(exp.simplify(), TypeMatcher<UnaryMinus>());
     expect((exp.simplify() as UnaryMinus).exp, TypeMatcher<Times>());
     expect(
-        _isVariable(((exp.simplify() as UnaryMinus).exp as Times).first, 'a'),
-        isTrue);
+      _isVariable(((exp.simplify() as UnaryMinus).exp as Times).first, 'a'),
+      isTrue,
+    );
     expect(
-        _isVariable(((exp.simplify() as UnaryMinus).exp as Times).second, 'b'),
-        isTrue);
+      _isVariable(((exp.simplify() as UnaryMinus).exp as Times).second, 'b'),
+      isTrue,
+    );
 
     // -a * -b = a * b
     exp = Times(UnaryMinus('a'), UnaryMinus('b'));
@@ -309,22 +313,26 @@ class ExpressionTests extends TestSet {
     expect(exp.simplify(), TypeMatcher<UnaryMinus>());
     expect((exp.simplify() as UnaryMinus).exp, TypeMatcher<Divide>());
     expect(
-        _isVariable(((exp.simplify() as UnaryMinus).exp as Divide).first, 'a'),
-        isTrue);
+      _isVariable(((exp.simplify() as UnaryMinus).exp as Divide).first, 'a'),
+      isTrue,
+    );
     expect(
-        _isVariable(((exp.simplify() as UnaryMinus).exp as Divide).second, 'b'),
-        isTrue);
+      _isVariable(((exp.simplify() as UnaryMinus).exp as Divide).second, 'b'),
+      isTrue,
+    );
 
     // a * -b = - (a / b)
     exp = Divide('a', UnaryMinus('b'));
     expect(exp.simplify(), TypeMatcher<UnaryMinus>());
     expect((exp.simplify() as UnaryMinus).exp, TypeMatcher<Divide>());
     expect(
-        _isVariable(((exp.simplify() as UnaryMinus).exp as Divide).first, 'a'),
-        isTrue);
+      _isVariable(((exp.simplify() as UnaryMinus).exp as Divide).first, 'a'),
+      isTrue,
+    );
     expect(
-        _isVariable(((exp.simplify() as UnaryMinus).exp as Divide).second, 'b'),
-        isTrue);
+      _isVariable(((exp.simplify() as UnaryMinus).exp as Divide).second, 'b'),
+      isTrue,
+    );
 
     // -a / -b = a / b
     exp = Divide(UnaryMinus('a'), UnaryMinus('b'));
@@ -400,13 +408,13 @@ class ExpressionTests extends TestSet {
         Modulo('x', 'x'),
         'x',
         '1.0 - floor(x / abs(x)) * (sgn(x) * 1.0)',
-        '1.0 - floor(x / abs(x)) * sgn(x)'
+        '1.0 - floor(x / abs(x)) * sgn(x)',
       ],
       [
         Power('x', 2),
         'x',
         'e(2.0 * ln(x)) * ((2.0 * (1.0 / x)) + (0.0 * ln(x)))',
-        'x^2.0 * (2.0 * (1.0 / x))' // = (2x^2)/x = 2x
+        'x^2.0 * (2.0 * (1.0 / x))', // = (2x^2)/x = 2x
       ],
     ];
 
@@ -416,7 +424,9 @@ class ExpressionTests extends TestSet {
       String expected = exprCase[2];
       String expectedSimpl = exprCase[3];
       expect(
-          exp.derive(deriveTo), _equalsExpression(expected, simplify: false));
+        exp.derive(deriveTo),
+        _equalsExpression(expected, simplify: false),
+      );
       expect(exp.derive(deriveTo), _equalsExpression(expectedSimpl));
     }
   }
@@ -447,24 +457,24 @@ class ExpressionTests extends TestSet {
 
   /// Helper function to create a list of all default functions.
   List<MathFunction> _createDefaultFunctions(Expression exp) => [
-        Exponential(exp),
-        Log(exp, exp),
-        Ln(exp),
-        Root(Number(5), exp),
-        Root.sqrt(exp),
-        Sqrt(exp),
-        Sin(exp),
-        Cos(exp),
-        Tan(exp),
-        Asin(exp),
-        Acos(exp),
-        Atan(exp),
-        Ceil(exp),
-        Floor(exp),
-        Abs(exp),
-        Sgn(exp),
-        Factorial(exp)
-      ];
+    Exponential(exp),
+    Log(exp, exp),
+    Ln(exp),
+    Root(Number(5), exp),
+    Root.sqrt(exp),
+    Sqrt(exp),
+    Sin(exp),
+    Cos(exp),
+    Tan(exp),
+    Asin(exp),
+    Acos(exp),
+    Atan(exp),
+    Ceil(exp),
+    Floor(exp),
+    Abs(exp),
+    Sgn(exp),
+    Factorial(exp),
+  ];
 
   /// Tests simplification of default functions.
   void defFuncSimplification() {
@@ -614,26 +624,25 @@ class ExpressionTests extends TestSet {
         Log(two, x),
         'x',
         '((((1.0 / x) * ln(2.0)) - (ln(x) * (0.0 / 2.0))) / (ln(2.0) * ln(2.0)))',
-        '(((1.0 / x) * ln(2.0)) / (ln(2.0) * ln(2.0)))'
+        '(((1.0 / x) * ln(2.0)) / (ln(2.0) * ln(2.0)))',
       ],
+
       //'1.0 / (x * ln(2.0))'],
 
       // TODO Roots are internally handled as Powers:
       //[Sqrt(x),        'x', '0.0', '0.0'],
       //[Root(2, x),     'x', '0.0', '0.0'],
-
       [Sin(x), 'x', 'cos(x) * 1.0', 'cos(x)'],
       [Cos(x), 'x', '-sin(x) * 1.0', '-sin(x)'],
 
       // TODO Tan is internally handled as sin/cos:
       //[Tan(x),          'x', '0.0',    '0.0']
-
       [Asin(x), 'x', '1.0 / sqrt(1.0 - x ^ 2.0)', '1.0 / sqrt(1.0 - x ^ 2.0)'],
       [
         Acos(x),
         'x',
         '- 1.0 / sqrt(1.0 - x ^ 2.0)',
-        '-(1.0 / sqrt(1.0 - x ^ 2.0))'
+        '-(1.0 / sqrt(1.0 - x ^ 2.0))',
       ],
       [Atan(x), 'x', '1.0 / (1.0 + x^2.0)', '1.0 / (1.0 + x^2.0)'],
 
@@ -642,8 +651,8 @@ class ExpressionTests extends TestSet {
         Abs(two * x),
         'x',
         'sgn(2.0 * x) * (2.0 * 1.0 + 0.0 * x)',
-        'sgn(2.0 * x) * 2.0'
-      ]
+        'sgn(2.0 * x) * 2.0',
+      ],
     ];
 
     for (List exprCase in diff) {
@@ -652,7 +661,9 @@ class ExpressionTests extends TestSet {
       String expected = exprCase[2];
       String expectedSimpl = exprCase[3];
       expect(
-          exp.derive(deriveTo), _equalsExpression(expected, simplify: false));
+        exp.derive(deriveTo),
+        _equalsExpression(expected, simplify: false),
+      );
       expect(exp.derive(deriveTo), _equalsExpression(expectedSimpl));
     }
   }
@@ -695,8 +706,11 @@ class ExpressionTests extends TestSet {
 
     // Custom Vector LENGTH (R^3 -> R)
     Expression two = Number(2);
-    g = CustomFunction(
-        'length', [x, y, z], Sqrt((x ^ two) + (y ^ two) + (z ^ two)));
+    g = CustomFunction('length', [
+      x,
+      y,
+      z,
+    ], Sqrt((x ^ two) + (y ^ two) + (z ^ two)));
 
     /*
      * Simple Composite of two functions: R -> R^3 -> R
@@ -813,9 +827,9 @@ class ExpressionMatcher extends Matcher {
   /// Creates a new Expression matcher. If [simplify] is true, the expression to
   /// match will be simplified as much as possible beore testing.
   ExpressionMatcher(String expression, {bool simplify = true})
-      : this._expression = expression,
-        this._exprRPN = _lexer.tokenizeToRPN(expression),
-        this._simplify = simplify;
+    : this._expression = expression,
+      this._exprRPN = _lexer.tokenizeToRPN(expression),
+      this._simplify = simplify;
 
   @override
   bool matches(dynamic item, Map matchState) {
@@ -864,13 +878,16 @@ class ExpressionMatcher extends Matcher {
       .addDescriptionOf(_exprRPN);
 
   @override
-  Description describeMismatch(dynamic item, Description mismatchDescription,
-          Map matchState, bool verbose) =>
-      !_simplify
-          ? mismatchDescription
-          : mismatchDescription
-              .add('was simplified to ')
-              .addDescriptionOf(matchState['state']['item'].toString())
-              .add(' with RPN: ')
-              .addDescriptionOf(matchState['state']['itemRPN']);
+  Description describeMismatch(
+    dynamic item,
+    Description mismatchDescription,
+    Map matchState,
+    bool verbose,
+  ) => !_simplify
+      ? mismatchDescription
+      : mismatchDescription
+            .add('was simplified to ')
+            .addDescriptionOf(matchState['state']['item'].toString())
+            .add(' with RPN: ')
+            .addDescriptionOf(matchState['state']['itemRPN']);
 }

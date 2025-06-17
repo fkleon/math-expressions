@@ -88,7 +88,7 @@ class CompositeFunction extends MathFunction {
   ///     composite = CompositeFunction(f, g); // R -> R
   ///                                          // composite(2) = 6
   CompositeFunction(this.f, this.g)
-      : super('comp(${f.name},${g.name})', f.args);
+    : super('comp(${f.name},${g.name})', f.args);
 
   /// The domain of the 'second' function, which should match the range
   /// of the 'first' function.
@@ -254,7 +254,7 @@ abstract class DefaultFunction extends MathFunction {
   /// Must only be used internally for pre-defined functions, as it does not
   /// contain any expression. The Evaluator needs to know how to handle this.
   DefaultFunction._binary(super.name, Expression arg1, Expression arg2)
-      : super._empty() {
+    : super._empty() {
     final Variable bindingVariable1 = _wrapIntoVariable(arg1);
     final Variable bindingVariable2 = _wrapIntoVariable(arg2);
     this.args = <Variable>[bindingVariable1, bindingVariable2];

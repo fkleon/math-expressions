@@ -381,7 +381,9 @@ class Times extends BinaryOperator {
 
   @override
   Expression derive(String toVar) => Plus(
-      Times(first, second.derive(toVar)), Times(first.derive(toVar), second));
+    Times(first, second.derive(toVar)),
+    Times(first.derive(toVar), second),
+  );
 
   /// Possible simplifications:
   ///
@@ -710,8 +712,9 @@ class Vector extends Literal {
 
   @override
   Expression derive(String toVar) {
-    final elementDerivative =
-        elements.map((item) => item.derive(toVar)).toList();
+    final elementDerivative = elements
+        .map((item) => item.derive(toVar))
+        .toList();
 
     return Vector(elementDerivative);
   }
@@ -736,14 +739,18 @@ class Vector extends Literal {
 
   @override
   bool isConstant() => elements.fold(
-      true, (prev, elem) => prev && (elem is Literal && elem.isConstant()));
+    true,
+    (prev, elem) => prev && (elem is Literal && elem.isConstant()),
+  );
 
   @override
   Vector getConstantValue() {
     // TODO unit test
-    final constVals = elements.map<Expression>((e) => (e is Literal)
-        ? e.getConstantValue()
-        : throw UnsupportedError('Vector $this is not constant.'));
+    final constVals = elements.map<Expression>(
+      (e) => (e is Literal)
+          ? e.getConstantValue()
+          : throw UnsupportedError('Vector $this is not constant.'),
+    );
 
     return Vector(constVals as List<Expression>);
   }
@@ -818,9 +825,7 @@ class IntervalLiteral extends Literal {
   IntervalLiteral(this.min, this.max);
 
   /// Creates a new interval with identical bounds.
-  IntervalLiteral.fromSingle(Expression exp)
-      : this.min = exp,
-        this.max = exp;
+  IntervalLiteral.fromSingle(Expression exp) : this.min = exp, this.max = exp;
 
   @override
   Expression derive(String toVar) {
@@ -853,5 +858,7 @@ class IntervalLiteral extends Literal {
 
   @override
   Interval getConstantValue() => Interval(
-      (min as Literal).getConstantValue(), (max as Literal).getConstantValue());
+    (min as Literal).getConstantValue(),
+    (max as Literal).getConstantValue(),
+  );
 }

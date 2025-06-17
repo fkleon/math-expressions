@@ -10,67 +10,64 @@ class PetitParserTests extends TestSet {
 
   @override
   Map<String, Function> get testFunctions => {
-        // TODO: Refactor these to be included in the individual test groups
-        'Parse from toString())': parseFromToString,
-      };
+    // TODO: Refactor these to be included in the individual test groups
+    'Parse from toString())': parseFromToString,
+  };
 
   @override
   Map<String, Function> get testGroups => {
-        // Lint
-        'Lint': lint,
+    // Lint
+    'Lint': lint,
 
-        // Literals
-        'Number': parseNumber,
-        'Constant': parseConstant,
-        'Custom Constant': parseCustomConstant,
-        'Variable': parseVariable,
-        'Parenthesis': parseParenthesis,
+    // Literals
+    'Number': parseNumber,
+    'Constant': parseConstant,
+    'Custom Constant': parseCustomConstant,
+    'Variable': parseVariable,
+    'Parenthesis': parseParenthesis,
 
-        // Operators
-        'Unary Minus': parseUnaryMinus,
-        'Unary Plus': parseUnaryPlus,
-        'Power': parsePower,
-        'Modulo': parseModulo,
-        'Multiplication': parseMultiplication,
-        //'ImplicitMultiplication': parseImplicitMultiplication,
-        'Division': parseDivision,
-        'Addition': parsePlus,
-        'Subtraction': parseMinus,
-        'Operator Precedence': parseOperatorPrecedence,
+    // Operators
+    'Unary Minus': parseUnaryMinus,
+    'Unary Plus': parseUnaryPlus,
+    'Power': parsePower,
+    'Modulo': parseModulo,
+    'Multiplication': parseMultiplication,
+    //'ImplicitMultiplication': parseImplicitMultiplication,
+    'Division': parseDivision,
+    'Addition': parsePlus,
+    'Subtraction': parseMinus,
+    'Operator Precedence': parseOperatorPrecedence,
 
-        // Functions
-        'Functions': parseFunctions,
-        //'Custom functions': parseCustomFunctions,
-        'Algorithmic functions': parseAlgorithmicFunctions,
+    // Functions
+    'Functions': parseFunctions,
+    //'Custom functions': parseCustomFunctions,
+    'Algorithmic functions': parseAlgorithmicFunctions,
 
-        // Expressions
-        'Complex expression': parseComplexExpression,
+    // Expressions
+    'Complex expression': parseComplexExpression,
 
-        // Negative test cases
-        'Invalid': parserExpressionTestInvalid,
+    // Negative test cases
+    'Invalid': parserExpressionTestInvalid,
 
-        // Parser customisation via subclass
-        'Customisation': parseWithCustomisation,
-      };
+    // Parser customisation via subclass
+    'Customisation': parseWithCustomisation,
+  };
 
   @override
   void initTests() {}
 
   GrammarParser parser = GrammarParser();
 
-  void parameterized(Map<String, Expression> cases,
-      {ExpressionParser? parser}) {
+  void parameterized(
+    Map<String, Expression> cases, {
+    ExpressionParser? parser,
+  }) {
     parser ??= this.parser;
     cases.forEach((key, value) {
       test(
-          '$key -> $value',
-          () => expect(
-              parser!
-                  .parse(
-                    key,
-                  )
-                  .toString(),
-              value.toString()));
+        '$key -> $value',
+        () => expect(parser!.parse(key).toString(), value.toString()),
+      );
     });
   }
 
@@ -123,8 +120,9 @@ class PetitParserTests extends TestSet {
 
     var cases = constants.map((k, v) => MapEntry(k, Number(v)));
 
-    ExpressionParser parser =
-        GrammarParser(ParserOptions(constants: constants));
+    ExpressionParser parser = GrammarParser(
+      ParserOptions(constants: constants),
+    );
 
     parameterized(cases, parser: parser);
   }
@@ -144,11 +142,7 @@ class PetitParserTests extends TestSet {
   }
 
   void parseUnaryMinus() {
-    var cases = {
-      '-0': -Number(0),
-      '-1': -Number(1),
-      '-1.0': -Number(1.0),
-    };
+    var cases = {'-0': -Number(0), '-1': -Number(1), '-1.0': -Number(1.0)};
     parameterized(cases);
   }
 
@@ -207,9 +201,7 @@ class PetitParserTests extends TestSet {
   }
 
   void parsePlus() {
-    var cases = {
-      'x + 2': Variable('x') + Number(2),
-    };
+    var cases = {'x + 2': Variable('x') + Number(2)};
     parameterized(cases);
   }
 
@@ -230,10 +222,7 @@ class PetitParserTests extends TestSet {
   }
 
   void parseParenthesis() {
-    var cases = {
-      '(0)': Number(0),
-      '(0-x)': Number(0) - Variable('x'),
-    };
+    var cases = {'(0)': Number(0), '(0-x)': Number(0) - Variable('x')};
     parameterized(cases);
   }
 
@@ -267,32 +256,43 @@ class PetitParserTests extends TestSet {
 
   void parseCustomFunctions() {
     var cases = {
-      'myCustomFunction(x)':
-          CustomFunction('myCustomFunction', [Variable('x')], Number(0)),
+      'myCustomFunction(x)': CustomFunction('myCustomFunction', [
+        Variable('x'),
+      ], Number(0)),
     };
     parameterized(cases);
   }
 
   void parseAlgorithmicFunctions() {
     var cases = {
-      'myAlgorithmicFunction(1.0)':
-          AlgorithmicFunction('myAlgorithmicFunction', [Number(1.0)], (_) => 0),
-      'my_min(1,x,-2)': AlgorithmicFunction('my_min',
-          [Number(1), Variable('x'), UnaryMinus(Number(2))], (_) => 0),
+      'myAlgorithmicFunction(1.0)': AlgorithmicFunction(
+        'myAlgorithmicFunction',
+        [Number(1.0)],
+        (_) => 0,
+      ),
+      'my_min(1,x,-2)': AlgorithmicFunction('my_min', [
+        Number(1),
+        Variable('x'),
+        UnaryMinus(Number(2)),
+      ], (_) => 0),
     };
 
     parser.addFunction('myAlgorithmicFunction', (_) => 0, replace: true);
-    parser.addFunction('my_min', (List<double> args) => args.reduce(math.min),
-        replace: true);
+    parser.addFunction(
+      'my_min',
+      (List<double> args) => args.reduce(math.min),
+      replace: true,
+    );
 
     parameterized(cases);
   }
 
   void parseComplexExpression() {
     var cases = {
-      'x * 2^2.5 * log(10,100)': Variable('x') *
+      'x * 2^2.5 * log(10,100)':
+          Variable('x') *
           Power(Number(2), Number(2.5)) *
-          Log(Number(10), Number(100))
+          Log(Number(10), Number(100)),
     };
     parameterized(cases);
   }
@@ -351,8 +351,11 @@ class PetitParserTests extends TestSet {
         num r2 = evaluator.evaluate(exp2);
         expect(r2, r1, reason: 'Expected $r2 for $exp ($exp2)');
       } on FormatException catch (fe) {
-        expect(fe, isNot(isFormatException),
-            reason: 'Expected no exception for $expression ($exp)');
+        expect(
+          fe,
+          isNot(isFormatException),
+          reason: 'Expected no exception for $expression ($exp)',
+        );
       }
     }
   }

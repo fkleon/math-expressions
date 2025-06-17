@@ -10,32 +10,32 @@ class LexerTests extends TestSet {
 
   @override
   Map<String, Function> get testGroups => {
-        // Literals
-        'Value': tokenizeValue,
-        'Variable': tokenizeVariable,
-        'Parenthesis': tokenizeParenthesis,
+    // Literals
+    'Value': tokenizeValue,
+    'Variable': tokenizeVariable,
+    'Parenthesis': tokenizeParenthesis,
 
-        // Operators
-        'Unary Minus': tokenizeUnaryMinus,
-        'Unary Plus': tokenizeUnaryPlus,
-        'Power': tokenizePower,
-        'Modulo': tokenizeModulo,
-        'Multiplication': tokenizeMultiplication,
-        'ImplicitMultiplication': tokenizeImplicitMultiplication,
-        'Division': tokenizeDivision,
-        'Plus': tokenizePlus,
-        'Minus': tokenizeMinus,
+    // Operators
+    'Unary Minus': tokenizeUnaryMinus,
+    'Unary Plus': tokenizeUnaryPlus,
+    'Power': tokenizePower,
+    'Modulo': tokenizeModulo,
+    'Multiplication': tokenizeMultiplication,
+    'ImplicitMultiplication': tokenizeImplicitMultiplication,
+    'Division': tokenizeDivision,
+    'Plus': tokenizePlus,
+    'Minus': tokenizeMinus,
 
-        // Functions
-        'Functions': tokenizeFunctions,
-        'Algorithmic functions': tokenizeAlgorithmicFunctions,
+    // Functions
+    'Functions': tokenizeFunctions,
+    'Algorithmic functions': tokenizeAlgorithmicFunctions,
 
-        // Expressions
-        'Complex expression': tokenizeComplexExpression,
+    // Expressions
+    'Complex expression': tokenizeComplexExpression,
 
-        // Negative test cases
-        'Invalid': lexerTokenTestInvalid,
-      };
+    // Negative test cases
+    'Invalid': lexerTokenTestInvalid,
+  };
 
   @override
   void initTests() {}
@@ -45,24 +45,34 @@ class LexerTests extends TestSet {
   // Test RPN
   void parameterizedRpn(Map<String, List<Token>> cases) {
     cases.forEach((expression, rpn) {
-      test('$expression -> $rpn',
-          () => expect(lex.tokenizeToRPN(expression), orderedEquals(rpn)));
+      test(
+        '$expression -> $rpn',
+        () => expect(lex.tokenizeToRPN(expression), orderedEquals(rpn)),
+      );
     });
   }
 
   /// Test infix and RPN
-  void parameterized(Map<String, (List<Token> infix, List<Token> rpn)> cases,
-      {Lexer? lexer}) {
+  void parameterized(
+    Map<String, (List<Token> infix, List<Token> rpn)> cases, {
+    Lexer? lexer,
+  }) {
     lexer ??= this.lex;
     cases.forEach((expression, value) {
       var (infix, rpn) = value;
       test('$expression -> $infix -> $rpn', () {
         var infixStream = lexer!.tokenize(expression);
-        expect(infixStream, orderedEquals(infix),
-            reason: 'Incorrect infix notation');
+        expect(
+          infixStream,
+          orderedEquals(infix),
+          reason: 'Incorrect infix notation',
+        );
         var rpnStream = lexer.shuntingYard(infixStream);
-        expect(rpnStream, orderedEquals(rpn),
-            reason: "Incorrect reverse polish notation");
+        expect(
+          rpnStream,
+          orderedEquals(rpn),
+          reason: "Incorrect reverse polish notation",
+        );
       });
     });
   }
@@ -97,29 +107,29 @@ class LexerTests extends TestSet {
     var cases = {
       '-0': (
         [Token('-', TokenType.MINUS), Token('0', TokenType.VAL)],
-        [Token('0', TokenType.VAL), Token('-', TokenType.UNMINUS)]
+        [Token('0', TokenType.VAL), Token('-', TokenType.UNMINUS)],
       ),
       '-1.0': (
         [Token('-', TokenType.MINUS), Token('1.0', TokenType.VAL)],
-        [Token('1.0', TokenType.VAL), Token('-', TokenType.UNMINUS)]
+        [Token('1.0', TokenType.VAL), Token('-', TokenType.UNMINUS)],
       ),
       '(-1)': (
         [
           Token('(', TokenType.LBRACE),
           Token('-', TokenType.MINUS),
           Token('1', TokenType.VAL),
-          Token(')', TokenType.RBRACE)
+          Token(')', TokenType.RBRACE),
         ],
-        [Token('1', TokenType.VAL), Token('-', TokenType.UNMINUS)]
+        [Token('1', TokenType.VAL), Token('-', TokenType.UNMINUS)],
       ),
       '-(1)': (
         [
           Token('-', TokenType.MINUS),
           Token('(', TokenType.LBRACE),
           Token('1', TokenType.VAL),
-          Token(')', TokenType.RBRACE)
+          Token(')', TokenType.RBRACE),
         ],
-        [Token('1', TokenType.VAL), Token('-', TokenType.UNMINUS)]
+        [Token('1', TokenType.VAL), Token('-', TokenType.UNMINUS)],
       ),
     };
     parameterized(cases);
@@ -129,25 +139,25 @@ class LexerTests extends TestSet {
     var cases = {
       '+1': (
         [Token('+', TokenType.PLUS), Token('1', TokenType.VAL)],
-        [Token('1', TokenType.VAL), Token('+', TokenType.UNPLUS)]
+        [Token('1', TokenType.VAL), Token('+', TokenType.UNPLUS)],
       ),
       '(+1)': (
         [
           Token('(', TokenType.LBRACE),
           Token('+', TokenType.PLUS),
           Token('1', TokenType.VAL),
-          Token(')', TokenType.RBRACE)
+          Token(')', TokenType.RBRACE),
         ],
-        [Token('1', TokenType.VAL), Token('+', TokenType.UNPLUS)]
+        [Token('1', TokenType.VAL), Token('+', TokenType.UNPLUS)],
       ),
       '+(1)': (
         [
           Token('+', TokenType.PLUS),
           Token('(', TokenType.LBRACE),
           Token('1', TokenType.VAL),
-          Token(')', TokenType.RBRACE)
+          Token(')', TokenType.RBRACE),
         ],
-        [Token('1', TokenType.VAL), Token('+', TokenType.UNPLUS)]
+        [Token('1', TokenType.VAL), Token('+', TokenType.UNPLUS)],
       ),
     };
     parameterized(cases);
@@ -159,13 +169,13 @@ class LexerTests extends TestSet {
         [
           Token('1', TokenType.VAL),
           Token('^', TokenType.POW),
-          Token('1', TokenType.VAL)
+          Token('1', TokenType.VAL),
         ],
         [
           Token('1', TokenType.VAL),
           Token('1', TokenType.VAL),
           Token('^', TokenType.POW),
-        ]
+        ],
       ),
       '1^1^1': (
         [
@@ -173,16 +183,16 @@ class LexerTests extends TestSet {
           Token('^', TokenType.POW),
           Token('1', TokenType.VAL),
           Token('^', TokenType.POW),
-          Token('1', TokenType.VAL)
+          Token('1', TokenType.VAL),
         ],
         [
           Token('1', TokenType.VAL),
           Token('1', TokenType.VAL),
           Token('1', TokenType.VAL),
           Token('^', TokenType.POW),
-          Token('^', TokenType.POW)
-        ]
-      )
+          Token('^', TokenType.POW),
+        ],
+      ),
     };
     parameterized(cases);
   }
@@ -199,7 +209,7 @@ class LexerTests extends TestSet {
           Token('1', TokenType.VAL),
           Token('1', TokenType.VAL),
           Token('%', TokenType.MOD),
-        ]
+        ],
       ),
     };
     parameterized(cases);
@@ -211,13 +221,13 @@ class LexerTests extends TestSet {
         [
           Token('0', TokenType.VAL),
           Token('*', TokenType.TIMES),
-          Token('1', TokenType.VAL)
+          Token('1', TokenType.VAL),
         ],
         [
           Token('0', TokenType.VAL),
           Token('1', TokenType.VAL),
-          Token('*', TokenType.TIMES)
-        ]
+          Token('*', TokenType.TIMES),
+        ],
       ),
     };
     parameterized(cases);
@@ -238,8 +248,8 @@ class LexerTests extends TestSet {
         [
           Token('0', TokenType.VAL),
           Token('1', TokenType.VAL),
-          Token('*', TokenType.TIMES)
-        ]
+          Token('*', TokenType.TIMES),
+        ],
       ),
       '(-2.0)5': (
         [
@@ -255,7 +265,7 @@ class LexerTests extends TestSet {
           Token('-', TokenType.UNMINUS),
           Token('5', TokenType.VAL),
           Token('*', TokenType.TIMES),
-        ]
+        ],
       ),
     };
     var lexer = Lexer(ParserOptions(implicitMultiplication: true));
@@ -268,13 +278,13 @@ class LexerTests extends TestSet {
         [
           Token('0', TokenType.VAL),
           Token('/', TokenType.DIV),
-          Token('1', TokenType.VAL)
+          Token('1', TokenType.VAL),
         ],
         [
           Token('0', TokenType.VAL),
           Token('1', TokenType.VAL),
-          Token('/', TokenType.DIV)
-        ]
+          Token('/', TokenType.DIV),
+        ],
       ),
     };
     parameterized(cases);
@@ -286,13 +296,13 @@ class LexerTests extends TestSet {
         [
           Token('x', TokenType.VAR),
           Token('+', TokenType.PLUS),
-          Token('2', TokenType.VAL)
+          Token('2', TokenType.VAL),
         ],
         [
           Token('x', TokenType.VAR),
           Token('2', TokenType.VAL),
-          Token('+', TokenType.PLUS)
-        ]
+          Token('+', TokenType.PLUS),
+        ],
       ),
     };
     parameterized(cases);
@@ -304,13 +314,13 @@ class LexerTests extends TestSet {
         [
           Token('x', TokenType.VAR),
           Token('-', TokenType.MINUS),
-          Token('2', TokenType.VAL)
+          Token('2', TokenType.VAL),
         ],
         [
           Token('x', TokenType.VAR),
           Token('2', TokenType.VAL),
-          Token('-', TokenType.MINUS)
-        ]
+          Token('-', TokenType.MINUS),
+        ],
       ),
     };
     parameterized(cases);
@@ -332,31 +342,31 @@ class LexerTests extends TestSet {
           Token('10', TokenType.VAL),
           Token(',', TokenType.SEPAR),
           Token('100', TokenType.VAL),
-          Token(')', TokenType.RBRACE)
+          Token(')', TokenType.RBRACE),
         ],
         [
           Token('10', TokenType.VAL),
           Token('100', TokenType.VAL),
-          Token('log', TokenType.LOG)
-        ]
+          Token('log', TokenType.LOG),
+        ],
       ),
       'ln(2)': (
         [
           Token('ln', TokenType.LN),
           Token('(', TokenType.LBRACE),
           Token('2', TokenType.VAL),
-          Token(')', TokenType.RBRACE)
+          Token(')', TokenType.RBRACE),
         ],
-        [Token('2', TokenType.VAL), Token('ln', TokenType.LN)]
+        [Token('2', TokenType.VAL), Token('ln', TokenType.LN)],
       ),
       'sqrt(10)': (
         [
           Token('sqrt', TokenType.SQRT),
           Token('(', TokenType.LBRACE),
           Token('10', TokenType.VAL),
-          Token(')', TokenType.RBRACE)
+          Token(')', TokenType.RBRACE),
         ],
-        [Token('10', TokenType.VAL), Token('sqrt', TokenType.SQRT)]
+        [Token('10', TokenType.VAL), Token('sqrt', TokenType.SQRT)],
       ),
       // n-th root
       'nrt(2,10)': (
@@ -366,13 +376,13 @@ class LexerTests extends TestSet {
           Token('2', TokenType.VAL),
           Token(',', TokenType.SEPAR),
           Token('10', TokenType.VAL),
-          Token(')', TokenType.RBRACE)
+          Token(')', TokenType.RBRACE),
         ],
         [
           Token('2', TokenType.VAL),
           Token('10', TokenType.VAL),
-          Token('nrt', TokenType.ROOT)
-        ]
+          Token('nrt', TokenType.ROOT),
+        ],
       ),
       'nrt(5,10-1)': (
         [
@@ -383,87 +393,87 @@ class LexerTests extends TestSet {
           Token('10', TokenType.VAL),
           Token('-', TokenType.MINUS),
           Token('1', TokenType.VAL),
-          Token(')', TokenType.RBRACE)
+          Token(')', TokenType.RBRACE),
         ],
         [
           Token('5', TokenType.VAL),
           Token('10', TokenType.VAL),
           Token('1', TokenType.VAL),
           Token('-', TokenType.MINUS),
-          Token('nrt', TokenType.ROOT)
-        ]
+          Token('nrt', TokenType.ROOT),
+        ],
       ),
       'cos(10)': (
         [
           Token('cos', TokenType.COS),
           Token('(', TokenType.LBRACE),
           Token('10', TokenType.VAL),
-          Token(')', TokenType.RBRACE)
+          Token(')', TokenType.RBRACE),
         ],
-        [Token('10', TokenType.VAL), Token('cos', TokenType.COS)]
+        [Token('10', TokenType.VAL), Token('cos', TokenType.COS)],
       ),
       'sin(10)': (
         [
           Token('sin', TokenType.SIN),
           Token('(', TokenType.LBRACE),
           Token('10', TokenType.VAL),
-          Token(')', TokenType.RBRACE)
+          Token(')', TokenType.RBRACE),
         ],
-        [Token('10', TokenType.VAL), Token('sin', TokenType.SIN)]
+        [Token('10', TokenType.VAL), Token('sin', TokenType.SIN)],
       ),
       'tan(10)': (
         [
           Token('tan', TokenType.TAN),
           Token('(', TokenType.LBRACE),
           Token('10', TokenType.VAL),
-          Token(')', TokenType.RBRACE)
+          Token(')', TokenType.RBRACE),
         ],
-        [Token('10', TokenType.VAL), Token('tan', TokenType.TAN)]
+        [Token('10', TokenType.VAL), Token('tan', TokenType.TAN)],
       ),
       'arccos(1)': (
         [
           Token('arccos', TokenType.ACOS),
           Token('(', TokenType.LBRACE),
           Token('1', TokenType.VAL),
-          Token(')', TokenType.RBRACE)
+          Token(')', TokenType.RBRACE),
         ],
-        [Token('1', TokenType.VAL), Token('arccos', TokenType.ACOS)]
+        [Token('1', TokenType.VAL), Token('arccos', TokenType.ACOS)],
       ),
       'arcsin(1)': (
         [
           Token('arcsin', TokenType.ASIN),
           Token('(', TokenType.LBRACE),
           Token('1', TokenType.VAL),
-          Token(')', TokenType.RBRACE)
+          Token(')', TokenType.RBRACE),
         ],
-        [Token('1', TokenType.VAL), Token('arcsin', TokenType.ASIN)]
+        [Token('1', TokenType.VAL), Token('arcsin', TokenType.ASIN)],
       ),
       'arctan(10)': (
         [
           Token('arctan', TokenType.ATAN),
           Token('(', TokenType.LBRACE),
           Token('10', TokenType.VAL),
-          Token(')', TokenType.RBRACE)
+          Token(')', TokenType.RBRACE),
         ],
-        [Token('10', TokenType.VAL), Token('arctan', TokenType.ATAN)]
+        [Token('10', TokenType.VAL), Token('arctan', TokenType.ATAN)],
       ),
       'abs(10)': (
         [
           Token('abs', TokenType.ABS),
           Token('(', TokenType.LBRACE),
           Token('10', TokenType.VAL),
-          Token(')', TokenType.RBRACE)
+          Token(')', TokenType.RBRACE),
         ],
-        [Token('10', TokenType.VAL), Token('abs', TokenType.ABS)]
+        [Token('10', TokenType.VAL), Token('abs', TokenType.ABS)],
       ),
       'sgn(10)': (
         [
           Token('sgn', TokenType.SGN),
           Token('(', TokenType.LBRACE),
           Token('10', TokenType.VAL),
-          Token(')', TokenType.RBRACE)
+          Token(')', TokenType.RBRACE),
         ],
-        [Token('10', TokenType.VAL), Token('sgn', TokenType.SGN)]
+        [Token('10', TokenType.VAL), Token('sgn', TokenType.SGN)],
       ),
       // Exponential - function syntax
       'e(x)': (
@@ -473,12 +483,12 @@ class LexerTests extends TestSet {
           Token('x', TokenType.VAR),
           Token(')', TokenType.RBRACE),
         ],
-        [Token('x', TokenType.VAR), Token('e', TokenType.EFUNC)]
+        [Token('x', TokenType.VAR), Token('e', TokenType.EFUNC)],
       ),
       // Exponential - power syntax
       'e^x': (
         [Token('e', TokenType.EFUNC), Token('x', TokenType.VAR)],
-        [Token('x', TokenType.VAR), Token('e', TokenType.EFUNC)]
+        [Token('x', TokenType.VAR), Token('e', TokenType.EFUNC)],
       ),
       'e^(x+2)': (
         [
@@ -487,36 +497,36 @@ class LexerTests extends TestSet {
           Token('x', TokenType.VAR),
           Token('+', TokenType.PLUS),
           Token('2', TokenType.VAL),
-          Token(')', TokenType.RBRACE)
+          Token(')', TokenType.RBRACE),
         ],
         [
           Token('x', TokenType.VAR),
           Token('2', TokenType.VAL),
           Token('+', TokenType.PLUS),
-          Token('e', TokenType.EFUNC)
-        ]
+          Token('e', TokenType.EFUNC),
+        ],
       ),
       'ceil(9.5)': (
         [
           Token('ceil', TokenType.CEIL),
           Token('(', TokenType.LBRACE),
           Token('9.5', TokenType.VAL),
-          Token(')', TokenType.RBRACE)
+          Token(')', TokenType.RBRACE),
         ],
-        [Token('9.5', TokenType.VAL), Token('ceil', TokenType.CEIL)]
+        [Token('9.5', TokenType.VAL), Token('ceil', TokenType.CEIL)],
       ),
       'floor(9.5)': (
         [
           Token('floor', TokenType.FLOOR),
           Token('(', TokenType.LBRACE),
           Token('9.5', TokenType.VAL),
-          Token(')', TokenType.RBRACE)
+          Token(')', TokenType.RBRACE),
         ],
-        [Token('9.5', TokenType.VAL), Token('floor', TokenType.FLOOR)]
+        [Token('9.5', TokenType.VAL), Token('floor', TokenType.FLOOR)],
       ),
       '10!': (
         [Token('10', TokenType.VAL), Token('!', TokenType.FACTORIAL)],
-        [Token('10', TokenType.VAL), Token('!', TokenType.FACTORIAL)]
+        [Token('10', TokenType.VAL), Token('!', TokenType.FACTORIAL)],
       ),
     };
     parameterized(cases);
@@ -534,7 +544,7 @@ class LexerTests extends TestSet {
         [
           Token('1.0', TokenType.VAL),
           Token('myAlgorithmicFunction', TokenType.FUNC),
-        ]
+        ],
       ),
       'my_min(1,x,-2)': (
         [
@@ -554,7 +564,7 @@ class LexerTests extends TestSet {
           Token('2', TokenType.VAL),
           Token('-', TokenType.UNMINUS),
           Token('my_min', TokenType.FUNC),
-        ]
+        ],
       ),
     };
 
@@ -579,7 +589,7 @@ class LexerTests extends TestSet {
           Token('10', TokenType.VAL),
           Token(',', TokenType.SEPAR),
           Token('100', TokenType.VAL),
-          Token(')', TokenType.RBRACE)
+          Token(')', TokenType.RBRACE),
         ],
         [
           Token('x', TokenType.VAR),
@@ -590,8 +600,8 @@ class LexerTests extends TestSet {
           Token('10', TokenType.VAL),
           Token('100', TokenType.VAL),
           Token('log', TokenType.LOG),
-          Token('*', TokenType.TIMES)
-        ]
+          Token('*', TokenType.TIMES),
+        ],
       ),
     };
     parameterized(cases);
@@ -607,8 +617,10 @@ class LexerTests extends TestSet {
     };
 
     for (String expr in invalidCases.keys) {
-      test(expr,
-          () => expect(() => lex.tokenizeToRPN(expr), invalidCases[expr]));
+      test(
+        expr,
+        () => expect(() => lex.tokenizeToRPN(expr), invalidCases[expr]),
+      );
     }
   }
 }

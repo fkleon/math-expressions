@@ -18,7 +18,8 @@ void main(List<String> arguments) {
   print('  <var>=<expr> (bind variable <var> to expression)');
   print('  ?<var>       (get variable binding)');
   print(
-      '  !<var>       (differentiates the current expression with respect to given <var>)\n');
+    '  !<var>       (differentiates the current expression with respect to given <var>)\n',
+  );
   print('Please, enter any expression or command.\n');
 
   for (String input in arguments) {
@@ -26,8 +27,12 @@ void main(List<String> arguments) {
     wrapParseInput(input);
   }
 
-  stdin.transform(Utf8Decoder()).listen((line) => wrapParseInput(line.trim()),
-      onError: (Object err) => print('error: $err'));
+  stdin
+      .transform(Utf8Decoder())
+      .listen(
+        (line) => wrapParseInput(line.trim()),
+        onError: (Object err) => print('error: $err'),
+      );
 }
 
 /// Error handling.

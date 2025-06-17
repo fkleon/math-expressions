@@ -10,15 +10,15 @@ class AlgebraTests extends TestSet {
 
   @override
   Map<String, Function> get testFunctions => {
-        'Point Creation': pointCreation,
-        'Point Equality': pointEquality,
-        'Point Subtraction': pointSubtraction,
-        'Point Addition': pointAddition,
-        'Point LERP': pointLerp,
-        'Interval Creation': intervalCreation,
-        'Interval Arithmetic': intervalArithmetic,
-        'Interval Comparison': intervalComparison,
-      };
+    'Point Creation': pointCreation,
+    'Point Equality': pointEquality,
+    'Point Subtraction': pointSubtraction,
+    'Point Addition': pointAddition,
+    'Point LERP': pointLerp,
+    'Interval Creation': intervalCreation,
+    'Interval Arithmetic': intervalArithmetic,
+    'Interval Comparison': intervalComparison,
+  };
 
   @override
   void initTests() {}

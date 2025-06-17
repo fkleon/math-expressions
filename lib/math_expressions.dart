@@ -33,7 +33,7 @@
 /// For backwards-compatibility the legacy [ShuntingYardParser] is also
 /// included. Users are encouraged to switch to [GrammarParser] as it will
 /// not receive new features and bug fixes.
-library math_expressions;
+library;
 
 import 'dart:math' as math;
 
