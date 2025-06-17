@@ -104,7 +104,7 @@ class GrammarParser implements ExpressionParser {
 
     final identifier = constant |
         ((letter() | char('\$')) & word().star())
-            .flatten('Identifier expected')
+            .flatten(message: 'Identifier expected')
             .trim();
 
     final arguments = seq3(
@@ -120,7 +120,7 @@ class GrammarParser implements ExpressionParser {
         .map2((name, args) => _createBinding(name, args));
 
     final number = (digit().plus() & (char('.') & digit().plus()).optional())
-        .flatten('Number expected')
+        .flatten(message: 'Number expected')
         .trim()
         .map(num.parse)
         .map(Number.new);
