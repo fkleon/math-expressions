@@ -1,4 +1,4 @@
-library math_expressions_test;
+library;
 
 import 'dart:math' as math;
 

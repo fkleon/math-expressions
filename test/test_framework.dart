@@ -5,7 +5,7 @@
 /// This library was developed prior to the existence of dedicated test
 /// frameworks like [bench](http://pub.dartlang.org/packages/bench), but
 /// still gets the job done.
-library test_framework;
+library;
 
 import 'package:test/test.dart';
 
