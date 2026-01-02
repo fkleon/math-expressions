@@ -12,6 +12,7 @@ void main() {
   _expression_simplification_and_differentiation();
   _custom_function_definition_and_use();
   _algorithmic_function_definition_and_use();
+  _interval_and_vector_evaluation();
 }
 
 /// Example 1: Expression creation and evaluation
@@ -133,4 +134,34 @@ void _algorithmic_function_definition_and_use() {
 
   num res = evaluator.evaluate(exp);
   print('my_min(1, ${context.getExpression('x')}, -1) = $res');
+}
+
+/// Example 5: Interval and vector evaluation
+///
+/// Demonstrates how to evaluate the same expression under interval and vector contexts.
+void _interval_and_vector_evaluation() {
+  print('\nExample 5: Interval and vector evaluation\n');
+
+  final parser = GrammarParser();
+
+  // Interval example: sqrt(x) + y, where x and y are ranges.
+  final intervalExpression = parser.parse('nrt(2, x) + y');
+  final intervalContext = ContextModel()
+    ..bindVariableName('x', IntervalLiteral(Number(4), Number(9)))
+    ..bindVariableName('y', IntervalLiteral(Number(-1), Number(2)));
+  final intervalEvaluator = IntervalEvaluator(intervalContext);
+  final Interval intervalResult = intervalEvaluator.evaluate(
+    intervalExpression,
+  );
+  print('Interval result: $intervalResult');
+
+  // Vector example: (a * 2) + b, where a and b are 3D vectors.
+  final vectorExpression = parser.parse('(a * 2) + b');
+  final vectorContext = ContextModel()
+    ..bindVariableName('a', Vector([Number(1), Number(2), Number(3)]))
+    ..bindVariableName('b', Vector([Number(-1), Number(0), Number(4)]));
+  final vectorEvaluator = VectorEvaluator(vectorContext);
+  final Vector3 vectorResult =
+      vectorEvaluator.evaluate(vectorExpression) as Vector3;
+  print('Vector result: $vectorResult');
 }

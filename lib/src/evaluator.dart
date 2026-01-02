@@ -651,6 +651,12 @@ class RealEvaluator extends ExpressionEvaluator<num> {
   }
 }
 
+/// Evaluates expressions as mathematical intervals, assuming every literal
+/// can represent a range of values instead of a single scalar. Bind variable
+/// names to [IntervalLiteral]s (or expressions that yield intervals) via the
+/// [ContextModel] to describe input uncertainty. Not all functions are
+/// currently supported in interval mode (see README for details); unsupported
+/// nodes throw [UnimplementedError] or [UnsupportedError].
 class IntervalEvaluator extends ExpressionEvaluator<Interval> {
   /// Create a new evaluator with the given context.
   IntervalEvaluator([ContextModel? context])
@@ -823,6 +829,12 @@ class IntervalEvaluator extends ExpressionEvaluator<Interval> {
 /// The vector evaluator can operate on mixed datatypes,
 /// so is typed less strict. The underlying data types could
 /// be Vector2, Vector3, Vector4 and double (scalars).
+/// Evaluates expressions in the vector space, mapping literals with 2‒4
+/// components to the corresponding `vector_math` types. Vector arithmetic is
+/// limited to the operations implemented in this evaluator (vector ± vector,
+/// vector * scalar, vector / scalar with the scalar on the right-hand side).
+/// See the README for a usage walkthrough. Unsupported combinations throw an
+/// [UnsupportedError] or [ArgumentError].
 class VectorEvaluator extends ExpressionEvaluator<Object> {
   /// Create a new evaluator with the given context.
   VectorEvaluator([ContextModel? context])
