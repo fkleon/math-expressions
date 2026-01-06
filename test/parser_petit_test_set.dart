@@ -32,7 +32,7 @@ class PetitParserTests extends TestSet {
     'Power': parsePower,
     'Modulo': parseModulo,
     'Multiplication': parseMultiplication,
-    //'ImplicitMultiplication': parseImplicitMultiplication,
+    'ImplicitMultiplication': parseImplicitMultiplication,
     'Division': parseDivision,
     'Addition': parsePlus,
     'Subtraction': parseMinus,
@@ -184,8 +184,11 @@ class PetitParserTests extends TestSet {
 
   void parseImplicitMultiplication() {
     var cases = {
+      '2x': Number(2) * Variable('x'),
       '(5)(5)': Number(5) * Number(5),
       '(-2.0)5': -Number(2.0) * Number(5),
+      '2(x+1)': Number(2) * (Variable('x') + Number(1)),
+      '(x+1)(x-1)': (Variable('x') + Number(1)) * (Variable('x') - Number(1)),
     };
 
     var parser = GrammarParser(ParserOptions(implicitMultiplication: true));

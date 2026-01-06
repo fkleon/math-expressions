@@ -87,13 +87,7 @@ class GrammarParser implements ExpressionParser {
   /// Creates a new parser.
   /// The given [options] can be used to configure the behaviour.
   GrammarParser([ParserOptions options = const ParserOptions()]) {
-    if (options.implicitMultiplication) {
-      throw UnimplementedError(
-        'Implicit multiplication is not supported by this parser',
-      );
-    }
-
-    this.constants.addAll(options.constants);
+    constants.addAll(options.constants);
 
     final builder = ExpressionBuilder<Expression>();
 
@@ -116,7 +110,7 @@ class GrammarParser implements ExpressionParser {
     final functionOrVariable = seq2(
       identifier,
       arguments,
-    ).map2((name, args) => _createBinding(name, args));
+    ).map2((name, args) => _createBinding(name, args)).trim();
 
     final number = (digit().plus() & (char('.') & digit().plus()).optional())
         .flatten(message: 'Number expected')
@@ -124,23 +118,47 @@ class GrammarParser implements ExpressionParser {
         .map(num.parse)
         .map(Number.new);
 
-    // Numbers and variables
-    builder
-      // Numbers
-      ..primitive(number)
-      // Special case for exponential function notation of form `e^x`
-      ..primitive(
-        seq2(
-          char('e').trim() & char('^').trim(),
-          builder.loopback,
-        ).map2((_, exp) => Exponential(exp)),
-      )
-      // Generic constants, functions or variables
-      ..primitive(functionOrVariable)
-      // Parenthesis to group terms
-      ..group().wrapper(char('(').trim(), char(')').trim(), (l, e, r) => e)
-      // Backwards compat: Curly braces to group function arguments
-      ..group().wrapper(char('{').trim(), char('}').trim(), (l, e, r) => e);
+    final exponential = seq2(
+      char('e').trim() & char('^').trim(),
+      builder.loopback,
+    ).map2((_, exp) => Exponential(exp));
+
+    final parenthesized = seq3(
+      char('(').trim(),
+      builder.loopback,
+      char(')').trim(),
+    ).map3((_, expr, _) => expr);
+
+    final curly = seq3(
+      char('{').trim(),
+      builder.loopback,
+      char('}').trim(),
+    ).map3((_, expr, _) => expr);
+
+    Expression foldImplicitProduct(List<Expression> terms) {
+      if (terms.length == 1) {
+        return terms.first;
+      }
+      Expression product = terms.first;
+      for (var i = 1; i < terms.length; i++) {
+        product = Times(product, terms[i]);
+      }
+      return product;
+    }
+
+    final baseTerm = ChoiceParser<Expression>([
+      number,
+      exponential,
+      functionOrVariable,
+      parenthesized,
+      curly,
+    ]);
+
+    final implicitTerm = options.implicitMultiplication
+        ? baseTerm.plus().map(foldImplicitProduct)
+        : baseTerm;
+
+    builder.primitive(implicitTerm);
 
     // Binary operators (right associative)
     builder.group().right(char('^').trim(), (l, op, r) => Power(l, r));
