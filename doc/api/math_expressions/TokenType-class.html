@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the TokenType class from the math_expressions library, for the Dart programming language.">
+  <title>TokenType class - math_expressions library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../static-assets/styles.css?v1">
+  <link rel="icon" href="../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../index.html">math_expressions</a></li>
+    <li><a href="../math_expressions/">math_expressions.dart</a></li>
+    <li class="self-crumb">TokenType class</li>
+  </ol>
+  <div class="self-name">TokenType</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="math_expressions&#47;math_expressions-library-sidebar.html"
+    data-below-sidebar="math_expressions&#47;TokenType-class-sidebar.html">
+    <div>
+<h1><span class="kind-class">TokenType</span> class 
+ 
+</h1></div>
+
+    
+<section class="desc markdown">
+  <p>A token type. Access token types via the static fields.</p>
+<p>For example, to access the token type PLUS:</p>
+<pre class="language-dart"><code>plusType = TokenType.PLUS;
+</code></pre>
+<p>The type defines the <code>priority</code> (precedence) of the token.</p>
+<pre class="language-dart"><code>(+,-) &lt; (*,/) &lt; (^) &lt; functions &lt; (-u)
+</code></pre>
+<p>It also defines the associativity of the token. True stands for
+left-associative, false for right-associative.</p>
+</section>
+
+
+
+    
+    
+  <section
+      class="summary offset-anchor"
+      id="instance-properties">
+    <h2>Properties</h2>
+    <dl class="properties">
+        <dt id="function" class="property">
+  <span class="name"><a href="../math_expressions/TokenType/function.html">function</a></span>
+  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>
+  
+
+</dt>
+<dd>
+  True, if this token is a function.
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="hashCode" class="property inherited">
+  <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/hashCode.html">hashCode</a></span>
+  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span>
+  
+
+</dt>
+<dd class="inherited">
+  The hash code for this object.
+  <div class="features"><span class="feature">no setter</span><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="leftAssociative" class="property">
+  <span class="name"><a href="../math_expressions/TokenType/leftAssociative.html">leftAssociative</a></span>
+  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>
+  
+
+</dt>
+<dd>
+  Associativity of this token type. true = left.
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="operator" class="property">
+  <span class="name"><a href="../math_expressions/TokenType/operator.html">operator</a></span>
+  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>
+  
+
+</dt>
+<dd>
+  True, if this token is an operator.
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="priority" class="property">
+  <span class="name"><a href="../math_expressions/TokenType/priority.html">priority</a></span>
+  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span>
+  
+
+</dt>
+<dd>
+  The priority of this token type.
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="runtimeType" class="property inherited">
+  <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/runtimeType.html">runtimeType</a></span>
+  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Type-class.html">Type</a></span>
+  
+
+</dt>
+<dd class="inherited">
+  A representation of the runtime type of the object.
+  <div class="features"><span class="feature">no setter</span><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="value" class="property">
+  <span class="name"><a href="../math_expressions/TokenType/value.html">value</a></span>
+  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>
+  
+
+</dt>
+<dd>
+  The string value of this token type.
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+    </dl>
+  </section>
+
+    
+  <section
+      class="summary offset-anchor"
+      id="instance-methods">
+    <h2>Methods</h2>
+    <dl class="callables">
+        <dt id="noSuchMethod" class="callable inherited">
+  <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/noSuchMethod.html">noSuchMethod</a></span><span class="signature">(<wbr><span class="parameter" id="noSuchMethod-param-invocation"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Invocation-class.html">Invocation</a></span> <span class="parameter-name">invocation</span></span>)
+    <span class="returntype parameter">&#8594; dynamic</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  Invoked when a nonexistent method or property is accessed.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="toString" class="callable">
+  <span class="name"><a href="../math_expressions/TokenType/toString.html">toString</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  A string representation of this object.
+  <div class="features"><span class="feature">override</span></div>
+
+</dd>
+
+    </dl>
+  </section>
+    
+  <section
+      class="summary offset-anchor inherited"
+      id="operators">
+    <h2>Operators</h2>
+    <dl class="callables">
+        <dt id="operator ==" class="callable inherited">
+  <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/operator_equals.html">operator ==</a></span><span class="signature">(<wbr><span class="parameter" id="==-param-other"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  The equality operator.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+    </dl>
+  </section>
+    
+    
+    
+
+  <section class="summary offset-anchor" id="constants">
+    <h2>Constants</h2>
+    <dl class="properties">
+        <dt id="ABS" class="constant">
+    <span class="name "><a href="../math_expressions/TokenType/ABS-constant.html">ABS</a></span>
+  <span class="signature">&#8594; const <a href="../math_expressions/TokenType-class.html">TokenType</a></span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="ACOS" class="constant">
+    <span class="name "><a href="../math_expressions/TokenType/ACOS-constant.html">ACOS</a></span>
+  <span class="signature">&#8594; const <a href="../math_expressions/TokenType-class.html">TokenType</a></span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="ASIN" class="constant">
+    <span class="name "><a href="../math_expressions/TokenType/ASIN-constant.html">ASIN</a></span>
+  <span class="signature">&#8594; const <a href="../math_expressions/TokenType-class.html">TokenType</a></span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="ATAN" class="constant">
+    <span class="name "><a href="../math_expressions/TokenType/ATAN-constant.html">ATAN</a></span>
+  <span class="signature">&#8594; const <a href="../math_expressions/TokenType-class.html">TokenType</a></span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="CEIL" class="constant">
+    <span class="name "><a href="../math_expressions/TokenType/CEIL-constant.html">CEIL</a></span>
+  <span class="signature">&#8594; const <a href="../math_expressions/TokenType-class.html">TokenType</a></span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="COS" class="constant">
+    <span class="name "><a href="../math_expressions/TokenType/COS-constant.html">COS</a></span>
+  <span class="signature">&#8594; const <a href="../math_expressions/TokenType-class.html">TokenType</a></span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="DIV" class="constant">
+    <span class="name "><a href="../math_expressions/TokenType/DIV-constant.html">DIV</a></span>
+  <span class="signature">&#8594; const <a href="../math_expressions/TokenType-class.html">TokenType</a></span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="EFUNC" class="constant">
+    <span class="name "><a href="../math_expressions/TokenType/EFUNC-constant.html">EFUNC</a></span>
+  <span class="signature">&#8594; const <a href="../math_expressions/TokenType-class.html">TokenType</a></span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="FACTORIAL" class="constant">
+    <span class="name "><a href="../math_expressions/TokenType/FACTORIAL-constant.html">FACTORIAL</a></span>
+  <span class="signature">&#8594; const <a href="../math_expressions/TokenType-class.html">TokenType</a></span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="FLOOR" class="constant">
+    <span class="name "><a href="../math_expressions/TokenType/FLOOR-constant.html">FLOOR</a></span>
+  <span class="signature">&#8594; const <a href="../math_expressions/TokenType-class.html">TokenType</a></span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="FUNC" class="constant">
+    <span class="name "><a href="../math_expressions/TokenType/FUNC-constant.html">FUNC</a></span>
+  <span class="signature">&#8594; const <a href="../math_expressions/TokenType-class.html">TokenType</a></span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="LBRACE" class="constant">
+    <span class="name "><a href="../math_expressions/TokenType/LBRACE-constant.html">LBRACE</a></span>
+  <span class="signature">&#8594; const <a href="../math_expressions/TokenType-class.html">TokenType</a></span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="LN" class="constant">
+    <span class="name "><a href="../math_expressions/TokenType/LN-constant.html">LN</a></span>
+  <span class="signature">&#8594; const <a href="../math_expressions/TokenType-class.html">TokenType</a></span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="LOG" class="constant">
+    <span class="name "><a href="../math_expressions/TokenType/LOG-constant.html">LOG</a></span>
+  <span class="signature">&#8594; const <a href="../math_expressions/TokenType-class.html">TokenType</a></span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="MINUS" class="constant">
+    <span class="name "><a href="../math_expressions/TokenType/MINUS-constant.html">MINUS</a></span>
+  <span class="signature">&#8594; const <a href="../math_expressions/TokenType-class.html">TokenType</a></span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="MOD" class="constant">
+    <span class="name "><a href="../math_expressions/TokenType/MOD-constant.html">MOD</a></span>
+  <span class="signature">&#8594; const <a href="../math_expressions/TokenType-class.html">TokenType</a></span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="PLUS" class="constant">
+    <span class="name "><a href="../math_expressions/TokenType/PLUS-constant.html">PLUS</a></span>
+  <span class="signature">&#8594; const <a href="../math_expressions/TokenType-class.html">TokenType</a></span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="POW" class="constant">
+    <span class="name "><a href="../math_expressions/TokenType/POW-constant.html">POW</a></span>
+  <span class="signature">&#8594; const <a href="../math_expressions/TokenType-class.html">TokenType</a></span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="RBRACE" class="constant">
+    <span class="name "><a href="../math_expressions/TokenType/RBRACE-constant.html">RBRACE</a></span>
+  <span class="signature">&#8594; const <a href="../math_expressions/TokenType-class.html">TokenType</a></span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="ROOT" class="constant">
+    <span class="name "><a href="../math_expressions/TokenType/ROOT-constant.html">ROOT</a></span>
+  <span class="signature">&#8594; const <a href="../math_expressions/TokenType-class.html">TokenType</a></span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="SEPAR" class="constant">
+    <span class="name "><a href="../math_expressions/TokenType/SEPAR-constant.html">SEPAR</a></span>
+  <span class="signature">&#8594; const <a href="../math_expressions/TokenType-class.html">TokenType</a></span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="SGN" class="constant">
+    <span class="name "><a href="../math_expressions/TokenType/SGN-constant.html">SGN</a></span>
+  <span class="signature">&#8594; const <a href="../math_expressions/TokenType-class.html">TokenType</a></span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="SIN" class="constant">
+    <span class="name "><a href="../math_expressions/TokenType/SIN-constant.html">SIN</a></span>
+  <span class="signature">&#8594; const <a href="../math_expressions/TokenType-class.html">TokenType</a></span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="SQRT" class="constant">
+    <span class="name "><a href="../math_expressions/TokenType/SQRT-constant.html">SQRT</a></span>
+  <span class="signature">&#8594; const <a href="../math_expressions/TokenType-class.html">TokenType</a></span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="TAN" class="constant">
+    <span class="name "><a href="../math_expressions/TokenType/TAN-constant.html">TAN</a></span>
+  <span class="signature">&#8594; const <a href="../math_expressions/TokenType-class.html">TokenType</a></span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="TIMES" class="constant">
+    <span class="name "><a href="../math_expressions/TokenType/TIMES-constant.html">TIMES</a></span>
+  <span class="signature">&#8594; const <a href="../math_expressions/TokenType-class.html">TokenType</a></span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="UNMINUS" class="constant">
+    <span class="name "><a href="../math_expressions/TokenType/UNMINUS-constant.html">UNMINUS</a></span>
+  <span class="signature">&#8594; const <a href="../math_expressions/TokenType-class.html">TokenType</a></span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="UNPLUS" class="constant">
+    <span class="name "><a href="../math_expressions/TokenType/UNPLUS-constant.html">UNPLUS</a></span>
+  <span class="signature">&#8594; const <a href="../math_expressions/TokenType-class.html">TokenType</a></span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="VAL" class="constant">
+    <span class="name "><a href="../math_expressions/TokenType/VAL-constant.html">VAL</a></span>
+  <span class="signature">&#8594; const <a href="../math_expressions/TokenType-class.html">TokenType</a></span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+        <dt id="VAR" class="constant">
+    <span class="name "><a href="../math_expressions/TokenType/VAR-constant.html">VAR</a></span>
+  <span class="signature">&#8594; const <a href="../math_expressions/TokenType-class.html">TokenType</a></span>
+  
+
+</dt>
+<dd>
+  
+  
+
+</dd>
+
+    </dl>
+  </section>
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../index.html">math_expressions</a></li>
+    <li><a href="../math_expressions/">math_expressions</a></li>
+    <li class="self-crumb">TokenType class</li>
+</ol>
+
+    <h5>math_expressions library</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div>
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    math_expressions
+      3.1.0
+  </span>
+  
+</footer>
+
+
+<script src="../static-assets/highlight.pack.js?v1"></script>
+<script src="../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+
