@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the shuntingYard method from the Lexer class, for the Dart programming language.">
+  <title>shuntingYard method - Lexer class - math_expressions library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../../static-assets/styles.css?v1">
+  <link rel="icon" href="../../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../../index.html">math_expressions</a></li>
+    <li><a href="../../math_expressions/">math_expressions.dart</a></li>
+    <li><a href="../../math_expressions/Lexer-class.html">Lexer</a></li>
+    <li class="self-crumb">shuntingYard method</li>
+  </ol>
+  <div class="self-name">shuntingYard</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="math_expressions&#47;Lexer-class-sidebar.html"
+    data-below-sidebar="">
+    <div>
+<h1><span class="kind-method">shuntingYard</span> method 
+</h1></div>
+
+    <section class="multi-line-signature">
+      
+<span class="returntype"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../math_expressions/Token-class.html">Token</a></span>&gt;</span></span>
+<span class="name ">shuntingYard</span>(<wbr><ol class="parameter-list single-line"> <li><span class="parameter" id="shuntingYard-param-stream"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="../../math_expressions/Token-class.html">Token</a></span>&gt;</span></span> <span class="parameter-name">stream</span></span></li>
+</ol>)
+
+      
+
+    </section>
+    
+<section class="desc markdown">
+  <p>Transforms the lexer's token stream into RPN using the Shunting-yard
+algorithm. Returns a list of <a href="../../math_expressions/Token-class.html">Token</a> in RPN form. Throws an
+<a href="https://api.flutter.dev/flutter/dart-core/ArgumentError-class.html">ArgumentError</a> if the list is empty.</p>
+</section>
+
+
+    
+<section class="summary source-code" id="source">
+  <h2><span>Implementation</span></h2>
+  <pre class="language-dart"><code class="language-dart">List&lt;Token&gt; shuntingYard(List&lt;Token&gt; stream) {
+  if (stream.isEmpty) {
+    throw FormatException(&#39;The given tokenStream was empty.&#39;);
+  }
+
+  final List&lt;Token&gt; outputStream = &lt;Token&gt;[];
+  final List&lt;Token&gt; operatorBuffer = &lt;Token&gt;[];
+
+  Token? prevToken;
+
+  for (Token curToken in stream) {
+    &#47;&#47; If the current Token is a value or a variable, put them into the output stream.
+    if (curToken.type == TokenType.VAL || curToken.type == TokenType.VAR) {
+      outputStream.add(curToken);
+      prevToken = curToken;
+      continue;
+    }
+
+    &#47;&#47; If the current Token is a function, put it onto the operator stack.
+    if (curToken.type.function) {
+      curToken.argCount = 1;
+      operatorBuffer.add(curToken);
+      prevToken = curToken;
+      continue;
+    }
+
+    &#47;*
+     *  If the current Token is a function argument separator, pop operators
+     *  to output stream until a left brace is encountered.
+     *&#47;
+    if (curToken.type == TokenType.SEPAR) {
+      while (operatorBuffer.isNotEmpty &amp;&amp;
+          operatorBuffer.last.type != TokenType.LBRACE) {
+        outputStream.add(operatorBuffer.removeLast());
+      }
+
+      if (operatorBuffer.length &gt; 1) {
+        var func = operatorBuffer[operatorBuffer.length - 2];
+        if (func.type.function) {
+          ++func.argCount;
+        }
+      }
+
+      &#47;&#47; If no left brace is encountered, separator was misplaced or parenthesis mismatch
+      if (operatorBuffer.isNotEmpty &amp;&amp;
+          operatorBuffer.last.type != TokenType.LBRACE) {
+        &#47;&#47;TODO never reached, check this.
+        throw FormatException(
+          &#39;Misplaced separator or mismatched parenthesis.&#39;,
+        );
+      }
+      prevToken = curToken;
+      continue;
+    }
+
+    &#47;* if the current Tokens type is PLUS or MINUS and the previous Token is an operator or type LBRACE
+     * or we&#39;re at the beginning of the expression (prevToken == null) the current Token is
+     * an unary plur or minus, so the tokentype has to be changed.
+     *&#47;
+    if ((curToken.type == TokenType.MINUS ||
+            curToken.type == TokenType.PLUS) &amp;&amp;
+        (prevToken == null ||
+            prevToken.type.operator ||
+            prevToken.type == TokenType.SEPAR ||
+            prevToken.type == TokenType.LBRACE)) {
+      final Token newToken = Token(
+        curToken.text,
+        curToken.type == TokenType.MINUS
+            ? TokenType.UNMINUS
+            : TokenType.UNPLUS,
+      );
+      operatorBuffer.add(newToken);
+      prevToken = newToken;
+      continue;
+    }
+
+    &#47;*
+     * If the current token is an operator and it&#39;s priority is lower than the priority of the last
+     * operator in the operator buffer, than put the operators from the operator buffer into the output
+     * stream until you find an operator with a priority lower or equal as the current tokens.
+     * Then add the current Token to the operator buffer.
+     *&#47;
+    if (curToken.type.operator) {
+      while (operatorBuffer.isNotEmpty &amp;&amp;
+          ((curToken.type.leftAssociative &amp;&amp;
+                  curToken.type.priority &lt;=
+                      operatorBuffer.last.type.priority) ||
+              (!curToken.type.leftAssociative &amp;&amp;
+                  curToken.type.priority &lt;
+                      operatorBuffer.last.type.priority))) {
+        outputStream.add(operatorBuffer.removeLast());
+      }
+      operatorBuffer.add(curToken);
+      prevToken = curToken;
+      continue;
+    }
+
+    &#47;&#47; If the current Token is a left brace, put it on the operator buffer.
+    if (curToken.type == TokenType.LBRACE) {
+      operatorBuffer.add(curToken);
+      prevToken = curToken;
+      continue;
+    }
+
+    &#47;&#47; If the current Token is a right brace, empty the operator buffer until you find a left brace.
+    if (curToken.type == TokenType.RBRACE) {
+      while (operatorBuffer.isNotEmpty &amp;&amp;
+          operatorBuffer.last.type != TokenType.LBRACE) {
+        outputStream.add(operatorBuffer.removeLast());
+      }
+
+      &#47;&#47; Expect next token on stack to be left parenthesis and pop it
+      if (operatorBuffer.isEmpty ||
+          operatorBuffer.removeLast().type != TokenType.LBRACE) {
+        throw FormatException(&#39;Mismatched parenthesis.&#39;);
+      }
+
+      &#47;&#47; If the token at the top of the stack is a function token, pop it onto the output queue.
+      if (operatorBuffer.isNotEmpty &amp;&amp; operatorBuffer.last.type.function) {
+        outputStream.add(operatorBuffer.removeLast());
+      }
+    }
+    prevToken = curToken;
+  }
+
+  &#47;*
+   * When the algorithm reaches the end of the input stream, we add the
+   * tokens in the operatorBuffer to the outputStream. If the operator
+   * on top of the stack is a parenthesis, there are mismatched parenthesis.
+   *&#47;
+  while (operatorBuffer.isNotEmpty) {
+    if (operatorBuffer.last.type == TokenType.LBRACE ||
+        operatorBuffer.last.type == TokenType.RBRACE) {
+      throw FormatException(&#39;Mismatched parenthesis.&#39;);
+    }
+    outputStream.add(operatorBuffer.removeLast());
+  }
+
+  return outputStream;
+}</code></pre>
+</section>
+
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../../index.html">math_expressions</a></li>
+    <li><a href="../../math_expressions/">math_expressions</a></li>
+    <li><a href="../../math_expressions/Lexer-class.html">Lexer</a></li>
+    <li class="self-crumb">shuntingYard method</li>
+</ol>
+
+    <h5>Lexer class</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div><!--/.sidebar-offcanvas-->
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+</div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    math_expressions
+      3.1.0
+  </span>
+  
+</footer>
+
+
+<script src="../../static-assets/highlight.pack.js?v1"></script>
+<script src="../../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

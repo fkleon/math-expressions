@@ -8,17 +8,17 @@ import 'package:math_expressions/math_expressions.dart';
 ///  - Example 3: Custom function definition and use (function bound to expression)
 ///  - Example 4: Generic function definition and use (function bound to Dart handler)
 void main() {
-  _expression_creation_and_evaluation();
-  _expression_simplification_and_differentiation();
-  _custom_function_definition_and_use();
-  _algorithmic_function_definition_and_use();
+  _exampleExpressionCreationAndEvaluation();
+  _exampleExpressionSimplificationAndDifferentiation();
+  _customFunctionDefinitionAndUse();
+  _algorithmicFunctionDefinitionAndUse();
 }
 
 /// Example 1: Expression creation and evaluation
 ///
 /// How to create an expression (a) via the Parser, (b) programmatically,
 /// and how to evaluate an expression given a context.
-void _expression_creation_and_evaluation() {
+void _exampleExpressionCreationAndEvaluation() {
   print('\nExample 1: Expression creation and evaluation\n');
 
   // You can either create an mathematical expression programmatically or parse
@@ -52,7 +52,7 @@ void _expression_creation_and_evaluation() {
 ///
 /// How to simplify an expression, and how to differentiate it with respect
 /// to a given variable.
-void _expression_simplification_and_differentiation() {
+void _exampleExpressionSimplificationAndDifferentiation() {
   print('\nExample 2: Expression simplification and differentiation\n');
 
   // (1) Parse expression:
@@ -77,7 +77,7 @@ void _expression_simplification_and_differentiation() {
 /// Example 3: Custom function definition and use
 ///
 /// How to create an arbitrary custom function expression and evaluate it.
-void _custom_function_definition_and_use() {
+void _customFunctionDefinitionAndUse() {
   print('\nExample 3: Custom function definition and use\n');
 
   // (1) Create and evaluate custom function: DOUBLEUP (R -> R)
@@ -114,7 +114,7 @@ void _custom_function_definition_and_use() {
 /// Example 4: Algorithmic function definition and use
 ///
 /// How to create and parse an algorithmic function that's bound to a Dart handler.
-void _algorithmic_function_definition_and_use() {
+void _algorithmicFunctionDefinitionAndUse() {
   print('\nExample 4: Algorithmic function definition and use\n');
 
   // (1) Create expression via parser by registering a function name
