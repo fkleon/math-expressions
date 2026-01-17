@@ -16,5 +16,5 @@ web/out/
 .dart_tool/
 .vscode/
 
-# Documentation #
-doc/
+# # Documentation #
+# doc/

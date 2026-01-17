@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the VectorEvaluator class from the math_expressions library, for the Dart programming language.">
+  <title>VectorEvaluator class - math_expressions library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../static-assets/styles.css?v1">
+  <link rel="icon" href="../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../index.html">math_expressions</a></li>
+    <li><a href="../math_expressions/">math_expressions.dart</a></li>
+    <li class="self-crumb">VectorEvaluator class</li>
+  </ol>
+  <div class="self-name">VectorEvaluator</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar="math_expressions&#47;math_expressions-library-sidebar.html"
+    data-below-sidebar="math_expressions&#47;VectorEvaluator-class-sidebar.html">
+    <div>
+<h1><span class="kind-class">VectorEvaluator</span> class 
+ 
+</h1></div>
+
+    
+<section class="desc markdown">
+  <p>The vector evaluator can operate on mixed datatypes,
+so is typed less strict. The underlying data types could
+be Vector2, Vector3, Vector4 and double (scalars).</p>
+</section>
+
+
+    <section>
+      <dl class="dl-horizontal">
+        
+  <dt>Inheritance</dt>
+  <dd>
+    <ul class="gt-separated dark clazz-relationships">
+      <li><a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a></li>
+        <li><a href="../math_expressions/NullExpressionVisitor-class.html">NullExpressionVisitor</a></li>
+        <li><a href="../math_expressions/ExpressionEvaluator-class.html">ExpressionEvaluator</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a></span>&gt;</span></li>
+      <li>VectorEvaluator</li>
+    </ul>
+  </dd>
+
+        
+        
+
+
+        
+        
+
+
+      </dl>
+    </section>
+
+    
+  <section class="summary offset-anchor" id="constructors">
+    <h2>Constructors</h2>
+    <dl class="constructor-summary-list">
+        <dt id="VectorEvaluator.new" class="callable">
+          <span class="name"><a href="../math_expressions/VectorEvaluator/VectorEvaluator.html">VectorEvaluator</a></span><span class="signature">([<span class="parameter" id="-param-context"><span class="type-annotation"><a href="../math_expressions/ContextModel-class.html">ContextModel</a>?</span> <span class="parameter-name">context</span></span>])</span>
+        </dt>
+        <dd>
+          Create a new evaluator with the given context.
+        </dd>
+    </dl>
+  </section>
+    
+  <section
+      class="summary offset-anchor inherited"
+      id="instance-properties">
+    <h2>Properties</h2>
+    <dl class="properties">
+        <dt id="context" class="property inherited">
+  <span class="name"><a href="../math_expressions/ExpressionEvaluator/context.html">context</a></span>
+  <span class="signature">&#8594; <a href="../math_expressions/ContextModel-class.html">ContextModel</a></span>
+  
+
+</dt>
+<dd class="inherited">
+  
+  <div class="features"><span class="feature">final</span><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="hashCode" class="property inherited">
+  <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/hashCode.html">hashCode</a></span>
+  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span>
+  
+
+</dt>
+<dd class="inherited">
+  The hash code for this object.
+  <div class="features"><span class="feature">no setter</span><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="runtimeType" class="property inherited">
+  <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/runtimeType.html">runtimeType</a></span>
+  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Type-class.html">Type</a></span>
+  
+
+</dt>
+<dd class="inherited">
+  A representation of the runtime type of the object.
+  <div class="features"><span class="feature">no setter</span><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="type" class="property inherited">
+  <span class="name"><a href="../math_expressions/ExpressionEvaluator/type.html">type</a></span>
+  <span class="signature">&#8594; <a href="../math_expressions/EvaluationType.html">EvaluationType</a></span>
+  
+
+</dt>
+<dd class="inherited">
+  
+  <div class="features"><span class="feature">final</span><span class="feature">inherited</span></div>
+
+</dd>
+
+    </dl>
+  </section>
+
+    
+  <section
+      class="summary offset-anchor"
+      id="instance-methods">
+    <h2>Methods</h2>
+    <dl class="callables">
+        <dt id="evaluate" class="callable inherited">
+  <span class="name"><a href="../math_expressions/ExpressionEvaluator/evaluate.html">evaluate</a></span><span class="signature">(<wbr><span class="parameter" id="evaluate-param-exp"><span class="type-annotation"><a href="../math_expressions/Expression-class.html">Expression</a></span> <span class="parameter-name">exp</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a></span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  Evaluate the given expression.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="noSuchMethod" class="callable inherited">
+  <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/noSuchMethod.html">noSuchMethod</a></span><span class="signature">(<wbr><span class="parameter" id="noSuchMethod-param-invocation"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Invocation-class.html">Invocation</a></span> <span class="parameter-name">invocation</span></span>)
+    <span class="returntype parameter">&#8594; dynamic</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  Invoked when a nonexistent method or property is accessed.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="pop1" class="callable inherited">
+  <span class="name"><a href="../math_expressions/ExpressionEvaluator/pop1.html">pop1</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; (<span class="field"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a></span></span>)</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="pop2" class="callable inherited">
+  <span class="name"><a href="../math_expressions/ExpressionEvaluator/pop2.html">pop2</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; (<span class="field"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a></span>, </span><span class="field"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a></span></span>)</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="popN" class="callable">
+  <span class="name"><a href="../math_expressions/VectorEvaluator/popN.html">popN</a></span><span class="signature">(<wbr><span class="parameter" id="popN-param-count"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span> <span class="parameter-name">count</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/List-class.html">List</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a></span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">override</span></div>
+
+</dd>
+
+        <dt id="push1" class="callable inherited">
+  <span class="name"><a href="../math_expressions/ExpressionEvaluator/push1.html">push1</a></span><span class="signature">(<wbr><span class="parameter" id="push1-param-val"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a></span> <span class="parameter-name">val</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="toString" class="callable inherited">
+  <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/toString.html">toString</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  A string representation of this object.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="visitAbs" class="callable inherited">
+  <span class="name"><a href="../math_expressions/ExpressionEvaluator/visitAbs.html">visitAbs</a></span><span class="signature">(<wbr><span class="parameter" id="visitAbs-param-func"><span class="type-annotation"><a href="../math_expressions/Abs-class.html">Abs</a></span> <span class="parameter-name">func</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="visitAcos" class="callable inherited">
+  <span class="name"><a href="../math_expressions/ExpressionEvaluator/visitAcos.html">visitAcos</a></span><span class="signature">(<wbr><span class="parameter" id="visitAcos-param-func"><span class="type-annotation"><a href="../math_expressions/Acos-class.html">Acos</a></span> <span class="parameter-name">func</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="visitAlgorithmicFunction" class="callable inherited">
+  <span class="name"><a href="../math_expressions/ExpressionEvaluator/visitAlgorithmicFunction.html">visitAlgorithmicFunction</a></span><span class="signature">(<wbr><span class="parameter" id="visitAlgorithmicFunction-param-func"><span class="type-annotation"><a href="../math_expressions/AlgorithmicFunction-class.html">AlgorithmicFunction</a></span> <span class="parameter-name">func</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="visitAsin" class="callable inherited">
+  <span class="name"><a href="../math_expressions/ExpressionEvaluator/visitAsin.html">visitAsin</a></span><span class="signature">(<wbr><span class="parameter" id="visitAsin-param-func"><span class="type-annotation"><a href="../math_expressions/Asin-class.html">Asin</a></span> <span class="parameter-name">func</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="visitAtan" class="callable inherited">
+  <span class="name"><a href="../math_expressions/ExpressionEvaluator/visitAtan.html">visitAtan</a></span><span class="signature">(<wbr><span class="parameter" id="visitAtan-param-func"><span class="type-annotation"><a href="../math_expressions/Atan-class.html">Atan</a></span> <span class="parameter-name">func</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="visitBinaryOperator" class="callable inherited">
+  <span class="name"><a href="../math_expressions/NullExpressionVisitor/visitBinaryOperator.html">visitBinaryOperator</a></span><span class="signature">(<wbr><span class="parameter" id="visitBinaryOperator-param-op"><span class="type-annotation"><a href="../math_expressions/BinaryOperator-class.html">BinaryOperator</a></span> <span class="parameter-name">op</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="visitBoundVariable" class="callable inherited">
+  <span class="name"><a href="../math_expressions/NullExpressionVisitor/visitBoundVariable.html">visitBoundVariable</a></span><span class="signature">(<wbr><span class="parameter" id="visitBoundVariable-param-literal"><span class="type-annotation"><a href="../math_expressions/BoundVariable-class.html">BoundVariable</a></span> <span class="parameter-name">literal</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="visitCeil" class="callable inherited">
+  <span class="name"><a href="../math_expressions/ExpressionEvaluator/visitCeil.html">visitCeil</a></span><span class="signature">(<wbr><span class="parameter" id="visitCeil-param-func"><span class="type-annotation"><a href="../math_expressions/Ceil-class.html">Ceil</a></span> <span class="parameter-name">func</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="visitCompositeFunction" class="callable">
+  <span class="name"><a href="../math_expressions/VectorEvaluator/visitCompositeFunction.html">visitCompositeFunction</a></span><span class="signature">(<wbr><span class="parameter" id="visitCompositeFunction-param-func"><span class="type-annotation"><a href="../math_expressions/CompositeFunction-class.html">CompositeFunction</a></span> <span class="parameter-name">func</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">override</span></div>
+
+</dd>
+
+        <dt id="visitCos" class="callable inherited">
+  <span class="name"><a href="../math_expressions/ExpressionEvaluator/visitCos.html">visitCos</a></span><span class="signature">(<wbr><span class="parameter" id="visitCos-param-func"><span class="type-annotation"><a href="../math_expressions/Cos-class.html">Cos</a></span> <span class="parameter-name">func</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="visitCustomFunction" class="callable inherited">
+  <span class="name"><a href="../math_expressions/ExpressionEvaluator/visitCustomFunction.html">visitCustomFunction</a></span><span class="signature">(<wbr><span class="parameter" id="visitCustomFunction-param-func"><span class="type-annotation"><a href="../math_expressions/CustomFunction-class.html">CustomFunction</a></span> <span class="parameter-name">func</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="visitDefaultFunction" class="callable inherited">
+  <span class="name"><a href="../math_expressions/ExpressionEvaluator/visitDefaultFunction.html">visitDefaultFunction</a></span><span class="signature">(<wbr><span class="parameter" id="visitDefaultFunction-param-func"><span class="type-annotation"><a href="../math_expressions/DefaultFunction-class.html">DefaultFunction</a></span> <span class="parameter-name">func</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="visitDivide" class="callable">
+  <span class="name"><a href="../math_expressions/VectorEvaluator/visitDivide.html">visitDivide</a></span><span class="signature">(<wbr><span class="parameter" id="visitDivide-param-op"><span class="type-annotation"><a href="../math_expressions/Divide-class.html">Divide</a></span> <span class="parameter-name">op</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">override</span></div>
+
+</dd>
+
+        <dt id="visitEnter" class="callable">
+  <span class="name"><a href="../math_expressions/VectorEvaluator/visitEnter.html">visitEnter</a></span><span class="signature">(<wbr><span class="parameter" id="visitEnter-param-exp"><span class="type-annotation"><a href="../math_expressions/Expression-class.html">Expression</a></span> <span class="parameter-name">exp</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">override</span></div>
+
+</dd>
+
+        <dt id="visitExponential" class="callable inherited">
+  <span class="name"><a href="../math_expressions/ExpressionEvaluator/visitExponential.html">visitExponential</a></span><span class="signature">(<wbr><span class="parameter" id="visitExponential-param-func"><span class="type-annotation"><a href="../math_expressions/Exponential-class.html">Exponential</a></span> <span class="parameter-name">func</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="visitFactorial" class="callable inherited">
+  <span class="name"><a href="../math_expressions/ExpressionEvaluator/visitFactorial.html">visitFactorial</a></span><span class="signature">(<wbr><span class="parameter" id="visitFactorial-param-func"><span class="type-annotation"><a href="../math_expressions/Factorial-class.html">Factorial</a></span> <span class="parameter-name">func</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="visitFloor" class="callable inherited">
+  <span class="name"><a href="../math_expressions/ExpressionEvaluator/visitFloor.html">visitFloor</a></span><span class="signature">(<wbr><span class="parameter" id="visitFloor-param-func"><span class="type-annotation"><a href="../math_expressions/Floor-class.html">Floor</a></span> <span class="parameter-name">func</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="visitFunction" class="callable inherited">
+  <span class="name"><a href="../math_expressions/ExpressionEvaluator/visitFunction.html">visitFunction</a></span><span class="signature">(<wbr><span class="parameter" id="visitFunction-param-func"><span class="type-annotation"><a href="../math_expressions/MathFunction-class.html">MathFunction</a></span> <span class="parameter-name">func</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="visitInterval" class="callable inherited">
+  <span class="name"><a href="../math_expressions/ExpressionEvaluator/visitInterval.html">visitInterval</a></span><span class="signature">(<wbr><span class="parameter" id="visitInterval-param-literal"><span class="type-annotation"><a href="../math_expressions/IntervalLiteral-class.html">IntervalLiteral</a></span> <span class="parameter-name">literal</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="visitLiteral" class="callable inherited">
+  <span class="name"><a href="../math_expressions/NullExpressionVisitor/visitLiteral.html">visitLiteral</a></span><span class="signature">(<wbr><span class="parameter" id="visitLiteral-param-literal"><span class="type-annotation"><a href="../math_expressions/Literal-class.html">Literal</a></span> <span class="parameter-name">literal</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="visitLn" class="callable inherited">
+  <span class="name"><a href="../math_expressions/ExpressionEvaluator/visitLn.html">visitLn</a></span><span class="signature">(<wbr><span class="parameter" id="visitLn-param-func"><span class="type-annotation"><a href="../math_expressions/Ln-class.html">Ln</a></span> <span class="parameter-name">func</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="visitLog" class="callable inherited">
+  <span class="name"><a href="../math_expressions/ExpressionEvaluator/visitLog.html">visitLog</a></span><span class="signature">(<wbr><span class="parameter" id="visitLog-param-func"><span class="type-annotation"><a href="../math_expressions/Log-class.html">Log</a></span> <span class="parameter-name">func</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="visitMinus" class="callable">
+  <span class="name"><a href="../math_expressions/VectorEvaluator/visitMinus.html">visitMinus</a></span><span class="signature">(<wbr><span class="parameter" id="visitMinus-param-op"><span class="type-annotation"><a href="../math_expressions/Minus-class.html">Minus</a></span> <span class="parameter-name">op</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">override</span></div>
+
+</dd>
+
+        <dt id="visitModulo" class="callable inherited">
+  <span class="name"><a href="../math_expressions/ExpressionEvaluator/visitModulo.html">visitModulo</a></span><span class="signature">(<wbr><span class="parameter" id="visitModulo-param-op"><span class="type-annotation"><a href="../math_expressions/Modulo-class.html">Modulo</a></span> <span class="parameter-name">op</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="visitNumber" class="callable">
+  <span class="name"><a href="../math_expressions/VectorEvaluator/visitNumber.html">visitNumber</a></span><span class="signature">(<wbr><span class="parameter" id="visitNumber-param-literal"><span class="type-annotation"><a href="../math_expressions/Number-class.html">Number</a></span> <span class="parameter-name">literal</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">override</span></div>
+
+</dd>
+
+        <dt id="visitPlus" class="callable">
+  <span class="name"><a href="../math_expressions/VectorEvaluator/visitPlus.html">visitPlus</a></span><span class="signature">(<wbr><span class="parameter" id="visitPlus-param-op"><span class="type-annotation"><a href="../math_expressions/Plus-class.html">Plus</a></span> <span class="parameter-name">op</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">override</span></div>
+
+</dd>
+
+        <dt id="visitPower" class="callable inherited">
+  <span class="name"><a href="../math_expressions/ExpressionEvaluator/visitPower.html">visitPower</a></span><span class="signature">(<wbr><span class="parameter" id="visitPower-param-op"><span class="type-annotation"><a href="../math_expressions/Power-class.html">Power</a></span> <span class="parameter-name">op</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="visitRoot" class="callable inherited">
+  <span class="name"><a href="../math_expressions/ExpressionEvaluator/visitRoot.html">visitRoot</a></span><span class="signature">(<wbr><span class="parameter" id="visitRoot-param-func"><span class="type-annotation"><a href="../math_expressions/Root-class.html">Root</a></span> <span class="parameter-name">func</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="visitSgn" class="callable inherited">
+  <span class="name"><a href="../math_expressions/ExpressionEvaluator/visitSgn.html">visitSgn</a></span><span class="signature">(<wbr><span class="parameter" id="visitSgn-param-func"><span class="type-annotation"><a href="../math_expressions/Sgn-class.html">Sgn</a></span> <span class="parameter-name">func</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="visitSin" class="callable inherited">
+  <span class="name"><a href="../math_expressions/ExpressionEvaluator/visitSin.html">visitSin</a></span><span class="signature">(<wbr><span class="parameter" id="visitSin-param-func"><span class="type-annotation"><a href="../math_expressions/Sin-class.html">Sin</a></span> <span class="parameter-name">func</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="visitSqrt" class="callable inherited">
+  <span class="name"><a href="../math_expressions/ExpressionEvaluator/visitSqrt.html">visitSqrt</a></span><span class="signature">(<wbr><span class="parameter" id="visitSqrt-param-func"><span class="type-annotation"><a href="../math_expressions/Sqrt-class.html">Sqrt</a></span> <span class="parameter-name">func</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="visitTan" class="callable inherited">
+  <span class="name"><a href="../math_expressions/ExpressionEvaluator/visitTan.html">visitTan</a></span><span class="signature">(<wbr><span class="parameter" id="visitTan-param-func"><span class="type-annotation"><a href="../math_expressions/Tan-class.html">Tan</a></span> <span class="parameter-name">func</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="visitTimes" class="callable">
+  <span class="name"><a href="../math_expressions/VectorEvaluator/visitTimes.html">visitTimes</a></span><span class="signature">(<wbr><span class="parameter" id="visitTimes-param-op"><span class="type-annotation"><a href="../math_expressions/Times-class.html">Times</a></span> <span class="parameter-name">op</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">override</span></div>
+
+</dd>
+
+        <dt id="visitUnaryMinus" class="callable">
+  <span class="name"><a href="../math_expressions/VectorEvaluator/visitUnaryMinus.html">visitUnaryMinus</a></span><span class="signature">(<wbr><span class="parameter" id="visitUnaryMinus-param-op"><span class="type-annotation"><a href="../math_expressions/UnaryMinus-class.html">UnaryMinus</a></span> <span class="parameter-name">op</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">override</span></div>
+
+</dd>
+
+        <dt id="visitUnaryOperator" class="callable inherited">
+  <span class="name"><a href="../math_expressions/NullExpressionVisitor/visitUnaryOperator.html">visitUnaryOperator</a></span><span class="signature">(<wbr><span class="parameter" id="visitUnaryOperator-param-op"><span class="type-annotation"><a href="../math_expressions/UnaryOperator-class.html">UnaryOperator</a></span> <span class="parameter-name">op</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="visitUnaryPlus" class="callable">
+  <span class="name"><a href="../math_expressions/VectorEvaluator/visitUnaryPlus.html">visitUnaryPlus</a></span><span class="signature">(<wbr><span class="parameter" id="visitUnaryPlus-param-op"><span class="type-annotation"><a href="../math_expressions/UnaryPlus-class.html">UnaryPlus</a></span> <span class="parameter-name">op</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">override</span></div>
+
+</dd>
+
+        <dt id="visitVariable" class="callable inherited">
+  <span class="name"><a href="../math_expressions/ExpressionEvaluator/visitVariable.html">visitVariable</a></span><span class="signature">(<wbr><span class="parameter" id="visitVariable-param-literal"><span class="type-annotation"><a href="../math_expressions/Variable-class.html">Variable</a></span> <span class="parameter-name">literal</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="visitVector" class="callable">
+  <span class="name"><a href="../math_expressions/VectorEvaluator/visitVector.html">visitVector</a></span><span class="signature">(<wbr><span class="parameter" id="visitVector-param-literal"><span class="type-annotation"><a href="../math_expressions/Vector-class.html">Vector</a></span> <span class="parameter-name">literal</span></span>)
+    <span class="returntype parameter">&#8594; void</span>
+  </span>
+  
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">override</span></div>
+
+</dd>
+
+    </dl>
+  </section>
+    
+  <section
+      class="summary offset-anchor inherited"
+      id="operators">
+    <h2>Operators</h2>
+    <dl class="callables">
+        <dt id="operator ==" class="callable inherited">
+  <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/operator_equals.html">operator ==</a></span><span class="signature">(<wbr><span class="parameter" id="==-param-other"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  The equality operator.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+    </dl>
+  </section>
+    
+    
+    
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../index.html">math_expressions</a></li>
+    <li><a href="../math_expressions/">math_expressions</a></li>
+    <li class="self-crumb">VectorEvaluator class</li>
+</ol>
+
+    <h5>math_expressions library</h5>
+    <div id="dartdoc-sidebar-left-content"></div>
+  </div>
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+</main>
+<footer>
+  <span class="no-break">
+    math_expressions
+      3.1.0
+  </span>
+  
+</footer>
+
+
+<script src="../static-assets/highlight.pack.js?v1"></script>
+<script src="../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

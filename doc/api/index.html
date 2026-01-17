@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="math_expressions API docs, for the Dart programming language.">
+  <title>math_expressions - Dart API docs</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="static-assets/github.css?v1">
+  <link rel="stylesheet" href="static-assets/styles.css?v1">
+  <link rel="icon" href="static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="https://github.com/fkleon/math-expressions">math_expressions package</a></li>
+  </ol>
+  <div class="self-name">math_expressions</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+  <div id="dartdoc-main-content" class="main-content">
+      
+<section class="desc markdown">
+  <h1 id="math_expressions">math_expressions</h1>
+<p>A library for parsing and evaluating mathematical expressions.</p>
+<ul>
+<li>Performs evaluations in real, vector, and <a href="https://interval.louisiana.edu/reliable-computing-journal/volume-15/no-1/reliable-computing-15-pp-36-42.pdf" title="Deﬁnition of the Arithmetic Operations and Comparison Relations for an Interval Arithmetic Standard, PDF">interval</a> contexts.</li>
+<li>Supports expression simplification and differentiation.</li>
+</ul>
+<p>math_expressions is inspired by <a href="https://www3.math.tu-berlin.de/geometrie/jtem/mathExpr/" title="The mathExpr library provides classes to parse and evaluate mathematical expressions.">mathExpr</a> for Java and distributed under the
+<a href="LICENSE" title="MIT LICENSE">MIT license</a>.</p>
+<h2 id="features">Features</h2>
+<ul>
+<li>Evaluation of expressions in various modes: Real, Vector and <a href="https://interval.louisiana.edu/reliable-computing-journal/volume-15/no-1/reliable-computing-15-pp-36-42.pdf" title="Deﬁnition of the Arithmetic Operations and Comparison Relations for an Interval Arithmetic Standard, PDF">Interval</a>.</li>
+<li>Parsing, simplification and differentiation of mathematical expressions.</li>
+<li>Supporting most <a href="https://pub.dartlang.org/documentation/math_expressions/latest/math_expressions/DefaultFunction-class.html">basic math functions</a> out of the box.</li>
+<li>Extensible through custom function definitions in code.</li>
+<li>Well <a href="https://pub.dartlang.org/documentation/math_expressions/latest/">documented</a> and tested.</li>
+</ul>
+<p>This package contains a very simple <a href="bin/interpreter.dart">command-line interpreter</a>
+for real numbers:</p>
+<pre class="language-dart"><code>dart pub run math_expressions:interpreter
+</code></pre>
+<h3 id="whats-not-working-yet">What's not working yet?</h3>
+<ul>
+<li>Some evaluations in vector and interval space (especially functions).</li>
+<li>N-dimensional vectors. Curently no more than four dimensions are supported.</li>
+<li>The parser only works for real numbers.</li>
+<li>Complex numbers.</li>
+</ul>
+<p>Suggestions and pull requests are always welcome!</p>
+<h2 id="usage">Usage</h2>
+<p>Below are two basic examples of how to use this library. There also is some <a href="example/main.dart">additional example code</a> available.</p>
+<h3 id="1-expression-creation-and-evaluation">1. Expression creation and evaluation</h3>
+<p>This example shows how to evaluate</p>
+<p>$\frac{(x^2+\cos y)}{3}$</p>
+<p>for $x=2, y=\pi$</p>
+<h4 id="build-the-expression">Build the expression</h4>
+<p>You can either create an mathematical expression programmatically or parse a string.</p>
+<ul>
+<li>Create the expression programmatically:</li>
+</ul>
+<pre class="language-dart"><code class="language-dart">  var x = Variable('x'), y = Variable('y');
+  var xSquare = Power(x, 2);
+  var yCos = Cos(y);
+  var three = Number(3.0);
+  Expression exp = (xSquare + yCos) / three;
+</code></pre>
+<ul>
+<li>Create the expression via the parser:</li>
+</ul>
+<pre class="language-dart"><code class="language-dart">  ExpressionParser p = GrammarParser();
+  Expression exp = p.parse("(x^2 + cos(y)) / 3");
+</code></pre>
+<h4 id="evaluate-the-expression">Evaluate the expression</h4>
+<ul>
+<li>Bind variables and evaluate the expression as real number:</li>
+</ul>
+<pre class="language-dart"><code class="language-dart">  // Bind variables:
+  var context = ContextModel()
+    ..bindVariableName('x', Number(2.0));
+    ..bindVariableName('y', Number(math.pi));
+
+  // Evaluate expression:
+  var evaluator = RealEvaluator(context);
+  num eval = evaluator.evaluate(exp);
+
+  print(eval) // = 1.0
+</code></pre>
+<h3 id="2-expression-simplification-and-differentiation">2. Expression simplification and differentiation</h3>
+<p>This example shows how to simplify and differentiate</p>
+<p>$x \cdot 1 - (-5)$</p>
+<ul>
+<li>Expressions can be simplified and differentiated with respect to a given variable:</li>
+</ul>
+<pre class="language-dart"><code class="language-dart">  Expression exp = p.parse("x*1 - (-5)");
+
+  print(exp);            // = ((x * 1.0) - -(5.0))
+  print(exp.simplify()); // = (x + 5.0)
+
+  Expression expDerived = exp.derive('x');
+
+  print(expDerived);            // = (((x * 0.0) + (1.0 * 1.0)) - -(0.0))
+  print(expDerived.simplify()); // = 1.0
+</code></pre>
+<h2 id="alternatives">Alternatives</h2>
+<p>Here are some other Dart libraries that implement similar functionality to
+math_expression: parsing and evaluating mathematical expressions.</p>
+<ul>
+<li><a href="https://pub.dartlang.org/packages/expressions" title="A library to parse and evaluate simple expressions.">expressions</a>: an elegant and small library to parse and evaluate simple
+expressions.</li>
+<li><a href="https://pub.dartlang.org/packages/function_tree" title="A library for parsing and evaluating numerical functions built from strings.">function_tree</a>: a library for parsing, evaluating and plotting single- and
+multi-variables numerical functions.</li>
+</ul>
+<p>To the author's knowledge math_expressions is currently the only library
+supporting interval arithmetics.</p>
+</section>
+
+
+      <section class="summary">
+          <h2>Libraries</h2>
+        <dl>
+          <dt id="math_expressions">
+  <span class="name"><a href="math_expressions/">math_expressions</a></span> 
+
+</dt>
+<dd>A math library for parsing and evaluating expressions in real, interval and
+vector contexts. It also supports simplification and differentiation of
+expressions.
+</dd>
+
+        </dl>
+      </section>
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="https://github.com/fkleon/math-expressions">math_expressions package</a></li>
+</ol>
+
+    <h5 class="hidden-xs"><span class="package-name">math_expressions</span> <span class="package-kind">package</span></h5>
+    <ol>
+      <li class="section-title">Libraries</li>
+      <li><a href="math_expressions/">math_expressions</a></li>
+</ol>
+
+  </div>
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+  </div>
+</main>
+<footer>
+  <span class="no-break">
+    math_expressions
+      3.1.0
+  </span>
+  
+</footer>
+
+
+<script src="static-assets/highlight.pack.js?v1"></script>
+<script src="static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+

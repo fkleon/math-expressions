@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="math_expressions library API docs, for the Dart programming language.">
+  <title>math_expressions library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../static-assets/styles.css?v1">
+  <link rel="icon" href="../static-assets/favicon.png?v1">
+  
+</head>
+
+<body data-base-href="../" data-using-base-href="false" class="light-theme">
+<div id="overlay-under-drawer"></div>
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../index.html">math_expressions</a></li>
+    <li class="self-crumb">math_expressions.dart</li>
+  </ol>
+  <div class="self-name">math_expressions</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <button class="toggle" id="theme-button" title="Toggle between light and dark mode" aria-label="Light and dark mode toggle">
+    <span id="dark-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      dark_mode
+    </span>
+    <span id="light-theme-button" class="material-symbols-outlined" aria-hidden="true">
+      light_mode
+    </span>
+  </button>
+</header>
+<main>
+<div
+    id="dartdoc-main-content"
+    class="main-content"
+    data-above-sidebar=""
+    data-below-sidebar="math_expressions&#47;math_expressions-library-sidebar.html">
+  
+    <div>
+      
+
+      <h1>
+        <span class="kind-library">math_expressions</span>
+        library 
+ 
+
+      </h1>
+    </div>
+
+    
+<section class="desc markdown">
+  <p>A math library for parsing and evaluating expressions in real, interval and
+vector contexts. It also supports simplification and differentiation of
+expressions.</p>
+<p>The libary supports the three basic data types <a href="../math_expressions/Number-class.html">Number</a>, <a href="../math_expressions/Interval-class.html">Interval</a> and
+<a href="../math_expressions/Vector-class.html">Vector</a>. It includes the <a href="../math_expressions/GrammarParser-class.html">GrammarParser</a> to create <a href="../math_expressions/Expression-class.html">Expression</a>s from
+string inputs.</p>
+<p>For backwards-compatibility the legacy <a href="../math_expressions/ShuntingYardParser-class.html">ShuntingYardParser</a> is also
+included. Users are encouraged to switch to <a href="../math_expressions/GrammarParser-class.html">GrammarParser</a> as it will
+not receive new features and bug fixes.</p>
+</section>
+
+
+    <section class="summary offset-anchor" id="classes">
+      <h2>Classes</h2>
+      <dl>
+          <dt id="Abs">
+  <span class="name "><a href="../math_expressions/Abs-class.html">Abs</a></span> 
+
+</dt>
+<dd>
+  The absolute value function.
+</dd>
+
+          <dt id="Acos">
+  <span class="name "><a href="../math_expressions/Acos-class.html">Acos</a></span> 
+
+</dt>
+<dd>
+  The arcus cosine function.
+</dd>
+
+          <dt id="AlgorithmicFunction">
+  <span class="name "><a href="../math_expressions/AlgorithmicFunction-class.html">AlgorithmicFunction</a></span> 
+
+</dt>
+<dd>
+  
+</dd>
+
+          <dt id="Asin">
+  <span class="name "><a href="../math_expressions/Asin-class.html">Asin</a></span> 
+
+</dt>
+<dd>
+  The arcus sine function.
+</dd>
+
+          <dt id="Atan">
+  <span class="name "><a href="../math_expressions/Atan-class.html">Atan</a></span> 
+
+</dt>
+<dd>
+  The arcus tangens function.
+</dd>
+
+          <dt id="BinaryOperator">
+  <span class="name "><a href="../math_expressions/BinaryOperator-class.html">BinaryOperator</a></span> 
+
+</dt>
+<dd>
+  A binary operator takes two expressions and performs an operation on them.
+</dd>
+
+          <dt id="BoundVariable">
+  <span class="name "><a href="../math_expressions/BoundVariable-class.html">BoundVariable</a></span> 
+
+</dt>
+<dd>
+  A bound variable is an anonymous variable, e.g. a variable without name,
+which is bound to an expression.
+</dd>
+
+          <dt id="Ceil">
+  <span class="name "><a href="../math_expressions/Ceil-class.html">Ceil</a></span> 
+
+</dt>
+<dd>
+  The ceil function.
+</dd>
+
+          <dt id="CompositeFunction">
+  <span class="name "><a href="../math_expressions/CompositeFunction-class.html">CompositeFunction</a></span> 
+
+</dt>
+<dd>
+  A composition of two given <a href="../math_expressions/MathFunction-class.html">MathFunction</a>s.
+</dd>
+
+          <dt id="ContextModel">
+  <span class="name "><a href="../math_expressions/ContextModel-class.html">ContextModel</a></span> 
+
+</dt>
+<dd>
+  The context model keeps track of all known variables and functions.
+</dd>
+
+          <dt id="Cos">
+  <span class="name "><a href="../math_expressions/Cos-class.html">Cos</a></span> 
+
+</dt>
+<dd>
+  The cosine function. Expects input in <code>radians</code>.
+</dd>
+
+          <dt id="CustomFunction">
+  <span class="name "><a href="../math_expressions/CustomFunction-class.html">CustomFunction</a></span> 
+
+</dt>
+<dd>
+  A user-defined <a href="../math_expressions/MathFunction-class.html">MathFunction</a> with an arbitrary expression.
+</dd>
+
+          <dt id="DefaultFunction">
+  <span class="name "><a href="../math_expressions/DefaultFunction-class.html">DefaultFunction</a></span> 
+
+</dt>
+<dd>
+  A default function is predefined in this library.
+It contains no expression because the appropriate evaluation method usually
+uses native Dart math code.
+</dd>
+
+          <dt id="Divide">
+  <span class="name "><a href="../math_expressions/Divide-class.html">Divide</a></span> 
+
+</dt>
+<dd>
+  The divide operator performs a division.
+</dd>
+
+          <dt id="Exponential">
+  <span class="name "><a href="../math_expressions/Exponential-class.html">Exponential</a></span> 
+
+</dt>
+<dd>
+  The exponential function.
+</dd>
+
+          <dt id="Expression">
+  <span class="name "><a href="../math_expressions/Expression-class.html">Expression</a></span> 
+
+</dt>
+<dd>
+  Any Expression supports basic mathematical operations like
+addition, subtraction, multiplication, division, power and negate.
+</dd>
+
+          <dt id="ExpressionEvaluator">
+  <span class="name "><a href="../math_expressions/ExpressionEvaluator-class.html">ExpressionEvaluator</a><span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span></span> 
+
+</dt>
+<dd>
+  
+</dd>
+
+          <dt id="ExpressionParser">
+  <span class="name "><a href="../math_expressions/ExpressionParser-class.html">ExpressionParser</a></span> 
+
+</dt>
+<dd>
+  The Parser creates a mathematical <a href="../math_expressions/Expression-class.html">Expression</a> from a given input string.
+</dd>
+
+          <dt id="ExpressionVisitor">
+  <span class="name "><a href="../math_expressions/ExpressionVisitor-class.html">ExpressionVisitor</a><span class="signature">&lt;<wbr><span class="type-parameter">T</span>&gt;</span></span> 
+
+</dt>
+<dd>
+  The visitor interface for the abstract syntax tree (AST)
+of an <a href="../math_expressions/Expression-class.html">Expression</a>.
+</dd>
+
+          <dt id="Factorial">
+  <span class="name "><a href="../math_expressions/Factorial-class.html">Factorial</a></span> 
+
+</dt>
+<dd>
+  simple factorial function
+might be expanded to the <a href="https://en.wikipedia.org/wiki/Gamma_function">Gamma function</a>
+to allow negative and complex numbers and deriving
+</dd>
+
+          <dt id="Floor">
+  <span class="name "><a href="../math_expressions/Floor-class.html">Floor</a></span> 
+
+</dt>
+<dd>
+  The floor function.
+</dd>
+
+          <dt id="GrammarParser">
+  <span class="name "><a href="../math_expressions/GrammarParser-class.html">GrammarParser</a></span> 
+
+</dt>
+<dd>
+  This parser uses a grammar-based approach to parse the input and
+build the expression.
+</dd>
+
+          <dt id="Interval">
+  <span class="name "><a href="../math_expressions/Interval-class.html">Interval</a></span> 
+
+</dt>
+<dd>
+  An <a href="../math_expressions/Interval-class.html">Interval</a> is defined by its minimum and maximum values, where
+<em>min &lt;= max</em>.
+</dd>
+
+          <dt id="IntervalEvaluator">
+  <span class="name "><a href="../math_expressions/IntervalEvaluator-class.html">IntervalEvaluator</a></span> 
+
+</dt>
+<dd>
+  
+</dd>
+
+          <dt id="IntervalLiteral">
+  <span class="name "><a href="../math_expressions/IntervalLiteral-class.html">IntervalLiteral</a></span> 
+
+</dt>
+<dd>
+  An interval literal.
+</dd>
+
+          <dt id="Lexer">
+  <span class="name "><a href="../math_expressions/Lexer-class.html">Lexer</a></span> 
+
+</dt>
+<dd>
+  The lexer creates tokens (see <a href="../math_expressions/TokenType-class.html">TokenType</a> and <a href="../math_expressions/Token-class.html">Token</a>) from an input string.
+The input string is expected to be in
+<a href="https://en.wikipedia.org/wiki/Infix_notation">infix notation form</a>.
+The lexer can convert an infix stream into a
+<a href="https://en.wikipedia.org/wiki/Reverse_Polish_notation">postfix stream</a>
+(Reverse Polish Notation) for further processing by a <a href="../math_expressions/ShuntingYardParser-class.html">ShuntingYardParser</a>.
+</dd>
+
+          <dt id="Literal">
+  <span class="name "><a href="../math_expressions/Literal-class.html">Literal</a></span> 
+
+</dt>
+<dd>
+  A literal can be a number, a constant or a variable.
+</dd>
+
+          <dt id="Ln">
+  <span class="name "><a href="../math_expressions/Ln-class.html">Ln</a></span> 
+
+</dt>
+<dd>
+  The natural logarithm (log based e).
+</dd>
+
+          <dt id="Log">
+  <span class="name "><a href="../math_expressions/Log-class.html">Log</a></span> 
+
+</dt>
+<dd>
+  The logarithm function.
+</dd>
+
+          <dt id="MathFunction">
+  <span class="name "><a href="../math_expressions/MathFunction-class.html">MathFunction</a></span> 
+
+</dt>
+<dd>
+  A function with an arbitrary number of arguments.
+</dd>
+
+          <dt id="Minus">
+  <span class="name "><a href="../math_expressions/Minus-class.html">Minus</a></span> 
+
+</dt>
+<dd>
+  The minus operator performs a subtraction.
+</dd>
+
+          <dt id="Modulo">
+  <span class="name "><a href="../math_expressions/Modulo-class.html">Modulo</a></span> 
+
+</dt>
+<dd>
+  The modulo operator performs a Euclidean modulo operation, as Dart performs
+it. That is, a % b = a - floor(a / |b|) |b|. For positive integers, this is a
+remainder.
+</dd>
+
+          <dt id="NullExpressionVisitor">
+  <span class="name "><a href="../math_expressions/NullExpressionVisitor-class.html">NullExpressionVisitor</a></span> 
+
+</dt>
+<dd>
+  Default ("null") implementation of the expression visitor.
+</dd>
+
+          <dt id="Number">
+  <span class="name "><a href="../math_expressions/Number-class.html">Number</a></span> 
+
+</dt>
+<dd>
+  A number is a constant number literal.
+</dd>
+
+          <dt id="ParserOptions">
+  <span class="name "><a href="../math_expressions/ParserOptions-class.html">ParserOptions</a></span> 
+
+</dt>
+<dd>
+  <a href="../math_expressions/ParserOptions-class.html">ParserOptions</a> can be used to customise the behaviour of an
+<a href="../math_expressions/ExpressionParser-class.html">ExpressionParser</a>.
+</dd>
+
+          <dt id="Plus">
+  <span class="name "><a href="../math_expressions/Plus-class.html">Plus</a></span> 
+
+</dt>
+<dd>
+  The plus operator performs an addition.
+</dd>
+
+          <dt id="Point3">
+  <span class="name "><a href="../math_expressions/Point3-class.html">Point3</a></span> 
+
+</dt>
+<dd>
+  A point in 3-dimensional space, which is a Vector3.
+This implementation supplies common mathematical operations on points.
+</dd>
+
+          <dt id="Power">
+  <span class="name "><a href="../math_expressions/Power-class.html">Power</a></span> 
+
+</dt>
+<dd>
+  The power operator.
+</dd>
+
+          <dt id="RealEvaluator">
+  <span class="name "><a href="../math_expressions/RealEvaluator-class.html">RealEvaluator</a></span> 
+
+</dt>
+<dd>
+  An evaluator for real numbers as per <a href="../math_expressions/EvaluationType.html">EvaluationType.REAL</a>.
+</dd>
+
+          <dt id="Root">
+  <span class="name "><a href="../math_expressions/Root-class.html">Root</a></span> 
+
+</dt>
+<dd>
+  The n-th root function. n needs to be a natural number.
+</dd>
+
+          <dt id="Sgn">
+  <span class="name "><a href="../math_expressions/Sgn-class.html">Sgn</a></span> 
+
+</dt>
+<dd>
+  The sign function.
+</dd>
+
+          <dt id="ShuntingYardParser">
+  <span class="name "><a href="../math_expressions/ShuntingYardParser-class.html">ShuntingYardParser</a></span> 
+
+</dt>
+<dd>
+  The ShuntingYardParser uses a <a href="../math_expressions/Lexer-class.html">Lexer</a> to tokenise the input into a RPN
+token stream, and then builds the expression using the Shunting-yard
+algorithm.
+</dd>
+
+          <dt id="Sin">
+  <span class="name "><a href="../math_expressions/Sin-class.html">Sin</a></span> 
+
+</dt>
+<dd>
+  The sine function. Expects input in <code>radians</code>.
+</dd>
+
+          <dt id="Sqrt">
+  <span class="name "><a href="../math_expressions/Sqrt-class.html">Sqrt</a></span> 
+
+</dt>
+<dd>
+  The square root function. A specialisation of <a href="../math_expressions/Root-class.html">Root</a>.
+</dd>
+
+          <dt id="Stack">
+  <span class="name "><a href="../math_expressions/Stack-class.html">Stack</a><span class="signature">&lt;<wbr><span class="type-parameter">E</span>&gt;</span></span> 
+
+</dt>
+<dd>
+  Implementation of a stack interface on top of a list.
+</dd>
+
+          <dt id="Tan">
+  <span class="name "><a href="../math_expressions/Tan-class.html">Tan</a></span> 
+
+</dt>
+<dd>
+  The tangens function. Expects input in <code>radians</code>.
+</dd>
+
+          <dt id="Times">
+  <span class="name "><a href="../math_expressions/Times-class.html">Times</a></span> 
+
+</dt>
+<dd>
+  The times operator performs a multiplication.
+</dd>
+
+          <dt id="Token">
+  <span class="name "><a href="../math_expressions/Token-class.html">Token</a></span> 
+
+</dt>
+<dd>
+  A Token consists of text and has a <a href="../math_expressions/TokenType-class.html">TokenType</a>.
+</dd>
+
+          <dt id="TokenType">
+  <span class="name "><a href="../math_expressions/TokenType-class.html">TokenType</a></span> 
+
+</dt>
+<dd>
+  A token type. Access token types via the static fields.
+</dd>
+
+          <dt id="UnaryMinus">
+  <span class="name "><a href="../math_expressions/UnaryMinus-class.html">UnaryMinus</a></span> 
+
+</dt>
+<dd>
+  The unary minus negates its argument.
+</dd>
+
+          <dt id="UnaryOperator">
+  <span class="name "><a href="../math_expressions/UnaryOperator-class.html">UnaryOperator</a></span> 
+
+</dt>
+<dd>
+  A unary operator takes one argument and performs an operation on it.
+</dd>
+
+          <dt id="UnaryPlus">
+  <span class="name "><a href="../math_expressions/UnaryPlus-class.html">UnaryPlus</a></span> 
+
+</dt>
+<dd>
+  
+</dd>
+
+          <dt id="Variable">
+  <span class="name "><a href="../math_expressions/Variable-class.html">Variable</a></span> 
+
+</dt>
+<dd>
+  A variable is a named literal.
+</dd>
+
+          <dt id="VariableCollector">
+  <span class="name "><a href="../math_expressions/VariableCollector-class.html">VariableCollector</a></span> 
+
+</dt>
+<dd>
+  An expression visitor that collects all variables in an expression.
+</dd>
+
+          <dt id="Vector">
+  <span class="name "><a href="../math_expressions/Vector-class.html">Vector</a></span> 
+
+</dt>
+<dd>
+  A vector of arbitrary size.
+</dd>
+
+          <dt id="VectorEvaluator">
+  <span class="name "><a href="../math_expressions/VectorEvaluator-class.html">VectorEvaluator</a></span> 
+
+</dt>
+<dd>
+  The vector evaluator can operate on mixed datatypes,
+so is typed less strict. The underlying data types could
+be Vector2, Vector3, Vector4 and double (scalars).
+</dd>
+
+      </dl>
+    </section>
+
+    <section class="summary offset-anchor" id="enums">
+      <h2>Enums</h2>
+      <dl>
+          <dt id="EvaluationType">
+  <span class="name "><a href="../math_expressions/EvaluationType.html">EvaluationType</a></span> 
+
+</dt>
+<dd>
+  Mathematical expressions must be evaluated under a certain <a href="../math_expressions/EvaluationType.html">EvaluationType</a>.
+</dd>
+
+      </dl>
+    </section>
+
+
+
+
+
+
+
+    <section class="summary offset-anchor" id="typedefs">
+      <h2>Typedefs</h2>
+      <dl>
+          
+  <dt id="Parser" class="">
+  <span class="name deprecated"><a class="deprecated" href="../math_expressions/Parser.html">Parser</a></span>
+    = <a href="../math_expressions/ShuntingYardParser-class.html">ShuntingYardParser</a>
+  </span>
+  
+
+</dt>
+<dd>
+  The default parser. This type alias is deprecated, use <a href="../math_expressions/GrammarParser-class.html">GrammarParser</a>
+or the legacy <a href="../math_expressions/ShuntingYardParser-class.html">ShuntingYardParser</a> instead.
+  
+
+</dd>
+
+
+      </dl>
+    </section>
+
+  </div> <!-- /.main-content -->
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <!-- The search input and breadcrumbs below are only responsively visible at low resolutions. -->
+<header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+    <li><a href="../index.html">math_expressions</a></li>
+    <li class="self-crumb">math_expressions.dart</li>
+</ol>
+
+    <h5><span class="package-name">math_expressions</span> <span class="package-kind">package</span></h5>
+    <ol>
+      <li class="section-title">Libraries</li>
+      <li><a href="../math_expressions/">math_expressions</a></li>
+</ol>
+
+  </div>
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+    <h5>math_expressions library</h5>
+  </div><!--/sidebar-offcanvas-right-->
+</main>
+<footer>
+  <span class="no-break">
+    math_expressions
+      3.1.0
+  </span>
+  
+</footer>
+
+
+<script src="../static-assets/highlight.pack.js?v1"></script>
+<script src="../static-assets/docs.dart.js"></script>
+
+</body>
+</html>
+
