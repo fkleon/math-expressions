@@ -51,6 +51,9 @@ class RealEvaluatorTests extends TestSet {
 
     // Complex expressions
     'Expression': evaluateExpression,
+
+    // Configurable behavior
+    'TraditionalMathDefinitions': evaluateTraditionalMathDefinitions,
   };
 
   final evaluator = RealEvaluator();
@@ -603,5 +606,48 @@ class RealEvaluatorTests extends TestSet {
     var eval = RealEvaluator(ctx);
 
     parameterized(cases, evaluator: eval);
+  }
+
+  /// Tests the [RealEvaluator.useTraditionalMathDefinitions] flag, which
+  /// controls whether mathematically undefined operations evaluate to
+  /// [double.nan] (traditional math) or follow Dart's default
+  /// floating-point behavior.
+  void evaluateTraditionalMathDefinitions() {
+    var piOverTwo = pi / two;
+
+    // Default (Dart) behavior: no NaN for these operations.
+    var dartCases = {
+      // 1/0 -> Infinity
+      one / zero: double.infinity,
+      // -1/0 -> -Infinity
+      -one / zero: double.negativeInfinity,
+      // 0/0 -> NaN (already Dart's own behavior)
+      zero / zero: isNaN,
+      // 0^0 -> 1
+      zero ^ zero: 1.0,
+      // tan(pi/2) -> large finite value, not NaN, due to imprecise pi.
+      Tan(piOverTwo): isNot(isNaN),
+    };
+    parameterized(dartCases);
+
+    // Traditional math behavior: undefined operations evaluate to NaN.
+    var traditionalEvaluator = RealEvaluator(ContextModel(), true);
+    var traditionalCases = {
+      // 1/0 -> NaN
+      one / zero: isNaN,
+      // -1/0 -> NaN
+      -one / zero: isNaN,
+      // 0/0 -> NaN
+      zero / zero: isNaN,
+      // 0^0 -> NaN
+      zero ^ zero: isNaN,
+      // tan(pi/2) -> NaN
+      Tan(piOverTwo): isNaN,
+      // Regular operations are unaffected.
+      two / one: 2.0,
+      two ^ two: 4.0,
+      Tan(zero): 0.0,
+    };
+    parameterized(traditionalCases, evaluator: traditionalEvaluator);
   }
 }
