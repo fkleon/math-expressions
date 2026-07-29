@@ -364,9 +364,33 @@ abstract class ExpressionEvaluator<T> extends NullExpressionVisitor {
 ///     num result = evaluator.evaluate(expression); // 5
 ///
 class RealEvaluator extends ExpressionEvaluator<num> {
+  /// Whether to return [double.nan] for operations that are undefined in
+  /// traditional mathematics, instead of following Dart's default
+  /// floating-point semantics.
+  ///
+  /// When set to `true`, the following operations will evaluate to
+  /// [double.nan]:
+  ///
+  /// - Division by zero, e.g. `1/0` (Dart returns [double.infinity] or
+  ///   [double.negativeInfinity]).
+  /// - Zero raised to the power of zero, e.g. `0^0` (Dart's `math.pow`
+  ///   returns `1`).
+  /// - The tangent function evaluated at one of its undefined points,
+  ///   e.g. `tan(pi/2)` (Dart's `math.tan` returns a very large, but
+  ///   finite, value due to the limited precision of `pi`).
+  ///
+  /// Defaults to `false`, which preserves Dart's floating-point behavior.
+  final bool useTraditionalMathDefinitions;
+
   /// Create a new evaluator with the given context.
-  RealEvaluator([ContextModel? context])
-    : super(EvaluationType.REAL, context ?? ContextModel());
+  ///
+  /// Set [useTraditionalMathDefinitions] to `true` to have undefined
+  /// operations (e.g. division by zero) evaluate to [double.nan] rather
+  /// than following Dart's default floating-point behavior.
+  RealEvaluator([
+    ContextModel? context,
+    this.useTraditionalMathDefinitions = false,
+  ]) : super(EvaluationType.REAL, context ?? ContextModel());
 
   @override
   bool visitEnter(Expression exp) {
@@ -437,6 +461,12 @@ class RealEvaluator extends ExpressionEvaluator<num> {
   void visitDivide(Divide op) {
     var (divisor, dividend) = pop2();
 
+    if (useTraditionalMathDefinitions && divisor == 0) {
+      // Division by zero is undefined in traditional mathematics.
+      push1(double.nan);
+      return;
+    }
+
     /// For real numbers this method performs a double divison and
     /// returns [double.infinity] if a divide by zero is encountered.
     push1(dividend / divisor);
@@ -451,6 +481,12 @@ class RealEvaluator extends ExpressionEvaluator<num> {
   @override
   void visitPower(Power op) {
     var (exponent, base) = pop2();
+
+    if (useTraditionalMathDefinitions && base == 0 && exponent == 0) {
+      // Zero to the power of zero is undefined in traditional mathematics.
+      push1(double.nan);
+      return;
+    }
 
     // TODO: Unnecessary calculations already done in case of expression rewrite below.
 
@@ -570,6 +606,14 @@ class RealEvaluator extends ExpressionEvaluator<num> {
   @override
   void visitTan(Tan func) {
     var (val,) = pop1();
+
+    if (useTraditionalMathDefinitions &&
+        ((val - math.pi / 2) / math.pi).abs() % 1 == 0) {
+      // Tangent is undefined at odd multiples of pi/2 in traditional
+      // mathematics.
+      push1(double.nan);
+      return;
+    }
 
     // Compensate for inaccuracies in machine-pi.
     // If val divides cleanly from pi, return 0.

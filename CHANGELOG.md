@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Add support for implicit multiplication to `GrammarParser`.
+- Add `useTraditionalMathDefinitions` option to `RealEvaluator` to return
+  `double.nan` for mathematically undefined operations (e.g. division by
+  zero, `0^0`, `tan(pi/2)`) instead of following Dart's default
+  floating-point behavior.
 
 ## [3.1.0] - 2025-06-29
 
